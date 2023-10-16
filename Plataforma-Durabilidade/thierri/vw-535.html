@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.67, maximum-scale=0.67, user-scalable=no ">
+    <link rel="shortcut icon" href="../imgs/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../style.css">
+    <title>Thierri | VW-535</title>
+    <style>
+        .entrada-direita {
+            transform: translateX(100%);
+            animation: entradaDireita 1s forwards ease;
+        }
+
+        .i1 {
+            animation: entradaDireita 1s ease 0s forwards;
+            opacity: 0;
+        }
+
+        .i2 {
+            animation: entradaDireita 1s ease 0.2s forwards;
+            opacity: 0;
+        }
+
+        .i3 {
+            animation: entradaDireita 1s ease 0.4s forwards;
+            opacity: 0;
+        }
+
+        .i4 {
+            animation: entradaDireita 1s ease 0.6s forwards;
+            opacity: 0;
+        }
+
+        .i5 {
+            animation: entradaDireita 1s ease 0.8s forwards;
+            opacity: 0;
+        }
+
+        .i6 {
+            animation: entradaDireita 1s ease 1s forwards;
+            opacity: 0;
+        }
+
+        .i7 {
+            animation: entradaDireita 1s ease 1.2s forwards;
+            opacity: 0;
+        }
+
+        .i8 {
+            animation: entradaDireita 1s ease 1.4s forwards;
+            opacity: 0;
+        }
+
+        .i9 {
+            animation: entradaDireita 1s ease 1.6s forwards;
+            opacity: 0;
+        }
+
+        .i10 {
+            animation: entradaDireita 1s ease 1.8s forwards;
+            opacity: 0;
+        }
+
+        @keyframes entradaDireita {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .pessoas {
+            height: 210px;
+            position: absolute;
+        }
+
+        .infosEng {
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: xx-large;
+            font-weight: normal;
+            position: absolute;
+            left: 100px;
+        }
+
+        .seta-dir {
+            height: 210px;
+            cursor: pointer;
+        }
+
+        .seta-dir:hover {
+            height: 220px;
+            transition-duration: 0.5s;
+        }
+
+        .seta-dir:not(:hover) {
+            transition-duration: 0.5s;
+        }
+
+        .seta-esq {
+            height: 200px;
+            cursor: pointer;
+        }
+
+        .seta-esq:hover {
+            height: 210px;
+            transition-duration: 0.5s;
+        }
+
+        .seta-esq:not(:hover) {
+            transition-duration: 0.5s;
+        }
+
+        body {
+            overflow-y: hidden;
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+    <body onload="ajustaZoom()">
+        <header>
+            <nav class="mini-menu i1">
+                <ul>
+                    <a href="#">
+                        <li style="background-color: white; color: black;">Departamentos</li>
+                    </a>
+                    <a href="https://lucaspaivazeentech.github.io/VW-html/Dashboards.html" target="$_blank" >
+                        <li>Dashboards</li>
+                    </a>
+                    <a href="https://equipzeentech.com/OSI/index.php" target="$_blank">
+                        <li>OSI</li>
+                    </a>
+                    <p>Passion for Inovation</p>
+                </ul>
+            </nav>
+            <nav class="menu i2">
+                <a href="../index.html"><img src="../imgs/logo-zeentech.png" alt="logo-zeentech" style="height: 80px; margin-left: 50px;"></a>
+                <ul>
+                    <li style="border-bottom: 5px solid red; border-radius: 5px;"><a href="../engEdur.html">Engenharia</a></li>
+                    <li>Rodagem</li>
+                    <li>Frota</li>
+                    <li>CTV</li>
+                    <li>Desenvolvimento</li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <img src="../imgs/pessoas/thierri.png" alt="1" class="pessoas entrada-direita i1" style="top: 250px; left: 130px;">
+            <div class="infosEng" style="top: 480px;">
+                <span class="entrada-direita i1">Thierri Victorino Rodrigues<br></span>   
+                <span class="entrada-direita i2" style="font-weight: lighter; font-size: smaller;">Engenheiro Mecânico<br></span>
+            </div>
+            <div class="infosEng" style="top: 710px;">
+                <span class="entrada-direita i1">Veículos em teste:<br></span>
+                
+                <div style="position: absolute; display: inline-block;" class="entrada-direita i4 veics"><a href="bev-pvs1.html"><img src="../imgs/caminhoes-leo/vw-123png.png" alt="vw-123" style="height: 280px;"></a><p style="font-size: x-large;">BEV-PVS1<br> 14t JJE (6x2)</p></div>
+                
+                <div style="position: absolute; bottom: -350px; left: 400px;" class="entrada-direita i5 veics"><a href="bev-20.html"><img src="../imgs/caminhoes-leo/vw-999.png" alt="vw-999" style="height: 270px;" class="entrada-direita i7"></a><p style="font-size: x-large; position: absolute; left: 10px;">BEV-20<br> 14t JJE (6x2)</p></div>
+            </div>
+            
+            <div style="position: absolute; top: 250px; left: 1250px;" class="infosEng">
+                <a href="bev-pvs1.html"><img src="../imgs/seta-esq.png" alt="seta-esq" style="position: absolute; left: -190px; top: 65px;" class="seta-esq entrada-direita i6"></a>
+                
+                <img src="imgs/vw-535.png" alt="vw-535" style="height: 250px;" class="i9">
+                
+                <a href="bev-20.html"><img src="../imgs/seta-dir.png" alt="seta-dir" style="position: absolute; top: -20px; right: -180px;" class="seta-dir entrada-direita i5"></a>
+                
+                <p style="font-size: 32px; position: absolute; left: -50px; width: 100%; line-height: 1.2; white-space: nowrap;" class="entrada-direita i8">
+                    VW-535<br>33.480T (6x4)<br>Eixo: Meritor DBC<br>Relação de eixo: 1:6,14<br><br><br><br>Test progress:
+                </p>
+                
+                <img src="../imgs/caminhoes-leo/barra80.png" alt="test-progress" style="position: absolute; height: 80px; top: 610px; left: -50px;" class="entrada-direita i9">
+                
+                <p style="white-space: nowrap; font-size: 25px; position: absolute; top: 700px; right: -250px;" class="entrada-direita i9">Test Target: 60.000 Km</p>
+            </div>
+        </main>
+        <script type="text/javascript">
+            function ajustaZoom() {
+                document.body.style.zoom = "65%" 
+            }
+        
+            window.addEventListener('load', function() {
+                setTimeout(function() {
+                    window.scrollTo(0, 0);
+                }, 100);
+            });
+        </script>
+    </body>
+</html>

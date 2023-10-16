@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilo.css">
+    <link rel="shortcut icon" href="imgs/favicon.png" type="image/x-icon">
+    <title>Plataforma Durabilidade</title>
+    <style>
+        .menu {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            height: 4.2rem;
+            margin: 0;
+            padding: 0;
+            font-size: 1rem;
+            box-shadow: 0 0 0.9375rem rgb(49, 49, 49);
+            width: 100%;
+        }
+
+        .menu ul {
+            display: inline-block;
+        }
+
+        .menu li {
+            display: inline-block;
+            margin-left: 3.8rem;
+        }
+
+        .mini-menu {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: black;
+            height: 1.2rem;
+            margin: 0;
+            padding: 0;
+            font-size: small;
+            width: 100%;
+        }
+
+        .mini-menu ul {
+            margin-left: 10%;
+            width: 100%;
+        }
+
+        .mini-menu li {
+            display: inline-block;
+            padding: 0.2500rem 1.5625rem 0.2500rem 1.5625rem;
+            color: white;
+        }
+
+        .mini-menu p {
+            display: inline;
+            margin-right: 1.8750rem;
+            color: white;
+            padding: 0.2500rem;
+            float: right;
+        }
+    </style>
+</head>
+<body onload="ajustaZoom()">
+    <header>
+        <nav class="mini-menu i1">
+            <ul>
+                <a href="#">
+                    <li style="background-color: white; color: black;">Departamentos</li>
+                </a>
+                <a href="https://lucaspaivazeentech.github.io/VW-html/Dashboards.html" target="$_blank" >
+                    <li>Dashboards</li>
+                </a>
+                <a href="https://equipzeentech.com/OSI/index.php" target="$_blank">
+                    <li>OSI</li>
+                </a>
+                <p>Passion for Inovation</p>
+            </ul>
+        </nav>
+        <nav class="menu i1">
+            <img src="imgs/logo-zeentech.png" alt="logo-zeentech" style="height: 3.5rem; margin-left: 3.1250rem;">
+            <ul>
+                <li><a href="engEdur.html">Engenharia</a></li>
+                <li>Rodagem</li>
+                <li>Frota</li>
+                <li>CTV</li>
+                <li>Desenvolvimento</li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="container">
+            <div class="div1"></div>
+            <div class="infos">
+                <div class="veiculos infos__squares i1">
+                    <div class="img_veic"><img src="imgs/departamentos/caminhaozin.png" alt="caminhaozin" style="width: 95%;"></div>
+                    <div class="tit_veic"><b>VEÍCULOS</b></div>
+                    <div class="qtd_veic infos__square__num">52</div>
+                </div>
+                <div class="motoristas infos__squares i2">
+                    <div class="img_mot"><img src="imgs/departamentos/motoristinha.png" alt="caminhaozin" style="width: 70%;"></div>
+                    <div class="tit_mot"><b>MOTORISTAS</b></div>
+                    <div class="qtd_mot infos__square__num">78</div>
+                </div>
+                <div class="reports infos__squares i3">
+                    <div class="img_rep"><img src="imgs/departamentos/papelzin.png" alt="caminhaozin" style="width: 50%;"></div>
+                    <div class="tit_rep"><b>REPORTS</b></div>
+                    <div class="qtd_rep infos__square__num">118</div>
+                </div>
+                <div class="oficina infos__squares i4">
+                    <div class="img_ofi"><img src="imgs/departamentos/ferramentinha.png" alt="caminhaozin" style="width: 55%;"></div>
+                    <div class="tit_ofi"><b>OFICINA</b></div>
+                    <div class="qtd_ofi infos__square__num">38</div>
+                </div>
+            </div>
+            <div class="graf1 i4"><img src="imgs/velocimetros/grafico.png" alt="grafico1" class="imgs i4"></div>
+            <div class="div2">
+              <div class="velocis">
+                <div class="engenharia i1">ENGENHARIA</div>
+                <div class="rodagem i2">RODAGEM</div>
+                <div class="frota i3">FROTA</div>
+                <div class="veloci1 i4"><img src="imgs/velocimetros/velocimetro1.png" alt="velo1" style="width: 80%;"></div>
+                <div class="veloci2 i5"><img src="imgs/velocimetros/velocimetro2.png" alt="velo1" style="width: 80%;"></div>
+                <div class="veloci3 i6"><img src="imgs/velocimetros/velocimetro3.png" alt="velo1" style="width: 80%;"></div>
+                <div class="porc1 i7">20%</div>
+                <div class="porc2 i8">96%</div>
+                <div class="porc3 i9">61%</div>
+              </div>
+              <div class="graf2 i6"><img src="imgs/velocimetros/grafico2.png" alt="grafico2" class="imgs i6"></div>
+            </div>
+          </div>
+    </main>
+    <footer>
+        <div>
+            <img src="imgs/truckbus-ladinho.png" alt="truckbus" style="height: 3.8rem; display: inline;">
+            <div style="width: 86.15%; float: right; margin: 0.6rem;">
+                <marquee direction="left" behavior="scroll" onmouseover="this.stop()" onmouseout="this.start()" scrollamount="7">
+                    <aside style="font-weight: bold; display: inline;">Entrega <img src="imgs/+.png" alt="truckbus" style="height: 1.2rem;"> Valor<br><span style="position: relative; left: 2rem; font-weight: normal; font-size: normal;">Para o seu negócio</span></aside>
+                </marquee>
+            </div>
+        </div>
+    </footer>
+    <script type="text/javascript">
+        function ajustaZoom() {
+            document.body.style.zoom = "90%" 
+        }
+    
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                window.scrollTo(0, 0);
+            }, 100);
+        });
+    </script>
+</body>
+</html>

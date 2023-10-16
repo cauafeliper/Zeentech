@@ -1,0 +1,308 @@
+<script type="text/javascript">
+    function ajustaZoom() {
+        document.body.style.zoom = "67%" 
+    }
+
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            window.scrollTo(0, 0);
+        }, 100);
+    });
+</script>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.67, maximum-scale=0.67, user-scalable=no ">
+    <link rel="shortcut icon" href="imgs/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <title>Organograma</title>
+    <style>
+        .entrada-direita {
+            transform: translateX(100%);
+            animation: entradaDireita 1s forwards ease;
+        }
+
+        .i1 {
+            animation: entradaDireita 1s ease 0s forwards;
+            opacity: 0;
+        }
+
+        .i2 {
+            animation: entradaDireita 1s ease 0.2s forwards;
+            opacity: 0;
+        }
+
+        .i3 {
+            animation: entradaDireita 1s ease 0.4s forwards;
+            opacity: 0;
+        }
+
+        .i4 {
+            animation: entradaDireita 1s ease 0.6s forwards;
+            opacity: 0;
+        }
+
+        .i5 {
+            animation: entradaDireita 1s ease 0.8s forwards;
+            opacity: 0;
+        }
+
+        .i6 {
+            animation: entradaDireita 1s ease 1s forwards;
+            opacity: 0;
+        }
+
+        .i7 {
+            animation: entradaDireita 1s ease 1.2s forwards;
+            opacity: 0;
+        }
+
+        @keyframes entradaDireita {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .pessoas {
+            height: 80%;
+        }
+
+        .pessoas:hover {
+            height: 90%;
+            transition-duration: 0.3s;
+            border-radius: 250px;
+        }
+
+        .pessoas:not(:hover) {
+            transition-duration: 0.3s;
+        }
+
+        .container {
+            display: grid; 
+            grid-template-columns: 1fr 1fr 1fr; 
+            grid-template-rows: 1fr 1fr 1fr; 
+            gap: 50px 50px;
+            height: 100%;
+            width: 100%;
+            color: black;
+            font-size: xx-large;
+            font-weight: bold;
+        }
+        .div1 { 
+            grid-area: 1 / 1 / 4 / 4; 
+        }
+        .pessoa1 {
+            display: grid; 
+            grid-template-columns: 1fr; 
+            grid-template-rows: 1.3fr 0.7fr; 
+            gap: 0px 0px; 
+            grid-template-areas: 
+                "foto1"
+                "nome1"; 
+            grid-area: 1 / 1 / 2 / 2; 
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: #fcfcfc;
+            border-radius: 10px;
+            box-shadow: 0px 0px 0px 3px #000000 inset;
+            width: 50%;
+            margin-left: 25%;
+        }
+        .foto1 { 
+            grid-area: foto1; 
+        }
+        .nome1 { 
+            grid-area: nome1; 
+        }
+        .pessoa2 {
+            display: grid; 
+            grid-template-columns: 1fr; 
+            grid-template-rows: 1.3fr 0.7fr; 
+            gap: 0px 0px; 
+            grid-template-areas: 
+                "foto2"
+                "nome2"; 
+            grid-area: 1 / 2 / 2 / 3;
+            justify-content: center;
+            align-items: center;
+            text-align: center; 
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 0px 3px #000000 inset;
+            width: 50%;
+            margin-left: 25%;
+        }
+        .foto2 { 
+            grid-area: foto2; 
+        }
+        .nome2 { 
+            grid-area: nome2; 
+        }
+        .pessoa3 {
+            display: grid; 
+            grid-template-columns: 1fr; 
+            grid-template-rows: 1.3fr 0.7fr; 
+            gap: 0px 0px; 
+            grid-template-areas: 
+                "foto3"
+                "nome3"; 
+            grid-area: 1 / 3 / 2 / 4; 
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 0px 3px #000000 inset;
+            width: 50%;
+            margin-left: 25%;
+        }
+        .foto3 { 
+            grid-area: foto3;
+        }
+        .nome3 { 
+            grid-area: nome3; 
+        }
+        .pessoa4 {
+            display: grid; 
+            grid-template-columns: 1fr; 
+            grid-template-rows: 1.3fr 0.7fr; 
+            gap: 0px 0px; 
+            grid-template-areas: 
+                "foto4"
+                "nome4"; 
+            grid-area: 3 / 1 / 4 / 2;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 0px 3px #000000 inset;
+            width: 50%;
+            margin-left: 25%;
+        }
+        .foto4 { 
+            grid-area: foto4; 
+        }
+        .nome4 { 
+            grid-area: nome4; 
+        }
+        .pessoa5 {
+            display: grid; 
+            grid-template-columns: 1fr; 
+            grid-template-rows: 1.3fr 0.7fr; 
+            gap: 0px 0px; 
+            grid-template-areas: 
+                "foto5"
+                "nome5"; 
+            grid-area: 3 / 2 / 4 / 3;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 0px 3px #000000 inset;
+            width: 50%;
+            margin-left: 25%;
+        }
+        .foto5 { 
+            grid-area: foto5; 
+        }
+        .nome5 { 
+            grid-area: nome5; 
+        }
+        .pessoa6 {
+            display: grid; 
+            grid-template-columns: 1fr; 
+            grid-template-rows: 1.3fr 0.7fr; 
+            gap: 0px 0px; 
+            grid-template-areas: 
+                "foto6"
+                "nome6"; 
+            grid-area: 3 / 3 / 4 / 4;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: rgb(255, 255, 255);
+            border-radius: 10px; 
+            width: 50%;
+            margin-left: 25%;
+            box-shadow: 0px 0px 0px 3px #000000 inset;
+        }
+        .foto6 { 
+            grid-area: foto6; 
+        }
+        .nome6 { 
+            grid-area: nome6; 
+        }
+        .div2 { 
+            grid-area: 2 / 1 / 3 / 4; 
+        }
+
+        main {
+            padding: 5rem;
+            padding-top: 3rem;
+        }
+    </style>
+</head>
+    <body onload="ajustaZoom()">
+        <header>
+            <nav class="mini-menu i1">
+                <ul>
+                    <a href="#">
+                        <li style="background-color: white; color: black;">Departamentos</li>
+                    </a>
+                    <a href="https://lucaspaivazeentech.github.io/VW-html/Dashboards.html" target="$_blank" >
+                        <li>Dashboards</li>
+                    </a>
+                    <a href="https://equipzeentech.com/OSI/index.php" target="$_blank">
+                        <li>OSI</li>
+                    </a>
+                    <p>Passion for Inovation</p>
+                </ul>
+            </nav>
+            <nav class="menu i2">
+                <a href="index.html"><img src="imgs/logo-zeentech.png" alt="logo-zeentech" style="height: 80px; margin-left: 50px;"></a>
+                <ul>
+                    <li style="border-bottom: 5px solid red; border-radius: 5px;"><a href="engEdur.html">Engenharia</a></li>
+                    <li>Rodagem</li>
+                    <li>Frota</li>
+                    <li>CTV</li>
+                    <li>Desenvolvimento</li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <div class="container">
+                <div class="div1"></div>
+                <div class="pessoa1 i1">
+                  <div class="foto1"><a href="leo/leo.html"><img src="imgs/pessoas/leo.png" alt="pessoa1" class="pessoas"></a></div>
+                  <div class="nome1">Leonardo</div>
+                </div>
+                <div class="pessoa2 i2">
+                  <div class="foto2"><a href="alceu/alceu.html"><img src="imgs/pessoas/alceu.png" alt="pessoa2" class="pessoas"></a></div>
+                  <div class="nome2">Alceu</div>
+                </div>
+                <div class="pessoa3 i3">
+                  <div class="foto3"><a href="gabriel/gabriel.html"><img src="imgs/pessoas/gabriel.png" alt="pessoa3" class="pessoas"></a></div>
+                  <div class="nome3">Gabriel</div>
+                </div>
+                <div class="pessoa4 i4">
+                  <div class="foto4"><a href="renato/renato.html"><img src="imgs/pessoas/renato.png" alt="pessoa4" class="pessoas"></a></div>
+                  <div class="nome4">Renato</div>
+                </div>
+                <div class="pessoa5 i5">
+                  <div class="foto5"><a href="andre/andre.html"><img src="imgs/pessoas/andre.png" alt="pessoa5" class="pessoas"></a></div>
+                  <div class="nome5">André</div>
+                </div>
+                <div class="pessoa6 i6">
+                  <div class="foto6"><a href="thierri/thierri.html"><img src="imgs/pessoas/thierri.png" alt="pessoa6" class="pessoas"></a></div>
+                  <div class="nome6">Thierri</div>
+                </div>
+                <div class="div2"></div>
+              </div>
+        </main>
+    </body>
+</html>

@@ -1,0 +1,351 @@
+@charset "UTF-8";
+
+* {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    list-style: none;
+}
+
+*:hover {
+  transition-duration: 0.3s;
+}
+
+*:not(:hover) {
+  transition-duration: 0.5s;
+}
+
+:root {
+    --cor1: #001e50;
+    --cor2: #4C7397;
+}
+
+.principal {
+   font-size: larger;
+   font-weight: bolder;
+   padding-left: 15px;
+   padding-right: 15px;
+}
+
+.paginacao {
+  float: right;
+  margin: 5px;
+  padding: 10px;
+  background-color: #707070bb;
+}
+
+.paginacao a {
+  display: inline-block;
+  padding: 3px;
+  margin: 0px;
+  border: 1px solid rgb(59, 59, 59);
+  background-color: rgb(146, 146, 146);
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.paginacao a:hover {
+  background-color: rgb(102, 102, 102);
+}
+
+.menu {
+  display: flex;
+}
+
+.menu li {
+  margin-left: 10px;
+  font-weight: bolder;
+  font-size: medium;
+}
+
+.menu li a {
+  display: block;
+  padding: 10px;
+}
+
+.bemvindo {
+  display: inline-block;
+  color: white;
+  border-radius: 5px;
+  background-color: var(--cor2);
+  padding: 5px 5px 5px 5px;
+  margin: 20px 0px 20px 40px;
+  font-weight: normal;
+  font-size: xx-large;
+}
+
+.bemvindo:hover {
+  background-color: #41607d;
+  border-radius: 10px;
+}
+
+.selectTabela {
+  background: transparent; 
+  width: 40%; 
+  overflow: hidden;
+  border: 0;
+}
+
+.selectTabela:hover {
+  background-color: rgb(187, 187, 187);
+}
+
+.selectTabela:active {
+  border-style: none;
+}
+
+div#container {
+  overflow-x: auto;
+}
+
+/*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+
+.liResumos {
+  border: 1px solid var(--cor2);
+  border-radius: 5px;
+  padding: 3px 3px 3px 5px;
+}
+
+/*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+
+.infosMaiores {
+  background-color: #032f7a;  
+  color: white;
+  border-radius: 5px;  
+  margin: 0px;
+  padding: 3px 3px 3px 5px;
+  border: 1px solid var(--cor2);
+}
+
+.infosMaiores:hover {
+  background-color: #02235b;
+  color: white;
+}
+
+/*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+
+.infosMenores {
+  background-color: var(--cor2);
+  color: white;
+  border-radius: 5px;
+  padding: 3px 3px 3px 5px;
+  margin: 0px;
+  border: 1px solid var(--cor1);
+}
+
+.infosMenores:hover {
+  background-color: #41607d;
+  color: white;
+}
+
+/*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+
+.infoPrincipal {
+  grid-column: 1/4;
+  grid-row: 1/3;
+}
+
+/*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+
+ .infoAmarela {
+   background-color: #EDAE49;
+   grid-column: 4/6;
+   color: white;
+   grid-row: 1/3;
+ }
+
+ .infoAmarela:hover {
+   background-color: #d19e4c;
+   color: white;
+ }
+
+/*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+
+.infoVermelha {
+   background-color: #DB3A34;
+   grid-column: 4/6;
+   grid-row: 3/4;
+   color: white;
+}
+
+.infoVermelha:hover {
+   background-color: #a53b37;
+   color: white;
+}
+
+/*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+
+.infoAprovadas {
+  grid-column: 6/8;
+  grid-row: 1/3;
+}
+
+/*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+
+.infoAndamento {
+  grid-column: 6/8;
+  grid-row: 3/4;
+}
+
+/*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+
+.infoEncerradas {
+   grid-column: 1/4;;
+   grid-row: 3/4;
+}
+
+/*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+
+.wrap {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+}
+
+ .container {
+  background-color: rgba(195, 195, 195, 0.445);
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: 10vw;
+  grid-template-rows: 4vh;
+  grid-row-gap: 3px;
+  grid-column-gap: 3px;
+ }
+
+ /*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+
+ body {
+    background-color: rgba(195, 195, 195, 0.445);
+ }
+
+ a {
+  text-decoration: none;
+  color: black;
+}
+
+header a {
+  color: white;
+  text-decoration: none;
+}
+
+a:hover {
+  color: white;
+  background-color: #0041b196;
+  border-radius: 5px;
+}
+
+ header {
+    display: flex;
+    color: white;
+    flex-wrap: wrap;
+    background-color: var(--cor1);
+    justify-content: space-between;
+    padding: 20px;
+    align-items: center;
+
+ }
+
+ header > nav {
+    padding: 10px;
+    font-size: small;
+ }
+
+ h2 {
+   display: block;
+   margin: 10px 0px 0px 10px;
+   font-weight: bolder;
+   font-size: larger;
+   color: rgba(24, 23, 23, 0.734);
+ }
+
+ section {
+   border: 2px solid var(--cor2);
+   padding: 5px 5px 5px 5px;
+   margin: 10px 40px 20px 40px;
+   background-color: aliceblue;
+   border-radius: 10px;
+ }
+
+ form {
+  background-color: rgba(195, 195, 195, 0.445);
+  border-radius: 10px;
+  padding: 15px 15px 15px 15px;
+ }
+
+ label {
+    display: inline-block;
+    width: fit-content;
+    color: white;
+    font-weight: 100;
+    background-color: #4C7397;
+    padding: 3px 7px;
+    border-radius: 5px;
+ }
+
+ div {
+  background-color: rgba(195, 195, 195, 0.445);
+  border-radius: 10px;
+  padding: 15px 15px 15px 15px;
+}
+
+  table {
+    background-color: rgba(195, 195, 195, 0.445);
+    width: 100%;
+    padding: 15px 15px 15px 15px;
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+ }
+ 
+ th {
+  border: 1px solid rgb(128, 128, 128);
+  border-bottom: 3px solid rgb(128, 128, 128);
+ }
+ 
+ td {
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(128, 128, 128);
+  padding: 10px;
+ }
+
+ input[type=text], [type=number], select, input[type=date], input[type=date], input[type=datetime], input[type=email], input[type=month], input[type=password], input[type=range], input[type=tel], input[type=time], input[type=week] {
+  width: 15%;
+  padding: 6px;
+  font-size: small;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #707070;
+  border-radius: 4px;
+  box-sizing: border-box;
+ }
+
+input[type=submit] {
+  width: 100%;
+  background-color: #4C7397;
+  font-size: 1em;
+  color: white;
+  padding: 10px 20px;
+  margin: 5px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #354d63;
+}
+
+footer {
+    display: flex;
+    color: white;
+    flex-wrap: wrap;
+    background-color: var(--cor1);
+    justify-content: space-between;
+    padding: 20px;
+    align-items: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
