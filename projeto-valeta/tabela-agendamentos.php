@@ -66,6 +66,13 @@
                     </div>
                 </abbr>
             </a>
+            <a href="agendamentos-usuario.php" class="sidebar__imgs" style="margin-top: 40px;">
+                <abbr title="Seus agendamentos.">
+                    <div>
+                        <img src="https://icons.iconarchive.com/icons/icons8/ios7/72/Users-Administrator-icon.png" width="72" height="72">
+                    </div>
+                </abbr>
+            </a>
             <a href="cadastro-login/sair.php" class="sidebar__sair">
                 <button style="position: relative; top: 38%; background-color: transparent; border: none;color: white; font-weight: bold;">
                     Sair

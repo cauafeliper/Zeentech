@@ -11,6 +11,7 @@
         $veiculo = $_POST['veiculo'];
         $insp = $_POST['insp'];
         $eng = $_POST['eng'];
+        $solic = $_POST['solic'];
 
         $checkQuery = "SELECT * FROM $valeta WHERE dia = '$dia' AND (hora = '$horario1' OR hora = '$horario2' OR hora = '$horario3' OR hora = '$horario4')";
         $checkResult = mysqli_query($conexao, $checkQuery);
@@ -25,16 +26,16 @@
             header('Location: ocupado.php');
         }
         else {
-            $query1 = "INSERT INTO $valeta (dia, hora, veículo, inspetor, eng) VALUES('$dia', '$horario1', '$veiculo', '$insp', '$eng')";
+            $query1 = "INSERT INTO $valeta (dia, hora, veículo, inspetor, eng, solic) VALUES('$dia', '$horario1', '$veiculo', '$insp', '$eng', '$solic')";
             $result1 = mysqli_query($conexao, $query1);
 
-            $query2 = "INSERT INTO  $valeta (dia, hora, veículo, inspetor, eng) VALUES('$dia', '$horario2', '$veiculo', '$insp', '$eng')";
+            $query2 = "INSERT INTO $valeta (dia, hora, veículo, inspetor, eng, solic) VALUES('$dia', '$horario2', '$veiculo', '$insp', '$eng', '$solic')";
             $result2 = mysqli_query($conexao, $query2);
 
-            $query3 = "INSERT INTO $valeta (dia, hora, veículo, inspetor, eng) VALUES('$dia', '$horario3', '$veiculo', '$insp', '$eng')";
+            $query3 = "INSERT INTO $valeta (dia, hora, veículo, inspetor, eng, solic) VALUES('$dia', '$horario3', '$veiculo', '$insp', '$eng', '$solic')";
             $result3 = mysqli_query($conexao, $query3);
 
-            $query4 = "INSERT INTO $valeta (dia, hora, veículo, inspetor, eng) VALUES('$dia', '$horario4', '$veiculo', '$insp', '$eng')";
+            $query4 = "INSERT INTO $valeta (dia, hora, veículo, inspetor, eng, solic) VALUES('$dia', '$horario4', '$veiculo', '$insp', '$eng', '$solic')";
             $result4 = mysqli_query($conexao, $query4);
 
             unset($_SESSION['valeta']);
@@ -56,6 +57,7 @@
             $veiculo = $_POST['veiculo'];
             $insp = $_POST['insp'];
             $eng = $_POST['eng'];
+            $solic = $_POST['solic'];
 
             $checkQuery = "SELECT * FROM $valeta WHERE dia = '$dia' AND (hora = '$horario1' OR hora = '$horario2' OR hora = '$horario3')";
             $checkResult = mysqli_query($conexao, $checkQuery);
@@ -69,13 +71,13 @@
                 header('Location: ocupado.php');
             }
             else{
-                $query1 = "INSERT INTO $valeta (dia, hora, veículo, inspetor, eng) VALUES('$dia', '$horario1', '$veiculo', '$insp', '$eng')";
+                $query1 = "INSERT INTO $valeta (dia, hora, veículo, inspetor, eng, solic) VALUES('$dia', '$horario1', '$veiculo', '$insp', '$eng', '$solic')";
                 $result1 = mysqli_query($conexao, $query1);
         
-                $query2 = "INSERT INTO $valeta (dia, hora, veículo, inspetor, eng) VALUES('$dia', '$horario2', '$veiculo', '$insp', '$eng')";
+                $query2 = "INSERT INTO $valeta (dia, hora, veículo, inspetor, eng, solic) VALUES('$dia', '$horario2', '$veiculo', '$insp', '$eng', '$solic')";
                 $result2 = mysqli_query($conexao, $query2);
         
-                $query3 = "INSERT INTO $valeta (dia, hora, veículo, inspetor, eng) VALUES('$dia', '$horario3', '$veiculo', '$insp', '$eng')";
+                $query3 = "INSERT INTO $valeta (dia, hora, veículo, inspetor, eng, solic) VALUES('$dia', '$horario3', '$veiculo', '$insp', '$eng', '$solic')";
                 $result3 = mysqli_query($conexao, $query3);
 
                 unset($_SESSION['valeta']);
@@ -95,6 +97,7 @@
                 $veiculo = $_POST['veiculo'];
                 $insp = $_POST['insp'];
                 $eng = $_POST['eng'];
+                $solic = $_POST['solic'];
 
                 $checkQuery = "SELECT * FROM $valeta WHERE dia = '$dia' AND (hora = '$horario1' OR hora = '$horario2')";
                 $checkResult = mysqli_query($conexao, $checkQuery);
@@ -107,10 +110,10 @@
                     header('Location: ocupado.php');
                 }
                 else {
-                    $query1 = "INSERT INTO $valeta (dia, hora, veículo, inspetor, eng) VALUES('$dia', '$horario1', '$veiculo', '$insp', '$eng')";
+                    $query1 = "INSERT INTO $valeta (dia, hora, veículo, inspetor, eng, solic) VALUES('$dia', '$horario1', '$veiculo', '$insp', '$eng', '$solic')";
                     $result1 = mysqli_query($conexao, $query1);
             
-                    $query2 = "INSERT INTO $valeta (dia, hora, veículo, inspetor, eng) VALUES('$dia', '$horario2', '$veiculo', '$insp', '$eng')";
+                    $query2 = "INSERT INTO $valeta (dia, hora, veículo, inspetor, eng, solic) VALUES('$dia', '$horario2', '$veiculo', '$insp', '$eng', '$solic')";
                     $result2 = mysqli_query($conexao, $query2);
 
                     unset($_SESSION['valeta']);
@@ -127,6 +130,7 @@
                 $veiculo = $_POST['veiculo'];
                 $insp = $_POST['insp'];
                 $eng = $_POST['eng'];
+                $solic = $_POST['solic'];
 
                 $checkQuery = "SELECT * FROM $valeta WHERE dia = '$dia' AND hora = '$horario1'";
                 $checkResult = mysqli_query($conexao, $checkQuery);
@@ -138,7 +142,7 @@
                     header('Location: ocupado.php');
                 }
                 else {
-                    $query1 = "INSERT INTO $valeta (dia, hora, veículo, inspetor, eng) VALUES('$dia', '$horario1', '$veiculo', '$insp', '$eng')";
+                    $query1 = "INSERT INTO $valeta (dia, hora, veículo, inspetor, eng, solic) VALUES('$dia', '$horario1', '$veiculo', '$insp', '$eng', '$solic')";
                     $result1 = mysqli_query($conexao, $query1);
 
                     unset($_SESSION['valeta']);

@@ -78,6 +78,7 @@
                     <label for="eng">Não</label>
                 </div>
             </div>
+            <input type="text" name="solic" id="idSolic" value="<?php echo $_SESSION['re'];?>" style="display: none;" readonly>
             
             <input type="submit" value="Agendar" class="submit">
         </form>
