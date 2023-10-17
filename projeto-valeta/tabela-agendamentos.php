@@ -206,8 +206,7 @@
                     ?> 
             </table>
         </div>
-
-        <div alt="valetaVW" class="valeta">
+        <div alt="valetaVW" class="valeta valeta_vw">
             <div class="valeta__titulo">Valeta VW</div>
             <hr>
             <table id="tabelaValetaVW">

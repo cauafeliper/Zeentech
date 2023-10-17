@@ -1,0 +1,93 @@
+@charset "UTF-8";
+
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-family: 'Heebo', sans-serif;
+}
+
+a {
+    text-decoration: initial;
+    color: initial;
+}
+
+body {
+    position: relative;
+    height: 100vh;
+    margin: 0;
+    background-color: lightgray;
+    min-height: 700px;
+    overflow-y: auto;
+}
+
+main {
+    background-color: #9a1c1f;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%; /* Modifiquei a largura para 90% */
+    max-width: 400px; /* Adicionei um limite de largura para telas menores */
+    padding: 10px;
+    border-radius: 10px;
+}
+
+h1 {
+    text-align: center;
+    color: white;
+}
+
+form {
+    padding: 15px;
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+}
+
+label {
+    display: block;
+    width: fit-content;
+    color: white;
+    background-color: #D51E24;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 5px;
+    margin-bottom: 7px;
+}
+
+input {
+    padding: 10px;
+    width: 100%;
+    display: inline-block;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+hr {
+    margin: 10px;
+}
+
+.botoes {
+    border: none;
+    background-color: #D51E24;
+    color: white;
+    width: 100%;
+    margin: 0;
+    border-radius: 10px;
+}
+
+.div__h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 15%;
+    background-color: #D51E24;
+    border-radius: 10px;
+    margin-bottom: 20px; /* Ajustei a margem inferior */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.502);
+}
