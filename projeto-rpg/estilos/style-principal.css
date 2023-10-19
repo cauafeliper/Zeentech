@@ -1,0 +1,74 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: 'vw';
+    src: url('../fonts/VW/VWHead-Regular.otf');
+}
+
+@font-face {
+    font-family: 'vw';
+    src: url("../fonts/VW/VWHead-Bold.otf");
+}
+
+@font-face {
+    font-family: 'vw';
+    src: url('../fonts/VW/VWText-Regular.otf');
+}
+
+@font-face {
+    font-family: 'vw';
+    src: url("../fonts/VW/VWText-Bold.otf");
+}
+
+* {
+    font-family: 'vw';
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+:root {
+    --claro: #4C7397;
+    --escuro: #001e50;
+}
+/*============================================================================================================*/
+header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    background-color: var(--escuro);
+    height: 100px;
+    padding: 5px;
+}
+
+header ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    float: right;
+    width: 30%;
+    height: 100%;
+    margin-right: 40px;
+}
+
+header li a {
+    color: white;
+    border-top-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    padding: 3px;
+}
+
+header li a:hover {
+    background-color: white;
+    color: black;
+    transition-duration: 0.3s;
+}
+
+header li a:not(:hover) {
+    transition-duration: 0.3s;
+}
