@@ -6,7 +6,6 @@
         exit();
     }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -17,8 +16,16 @@
     <link rel="shortcut icon" href="../imgs/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
+    <script>
+        Swal.fire({
+                icon: 'warning',
+                title: 'ATENCÃO!',
+                html: 'Ao selecionar um horário, você tem os próximos 30 minutos para utilizar aquela valeta!<br>Por exemplo, ao selecionar o horário das 08:00 você tem até as 08:29 para retirar o caminhão da valeta!',
+            })
+    </script>
     <div class="sidebar">
         <div class="sidebar__content">
             <a href="../tabela-agendamentos.php" class="sidebar__imgs" style="margin-top: 40px;">
@@ -57,13 +64,23 @@
                     </select>
                 </div>
             </span>
-            <input type="button" value="Estender horário" onclick="adicionarHorario()" class="add__horario">
+            <input type="button" value="Estender horário" onclick="adicionarHorario()" class="add__horario"> 
+            <button id="popAdd" type="button" style="height: 24px; position:absolute; bottom: 53px; left: 475px; border-radius: 20px; background-color: #D51E24; border-color: #D51E24;"><img src="https://icons.iconarchive.com/icons/bootstrap/bootstrap/16/Bootstrap-exclamation-circle-icon.png" width="20" height="20"></button>
+            <script>
+                const popAdd = document.getElementById('popAdd');
+                popAdd.addEventListener('click', () => {
+                    Swal.fire({
+                        icon: 'info',
+                        html: 'Selecione o botão ao lado até o horário que você deseja utilizar a valeta.<br>Lembre-se, você pode utilizar a valeta até 29 minutos depois do último horário selecionado.<br>Por exemplo, se o último horário selecionado for 15:00 você tem até ás 15:29 para retirar o caminhão da valeta!'
+                        })
+                 });
+            </script>
             <input type="button" value="Reduzir horário" onclick="removerHorario()" class="rmv__horario">
             <script>
                 let numHorarios = 1;
 
                 function adicionarHorario() {
-                    if (numHorarios < 4) {
+                    if (numHorarios < 6) {
                         numHorarios++;
                         const horarios = document.getElementById("horarios");
                         const novoHorario = document.createElement("div");
@@ -85,12 +102,11 @@
                             ?>
                         </select>`;
 
-                        // Define o valor do próximo horário
                         novoHorario.querySelector(`#idHorario${numHorarios}`).value = proximoHorario;
 
                         horarios.appendChild(novoHorario);
                     } else {
-                        alert("Você atingiu o número máximo de horários permitidos (4).");
+                        alert("Você atingiu o número máximo de horários permitidos (6).");
                     }
                 }
 

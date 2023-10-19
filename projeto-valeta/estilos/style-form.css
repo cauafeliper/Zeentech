@@ -203,11 +203,11 @@ a {
 
 .add__horario {
     position: absolute;
-    bottom: 42px;
-    left: 6px;
+    bottom: 50px;
+    left: 10px;
     height: 7%;
-    width: 49.4%;
-    border-top-left-radius: 10px;
+    width: 40%;
+    border-radius: 10px;
     background-color: #D51E24;
     color: white;
     font-weight: bold;
@@ -215,11 +215,11 @@ a {
 
 .rmv__horario {
     position: absolute;
-    bottom: 42px;
-    right: 6px;
+    bottom: 50px;
+    right: 10px;
     height: 7%;
-    width: 49.4%;
-    border-top-right-radius: 10px;
+    width: 40%;
+    border-radius: 10px;
     background-color: #D51E24;
     color: white;
     font-weight: bold;
