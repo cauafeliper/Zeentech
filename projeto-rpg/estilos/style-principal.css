@@ -36,13 +36,30 @@ a {
     --claro: #4C7397;
     --escuro: #001e50;
 }
+
+body {
+    background-color: #c9c9c9e8;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow-y: hidden;
+}
+
 /*============================================================================================================*/
 header {
-    position: absolute;
+    position: relative;
     top: 0;
     width: 100%;
     background-color: var(--escuro);
-    height: 100px;
+    height: 13%;
     padding: 5px;
 }
 
@@ -51,15 +68,13 @@ header ul {
     justify-content: space-between;
     align-items: center;
     float: right;
-    width: 30%;
+    width: 15%;
     height: 100%;
     margin-right: 40px;
 }
 
 header li a {
     color: white;
-    border-top-left-radius: 15px;
-    border-bottom-right-radius: 15px;
     padding: 3px;
 }
 
@@ -67,8 +82,324 @@ header li a:hover {
     background-color: white;
     color: black;
     transition-duration: 0.3s;
+    border-top-left-radius: 15px;
+    border-bottom-right-radius: 15px;
 }
 
 header li a:not(:hover) {
     transition-duration: 0.3s;
+}
+/*============================================================================================================*/
+main {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 80px 15px 80px;
+}
+
+main div {
+    background-color: white;
+    width: 45%;
+    height: 85%;
+    padding: 7px;
+}
+
+.form__agendamento {
+    background-color: white;
+    width: 45%;
+    height: 85%;
+    padding: 7px;
+}
+
+.tabela {
+    display: inline-block;
+}
+
+.tabela table {
+    margin: auto;
+    text-align: center;
+    width: 100%;
+}
+
+caption {
+    border: 1px solid var(--claro);
+    border-radius: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+th {
+    width: 14%;
+}
+td {
+    border: 1px solid var(--claro);
+    border-radius: 5px;
+    font-size: small;
+}
+
+.tabela select {
+    margin: 0;
+    width: 27%;
+    border: 1px solid rgb(150, 150, 150);
+    height: 100%;
+    color: gray;
+    text-align: center;
+}
+
+.tabela form {
+    width: 60%;
+    height: 5%;
+    margin: auto;
+    margin-bottom: 15px;
+}
+
+.filtro__data {
+    float: left;
+    width: 40%;
+    margin: 0;
+    height: 100%;
+    border: 1px solid rgb(150, 150, 150);
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+    text-align: center;
+}
+
+.submit {
+    margin: 0;
+    width: 23%;
+    height: 100%;
+    border: 1px solid rgb(150, 150, 150);
+    background-color: var(--claro);
+    color: white;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+/*============================================================================================================*/
+.novo__agendamento {
+    display: grid; 
+    grid-auto-columns: 1fr; 
+    grid-template-columns: 1fr 1fr 1fr; 
+    grid-template-rows: 0.6fr 1.1fr 1.1fr 1.1fr 1.1fr; 
+    gap: 2px 2px; 
+    grid-template-areas: 
+    "titulo solicitante solicitante"
+    "dia hora_inicio hora_fim"
+    "area_solicitante area_solicitada objtv_teste"
+    "veic resp_veic status"
+    "obs obs enviar";  
+  }
+
+.grids {
+    padding-top: 20px;
+}
+
+.grids label {
+    background-color: #4C7397;
+    color: white;
+    border-radius: 5px;
+    padding: 3px;
+    border: 0.5px solid var(--escuro);
+}
+
+.obs__label {
+    background-color: #4C7397;
+    color: white;
+    border-radius: 5px;
+    padding: 3px;
+    border: 0.5px solid var(--escuro);
+}
+
+.grids input {
+    margin-top: 5px;
+    width: 100%;
+    height: 40%;
+    border-radius: 5px;
+    border: 0.5px solid var(--escuro);
+}
+
+.grids select {
+    margin-top: 5px;
+    width: 100%;
+    height: 40%;
+    border-radius: 5px;
+    border: 0.5px solid var(--escuro);
+}
+
+.chosen-single {
+    margin-top: 5px;
+    width: 100%;
+    height: 40%;
+}
+
+.titulo { 
+    grid-area: titulo;
+    color: white;
+    background-color: var(--escuro); 
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+}
+
+.solicitante { 
+    grid-area: solicitante;
+    width: 100%;
+    height: 100%;
+    background-color: var(--claro);
+    border-radius: 5px;
+    border: 1px solid var(--escuro);
+}
+
+.solicitante label {
+    font-size: larger;
+    background-color: var(--claro);
+    color: white;
+    padding: 3px;
+    border-radius: 5px;
+}
+
+.solicitante input {
+    width: 100%;
+    border: none;
+    font-size: x-large;
+    color: white;
+    background-color: transparent;
+}
+
+.dia { 
+    grid-area: dia; 
+    width: 100%;
+    height: 100%;
+}
+
+.hora_inicio { 
+    grid-area: hora_inicio;
+    width: 100%;
+    height: 100%; 
+}
+
+.hora_fim { 
+    grid-area: hora_fim;
+    width: 100%;
+    height: 100%; 
+}
+
+.area_solicitante { 
+    grid-area: area_solicitante;
+    width: 100%;
+    height: 100%; 
+}
+
+.area_solicitada { 
+    grid-area: area_solicitada;
+    width: 100%;
+    height: 100%; 
+}
+
+.objtv_teste { 
+    grid-area: objtv_teste;
+    width: 100%;
+    height: 100%; 
+}
+
+.veic { 
+    grid-area: veic;
+    width: 100%;
+    height: 100%; 
+}
+
+.resp_veic { 
+    grid-area: resp_veic;
+    width: 100%;
+    height: 100%; 
+}
+
+.status { 
+    grid-area: status;
+    height: 100%;
+    width: 100%;
+}
+
+.enviar { 
+    grid-area: enviar;
+    height: 50%;
+    width: 100%;
+    position: relative;
+    top: 47%;
+}
+
+.exclsv {
+    width: 100%;
+    height: 100%;
+}
+
+.exclsv input[type="radio"] {
+    height: 20%;
+}
+
+.enviar input[type="submit"] {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background-color: var(--escuro);
+    color: white;
+}
+
+.enviar input[type="submit"]:hover {
+    border-top-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    background-color: var(--claro);
+    transition-duration: 0.3s;
+}
+
+.enviar input[type="submit"]:not(:hover) {
+    transition-duration: 0.3s;
+}
+
+.obs { 
+    grid-area: obs;
+    width: 100%;
+    height: 100%; 
+}
+/*============================================================================================================*/
+footer {
+    padding: 15px;
+    background-color: var(--escuro);
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    height: 50px;
+    color: white;
+    font-size: larger;
+    display: flex;
+    justify-content: space-between;
+}
+
+footer div {
+    height: 100%;
+}
+
+footer span {
+    height: 100%;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+footer img {
+    position: relative;
+    top: 2px;
+    height: 1.6rem;
+}
+
+.copyright {
+    float: right;
+    font-size: medium;
 }
