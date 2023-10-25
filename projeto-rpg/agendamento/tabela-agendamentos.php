@@ -11,24 +11,35 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
+    <?php 
+        include_once('../config/config.php');
+        session_start();
+        if (!isset($_SESSION['chapa']) || empty($_SESSION['chapa'])) {
+            header('Location: ../index.php');
+            exit();
+        }
+    ?>
     <header>
         <a href="https://www.vwco.com.br/" target="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus" style="height: 95%;"></a>
         <ul>
             <?php 
-            //    include_once('config.php');
+                include_once('../config/config.php');
 
-            //    $chapa = $_SESSION['chapa'];
+                $chapa = $_SESSION['chapa'];
 
-            //    $query = "SELECT COUNT(*) as count FROM chapa_adm WHERE chapa = '$chapa'";
-            //    $resultado = mysqli_query($conexao, $query);
-            //    $linha = mysqli_fetch_assoc($resultado);
-            //    $admTrue = ($linha['count'] > 0);
+                $query = "SELECT COUNT(*) as count FROM chapa_adm WHERE chapa = '$chapa'";
+                $resultado = mysqli_query($conexao, $query);
+                $linha = mysqli_fetch_assoc($resultado);
+                $admTrue = ($linha['count'] > 0);
 
-            //    if ($admTrue) {
-            //        echo '<li><a href="gestor.php">Gestão</a></li>';
-            //    }
+                if ($admTrue) {
+                    echo '<li><a href="gestor.php">Gestão</a></li>';
+                }
+
+                else {
+                    
+                }
             ?>
-            <li><a href="gestor.php">Gestão</a></li>
             <li><a href="sair.php">Sair</a></li>
         </ul>
     </header>
@@ -156,13 +167,13 @@
             </table>
         </div>
 
-        <form action="agendar.php" method="POST" id="formularioAgendamento" class="form__agendamento novo__agendamento">
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" id="formularioAgendamento" class="form__agendamento novo__agendamento">
             <div class="titulo">
                 <h2>Novo Agendamento</h2>
             </div>
             <div class="solicitante">
                 <label for="solicitante">Solicitante:</label>
-                <input type="text" name="solicitante" id="solicitante" value="<?= $nome ?>" readonly>
+                <input type="text" name="solicitante" id="solicitante" value="<?= $_SESSION['nome'] ?>" readonly>
             </div>
             <div class="dia grids">
                 <label for="dia">Dia:</label>
@@ -184,7 +195,7 @@
             </div>
             <div class="area_solicitante grids">
                 <label for="area_solicitante">Área do Solicitante:</label>
-                <input type="text" name="area_solicitante" value="<?= $area_solicitante ?>" readonly>
+                <input type="text" name="area_solicitante" value="<?= $_SESSION['area_solicitante'] ?>" readonly>
             </div>
             <div class="area_solicitada grids">
                 <label for="area_solicitada">Área Solicitada:</label>
@@ -245,33 +256,79 @@
             </div>
         </form>
         <?php
-        if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['dia']) && isset($_POST['area']) && isset($_POST['hora_inicio']) && isset($_POST['hora_fim'])) {
-            $data = $_POST['dia'];
-            $area = $_POST['area'];
-            $hora_inicio = $_POST['hora_inicio'];
-            $hora_fim = $_POST['hora_fim'];
-
-            $query = "SELECT * FROM $area WHERE dia = '$data' 
-            AND ((hora_inicio <= '$hora_inicio' AND hora_fim >= '$hora_inicio') 
-            OR (hora_inicio <= '$hora_fim' AND hora_fim >= '$hora_fim'))
-            UNION
-            SELECT * FROM exclusivo WHERE dia = '$data' 
-            AND ((hora_inicio <= '$hora_inicio' AND hora_fim >= '$hora_inicio') 
-            OR (hora_inicio <= '$hora_fim' AND hora_fim >= '$hora_fim'))";
-
-            $result = mysqli_query($conexao, $query);
-
-            if ($result && mysqli_num_rows($result) > 0) {
+        if (isset($_POST['submit'])) {
+            if (empty($_POST['solicitante']) || empty($_POST['dia']) || empty($_POST['hora_inicio']) || empty($_POST['hora_fim']) || empty($_POST['area_solicitante']) || empty($_POST['area']) || empty($_POST['objetivo']) || empty($_POST['veic']) || empty($_POST['resp_veic']) || empty($_POST['resposta']) || empty($_POST['obs'])) {
                 echo "<script>
                     Swal.fire({
-                            icon: 'warning',
-                            title: 'ATENCÃO!',
-                            html: 'O horário que você selecionou está ocupado!</br>Verifique a tabela ao lado e selecione um horário disponível!',
-                        })
+                        icon: 'warning',
+                        title: 'ATENÇÃO!',
+                        html: 'Algum dos campos está vazio! Por favor, preencha todos os campos atentamente.',
+                    });
                 </script>";
-            } 
-            else {
-                header('Location: agendar.php');
+            } else {
+                $solicitante = $_POST['solicitante'];
+                $area_solicitante = $_POST['area_solicitante']; // Corrigido o índice
+                $data = $_POST['dia'];
+                $hora_inicio = $_POST['hora_inicio'];
+                $hora_fim = $_POST['hora_fim'];
+                $area = $_POST['area'];
+                $objetivo = $_POST['objetivo'];
+                $veiculo = $_POST['veic'];
+                $resp_veic = $_POST['resp_veic'];
+                $exclsv = $_POST['resposta']; // Corrigido o índice
+                $obs = $_POST['obs'];
+
+                $query = "SELECT * FROM $area WHERE dia = '$data' 
+                    AND ((hora_inicio <= '$hora_inicio' AND hora_fim >= '$hora_inicio') 
+                    OR (hora_inicio <= '$hora_fim' AND hora_fim >= '$hora_fim'))
+                    UNION
+                    SELECT * FROM exclusivo WHERE dia = '$data' 
+                    AND ((hora_inicio <= '$hora_inicio' AND hora_fim >= '$hora_inicio') 
+                    OR (hora_inicio <= '$hora_fim' AND hora_fim >= '$hora_fim'))";
+
+                $result = mysqli_query($conexao, $query);
+
+                if ($result && mysqli_num_rows($result) > 0) {
+                    echo "<script>
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'ATENÇÃO!',
+                            html: 'O horário que você selecionou está ocupado! Verifique a tabela ao lado e selecione um horário disponível.',
+                        });
+                    </script>";
+                } else {
+                    $query = "INSERT INTO $area_solicitante (dia, hora_inicio, hora_fim, objtv, solicitante, area_solicitante, veic, resp_veic, exclsv, obs, status) VALUES ('$data', '$hora_inicio', '$hora_fim', '$objetivo', '$solicitante', '$area_solicitante', '$veiculo', '$resp_veic', '$exclsv', '$obs', '$status')";
+                    $result = mysqli_query($conexao, $query);
+
+                    if ($result) {
+                        $affected_rows = mysqli_affected_rows($conexao);
+                        if ($affected_rows > 0) {
+                            echo '<script>
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "SUCESSO!",
+                                    text: "Seu agendamento foi criado com sucesso!",
+                                    confirmButtonText: "OK",
+                                    confirmButtonColor: "#001e50",
+                                    allowOutsideClick: false,
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        // Redireciona o usuário para a página desejada
+                                        window.location.href = "tabela-agendamentos.php";
+                                    }
+                                });
+                            </script>';
+                        } else {
+                            echo '<script>
+                                Swal.fire({
+                                    icon: "warning",
+                                    title: "ATENÇÃO!",
+                                    html: "Ocorreu um erro no seu agendamento! Tente novamente.",
+                                });
+                            </script>';
+                        }
+                    }
+                }
             }
         }
         ?>
