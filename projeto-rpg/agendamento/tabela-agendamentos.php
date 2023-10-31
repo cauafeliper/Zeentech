@@ -23,7 +23,6 @@
         <a href="https://www.vwco.com.br/" target="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus" style="height: 95%;"></a>
         <ul>
             <?php 
-                include_once('../config/config.php');
 
                 $chapa = $_SESSION['chapa'];
 
@@ -50,20 +49,20 @@
                 <input type="date" id="data" name="data" placeholder="Indique a data" class="filtro__data">
                 <select name="area" id="area" required>
                     <option value="">Área</option>
-                    <option value="vda">Área de avaliação dinâmica(VDA)</option>
-                    <option value="nvh">Pista de Pass by Noise(NVH)</option>
-                    <option value="obstaculos">Pistas estruturais(obstáculos)</option>
-                    <option value="rampa_12_20">Rampas 12% e 20%</option>
-                    <option value="rampa_40">Rampa de 40%</option>
-                    <option value="rampa_60">Rampa de 60%</option>
-                    <option value="asfalto">Apenas asfalto</option>
+                    <option value="VDA">Área de avaliação dinâmica(VDA)</option>
+                    <option value="NVH">Pista de Pass by Noise(NVH)</option>
+                    <option value="Obstáculos">Pistas estruturais(obstáculos)</option>
+                    <option value="Rampa 12% e 20%">Rampas 12% e 20%</option>
+                    <option value="Rampa 40%">Rampa de 40%</option>
+                    <option value="Rampa 60%">Rampa de 60%</option>
+                    <option value="Asfalto">Apenas asfalto</option>
+                    <option value="Pista Completa">Pista Completa</option>
                     <option value="todas_areas">Todas as Áreas</option>
                 </select>
                 <input type="submit" value="Filtrar" class="submit">
             </form>
             <table>
             <?php 
-                include_once('../config/config.php');
                 if($_SERVER["REQUEST_METHOD"] === "POST"){
 
                     if(isset($_POST['data']) & isset($_POST['area'])){
@@ -71,34 +70,9 @@
                         $area = $_POST['area'];
 
                         if($area === 'todas_areas') {
-                            $query = "SELECT * FROM asfalto WHERE dia = '$data' AND status = 'Aprovado'
-                                    UNION
-                                    SELECT * FROM exclusivo WHERE dia = '$data' AND status = 'Aprovado'
-                                    UNION
-                                    SELECT * FROM nvh WHERE dia = '$data' AND status = 'Aprovado'
-                                    UNION
-                                    SELECT * FROM obstaculos WHERE dia = '$data' AND status = 'Aprovado'
-                                    UNION
-                                    SELECT * FROM rampa_12_20 WHERE dia = '$data' AND status = 'Aprovado'
-                                    UNION
-                                    SELECT * FROM rampa_40 WHERE dia = '$data' AND status = 'Aprovado'
-                                    UNION
-                                    SELECT * FROM rampa_60 WHERE dia = '$data' AND status = 'Aprovado'
-                                    UNION
-                                    SELECT * FROM vda WHERE dia = '$data' AND status = 'Aprovado'";
+                            $query = "SELECT * FROM agendamentos WHERE dia = '$data' AND status = 'Aprovado'";
 
                             $result = mysqli_query($conexao, $query);
-
-                            $tabelaNomes = array(
-                                "asfalto" => "Asfalto",
-                                "exclusivo" => "Completa",
-                                "nvh" => "NVH",
-                                "obstaculos" => "Obstáculos",
-                                "rampa_12_20" => "Rampa 12% e 20%",
-                                "rampa_40" => "Rampa 40%",
-                                "rampa_60" => "Rampa 60%",
-                                "vda" => "VDA"
-                            );
 
                             echo '<caption>Todas Áreas</caption>';
 
@@ -108,8 +82,7 @@
                             echo '<tr>';
                             if ($result->num_rows > 0) {
                                 $row = $result->fetch_assoc();
-                                $tabelaNome = $tabelaNomes[$area];
-                                echo "<td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["veic"] . "</td><td>" . $row["obtjv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $tabelaNome . "</td>";
+                                echo "<td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["veic"] . "</td><td>" . $row["objtv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $row["area_pista"] . "</td>";
                             }
                             else {
                                 echo "<td>Ainda</td><td>não</td><td>existem</td><td>agendamentos</td><td>nesse</td><td>dia.</td>";
@@ -117,49 +90,33 @@
                             echo '</tr>';
                         }
                         else {
-                            $query = "SELECT * FROM $area WHERE dia='$data' AND status = 'Aprovado'
-                                    UNION
-                                    SELECT * FROM exclusivo WHERE dia = '$data' AND status = 'Aprovado'";
-                            $result = mysqli_query($conexao, $query);
-                            
-                            if ($area === 'vda') {
-                                $titulo__tabela = 'Área de Avaliação Dinâmica(VDA)';
-                            }
-                            elseif ($area === 'nvh') {
-                                $titulo__tabela = 'Pista de Pass by Noise(NVH)';
-                            }
-                            elseif ($area === 'obstaculos') {
-                                $titulo__tabela = 'Pistas Estruturais(Obstáculos)';
-                            }
-                            elseif ($area === 'rampa_12_20') {
-                                $titulo__tabela = 'Rampa 12% e 20%';
-                            }
-                            elseif ($area === 'rampa_40') {
-                                $titulo__tabela = 'Rampa 40%';
-                            }
-                            elseif ($area === 'rampa_60') {
-                                $titulo__tabela = 'Rampa 60%';
-                            }
-                            elseif ($area === 'asfalto') {
-                                $titulo__tabela = 'Apenas Asfalto';
-                            }
-                            echo '<caption>' . "$titulo__tabela" . '</caption>';
+                               $query = "SELECT * FROM agendamentos WHERE dia = '$data' AND status = 'Aprovado' AND area_pista = '$area'
+                               UNION
+                               SELECT * FROM agendamentos WHERE dia = '$data' AND status = 'Aprovado' AND area_pista = 'Pista Completa'";
+                                $result = mysqli_query($conexao, $query);
 
-                            echo '<tr>';
-                            echo '<th>Início</th><th>Fim</th><th>Veículo</th><th>Objetivo</th><th>Uso exclusivo?</th>';
-                            echo '</tr>';
-                            echo '<tr>';
-                            if ($result->num_rows > 0) {
-                                $row = $result->fetch_assoc();
-                                echo "<td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["veic"] . "</td><td>" . $row["obtjv"] . "</td><td>" . $row["exclsv"] . "</td>";
+                                echo '<caption>' . "$area" . '</caption>';
+    
+                                echo '<tr>';
+                                echo '<th>Início</th><th>Fim</th><th>Veículo</th><th>Objetivo</th><th>Uso exclusivo?</th><th>Área</th>';
+                                echo '</tr>';
+                                echo '<tr>';
+                                if ($result->num_rows > 0) {
+                                    $row = $result->fetch_assoc();
+                                    echo "<td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["veic"] . "</td><td>" . $row["objtv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $row["area_pista"] . "</td>";
+                                }
+                                else {
+                                    echo "<td>Ainda</td><td>não</td><td>existem</td><td>agendamentos</td><td>nesse</td><td>dia.</td>";
+                                }
+                                echo '</tr>';
+                            }
+                           
                             }
                             else {
                                 echo "<td>Ainda</td><td>não</td><td>existem</td><td>agendamentos</td><td>nesse dia.</td>";
                             }
                             echo '</tr>';
-                        }
-                    }
-                }
+                            }
                 else {
                     echo "<caption>Selecione os termos para consulta.</caption>";
                 } 
@@ -201,20 +158,27 @@
                 <label for="area_solicitada">Área Solicitada:</label>
                 <select name="area" id="area" required>
                     <option value="">Selecione a área da pista</option>
-                    <option value="vda">Área de avaliação dinâmica(VDA)</option>
-                    <option value="nvh">Pista de Pass by Noise(NVH)</option>
-                    <option value="obstaculos">Pistas estruturais(obstáculos)</option>
-                    <option value="rampa_12_20">Rampas 12% e 20%</option>
-                    <option value="rampa_40">Rampa de 40%</option>
-                    <option value="rampa_60">Rampa de 60%</option>
-                    <option value="asfalto">Apenas asfalto</option>
-                    <option value="exclusivo">Pista Completa</option>
+                    <option value="VDA">Área de avaliação dinâmica(VDA)</option>
+                    <option value="NVH">Pista de Pass by Noise(NVH)</option>
+                    <option value="Obstáculos">Pistas estruturais(obstáculos)</option>
+                    <option value="Rampa 12% e 20%">Rampas 12% e 20%</option>
+                    <option value="Rampa 40%">Rampa de 40%</option>
+                    <option value="Rampa 60%">Rampa de 60%</option>
+                    <option value="Asfalto">Apenas asfalto</option>
+                    <option value="Pista Completa">Pista Completa</option>
                 </select>
             </div>
             <div class="objtv_teste grids">
                 <label for="objetivo">Objetivo do Teste:</label>
                 <select name="objetivo" id="objetivo" required>
                     <option value="">Selecione o Objetivo</option>
+                    <?php
+                        $query_objtv = "SELECT objtv FROM objtv_teste";
+                        $result_objtv = mysqli_query($conexao, $query_objtv);
+                        while ($row_objtv = mysqli_fetch_assoc($result_objtv)) {
+                            echo '<option value="' . $row_objtv['objtv'] . '">' . $row_objtv['objtv'] . '</option>';
+                        }
+                    ?>
                 </select>
             </div>
             <div class="veic grids">
@@ -222,7 +186,6 @@
                 <select name="veic" id="veic" required>
                     <option value="">Selecione o Veículo</option>
                     <?php
-                        include_once('../config/config.php');
                         $query_veics = "SELECT veic FROM veics";
                         $result_veics = mysqli_query($conexao, $query_veics);
                         while ($row_veic = mysqli_fetch_assoc($result_veics)) {
@@ -252,12 +215,12 @@
                 <textarea name="obs" id="obs" cols="48" rows="5" style="resize: none; margin-top: 5px;"></textarea>
             </div>
             <div class="enviar">
-                <input type="submit" value="Agendar">
+                <input type="submit" name="submit" value="Agendar">
             </div>
         </form>
         <?php
         if (isset($_POST['submit'])) {
-            if (empty($_POST['solicitante']) || empty($_POST['dia']) || empty($_POST['hora_inicio']) || empty($_POST['hora_fim']) || empty($_POST['area_solicitante']) || empty($_POST['area']) || empty($_POST['objetivo']) || empty($_POST['veic']) || empty($_POST['resp_veic']) || empty($_POST['resposta']) || empty($_POST['obs'])) {
+            if (empty($_POST['solicitante']) OR empty($_POST['dia']) OR empty($_POST['hora_inicio']) OR empty($_POST['hora_fim']) OR empty($_POST['area_solicitante']) OR empty($_POST['area']) OR empty($_POST['objetivo']) OR empty($_POST['veic']) OR empty($_POST['resp_veic']) OR empty($_POST['resposta']) OR empty($_POST['obs'])) {
                 echo "<script>
                     Swal.fire({
                         icon: 'warning',
@@ -267,7 +230,7 @@
                 </script>";
             } else {
                 $solicitante = $_POST['solicitante'];
-                $area_solicitante = $_POST['area_solicitante']; // Corrigido o índice
+                $area_solicitante = $_POST['area_solicitante'];
                 $data = $_POST['dia'];
                 $hora_inicio = $_POST['hora_inicio'];
                 $hora_fim = $_POST['hora_fim'];
@@ -275,14 +238,12 @@
                 $objetivo = $_POST['objetivo'];
                 $veiculo = $_POST['veic'];
                 $resp_veic = $_POST['resp_veic'];
-                $exclsv = $_POST['resposta']; // Corrigido o índice
+                $exclsv = $_POST['resposta'];
+                $status = $_POST['status'];
                 $obs = $_POST['obs'];
 
-                $query = "SELECT * FROM $area WHERE dia = '$data' 
-                    AND ((hora_inicio <= '$hora_inicio' AND hora_fim >= '$hora_inicio') 
-                    OR (hora_inicio <= '$hora_fim' AND hora_fim >= '$hora_fim'))
-                    UNION
-                    SELECT * FROM exclusivo WHERE dia = '$data' 
+                $query = "SELECT * FROM agendamentos WHERE (area_pista = '$area' OR area_pista = 'Pista Completa')
+                    AND dia = '$data' 
                     AND ((hora_inicio <= '$hora_inicio' AND hora_fim >= '$hora_inicio') 
                     OR (hora_inicio <= '$hora_fim' AND hora_fim >= '$hora_fim'))";
 
@@ -297,7 +258,7 @@
                         });
                     </script>";
                 } else {
-                    $query = "INSERT INTO $area_solicitante (dia, hora_inicio, hora_fim, objtv, solicitante, area_solicitante, veic, resp_veic, exclsv, obs, status) VALUES ('$data', '$hora_inicio', '$hora_fim', '$objetivo', '$solicitante', '$area_solicitante', '$veiculo', '$resp_veic', '$exclsv', '$obs', '$status')";
+                    $query = "INSERT INTO agendamentos (area_pista, dia, hora_inicio, hora_fim, objtv, solicitante, area_solicitante, veic, resp_veic, exclsv, obs, status) VALUES ('$area', '$data', '$hora_inicio', '$hora_fim', '$objetivo', '$solicitante', '$area_solicitante', '$veiculo', '$resp_veic', '$exclsv', '$obs', '$status')";
                     $result = mysqli_query($conexao, $query);
 
                     if ($result) {
@@ -313,7 +274,6 @@
                                     allowOutsideClick: false,
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        // Redireciona o usuário para a página desejada
                                         window.location.href = "tabela-agendamentos.php";
                                     }
                                 });

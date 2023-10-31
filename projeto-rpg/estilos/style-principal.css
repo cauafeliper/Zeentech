@@ -105,6 +105,7 @@ main div {
     width: 45%;
     height: 85%;
     padding: 7px;
+    border-radius: 10px;
 }
 
 .form__agendamento {

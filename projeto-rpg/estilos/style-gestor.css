@@ -1,0 +1,413 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: 'vw';
+    src: url('../fonts/VW/VWHead-Regular.otf');
+}
+
+@font-face {
+    font-family: 'vw';
+    src: url("../fonts/VW/VWHead-Bold.otf");
+}
+
+@font-face {
+    font-family: 'vw';
+    src: url('../fonts/VW/VWText-Regular.otf');
+}
+
+@font-face {
+    font-family: 'vw';
+    src: url("../fonts/VW/VWText-Bold.otf");
+}
+
+* {
+    font-family: 'vw';
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+:root {
+    --claro: #4C7397;
+    --escuro: #001e50;
+}
+
+body {
+    background-color: #c9c9c9e8;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+}
+
+/*============================================================================================================*/
+header {
+    position: relative;
+    top: 0;
+    width: 100%;
+    background-color: var(--escuro);
+    height: 70px;
+    padding: 5px;
+}
+
+header ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    float: right;
+    width: 15%;
+    height: 100%;
+    margin-right: 40px;
+}
+
+header li a {
+    color: white;
+    padding: 3px;
+}
+
+header li a:hover {
+    background-color: white;
+    color: black;
+    transition-duration: 0.3s;
+    border-top-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+header li a:not(:hover) {
+    transition-duration: 0.3s;
+}
+/*============================================================================================================*/
+main {
+    background-color: var(--escuro);
+    width: 90%;
+    height: fit-content;
+    margin: 20px;
+    padding: 15px;
+    border-radius: 10px;
+}
+main form {
+    background-color: white;
+    height: fit-content;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.filtros label {
+    padding: 3px;
+    background-color: var(--claro);
+    color: white;
+    border: 1px solid var(--escuro);
+    border-radius: 10px;
+}
+
+.filtros {  display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 0.8fr 1.2fr 1.2fr 0.8fr;
+    gap: 5px 5px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "titulo titulo titulo titulo"
+      "dia objetivo solicitante area_pista"
+      "veiculo resp_veiculo exclsv status"
+      "submit submit submit submit";
+  }
+  
+  .titulo { grid-area: titulo; }
+  
+  .dia {  display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.7fr 1.3fr;
+    gap: 5px 5px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "label_dia"
+      "input_dia";
+    grid-area: dia;
+  }
+  
+  .label_dia { grid-area: label_dia; }
+  
+  .input_dia { grid-area: input_dia; }
+
+  .input_dia input {
+    height: 100%;
+    border-radius: 5px;
+    border: 1px solid lightgrey;
+  }
+  
+  .objetivo {  display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.7fr 1.3fr;
+    gap: 5px 5px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "label_objetivo"
+      "input_objetivo";
+    grid-area: objetivo;
+  }
+  
+  .label_objetivo { grid-area: label_objetivo; }
+  
+  .input_objetivo { grid-area: input_objetivo; }
+  
+  .solicitante {  display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.7fr 1.3fr;
+    gap: 5px 5px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "label_solicitante"
+      "input_solicitante";
+    grid-area: solicitante;
+  }
+  
+  .label_solicitante { grid-area: label_solicitante; }
+  
+  .input_solicitante { grid-area: input_solicitante; }
+  
+  .area_pista {  display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.7fr 1.3fr;
+    gap: 5px 5px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "label_area_pista"
+      "input_area_pista";
+    grid-area: area_pista;
+  }
+  
+  .label_area_pista { grid-area: label_area_pista; }
+  
+  .input_area_pista { grid-area: input_area_pista; }
+  
+  .veiculo {  display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.7fr 1.3fr;
+    gap: 5px 5px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "label_veiculo"
+      "input_veiculo";
+    grid-area: veiculo;
+  }
+  
+  .label_veiculo { grid-area: label_veiculo; }
+  
+  .input_veiculo { grid-area: input_veiculo; }
+  
+  .resp_veiculo {  display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.7fr 1.3fr;
+    gap: 5px 5px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "label_resp_veiculo"
+      "input_resp_veiculo";
+    grid-area: resp_veiculo;
+  }
+  
+  .label_resp_veiculo { grid-area: label_resp_veiculo; }
+  
+  .input_resp_veiculo { grid-area: input_resp_veiculo; }
+  
+  .exclsv {  display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.7fr 1.3fr;
+    gap: 5px 5px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "label_exclsv"
+      "input_exclsv";
+    grid-area: exclsv;
+  }
+  
+  .label_exclsv { grid-area: label_exclsv; }
+  
+  .input_exclsv { grid-area: input_exclsv; }
+
+  .input_exclsv label {
+    color: black;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+  }
+  
+  .status {  display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.7fr 1.3fr;
+    gap: 5px 5px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "label_status"
+      "input_status";
+    grid-area: status;
+  }
+  
+  .input_status { grid-area: input_status; }
+  
+  .label_status { grid-area: label_status; }
+  
+  .submit { grid-area: submit; }
+  
+  .submit input {
+    width: 100%;
+    height: 100%;
+    margin-top: 3px;
+    color: white;
+    background-color: var(--escuro);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  
+
+  .tabela {
+    background-color: white;
+    height: fit-content;
+    padding: 10px;
+    border-radius: 10px;
+    width: 100%;
+    margin-top: 15px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 10px;
+  }
+
+  table caption {
+    background-color: white;
+    font-size: larger;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--escuro);
+    margin-bottom: 10px;
+  }
+
+  td {
+    border: 0.2px solid var(--escuro);
+    border-radius: 5px;
+    padding: 3px;
+    max-width: 90px;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: top;
+    text-align: center;
+  }
+
+  td:hover {
+    overflow: auto;
+    white-space: nowrap;
+  }
+
+  .paginacao {
+    float: left;
+    padding: 7px;
+    background-color: rgb(255, 255, 255);
+    position: relative;
+    bottom: 0px;
+    margin-top: 5px;
+    border-radius: 10px;
+  }
+  
+  .paginacao a {
+    display: inline-block;
+    padding: 3px;
+    margin: 0px;
+    border: 1px solid rgb(59, 59, 59);
+    background-color: rgb(146, 146, 146);
+    color: black;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
+  .paginacao a:hover {
+    background-color: rgb(102, 102, 102);
+  }
+
+  .aprovar {
+    background-color: #23CE6B;
+    border: 0.1px solid  var(--escuro);
+    height: 20px;
+    width: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .aprovar:hover {
+    background-color: #158544;
+    border-radius: 50px;
+    transition-duration: 0.5s;
+  }
+
+  .aprovar:not(:hover) {
+    transition-duration: 0.3s;
+  }
+
+  .cancelar {
+    background-color: #D64045;
+    border: 0.1px solid  var(--escuro);
+    height: 20px;
+    width: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .cancelar:hover {
+    background-color: #832427;
+    border-radius: 50px;
+    transition-duration: 0.5s;
+  }
+
+  .cancelar:not(:hover) {
+    transition-duration: 0.3s;
+  }
+/*============================================================================================================*/
+footer {
+    padding: 15px;
+    background-color: var(--escuro);
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    height: 50px;
+    color: white;
+    font-size: larger;
+    display: flex;
+    justify-content: space-between;
+}
+
+footer div {
+    height: 100%;
+}
+
+footer span {
+    height: 100%;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+footer img {
+    position: relative;
+    top: 2px;
+    height: 1.6rem;
+}
+
+.copyright {
+    float: right;
+    font-size: medium;
+}
