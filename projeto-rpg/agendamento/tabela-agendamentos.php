@@ -49,15 +49,16 @@
                 <input type="date" id="data" name="data" placeholder="Indique a data" class="filtro__data">
                 <select name="area" id="area" required>
                     <option value="">Área</option>
-                    <option value="VDA">Área de avaliação dinâmica(VDA)</option>
-                    <option value="NVH">Pista de Pass by Noise(NVH)</option>
-                    <option value="Obstáculos">Pistas estruturais(obstáculos)</option>
-                    <option value="Rampa 12% e 20%">Rampas 12% e 20%</option>
-                    <option value="Rampa 40%">Rampa de 40%</option>
-                    <option value="Rampa 60%">Rampa de 60%</option>
-                    <option value="Asfalto">Apenas asfalto</option>
-                    <option value="Pista Completa">Pista Completa</option>
-                    <option value="todas_areas">Todas as Áreas</option>
+                    <?php 
+                        include_once('../config/config.php');
+
+                        $query_area = "SELECT area FROM area_pista";
+                        $result_area = mysqli_query($conexao, $query_area);
+
+                        while ($row = mysqli_fetch_assoc($result_area)) {
+                            echo '<option value="' . $row['area'] . '">' . $row['area'] . '</option>';
+                        }
+                    ?>
                 </select>
                 <input type="submit" value="Filtrar" class="submit">
             </form>
@@ -158,14 +159,13 @@
                 <label for="area_solicitada">Área Solicitada:</label>
                 <select name="area" id="area" required>
                     <option value="">Selecione a área da pista</option>
-                    <option value="VDA">Área de avaliação dinâmica(VDA)</option>
-                    <option value="NVH">Pista de Pass by Noise(NVH)</option>
-                    <option value="Obstáculos">Pistas estruturais(obstáculos)</option>
-                    <option value="Rampa 12% e 20%">Rampas 12% e 20%</option>
-                    <option value="Rampa 40%">Rampa de 40%</option>
-                    <option value="Rampa 60%">Rampa de 60%</option>
-                    <option value="Asfalto">Apenas asfalto</option>
-                    <option value="Pista Completa">Pista Completa</option>
+                    <?php
+                        $query_area = "SELECT DISTINCT area FROM area_pista";
+                        $result_area = mysqli_query($conexao, $query_area);
+                        while ($row_area = mysqli_fetch_assoc($result_area)) {
+                            echo '<option value="' . $row_area['area'] . '">' . $row_area['area'] . '</option>';
+                        }
+                    ?>
                 </select>
             </div>
             <div class="objtv_teste grids">
@@ -173,10 +173,11 @@
                 <select name="objetivo" id="objetivo" required>
                     <option value="">Selecione o Objetivo</option>
                     <?php
-                        $query_objtv = "SELECT objtv FROM objtv_teste";
+                        $query_objtv = "SELECT DISTINCT objtv FROM objtv_teste";
                         $result_objtv = mysqli_query($conexao, $query_objtv);
                         while ($row_objtv = mysqli_fetch_assoc($result_objtv)) {
-                            echo '<option value="' . $row_objtv['objtv'] . '">' . $row_objtv['objtv'] . '</option>';
+                            $selected = ($objtv == $row_objtv['objtv']) ? 'selected' : '';
+                            echo '<option value="' . htmlspecialchars($row_objtv['objtv']) . '" ' . $selected . '>' . htmlspecialchars($row_objtv['objtv']) . '</option>';
                         }
                     ?>
                 </select>

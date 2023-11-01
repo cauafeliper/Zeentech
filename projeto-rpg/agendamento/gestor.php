@@ -67,12 +67,12 @@
                     <select name="objetivo" id="select_objetivo">
                         <option value="">Selecione o Objetivo</option>
                         <?php
-                        $query_objtv = "SELECT objtv FROM objtv_teste";
-                        $result_objtv = mysqli_query($conexao, $query_objtv);
-                        while ($row_objtv = mysqli_fetch_assoc($result_objtv)) {
-                            $selected = ($objetivo == $row_objtv['objtv']) ? 'selected' : '';
-                            echo '<option value="' . htmlspecialchars($row_objtv['objtv']) . '" ' . $selected . '>' . htmlspecialchars($row_objtv['objtv']) . '</option>';
-                        }
+                            $query_objtv = "SELECT DISTINCT objtv FROM objtv_teste";
+                            $result_objtv = mysqli_query($conexao, $query_objtv);
+                            while ($row_objtv = mysqli_fetch_assoc($result_objtv)) {
+                                $selected = ($objtv == $row_objtv['objtv']) ? 'selected' : '';
+                                echo '<option value="' . htmlspecialchars($row_objtv['objtv']) . '" ' . $selected . '>' . htmlspecialchars($row_objtv['objtv']) . '</option>';
+                            }
                         ?>
                     </select>
                     <script>
@@ -112,14 +112,14 @@
                 <div class="input_area_pista">
                 <select name="area_pista" id="select_area_pista">
                     <option value="">Selecione a área da pista</option>
-                    <option value="VDA">Área de avaliação dinâmica(VDA)</option>
-                    <option value="NVH">Pista de Pass by Noise(NVH)</option>
-                    <option value="Obstáculos">Pistas estruturais(obstáculos)</option>
-                    <option value="Rampa 12% e 20%">Rampas 12% e 20%</option>
-                    <option value="Rampa 40%">Rampa de 40%</option>
-                    <option value="Rampa 60%">Rampa de 60%</option>
-                    <option value="Asfalto">Apenas asfalto</option>
-                    <option value="Pista Completa">Pista Completa</option>
+                    <?php
+                        $query_area = "SELECT DISTINCT area FROM area_pista";
+                        $result_area = mysqli_query($conexao, $query_area);
+                        while ($row_area = mysqli_fetch_assoc($result_area)) {
+                            $selected = ($area == $row_area['area']) ? 'selected' : '';
+                            echo '<option value="' . htmlspecialchars($row_area['area']) . '" ' . $selected . '>' . htmlspecialchars($row_area['area']) . '</option>';
+                        }
+                    ?>
                 </select>
                 <script>
                     $(document).ready(function () {
@@ -139,7 +139,7 @@
                     <select name="veiculo" id="select_veiculo">
                         <option value="">Selecione o Veículo</option>
                         <?php
-                        $query_veic = "SELECT veic FROM veics";
+                        $query_veic = "SELECT DISTINCT veic FROM veics";
                         $result_veic = mysqli_query($conexao, $query_veic);
                         while ($row_veic = mysqli_fetch_assoc($result_veic)) {
                             $selected = ($veiculo == $row_veic['veic']) ? 'selected' : '';
@@ -259,8 +259,8 @@
                     
                     $offset = ($pagina_atual - 1) * $registros_por_pagina;
                     
-                    $query_paginacao = "SELECT * FROM agendamentos WHERE
-                                        (dia LIKE '%$dia%')
+                    $query_paginacao = "SELECT * FROM agendamentos 
+                                        WHERE (dia LIKE '%$dia%')
                                         AND (objtv LIKE '%$objetivo%')
                                         AND (solicitante LIKE '%$solicitante%')
                                         AND (area_pista LIKE '%$area_pista%')
@@ -268,6 +268,13 @@
                                         AND (resp_veic LIKE '%$resp_veic%')
                                         AND (exclsv LIKE '%$exclsv%')
                                         AND (status LIKE '%$status%')
+                                        ORDER BY 
+                                        CASE 
+                                            WHEN status = 'Pendente' THEN 1
+                                            WHEN status = 'Aprovado' THEN 2
+                                            ELSE 3
+                                        END,
+                                        dia ASC
                                         LIMIT $registros_por_pagina OFFSET $offset";
                     $result_paginacao = mysqli_query($conexao, $query_paginacao);
 
@@ -330,7 +337,135 @@
             }
             ?>
         </div>
+
+        <div class="addRmv">
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" class="form_addRmv">
+                <div class="veic_addRmv">
+                    <div class="veic_addRmv_label">
+                        <h3>Veículos</h3>
+                    </div>
+                    <div class="veic_add">
+                        <h4>Adicionar</h4>
+                        <input type="text" name="novoVeic" placeholder="Novo Veículo">
+                        <input type="submit" name="addVeic" value="Adicionar">
+                    </div>
+                    <div class="veic_rmv">
+                        <h4>Remover</h4>
+                        <select name="removerVeiculo">
+                            <option value="">Remover Veículo</option>
+                            <?php
+                            $query_veic = "SELECT DISTINCT veic FROM veics";
+                            $result_veic = mysqli_query($conexao, $query_veic);
+                            while ($row_veic = mysqli_fetch_assoc($result_veic)) {
+                                $selected = ($veiculo == $row_veic['veic']) ? 'selected' : '';
+                                echo '<option value="' . htmlspecialchars($row_veic['veic']) . '" ' . $selected . '>' . htmlspecialchars($row_veic['veic']) . '</option>';
+                            }
+                            ?>
+                        </select>
+                        <input type="submit" name="rmvVeic" value="Remover">
+                    </div>
+                </div>
+            </form>
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" class="form_addRmv">
+                <div class="area_addRmv">
+                    <div class="area_addRmv_label">
+                        <h3>Áreas da Pista</h3>
+                    </div>
+                    <div class="area_add">
+                        <h4>Adicionar</h4>
+                        <input type="text" name="novoArea" placeholder="Nova Área">
+                        <input type="submit" name="addArea" value="Adicionar">
+                    </div>
+                    <div class="area_rmv">
+                        <h4>Remover</h4>
+                        <select name="removerArea">
+                            <option value="">Remover Área</option>
+                            <?php
+                            $query_area = "SELECT DISTINCT area FROM area_pista";
+                            $result_area = mysqli_query($conexao, $query_area);
+                            while ($row_area = mysqli_fetch_assoc($result_area)) {
+                                $selected = ($area == $row_area['area']) ? 'selected' : '';
+                                echo '<option value="' . htmlspecialchars($row_area['area']) . '" ' . $selected . '>' . htmlspecialchars($row_area['area']) . '</option>';
+                            }
+                            ?>
+                        </select>
+                        <input type="submit" name="rmvArea" value="Remover">
+                    </div>
+                </div>
+            </form>
+
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" class="form_addRmv">
+                <div class="objtv_addRmv">
+                    <div class="objtv_addRmv_label">
+                        <h3>Objetivos</h3>
+                    </div>
+                    <div class="objtv_add">
+                        <h4>Adicionar</h4>
+                        <input type="text" name="novoObjtv" placeholder="Novo Objetivo">
+                        <input type="submit" name="addObjtv" value="Adicionar">
+                    </div>
+                    <div class="objtv_rmv">
+                        <h4>Remover</h4>
+                        <select name="removerObjtv">
+                            <option value="">Remover Objetivo</option>
+                            <?php
+                            $query_objtv = "SELECT DISTINCT objtv FROM objtv_teste";
+                            $result_objtv = mysqli_query($conexao, $query_objtv);
+                            while ($row_objtv = mysqli_fetch_assoc($result_objtv)) {
+                                $selected = ($objtv == $row_objtv['objtv']) ? 'selected' : '';
+                                echo '<option value="' . htmlspecialchars($row_objtv['objtv']) . '" ' . $selected . '>' . htmlspecialchars($row_objtv['objtv']) . '</option>';
+                            }
+                            ?>
+                        </select>
+                        <input type="submit" name="rmvObjtv" value="Remover">
+                    </div>
+                </div>
+            </form>
+        </div>
     </main>
+    <?php
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addVeic'])) {
+            include_once('../config/config.php');
+
+            if (!empty($_GET['novoVeic'])) {
+                include_once('../config/config.php');
+
+                $novoVeic = $_GET['novoVeic'];
+                $query_addVeic = "INSERT INTO veics(veic) VALUES ('$novoVeic')";
+                mysqli_query($conexao, $query_addVeic);
+            }
+        }
+
+
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['rmvVeic'])) {
+            include_once('../config/config.php');
+
+            $removerVeiculo = $_GET['removerVeiculo'];
+            $query_removerVeiculo = "DELETE FROM veics WHERE veic = '$removerVeiculo'";
+            mysqli_query($conexao, $query_removerVeiculo);
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addArea'])) {
+            include_once('../config/config.php');
+
+            if (!empty($_GET['novoArea'])) {
+                include_once('../config/config.php');
+
+                $novoArea = $_GET['novoArea'];
+                $query_addArea = "INSERT INTO area_pista(area) VALUES ('$novoArea')";
+                mysqli_query($conexao, $query_addArea);
+            }
+        }
+
+
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['rmvArea'])) {
+            include_once('../config/config.php');
+
+            $removerArea = $_GET['removerArea'];
+            $query_removerArea = "DELETE FROM area_pista WHERE area = '$removerArea'";
+            mysqli_query($conexao, $query_removerArea);
+        }
+    ?>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
         var botoesAprovar = document.querySelectorAll(".aprovar");

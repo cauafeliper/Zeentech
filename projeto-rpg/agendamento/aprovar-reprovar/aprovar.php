@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
 <?php
 include_once('../../config/config.php');
 
@@ -13,13 +22,12 @@ if (isset($_GET['id'])) {
                 Swal.fire({
                     icon: "success",
                     title: "SUCESSO!",
-                    text: "Agendamento reprovado com sucesso!",
+                    text: "Agendamento aprovado com sucesso!",
                     confirmButtonText: "OK",
-                    confirmButtonColor: "#001e50",
+                    confirmButtonColor: "#23CE6B",
                     allowOutsideClick: false,
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Redireciona o usuário para a página desejada
                         window.location.href = "../gestor.php";
                     }
                 });
@@ -29,7 +37,7 @@ if (isset($_GET['id'])) {
                 Swal.fire({
                     icon: "warning",
                     title: "ATENÇÃO!",
-                    text: "Ocorreu um erro ao reprovar o agendamento. Tente novamente.",
+                    text: "Ocorreu um erro ao aprovar o agendamento. Tente novamente.",
                 });
             </script>';
         }
@@ -44,3 +52,5 @@ if (isset($_GET['id'])) {
     }
 } 
 ?>
+</body>
+</html>

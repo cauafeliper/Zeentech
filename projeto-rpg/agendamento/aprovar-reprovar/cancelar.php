@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
 <?php
 include_once('../../config/config.php');
 
@@ -15,7 +24,7 @@ if (isset($_GET['id'])) {
                     title: "SUCESSO!",
                     text: "Agendamento reprovado com sucesso!",
                     confirmButtonText: "OK",
-                    confirmButtonColor: "#001e50",
+                    confirmButtonColor: "#23CE6B",
                     allowOutsideClick: false,
                 }).then((result) => {
                     if (result.isConfirmed) {
@@ -44,3 +53,5 @@ if (isset($_GET['id'])) {
     }
 } 
 ?>
+</body>
+</html>

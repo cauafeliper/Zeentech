@@ -58,7 +58,7 @@ header {
     top: 0;
     width: 100%;
     background-color: var(--escuro);
-    height: 70px;
+    height: 90px;
     padding: 5px;
 }
 
@@ -102,6 +102,11 @@ main form {
     height: fit-content;
     padding: 10px;
     border-radius: 10px;
+}
+
+.form_addRmv {
+    background-color: transparent;
+    height: fit-content;
 }
 
 .filtros label {
@@ -375,6 +380,157 @@ main form {
   .cancelar:not(:hover) {
     transition-duration: 0.3s;
   }
+/*============================================================================================================*/
+  .addRmv {  
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 0px 10px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "veic_addRmv area_addRmv objtv_addRmv";
+    width: 100%;
+    margin-top: 60px;
+    justify-content: center;
+  }
+  
+  .veic_addRmv {  
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 5px 5px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "veic_addRmv_label veic_addRmv_label"
+      "veic_add veic_rmv";
+    grid-area: veic_addRmv;
+    width: 90%;
+    background-color: white;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .veic_addRmv input {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid lightgray;
+  }
+
+  .veic_addRmv input[type="submit"] {
+    background-color: var(--escuro);
+    color: white;
+  }
+
+  .veic_addRmv select {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid lightgray;
+  }
+  
+  .veic_addRmv_label { 
+    grid-area: veic_addRmv_label;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+  }
+
+  
+  .veic_add { 
+    grid-area: veic_add; 
+  }
+  
+  .veic_rmv { 
+    grid-area: veic_rmv; 
+  }
+  
+  .area_addRmv {  display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 5px 5px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "area_addRmv_label area_addRmv_label"
+      "area_add area_rmv";
+    grid-area: area_addRmv;
+    width: 90%;
+    background-color: white;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+  }
+  
+  .area_addRmv_label { 
+    grid-area: area_addRmv_label;
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+  }
+
+  .area_addRmv input {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid lightgray;
+  }
+
+  .area_addRmv input[type="submit"] {
+    background-color: var(--escuro);
+    color: white;
+  }
+
+  .area_addRmv select {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid lightgray;
+  }
+  
+  .area_add { grid-area: area_add; }
+  
+  .area_rmv { grid-area: area_rmv; }
+  
+  .objtv_addRmv {  display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 5px 5px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "objtv_addRmv_label objtv_addRmv_label"
+      "objtv_add objtv_rmv";
+    grid-area: objtv_addRmv;
+    width: 90%;
+    background-color: white;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+  }
+  
+  .objtv_addRmv_label { 
+    grid-area: objtv_addRmv_label;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+  }
+
+  .objtv_addRmv input {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid lightgray;
+  }
+
+  .objtv_addRmv input[type="submit"] {
+    background-color: var(--escuro);
+    color: white;
+  }
+
+  .objtv_addRmv select {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid lightgray;
+  }
+  
+  .objtv_add { grid-area: objtv_add; }
+  
+  .objtv_rmv { grid-area: objtv_rmv; }
 /*============================================================================================================*/
 footer {
     padding: 15px;
