@@ -45,9 +45,9 @@
     
     <main>
         <div class="tabela">
-            <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" onsubmit="return validateForm()">
+            <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" onsubmit="return validateForm()">
                 <input type="date" id="data" name="data" placeholder="Indique a data" class="filtro__data">
-                <select name="area" id="area" required>
+                <select name="area_pista" id="area_pista" required>
                     <option value="">Área</option>
                     <?php 
                         include_once('../config/config.php');
@@ -59,6 +59,7 @@
                             echo '<option value="' . $row['area'] . '">' . $row['area'] . '</option>';
                         }
                     ?>
+                    <option value="todas_areas">Todas Áreas</option>
                 </select>
                 <input type="submit" value="Filtrar" class="submit">
             </form>
@@ -68,9 +69,9 @@
 
                     if(isset($_POST['data']) & isset($_POST['area'])){
                         $data = $_POST['data'];
-                        $area = $_POST['area'];
+                        $area_pista = $_POST['area'];
 
-                        if($area === 'todas_areas') {
+                        if($area_pista === 'todas_areas') {
                             $query = "SELECT * FROM agendamentos WHERE dia = '$data' AND status = 'Aprovado'";
 
                             $result = mysqli_query($conexao, $query);
@@ -82,8 +83,10 @@
                             echo '</tr>';
                             echo '<tr>';
                             if ($result->num_rows > 0) {
-                                $row = $result->fetch_assoc();
-                                echo "<td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["veic"] . "</td><td>" . $row["objtv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $row["area_pista"] . "</td>";
+                                while($row = $result->fetch_assoc()){
+
+                                echo "<tr><td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["veic"] . "</td><td>" . $row["objtv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $row["area_pista"] . "</td></tr>";
+                                }
                             }
                             else {
                                 echo "<td>Ainda</td><td>não</td><td>existem</td><td>agendamentos</td><td>nesse</td><td>dia.</td>";
@@ -91,20 +94,21 @@
                             echo '</tr>';
                         }
                         else {
-                               $query = "SELECT * FROM agendamentos WHERE dia = '$data' AND status = 'Aprovado' AND area_pista = '$area'
+                               $query = "SELECT * FROM agendamentos WHERE dia = '$data' AND status = 'Aprovado' AND area_pista = '$area_pista'
                                UNION
                                SELECT * FROM agendamentos WHERE dia = '$data' AND status = 'Aprovado' AND area_pista = 'Pista Completa'";
                                 $result = mysqli_query($conexao, $query);
 
-                                echo '<caption>' . "$area" . '</caption>';
+                                echo '<caption>' . "$area_pista" . '</caption>';
     
                                 echo '<tr>';
                                 echo '<th>Início</th><th>Fim</th><th>Veículo</th><th>Objetivo</th><th>Uso exclusivo?</th><th>Área</th>';
                                 echo '</tr>';
                                 echo '<tr>';
                                 if ($result->num_rows > 0) {
-                                    $row = $result->fetch_assoc();
-                                    echo "<td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["veic"] . "</td><td>" . $row["objtv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $row["area_pista"] . "</td>";
+                                    while($row = $result->fetch_assoc()) {
+                                    echo "<tr><td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["veic"] . "</td><td>" . $row["objtv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $row["area_pista"] . "</td></tr>";
+                                    }
                                 }
                                 else {
                                     echo "<td>Ainda</td><td>não</td><td>existem</td><td>agendamentos</td><td>nesse</td><td>dia.</td>";
