@@ -66,11 +66,19 @@
             right: 8%;
             top: 2%;
             width: 80%;
-            height: 20%;
+            height: 25%;
             background-color: #9a1c1f;
             border-radius: 10px;
             padding: 8px;
             color: white;
+        }
+
+        .select_veic {
+            margin-right: 10%;
+        }
+
+        .select_insp {
+            margin-right: 10%;
         }
 
         .filtro form {
@@ -110,7 +118,7 @@
 
         .tabela {
             position: absolute;
-            top: 24%;
+            top: 30%;
             right: 8%;
             width: 80%;
             background-color: #9a1c1f;
@@ -140,10 +148,10 @@
 
         .addRmv {
             position: absolute;
-            top: 85%;
+            top: 103%;
             left: 27%;
             width: 50%;
-            height: 30%;
+            height: 37%;
             background-color: #9a1c1f;
             border-radius: 10px;
             padding: 8px;
@@ -177,6 +185,137 @@
             border-radius: 7px;
             margin-bottom: 1.2rem;
         }
+
+        @media(max-width: 1033px){
+        .filtro {
+            position: absolute;
+            right: 3%;
+            top: 2%;
+            width: 80%;
+            height: 220px;
+        }
+
+        .filtro form {
+            height: 75%;
+            background-color: white;
+        }
+
+        .filtro form label {
+            background-color: #9A1C1F;
+            border-radius: 5px;
+            padding: 3px;
+        }
+
+        .filtro select {
+            width: 25%;
+            height: 27%;
+            margin-bottom: 5px;
+        }
+
+        .select_veic {
+            margin-right: 0%;
+        }
+
+        .select_insp {
+            margin-right: 0%;
+        }
+
+        form hr {
+            margin: 10px;
+        }
+
+        input[type=submit] {
+            width: 100%;
+            height: 35px;
+            background-color: #9A1C1F;
+            color: white;
+            font-weight: bold;
+            font-size: large;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            border: none;
+        }
+
+        .tabela {
+            position: absolute;
+            top: 38%;
+            right: 1%;
+            width: 83%;
+            background-color: #9a1c1f;
+            border-radius: 10px;
+            padding: 10px;
+            color: white;
+        }
+
+        table {
+            background-color: white;
+            border-radius: 10px;
+            color: black;
+            margin-bottom: 10px;
+        }
+
+        .paginacao {
+            margin: 5px;
+            border-radius: 5px;
+        }
+
+        .paginacao a {
+            color: white;
+            padding-left: 3px;
+            padding-right: 3px;
+            border-radius: 3px;
+        }
+
+        .sidebar {
+            width: 15vw;
+        }
+
+        .sidebar__imgs {
+            height: 12%;
+        }
+
+        
+
+        .addRmv {
+            position: absolute;
+            top: 153%;
+            left: 16%;
+            width: 83%;
+            height: 37%;
+            background-color: #9a1c1f;
+            border-radius: 10px;
+            padding: 8px;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .addRmv div {
+            padding: 5px;
+            border-radius: 10px;
+            height: 85%;
+            background-color: white;
+            width: 48%;
+            text-align: center;
+            color: black;
+        }
+
+        .addRmv div form {
+            padding: 10px;
+            height: 85%;
+            width: 48%;
+            background-color: lightcoral;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .addRmvInputs {
+            margin-top: 1.1rem;
+            height: 25%;
+            text-align: center;
+            border-radius: 7px;
+            margin-bottom: 1.2rem;
+        }
+    }
     </style>
 </head>
 <body>
@@ -201,7 +340,7 @@
             <h2><img src="https://icons.iconarchive.com/icons/colebemis/feather/16/filter-icon.png" width="16" height="16">Filtros de Busca</h2>
             <form action="<?=$_SERVER['PHP_SELF']?>" method="get">
                 <label for="veic">Veículo:</label>
-                <select name="veic" id="idVeic" style="margin-right: 13%;">
+                <select name="veic" id="idVeic" class="select_veic">
                     <option value="">Selecione</option>
                         <?php 
                             include_once('config.php');
@@ -215,7 +354,7 @@
                         ?>
                 </select>
                 <label for="inspetor">Inspetor:</label>
-                <select name="insp" id="idInsp" style="margin-right: 13%;">
+                <select name="insp" id="idInsp" class="select_insp">
                     <option value="">Selecione</option>
                         <?php 
                             include_once('config.php');
