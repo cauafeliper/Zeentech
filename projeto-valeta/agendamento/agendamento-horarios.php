@@ -12,7 +12,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendamento | Valeta</title>
-    <link rel="stylesheet" href="../estilos/style-form.css">
+    <link rel="stylesheet" href="../estilos/style-form-hora.css">
     <link rel="shortcut icon" href="../imgs/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -28,11 +28,12 @@
     </script>
     <div class="sidebar">
         <div class="sidebar__content">
-            <a href="../tabela-agendamentos.php" class="sidebar__imgs" style="margin-top: 40px;">
+            <a href="../tabela-agendamentos.php" class="sidebar__imgs">
                 <abbr title="Tabela de Agendamentos.">
                     <div>
                         <img src="../imgs/calendario.png" alt="icon-teste">
                     </div>
+                    <span>Horários</span>
                 </abbr>
             </a>
             <a href="../cadastro-login/sair.php" class="sidebar__sair">
@@ -65,7 +66,7 @@
                 </div>
             </span>
             <input type="button" value="Estender horário" onclick="adicionarHorario()" class="add__horario"> 
-            <button id="popAdd" type="button" style="height: 24px; position:absolute; bottom: 53px; left: 475px; border-radius: 20px; background-color: #D51E24; border-color: #D51E24;"><img src="https://icons.iconarchive.com/icons/bootstrap/bootstrap/16/Bootstrap-exclamation-circle-icon.png" width="20" height="20"></button>
+            <button id="popAdd" type="button" class="botaozin"><img src="https://icons.iconarchive.com/icons/bootstrap/bootstrap/16/Bootstrap-exclamation-circle-icon.png" width="20" height="20"></button>
             <script>
                 const popAdd = document.getElementById('popAdd');
                 popAdd.addEventListener('click', () => {

@@ -96,35 +96,6 @@ a {
     text-align: center;
 }
 
-.formulario__li__cinza {
-    width: 20%;
-    border-bottom: 3px solid gray;
-    text-align: center;
-}
-
-.select__valeta {
-    position: absolute;
-    top: 42%;
-    left: 43.2%;
-    height: 50px;
-    width: 152px;
-    font-weight: bold;
-    color: white;
-    background-color: #D51E24;
-    border-radius: 10px;
-    border: 0.5px solid #9a1c1f;
-    text-align: center;
-}
-
-.select__valeta:hover {
-    transition-duration: 0.3s;
-    background-color: #9a1c1f;
-}
-
-.select__valeta:not(:hover) {
-    transition-duration: 0.3s;
-}
-
 .select__veiculo {
     position: absolute;
     top: 42%;
@@ -154,9 +125,10 @@ a {
 }
 
 .div__radio__eng {
-    position: absolute;
-    top: 41.5%;
-    left: 57%;
+    position: absolute; 
+    top: 36.5%; 
+    left: 57%; 
+    height: 49%;
 }
 
 .div__radio__label {
@@ -175,69 +147,6 @@ a {
     border-radius: 10px;
     color: white;
 }
-
-.span__horarios {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 90%;
-    position: absolute;
-    top: 17%;
-    left: 5%;
-    height: 70%;
-}
-
-.select__horario {
-    height: 100%;
-    width: 100%;
-    font-weight: bold;
-    color: white;
-    background-color: #D51E24;
-    border-radius: 10px;
-    border: 0.5px solid #9a1c1f;
-    text-align: center;
-}
-
-.select__horario:hover {
-    transition-duration: 0.3s;
-    background-color: #9a1c1f;
-}
-
-.select__horario:not(:hover) {
-    transition-duration: 0.3s;
-}
-
-.add__horario {
-    position: absolute;
-    bottom: 50px;
-    left: 10px;
-    height: 7%;
-    width: 40%;
-    border-radius: 10px;
-    background-color: #D51E24;
-    color: white;
-    font-weight: bold;
-}
-
-.rmv__horario {
-    position: absolute;
-    bottom: 50px;
-    right: 10px;
-    height: 7%;
-    width: 40%;
-    border-radius: 10px;
-    background-color: #D51E24;
-    color: white;
-    font-weight: bold;
-}
-
-
-.div__select__horario {
-    height: 12%;
-    width: 15%;
-    margin-left: 10px;
-}
-
 
 .submit {
     position: absolute;
@@ -300,15 +209,11 @@ body {
     background-color: lightgray;
 }
 
-@media(max-width: 1100px) {
-    .select__valeta {
-        position: absolute;
-        top: 42%;
-        left: 40%;
-        height: 50px;
-        width: 152px;
-        }
+@media(max-width: 1150px) {
+    .formulario__li__vermelha {
+        height: 77px;
     }
+}
 
 @media(max-width: 970px) {
     .sidebar {
@@ -325,7 +230,22 @@ body {
     }
 }
 
-@media(max-width: 900px) {
+@media(max-width: 766px) {
+    .sidebar {
+        width: 10vw;
+    }
+
+    form {
+        position: absolute;
+        top: 50%;
+        left: 55%;
+        transform: translate(-50%, -50%);
+        height: 55%;
+        width: 80%;
+    }
+}
+
+@media(max-width: 615px) {
     .sidebar {
         position: fixed;
         left: 0;
@@ -358,12 +278,6 @@ body {
         right: 0;
         width: 50px;
         height: 100%;
-    }
-
-    .select__valeta {
-        position: absolute;
-        top: 42%;
-        left: 35%;
     }
 
     form {
@@ -377,6 +291,29 @@ body {
 }
 
 @media(max-width: 543px) {
+    .select__veiculo {
+        position: absolute;
+        top: 42%;
+        left: 32%;
+        height: 10%;
+        width: 90px;
+    }
+    
+    .select__insp {
+        position: absolute;
+        top: 42%;
+        left: 52%;
+        height: 10%;
+        width: 90px;
+    }
+    
+    .div__radio__eng {
+        position: absolute; 
+        top: 52%; 
+        left: 38%; 
+        height: 49%;
+    }
+
     .sidebar {
         position: fixed;
         left: 0;
@@ -411,24 +348,30 @@ body {
         height: 100%;
     }
 
-    .select__valeta {
-        position: absolute;
-        top: 42%;
-        left: 33%;
-    }
-
     .formulario__li__vermelha {
-        width: 25%;
-        height: 77px;
-    }
-    
-    .formulario__li__cinza {
         width: 25%;
         height: 77px;
     }
 }
 
-@media(max-width: 415px) {
+@media(max-width: 465px) {
+
+    .select__veiculo {
+        position: absolute;
+        top: 42%;
+        left: 30%;
+        height: 10%;
+        width: 90px;
+    }
+    
+    .select__insp {
+        position: absolute;
+        top: 42%;
+        left: 55%;
+        height: 10%;
+        width: 90px;
+    }
+    
     .sidebar {
         position: fixed;
         left: 0;
@@ -472,10 +415,23 @@ body {
         height: 55%;
         width: 98%;
     }
+}
 
-    .select__valeta {
+@media(max-width: 360px) {
+    .select__veiculo {
         position: absolute;
         top: 42%;
-        left: 30%;
+        left: 25%;
+        height: 10%;
+        width: 90px;
     }
+    
+    .select__insp {
+        position: absolute;
+        top: 42%;
+        left: 57%;
+        height: 10%;
+        width: 90px;
+    }
+    
 }

@@ -26,6 +26,7 @@
                     <div>
                         <img src="../imgs/calendario.png" alt="icon-teste">
                     </div>
+                    <span>Horários</span>
                 </abbr>
             </a>
             <a href="../cadastro-login/sair.php" class="sidebar__sair">

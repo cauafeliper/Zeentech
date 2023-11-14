@@ -8,12 +8,12 @@
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendamento | Veículo</title>
-    <link rel="stylesheet" href="../estilos/style-form.css">
+    <link rel="stylesheet" href="../estilos/style-form-veic.css">
     <link rel="shortcut icon" href="../imgs/favicon.png" type="image/x-icon">
 </head>
 <body>
@@ -24,6 +24,7 @@
                     <div>
                         <img src="../imgs/calendario.png" alt="icon-teste">
                     </div>
+                    <span>Horários</span>
                 </abbr>
             </a>
             <a href="../cadastro-login/sair.php" class="sidebar__sair">
@@ -42,7 +43,7 @@
                 <li class="formulario__li__vermelha" style="margin-right: 15px;">4.Indique o Veículo</li>
             </ol>
             <select name="veiculo" id="idVeiculo" style="margin-right: 13%;" class="select__veiculo" required>
-                <option value="">Selecione o Veículo</option>
+                <option value="">Veículo</option>
                     <?php 
                         include_once('config.php');
 
@@ -56,7 +57,7 @@
             </select>
             
             <select name="insp" id="idInsp" style="margin-right: 13%;" class="select__insp" required>
-                <option value="">Selecione o Inspetor</option>
+                <option value="">Inspetor</option>
                     <?php 
                         include_once('config.php');
 
@@ -69,7 +70,7 @@
                     ?>
             </select>
             
-            <div class="div__radio__eng" style="position: absolute; top: 36.5%; left: 57%; height: 49%;">
+            <div class="div__radio__eng">
                 <label for="eng" style="font-size: 0.8em;">Valeta do engenheiro?</label>
                 <div class="radio__eng">
                     <input type="radio" name="eng" id="idEng" value="sim" style="margin-right: 5px;" required />

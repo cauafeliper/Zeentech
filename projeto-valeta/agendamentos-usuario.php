@@ -6,52 +6,6 @@
         exit();
     }
 ?>
-
-<?php
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addVeic'])) {
-        include_once('config.php');
-
-        if (!empty($_POST['novoVeic'])) {
-            include_once('config.php');
-
-            $novoVeic = $_POST['novoVeic'];
-            $query_addVeic = "INSERT INTO veics(veic) VALUES ('$novoVeic')";
-            mysqli_query($conexao, $query_addVeic);
-        }
-    }
-
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rmvVeic'])) {
-        include_once('config.php');
-
-        $removerVeiculo = $_POST['removerVeiculo'];
-        $query_removerVeiculo = "DELETE FROM veics WHERE veic = '$removerVeiculo'";
-        mysqli_query($conexao, $query_removerVeiculo);
-    }
-?>
-
-<?php
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addInsp'])) {
-        include_once('config.php');
-
-        if (!empty($_POST['novoInsp'])) {
-            include_once('config.php');
-
-            $novoInsp = $_POST['novoInsp'];
-            $query_addInsp = "INSERT INTO insp(insp) VALUES ('$novoInsp')";
-            mysqli_query($conexao, $query_addInsp);
-        }
-    }
-
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rmvInsp'])) {
-        include_once('config.php');
-
-        $removerInsp = $_POST['removerInsp'];
-        $query_removerInsp = "DELETE FROM insp WHERE insp = '$removerInsp'";
-        mysqli_query($conexao, $query_removerInsp);
-    }
-?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -66,7 +20,7 @@
             right: 8%;
             top: 2%;
             width: 80%;
-            height: 20%;
+            height: 160px;
             background-color: #9a1c1f;
             border-radius: 10px;
             padding: 8px;
@@ -118,7 +72,7 @@
 
         .tabela {
             position: absolute;
-            top: 24%;
+            top: 28%;
             right: 8%;
             width: 80%;
             background-color: #9a1c1f;
@@ -145,6 +99,7 @@
             padding-right: 3px;
             border-radius: 3px;
         }
+
     @media(max-width: 1033px){
         .filtro {
             position: absolute;
@@ -204,6 +159,7 @@
             border-radius: 10px;
             padding: 10px;
             color: white;
+            overflow-x: auto;
         }
 
         table {
@@ -211,6 +167,7 @@
             border-radius: 10px;
             color: black;
             margin-bottom: 10px;
+            width: 470px;
         }
 
         .paginacao {
@@ -233,6 +190,222 @@
             height: 12%;
         }
     }
+
+    @media(max-width: 469px) {
+        .filtro {
+            position: absolute;
+            right: 3%;
+            top: 2%;
+            width: 83%;
+            height: 300px;
+        }
+
+        .filtro form {
+            height: 85%;
+            background-color: white;
+        }
+
+        .filtro form label {
+            background-color: #9A1C1F;
+            border-radius: 5px;
+            padding: 3px;
+            margin-bottom: 8px;
+        }
+
+        .filtro select {
+            width: 100%;
+            height: 13%;
+            margin-bottom: 5px;
+            margin-top: 2px;
+        }
+
+        .select_veic {
+            margin-right: 0;
+            width: 100%;
+        }
+
+        .select_insp {
+            margin-right: 0;
+            width: 100%;
+        }
+
+        .select_data {
+            margin-right: 0;
+            margin-top: 2px;
+            width: 100%;
+            height: 13%;
+            border-radius: 5px;
+            border: 0.5px solid gray;
+        }
+
+        form hr {
+            margin: 7px;
+        }
+
+        input[type=submit] {
+            width: 100%;
+            height: 35px;
+            background-color: #9A1C1F;
+            color: white;
+            font-weight: bold;
+            font-size: large;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            border: none;
+        }
+
+        .tabela {
+            position: absolute;
+            top: 50%;
+            right: 5px;
+            width: 86.5%;
+            background-color: #9a1c1f;
+            border-radius: 10px;
+            padding: 10px;
+            color: white;
+            overflow-x: auto;
+        }
+
+        table {
+            background-color: white;
+            border-radius: 10px;
+            color: black;
+            margin-bottom: 10px;
+            width: 470px;
+        }
+
+        .paginacao {
+            margin: 5px;
+            border-radius: 5px;
+        }
+
+        .paginacao a {
+            color: white;
+            padding-left: 3px;
+            padding-right: 3px;
+            border-radius: 3px;
+        }
+
+        .sidebar {
+            width: 12vw;
+        }
+
+        .sidebar__imgs {
+            height: 10%;
+        }
+
+        .sidebar__imgs img {
+            width: 100%;
+        }
+    }
+
+    @media(max-width: 400px) {
+        .filtro {
+            position: absolute;
+            right: 3%;
+            top: 2%;
+            width: 83%;
+            height: 300px;
+        }
+
+        .filtro form {
+            height: 85%;
+            background-color: white;
+        }
+
+        .filtro form label {
+            background-color: #9A1C1F;
+            border-radius: 5px;
+            padding: 3px;
+            margin-bottom: 8px;
+        }
+
+        .filtro select {
+            width: 100%;
+            height: 13%;
+            margin-bottom: 5px;
+            margin-top: 2px;
+        }
+
+        .select_veic {
+            margin-right: 0;
+            width: 100%;
+        }
+
+        .select_insp {
+            margin-right: 0;
+            width: 100%;
+        }
+
+        .select_data {
+            margin-right: 0;
+            margin-top: 2px;
+            width: 100%;
+            height: 13%;
+            border-radius: 5px;
+            border: 0.5px solid gray;
+        }
+
+        form hr {
+            margin: 7px;
+        }
+
+        input[type=submit] {
+            width: 100%;
+            height: 35px;
+            background-color: #9A1C1F;
+            color: white;
+            font-weight: bold;
+            font-size: large;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            border: none;
+        }
+
+        .tabela {
+            position: absolute;
+            top: 50%;
+            right: 5px;
+            width: 86.5%;
+            background-color: #9a1c1f;
+            border-radius: 10px;
+            padding: 10px;
+            color: white;
+            overflow-x: auto;
+        }
+
+        table {
+            background-color: white;
+            border-radius: 10px;
+            color: black;
+            margin-bottom: 10px;
+            width: 470px;
+        }
+
+        .paginacao {
+            margin: 5px;
+            border-radius: 5px;
+        }
+
+        .paginacao a {
+            color: white;
+            padding-left: 3px;
+            padding-right: 3px;
+            border-radius: 3px;
+        }
+
+        .sidebar {
+            width: 12vw;
+        }
+
+        .sidebar__imgs {
+            height: 10%;
+        }
+
+        .sidebar__imgs img {
+            width: 100%;
+        }
+    }
     </style>
 </head>
 <body>
@@ -243,6 +416,7 @@
                     <div>
                         <img src="imgs/calendario.png" alt="icon-teste">
                     </div>
+                    <span>Horários</span>
                 </abbr>
             </a>
             <a href="agendamento/agendamento-valeta.php" class="sidebar__imgs" style="margin-top: 40px;">
@@ -250,6 +424,7 @@
                     <div>
                         <img src="imgs/form.png" alt="icon-teste">
                     </div>
+                    <span>Agendar</span>
                 </abbr>
             </a>
             <a href="cadastro-login/sair.php" class="sidebar__sair">
@@ -292,7 +467,7 @@
                         ?>
                 </select>
                 <label for="dia">Data:</label>
-                <input type="date" name="dia" id="idDia">
+                <input type="date" name="dia" id="idDia" class="select_data">
                 <hr>
                 <input type="submit" value="Pesquisar">
             </form>
@@ -423,16 +598,55 @@
                 </table>
                 <div class="paginacao">
                     <p style="display: inline; color: white;">Páginas:</p>
-                    <?php for ($i = 1; $i <= $total_paginas; $i++) { ?>
-                        <a href="?pagina=<?php echo $i;
-                            // Adicione os parâmetros de filtro à URL dos links de paginação
-                            if ($dia !== '') echo '&dia=' . $dia;
-                            if ($veic !== '') echo '&veic=' . $veic;
-                            if ($insp !== '') echo '&insp=' . $insp;
-                            if ($eng !== '') echo '&eng=' . $eng;
-                        ?>" <?php if ($i == $pagina_atual) echo 'style="font-weight: bolder;
-                        border: 2.5px solid rgb(59, 59, 59);"';?> ><?php echo $i; ?></a>
-                    <?php } ?>
+
+                    <?php
+                    $num_paginas_visiveis = 5;
+
+                    // Calcula a página inicial e final com base na página atual
+                    $pagina_inicial = max(1, $pagina_atual - floor($num_paginas_visiveis / 2));
+                    $pagina_final = min($total_paginas, $pagina_inicial + $num_paginas_visiveis - 1);
+
+                    // Ajusta a página inicial se necessário
+                    $pagina_inicial = max(1, $pagina_final - $num_paginas_visiveis + 1);
+
+                    // Adiciona link para a primeira página
+                    if ($pagina_inicial > 1) {
+                        echo '<a href="?pagina=1';
+                        if ($dia !== '') echo '&dia=' . $dia;
+                        if ($veic !== '') echo '&veic=' . $veic;
+                        if ($insp !== '') echo '&insp=' . $insp;
+                        if ($eng !== '') echo '&eng=' . $eng;
+                        echo '">1</a>';
+                        echo '<span style="color: white;">...</span>';
+                    }
+
+                    // Adiciona links para as páginas visíveis
+                    for ($i = $pagina_inicial; $i <= $pagina_final; $i++) {
+                        echo '<a href="?pagina=' . $i;
+                        if ($dia !== '') echo '&dia=' . $dia;
+                        if ($veic !== '') echo '&veic=' . $veic;
+                        if ($insp !== '') echo '&insp=' . $insp;
+                        if ($eng !== '') echo '&eng=' . $eng;
+                        echo '"';
+
+                        if ($i == $pagina_atual) {
+                            echo ' style="font-weight: bolder; border: 2.5px solid rgb(59, 59, 59);"';
+                        }
+
+                        echo '>' . $i . '</a>';
+                    }
+
+                    // Adiciona link para a última página
+                    if ($pagina_final < $total_paginas) {
+                        echo '<span style="color: white;">...</span>';
+                        echo '<a href="?pagina=' . $total_paginas;
+                        if ($dia !== '') echo '&dia=' . $dia;
+                        if ($veic !== '') echo '&veic=' . $veic;
+                        if ($insp !== '') echo '&insp=' . $insp;
+                        if ($eng !== '') echo '&eng=' . $eng;
+                        echo '">' . $total_paginas . '</a>';
+                    }
+                    ?>
                 </div>
             </div>
         </section>

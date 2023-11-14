@@ -66,7 +66,7 @@
             right: 8%;
             top: 2%;
             width: 80%;
-            height: 25%;
+            height: 180px;
             background-color: #9a1c1f;
             border-radius: 10px;
             padding: 8px;
@@ -125,6 +125,7 @@
             border-radius: 10px;
             padding: 10px;
             color: white;
+            min-width: 315px;
         }
 
         table {
@@ -278,7 +279,7 @@
 
         .addRmv {
             position: absolute;
-            top: 153%;
+            top: 730px;
             left: 16%;
             width: 83%;
             height: 37%;
@@ -316,6 +317,290 @@
             margin-bottom: 1.2rem;
         }
     }
+
+    @media(max-width: 469px) {
+        .filtro {
+            position: absolute;
+            right: 3%;
+            top: 15px;
+            width: 83%;
+            height: 300px;
+        }
+
+        .filtro form {
+            height: 85%;
+            background-color: white;
+        }
+
+        .filtro form label {
+            background-color: #9A1C1F;
+            border-radius: 5px;
+            padding: 3px;
+            margin-bottom: 8px;
+        }
+
+        .filtro select {
+            width: 100%;
+            height: 13%;
+            margin-bottom: 5px;
+            margin-top: 2px;
+        }
+
+        .select_veic {
+            margin-right: 0%;
+        }
+
+        .select_insp {
+            margin-right: 0%;
+        }
+
+        form hr {
+            margin: 7px;
+        }
+
+        input[type=submit] {
+            width: 100%;
+            height: 35px;
+            background-color: #9A1C1F;
+            color: white;
+            font-weight: bold;
+            font-size: large;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            border: none;
+        }
+
+        .tabela {
+            position: absolute;
+            top: 320px;
+            right: 5px;
+            width: 86%;
+            background-color: #9a1c1f;
+            border-radius: 10px;
+            padding: 10px;
+            color: white;
+            overflow-x: auto;
+        }
+
+        table {
+            background-color: white;
+            border-radius: 10px;
+            color: black;
+            margin-bottom: 10px;
+            width: 470px;
+        }
+
+        .paginacao {
+            margin: 5px;
+            border-radius: 5px;
+        }
+
+        .paginacao a {
+            color: white;
+            padding-left: 3px;
+            padding-right: 3px;
+            border-radius: 3px;
+        }
+
+        .sidebar {
+            width: 12vw;
+        }
+
+        .sidebar__imgs {
+            height: 10%;
+        }
+
+        .sidebar__imgs img {
+            width: 100%;
+        }
+
+        .addRmv {
+            position: absolute;
+            top: 790px;
+            left: 12.5%;
+            width: 86.5%;
+            height: 55%;
+            background-color: #9a1c1f;
+            border-radius: 10px;
+            padding: 8px;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .addRmv div {
+            padding: 5px;
+            border-radius: 10px;
+            height: 43%;
+            background-color: white;
+            width: 100%;
+            text-align: center;
+            color: black;
+        }
+
+        .addRmv_veic {
+            margin-bottom: 10px;
+        }
+
+        .addRmv div form {
+            padding: 10px;
+            height: 80%;
+            width: 48%;
+            font-size: small;
+            background-color: lightcoral;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .addRmvInputs {
+            margin-top: 0.2rem;
+            height: 30%;
+            text-align: center;
+            border-radius: 7px;
+            margin-bottom: 0.2rem;
+        }        
+    }
+
+    @media(max-width: 400px) {
+        .filtro {
+            position: absolute;
+            right: 3%;
+            top: 15px;
+            width: 83%;
+            height: 300px;
+        }
+
+        .filtro form {
+            height: 85%;
+            background-color: white;
+        }
+
+        .filtro form label {
+            background-color: #9A1C1F;
+            border-radius: 5px;
+            padding: 3px;
+            margin-bottom: 8px;
+        }
+
+        .filtro select {
+            width: 100%;
+            height: 13%;
+            margin-bottom: 5px;
+            margin-top: 2px;
+        }
+
+        .select_veic {
+            margin-right: 0%;
+        }
+
+        .select_insp {
+            margin-right: 0%;
+        }
+
+        form hr {
+            margin: 7px;
+        }
+
+        input[type=submit] {
+            width: 100%;
+            height: 35px;
+            background-color: #9A1C1F;
+            color: white;
+            font-weight: bold;
+            font-size: large;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            border: none;
+        }
+
+        .tabela {
+            position: absolute;
+            top: 320px;
+            right: 5px;
+            width: 86%;
+            background-color: #9a1c1f;
+            border-radius: 10px;
+            padding: 10px;
+            color: white;
+            overflow-x: auto;
+        }
+
+        table {
+            background-color: white;
+            border-radius: 10px;
+            color: black;
+            margin-bottom: 10px;
+            width: 470px;
+        }
+
+        .paginacao {
+            margin: 5px;
+            border-radius: 5px;
+        }
+
+        .paginacao a {
+            color: white;
+            padding-left: 3px;
+            padding-right: 3px;
+            border-radius: 3px;
+        }
+
+        .sidebar {
+            width: 12vw;
+        }
+
+        .sidebar__imgs {
+            height: 10%;
+        }
+
+        .sidebar__imgs img {
+            width: 100%;
+        }
+
+        .addRmv {
+            position: absolute;
+            top: 790px;
+            left: 12.5%;
+            width: 86.5%;
+            height: 55%;
+            background-color: #9a1c1f;
+            border-radius: 10px;
+            padding: 8px;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .addRmv div {
+            padding: 5px;
+            border-radius: 10px;
+            height: 43%;
+            background-color: white;
+            width: 100%;
+            text-align: center;
+            color: black;
+        }
+
+        .addRmv_veic {
+            margin-bottom: 10px;
+        }
+
+        .addRmv div form {
+            padding: 10px;
+            height: 80%;
+            width: 48%;
+            font-size: small;
+            background-color: lightcoral;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .addRmvInputs {
+            margin-top: 0.2rem;
+            height: 30%;
+            text-align: center;
+            border-radius: 7px;
+            margin-bottom: 0.2rem;
+        }
+    }
     </style>
 </head>
 <body>
@@ -326,6 +611,7 @@
                     <div>
                         <img src="imgs/calendario.png" alt="icon-teste">
                     </div>
+                    <span>Horários</span>
                 </abbr>
             </a>
             <a href="cadastro-login/sair.php" class="sidebar__sair">
@@ -495,22 +781,60 @@
                 </table>
                 <div class="paginacao">
                     <p style="display: inline; color: white;">Páginas:</p>
-                    <?php for ($i = 1; $i <= $total_paginas; $i++) { ?>
-                        <a href="?pagina=<?php echo $i;
-                            // Adicione os parâmetros de filtro à URL dos links de paginação
-                            if ($dia !== '') echo '&dia=' . $dia;
-                            if ($veic !== '') echo '&veic=' . $veic;
-                            if ($insp !== '') echo '&insp=' . $insp;
-                            if ($eng !== '') echo '&eng=' . $eng;
-                        ?>" <?php if ($i == $pagina_atual) echo 'style="font-weight: bolder;
-                        border: 2.5px solid rgb(59, 59, 59);"';?> ><?php echo $i; ?></a>
-                    <?php } ?>
+
+                    <?php
+                    $num_paginas_visiveis = 5;
+
+                    // Calcula a página inicial e final com base na página atual
+                    $pagina_inicial = max(1, $pagina_atual - floor($num_paginas_visiveis / 2));
+                    $pagina_final = min($total_paginas, $pagina_inicial + $num_paginas_visiveis - 1);
+
+                    // Ajusta a página inicial se necessário
+                    $pagina_inicial = max(1, $pagina_final - $num_paginas_visiveis + 1);
+
+                    // Adiciona link para a primeira página
+                    if ($pagina_inicial > 1) {
+                        echo '<a href="?pagina=1';
+                        if ($dia !== '') echo '&dia=' . $dia;
+                        if ($veic !== '') echo '&veic=' . $veic;
+                        if ($insp !== '') echo '&insp=' . $insp;
+                        if ($eng !== '') echo '&eng=' . $eng;
+                        echo '">1</a>';
+                        echo '<span style="color: white;">...</span>';
+                    }
+
+                    // Adiciona links para as páginas visíveis
+                    for ($i = $pagina_inicial; $i <= $pagina_final; $i++) {
+                        echo '<a href="?pagina=' . $i;
+                        if ($dia !== '') echo '&dia=' . $dia;
+                        if ($veic !== '') echo '&veic=' . $veic;
+                        if ($insp !== '') echo '&insp=' . $insp;
+                        if ($eng !== '') echo '&eng=' . $eng;
+                        echo '"';
+
+                        if ($i == $pagina_atual) {
+                            echo ' style="font-weight: bolder; border: 2.5px solid rgb(59, 59, 59);"';
+                        }
+
+                        echo '>' . $i . '</a>';
+                    }
+                    // Adiciona link para a última página
+                    if ($pagina_final < $total_paginas) {
+                        echo '<span style="color: white;">...</span>';
+                        echo '<a href="?pagina=' . $total_paginas;
+                        if ($dia !== '') echo '&dia=' . $dia;
+                        if ($veic !== '') echo '&veic=' . $veic;
+                        if ($insp !== '') echo '&insp=' . $insp;
+                        if ($eng !== '') echo '&eng=' . $eng;
+                        echo '">' . $total_paginas . '</a>';
+                    }
+                    ?>
                 </div>
             </div>
         </section>
         <section class="addRmv">
             <h2><img src="https://icons.iconarchive.com/icons/icons8/ios7/16/Users-Administrator-icon.png" width="16" height="16">Administrador</h2>
-            <div style="float: left;">
+            <div style="float: left;" class="addRmv_veic">
                 <h3>Veículos</h3>
                 <form action="<?=$_SERVER['PHP_SELF']?>" method="post" style="float: left;">
                     <h4>Adicionar</h4>

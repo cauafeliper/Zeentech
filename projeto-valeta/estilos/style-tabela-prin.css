@@ -17,6 +17,7 @@ a {
 /*============================================================================================================*/
 .div__header__data {
     display: flex;
+    width: 150px;
 }
 
 .header__data {
@@ -28,7 +29,7 @@ a {
     margin: 0;
     padding: 0;
     font-weight: 500;
-    background-color: transparent;
+    background-color: white;
     text-align: center;
     border-radius: 10px;
 }
@@ -75,14 +76,18 @@ a {
 }
 
 .sidebar__imgs {
-    height: 15%;
+    height: 12%;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center;
     border-radius: 40px;
+    text-align: center;
     text-decoration: none;
+}
+
+.sidebar span {
+    font-weight: bolder;
 }
 
 .sidebar__imgs:hover {
@@ -126,6 +131,7 @@ a {
     padding: 5px;
     box-shadow: 1px 0px 2px rgb(134, 134, 134);
     margin-bottom: 10px;
+    margin-left: 50px;
 }
 
 .valeta__titulo {
@@ -168,8 +174,4 @@ table {
 td {
     text-align: center;
     padding-top: 10px;    
-}
-
-.sidebar span {
-    font-weight: bolder;
 }

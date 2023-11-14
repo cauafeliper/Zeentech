@@ -12,7 +12,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tabela | Valeta</title>
-    <link rel="stylesheet" href="estilos/style-tabela.css">
+    <link rel="stylesheet" href="estilos/style-tabela-prin.css">
+    <link rel="stylesheet" href="estilos/style-tabela-prin2.css">
     <link rel="shortcut icon" href="imgs/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -55,7 +56,7 @@
 
                 if ($admTrue) {
                     echo '<a href="tabela-pv.php" class="sidebar__imgs"><abbr title="Tela para Administradores.">
-                        <div><img src="imgs/tabela-pv.png" alt="tabela-pv"></div>
+                        <div><img src="imgs/tabela-pv.png" alt="tabela-pv"></div><span>ADM</span>
                     </abbr></a>';
                 }
             ?>
@@ -64,6 +65,7 @@
                     <div>
                         <img src="imgs/form.png" alt="icon-teste">
                     </div>
+                    <span>Agendar</span>
                 </abbr>
             </a>
             <a href="agendamentos-usuario.php" class="sidebar__imgs" style="margin-top: 40px;">
@@ -71,6 +73,7 @@
                     <div>
                         <img src="https://icons.iconarchive.com/icons/icons8/ios7/72/Users-Administrator-icon.png" width="72" height="72">
                     </div>
+                    <span>Usuário</span>
                 </abbr>
             </a>
             <a href="cadastro-login/sair.php" class="sidebar__sair">
@@ -81,7 +84,7 @@
         </div>
     </div>
     <main>
-        <div alt="valetaA" class="valeta" style="float: left;">
+        <div alt="valetaA" class="valeta">
             <div class="valeta__titulo">Valeta A</div>
             <hr>
             <table id="tabelaValetaA">
@@ -123,7 +126,7 @@
             </table>
         </div>
         
-        <div alt="valetaB" class="valeta" style="margin: 0px 90px 0px 90px;">
+        <div alt="valetaB" class="valeta">
             <div class="valeta__titulo">Valeta B</div>
             <hr>
             <table id="tabelaValetaB">
@@ -165,7 +168,7 @@
             </table>
         </div>
         
-        <div alt="valetaC" class="valeta" style="margin-right: 90px;">
+        <div alt="valetaC" class="valeta">
             <div class="valeta__titulo">Valeta C</div>
             <hr>
             <table id="tabelaValetaC">
