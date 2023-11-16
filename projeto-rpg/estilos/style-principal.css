@@ -59,7 +59,7 @@ header {
     top: 0;
     width: 100%;
     background-color: var(--escuro);
-    height: 13%;
+    height: 100px;
     padding: 5px;
 }
 
@@ -102,17 +102,18 @@ main {
 
 main div {
     background-color: white;
-    width: 45%;
-    height: 85%;
+    width: 543px;
+    height: 500px;
     padding: 7px;
     border-radius: 10px;
 }
 
 .form__agendamento {
     background-color: white;
-    width: 45%;
-    height: 85%;
+    width: 560px;
+    height: 500px;
     padding: 7px;
+    border-radius: 10px;
 }
 
 .tabela {
@@ -337,7 +338,7 @@ td {
 }
 
 .exclsv input[type="radio"] {
-    height: 20%;
+    height: 20px;
 }
 
 .enviar input[type="submit"] {
@@ -365,8 +366,8 @@ td {
 
 .obs { 
     grid-area: obs;
-    width: 100%;
-    height: 100%; 
+    width: 340px;
+    height: 70px;
 }
 /*============================================================================================================*/
 footer {
@@ -403,4 +404,280 @@ footer img {
 .copyright {
     float: right;
     font-size: medium;
+}
+
+@media(max-width: 1357px) {
+    main {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 60px 10px 60px;
+    }
+}
+
+@media(max-width: 1317px) {
+    main {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 50px 10px 50px;
+    }
+}
+
+@media(max-width: 1296px) {
+    main {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 40px 10px 40px;
+    }
+}
+
+@media(max-width: 1276px) {
+    main {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 30px 10px 30px;
+    }
+}
+
+@media(max-width: 1256px) {
+    main {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px 10px 20px;
+    }
+}
+
+@media(max-width: 1256px) {
+    main {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 10px 10px 10px;
+    }
+}
+
+@media(max-width: 1216px) {
+    main {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0px 10px 0px;
+    }
+}
+
+@media(max-width: 1196px) {
+    .form__agendamento {
+        background-color: white;
+        width: 560px;
+        height: 500px;
+        padding: 7px;
+        border-radius: 10px;
+        order: 2;
+    }
+}
+
+@media(max-width: 1157px) {
+    body {
+        height: fit-content;
+        overflow-y: auto;
+    }
+
+    header {
+        height: 100px;
+        padding: 5px;
+    }
+
+    main {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        padding: 15px 80px 15px 80px;
+    }
+    
+    main div {
+        background-color: white;
+        width: 543px;
+        height: 500px;
+        padding: 7px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .form__agendamento {
+        background-color: white;
+        width: 543px;
+        height: 500px;
+        padding: 7px;
+        border-radius: 10px;
+        order: 2;
+    }
+}
+
+@media(max-width: 698px) {
+    main {
+        padding: 15px 0px 15px 0px;
+        justify-content: center;
+    }
+
+    main div {
+        background-color: white;
+        width: 600px;
+        height: 500px;
+        padding: 7px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .form__agendamento {
+        background-color: white;
+        width: 600px;
+        height: 500px;
+        padding: 7px;
+        border-radius: 10px;
+        order: 2;
+    }
+
+    .obs { 
+        grid-area: obs;
+        width: 320px;
+        height: 62px;
+    }
+
+    footer {
+        height: 100px;
+        font-size: larger;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        flex-direction: column;
+    }
+    
+    footer div {
+        height: 40%;
+    }
+    
+    footer span {
+        height: 100%;
+        float: left;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    footer img {
+        position: relative;
+        top: 2px;
+        height: 1.6rem;
+    }
+    
+    .copyright {
+        float: right;
+        font-size: medium;
+    }
+}
+
+@media(max-width: 484px) {
+    header ul {
+        width: 30%;
+    }
+
+    main div {
+        width: 100%;
+        height: 500px;
+    }
+    
+    .form__agendamento {
+        width: 100%;
+        height: fit-content;
+    }
+
+    .novo__agendamento {
+        display: grid; 
+        grid-auto-columns: 1fr; 
+        grid-template-columns: 50% 50%; 
+        grid-template-rows: 0.5fr 0.5fr 0.7fr 0.7fr 0.7fr 0.7fr 0.7fr 0.4fr; 
+        gap: 2px 2px; 
+        grid-template-areas: 
+        "titulo titulo"
+        "solicitante solicitante"
+        "dia objtv_teste"
+        "hora_inicio hora_fim"
+        "area_solicitante area_solicitada"
+        "veic resp_veic"
+        "status obs"
+        "enviar enviar";  
+      }
+
+    .titulo { 
+        text-align: center;
+    }
+    
+    .enviar { 
+        grid-area: enviar;
+        height: 100%;
+        width: 100%;
+        position: relative;
+        top: 0%;
+    }
+
+    .exclsv {
+        width: 100%;
+        height: 100%;
+        padding: 3px;
+    }
+    
+    .exclsv input[type="radio"] {
+        height: 20px;
+    }
+    
+    .obs { 
+        grid-area: obs;
+        width: 100%;
+        height: 70%;
+    }
+}
+
+@media(max-width: 396px) {
+    .copyright {
+        margin-top: 10px;
+    }
+
+    footer span {
+        text-align: center;
+    }
+    
+    footer img {
+        position: relative;
+        top: 2px;
+        height: 1.6rem;
+    }
 }

@@ -204,7 +204,7 @@
                 <input type="text" name="resp_veic" id="resp_veic" placeholder="Indique o Responsável">
             </div>
             <div class="exclsv grids">
-                <label for="exclsv" style="margin-right: 50px;">Uso Exclusivo?</label>
+                <label for="exclsv" style="margin-right: 50px; display: block;">Uso Exclusivo?</label>
                 <label for="sim" style="font-size: smaller; width: 30%; margin-top: 5px; background-color: #001e50;">Sim:</label>
                 <input type="radio" id="sim" name="resposta" value="Sim" style="width: 10%; margin-top: 10px;" required>
     
@@ -217,7 +217,7 @@
             </div>
             <div class="obs">
                 <label for="obs" class="obs__label">Observações:</label>
-                <textarea name="obs" id="obs" cols="48" rows="5" style="resize: none; margin-top: 5px;"></textarea>
+                <textarea name="obs" id="obs" cols="48" rows="5" class="obs"></textarea>
             </div>
             <div class="enviar">
                 <input type="submit" name="submit" value="Agendar">
