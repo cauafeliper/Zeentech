@@ -681,3 +681,13 @@ footer img {
         height: 1.6rem;
     }
 }
+
+@media(max-width: 395px) {
+    .tabela {
+        overflow-y: auto;
+    }
+    
+    .tabela table {
+        width: 381px;
+    }
+}

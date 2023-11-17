@@ -65,67 +65,47 @@
             </form>
             <table>
             <?php 
-                if($_SERVER["REQUEST_METHOD"] === "POST"){
+                if (isset($_POST['data']) && isset($_POST['area_pista'])) {
+                    $data = $_POST['data'];
+                    $area_pista = $_POST['area_pista'];
 
-                    if(isset($_POST['data']) & isset($_POST['area'])){
-                        $data = $_POST['data'];
-                        $area_pista = $_POST['area'];
+                    if ($area_pista === 'todas_areas') {
+                        $query = "SELECT * FROM agendamentos WHERE dia = '$data' AND status = 'Aprovado'";
+                        $result = mysqli_query($conexao, $query);
 
-                        if($area_pista === 'todas_areas') {
-                            $query = "SELECT * FROM agendamentos WHERE dia = '$data' AND status = 'Aprovado'";
+                        echo '<caption>Todas Áreas</caption>';
+                        echo '<tr>';
+                        echo '<th>Início</th><th>Fim</th><th>Veículo</th><th>Objetivo</th><th>Uso exclusivo?</th><th>Área</th>';
+                        echo '</tr>';
 
-                            $result = mysqli_query($conexao, $query);
-
-                            echo '<caption>Todas Áreas</caption>';
-
-                            echo '<tr>';
-                            echo '<th>Início</th><th>Fim</th><th>Veículo</th><th>Objetivo</th><th>Uso exclusivo?</th><th>Área</th>';
-                            echo '</tr>';
-                            echo '<tr>';
-                            if ($result->num_rows > 0) {
-                                while($row = $result->fetch_assoc()){
-
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
                                 echo "<tr><td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["veic"] . "</td><td>" . $row["objtv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $row["area_pista"] . "</td></tr>";
-                                }
                             }
-                            else {
-                                echo "<td>Ainda</td><td>não</td><td>existem</td><td>agendamentos</td><td>nesse</td><td>dia.</td>";
-                            }
-                            echo '</tr>';
+                        } else {
+                            echo "<tr><td colspan='6'>Ainda não existem agendamentos para esta data e área.</td></tr>";
                         }
-                        else {
-                               $query = "SELECT * FROM agendamentos WHERE dia = '$data' AND status = 'Aprovado' AND area_pista = '$area_pista'
-                               UNION
-                               SELECT * FROM agendamentos WHERE dia = '$data' AND status = 'Aprovado' AND area_pista = 'Pista Completa'";
-                                $result = mysqli_query($conexao, $query);
+                    } else {
+                        $query = "SELECT * FROM agendamentos WHERE dia = '$data' AND status = 'Aprovado' AND area_pista = '$area_pista' UNION SELECT * FROM agendamentos WHERE dia = '$data' AND status = 'Aprovado' AND area_pista = 'Pista Completa'";
+                        $result = mysqli_query($conexao, $query);
 
-                                echo '<caption>' . "$area_pista" . '</caption>';
-    
-                                echo '<tr>';
-                                echo '<th>Início</th><th>Fim</th><th>Veículo</th><th>Objetivo</th><th>Uso exclusivo?</th><th>Área</th>';
-                                echo '</tr>';
-                                echo '<tr>';
-                                if ($result->num_rows > 0) {
-                                    while($row = $result->fetch_assoc()) {
-                                    echo "<tr><td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["veic"] . "</td><td>" . $row["objtv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $row["area_pista"] . "</td></tr>";
-                                    }
-                                }
-                                else {
-                                    echo "<td>Ainda</td><td>não</td><td>existem</td><td>agendamentos</td><td>nesse</td><td>dia.</td>";
-                                }
-                                echo '</tr>';
+                        echo '<caption>' . "$area_pista" . '</caption>';
+                        echo '<tr>';
+                        echo '<th>Início</th><th>Fim</th><th>Veículo</th><th>Objetivo</th><th>Uso exclusivo?</th><th>Área</th>';
+                        echo '</tr>';
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<tr><td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["veic"] . "</td><td>" . $row["objtv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $row["area_pista"] . "</td></tr>";
                             }
-                           
-                            }
-                            else {
-                                echo "<td>Ainda</td><td>não</td><td>existem</td><td>agendamentos</td><td>nesse dia.</td>";
-                            }
-                            echo '</tr>';
-                            }
-                else {
+                        } else {
+                            echo "<tr><td colspan='6'>Ainda não existem agendamentos para esta data e área.</td></tr>";
+                        }
+                    }
+                } else {
                     echo "<caption>Selecione os termos para consulta.</caption>";
                 } 
-            ?>
+                ?>
             </table>
         </div>
 
@@ -247,10 +227,13 @@
                 $status = $_POST['status'];
                 $obs = $_POST['obs'];
 
-                $query = "SELECT * FROM agendamentos WHERE (area_pista = '$area' OR area_pista = 'Pista Completa')
+                $query = "SELECT * FROM agendamentos 
+                    WHERE (area_pista = '$area' OR area_pista = 'Pista Completa')
                     AND dia = '$data' 
                     AND ((hora_inicio <= '$hora_inicio' AND hora_fim >= '$hora_inicio') 
-                    OR (hora_inicio <= '$hora_fim' AND hora_fim >= '$hora_fim'))";
+                    OR (hora_inicio <= '$hora_fim' AND hora_fim >= '$hora_fim'))
+                    AND (status = 'Aprovado' OR status = 'Pendente')";
+
 
                 $result = mysqli_query($conexao, $query);
 
