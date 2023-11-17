@@ -120,7 +120,8 @@ main form {
 .filtros {  display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: 0.8fr 1.2fr 1.2fr 0.8fr;
-    gap: 5px 5px;
+    column-gap: 5px;
+    row-gap: 10px;
     grid-auto-flow: row;
     grid-template-areas:
       "titulo titulo titulo titulo"
@@ -292,7 +293,7 @@ main form {
     border-spacing: 10px;
   }
 
-  table caption {
+  .caption {
     background-color: white;
     font-size: larger;
     text-align: center;
@@ -566,4 +567,193 @@ footer img {
 .copyright {
     float: right;
     font-size: medium;
+}
+
+@media (max-width: 1314px) { 
+  .tabela {
+    overflow-y: auto;
+  }
+  
+  table {
+    width: 1245px;
+  }
+}
+
+@media (max-width: 795px) {
+header ul {
+    width: 25%;
+}
+
+.filtros {  display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 0.8fr 1.2fr 1.2fr 1.2fr 0.8fr;
+    column-gap: 5px;
+    row-gap: 10px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "titulo titulo titulo titulo"
+      "dia objetivo solicitante ."
+      "veiculo resp_veiculo exclsv ."
+      "area_pista status . ."
+      "submit submit submit submit";
+  }
+}
+
+@media (max-width: 682px) {
+.filtros {  
+  display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 0.8fr 1.2fr 1.2fr 1.2fr 1fr;
+    column-gap: 5px;
+    row-gap: 10px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "titulo titulo"
+      "dia objetivo"
+      "area_pista status"
+      "veiculo resp_veiculo"
+      "solicitante exclsv"
+      "submit submit";
+  }
+/*============================================================================================================*/
+  .addRmv {  
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 10px 10px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "veic_addRmv area_addRmv"
+      "objtv_addRmv .";
+    width: 100%;
+    margin-top: 60px;
+    justify-content: center;
+  }
+  
+  footer {
+    height: 100px;
+    font-size: larger;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+
+  footer div {
+      height: 40%;
+  }
+
+  footer span {
+      height: 100%;
+      float: left;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+
+  .copyright {
+      float: right;
+      font-size: medium;
+  }
+}
+
+@media (max-width: 487px) {
+  .filtros {  
+    display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 0.8fr 1.2fr 1.2fr 1.2fr 1.2fr 1.2fr 1.2fr 1.2fr 1fr;
+      column-gap: 5px;
+      row-gap: 10px;
+      grid-auto-flow: row;
+      grid-template-areas:
+        "titulo"
+        "dia"
+        "objetivo"
+        "area_pista"
+        "status"
+        "veiculo"
+        "resp_veiculo"
+        "solicitante"
+        "exclsv"
+        "submit";
+    }
+  
+    .input_dia input {
+      width: 100%;
+    }
+    
+    .objetivo select {
+      width: 100%;  
+    }
+    
+    .solicitante select {
+      width: 100%;  
+    }
+    
+    .area_pista select {
+      width: 100%;  
+    }
+    
+    .veiculo select {
+      width: 100%;  
+    }
+    
+    .resp_veiculo select {
+      width: 100%;  
+    }
+
+    .exclsv select {  
+      width: 100%;
+    }
+
+    .status select {
+      width: 100%;
+    }
+  /*============================================================================================================*/
+    .addRmv {  
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+      gap: 10px 10px;
+      grid-auto-flow: row;
+      grid-template-areas:
+        "veic_addRmv"
+        "area_addRmv"
+        "objtv_addRmv";
+      width: 100%;
+      margin-top: 60px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    
+    .veic_addRmv {
+      margin: auto;
+    }
+
+    .area_addRmv {
+      margin: auto;
+    }
+
+    .objtv_addRmv {
+      margin: auto;
+    }
+}
+
+@media (max-width: 396px) {
+  .copyright {
+    margin-top: 10px;
+  }
+
+  footer span {
+      text-align: center;
+  }
+
+  footer img {
+      position: relative;
+      top: 2px;
+      left: 8px;
+      height: 1.6rem;
+  }
 }

@@ -212,8 +212,8 @@
             </div>
         </form>
         <div class="tabela">
+        <div class="caption"><img src="https://icons.iconarchive.com/icons/iconsmind/outline/24/Calendar-4-icon.png" width="22" height="22" style="position: relative; top: 3px; margin-right: 5px;">Tabela de Agendamentos</div>
             <table>
-                <caption><img src="https://icons.iconarchive.com/icons/iconsmind/outline/24/Calendar-4-icon.png" width="22" height="22" style="position: relative; top: 3px; margin-right: 5px;">Tabela de Agendamentos</caption>
                 <tr>
                     <th style="display: none;">ID</th>
                     <th>Dia</th>
