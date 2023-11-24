@@ -129,11 +129,11 @@
             </div>
             <div class="hora_inicio grids">
                 <label for="hora_inicio">Hora de Início:</label>
-                <input type="time" name="hora_inicio" id="hora_inicio">
+                <input type="time" name="hora_inicio" id="hora_inicio" min="07:00" max="19:00" step="3600">
             </div>
             <div class="hora_fim grids">
                 <label for="hora_fim">Hora do Fim:</label>
-                <input type="time" name="hora_fim" id="hora_fim">
+                <input type="time" name="hora_fim" id="hora_fim" min="07:00" max="19:00">
             </div>
             <div class="area_solicitante grids">
                 <label for="area_solicitante">Área do Solicitante:</label>

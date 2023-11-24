@@ -35,7 +35,9 @@
     <header>
         <a href="https://www.vwco.com.br/" tarGET="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus" style="height: 95%;"></a>
         <ul>
-            <li><a href="tabela-agendamentos.php">Voltar</a></li>
+            <li><a href="../grafico/grafico.php">Gráfico</a></li>
+
+            <li><a href="tabela-agendamentos.php">Início</a></li>
 
             <li><a href="sair.php">Sair</a></li>
         </ul>
