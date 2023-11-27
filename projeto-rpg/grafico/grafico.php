@@ -502,8 +502,8 @@
                         <div class="k4 quad_graf"></div>
                         <div class="k5 quad_graf"></div>
                         <div class="k6 quad_graf"></div>
-                        <div class="k7 quad_graf"><p>Agendamento</p></div>
-                        <div class="k8 quad_graf"></div>
+                        <div class="k7 quad_graf"></div>
+                        <div class="k8 quad_graf"><p>Agendamento</p></div>
                         <div class="k9 quad_graf"></div>
                         <div class="k10 quad_graf"></div>
                         <div class="k11 quad_graf"></div>
@@ -515,7 +515,7 @@
         </main>
     <footer>
         <div>
-            <span>Desenvolvido por:  <img src="../imgs/lg-zeentech(titulo).png" alt="logo-zeentech"></span>
+            <span>Desenvolvido por:<img src="../imgs/lg-zeentech(titulo).png" alt="logo-zeentech"></span>
         </div>
         <div class="copyright">
             <span>Copyright © 2023 de Zeentech os direitos reservados</span>

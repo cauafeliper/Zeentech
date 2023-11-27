@@ -526,6 +526,10 @@ main {
   .k6 { 
     grid-area: k6; 
     border: none;
+  }
+  .k7 { 
+    grid-area: k7; 
+    border: none;
     background-color: #001e50;
     border-top: 15px solid white;
     border-bottom: 13px solid white;
@@ -533,13 +537,13 @@ main {
     border-left: 13px solid white;
     border-radius: 18px;
   }
-  .k7 { 
-    grid-area: k7; 
+  .k8 { 
+    grid-area: k8; 
     border: none;
     font-size: small;
   }
-  .k8 { 
-    grid-area: k8; 
+  .k9 { 
+    grid-area: k9; 
     border: none;
     background-color: #4C7397;
     border-top: 15px solid white;
@@ -547,10 +551,6 @@ main {
     border-right: 13px solid white;
     border-left: 13px solid white;
     border-radius: 18px;
-  }
-  .k9 { 
-    grid-area: k9; 
-    border: none;
   }
   .k10 { 
     grid-area: k10; 
@@ -606,6 +606,33 @@ footer img {
 .copyright {
     float: right;
     font-size: medium;
+}
+
+@media (min-width: 1441px) {
+  .div__grafico {
+    width: 1161px;
+  }
+
+  .filtro__dia {
+    width: 322px;
+}
+}
+
+@media (max-width: 1424px) {
+  .grafico {
+    background-color: white;
+    padding: 15px;
+    border-radius: 15px;
+    height: fit-content;
+    width: 1120px;
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 1234px) {
+  .filtro__dia {
+    width: 275px;
+}
 }
 
 @media (max-width: 885px) {
