@@ -369,6 +369,10 @@ td {
     width: 340px;
     height: 70px;
 }
+
+.select_hora option {
+    border-radius: 5px;
+}
 /*============================================================================================================*/
 footer {
     padding: 15px;
@@ -689,5 +693,43 @@ footer img {
     
     .tabela table {
         width: 381px;
+    }
+}
+
+@media(min-width: 1910px) {
+    main div {
+        width: 700px;
+        height: 650px;
+        padding: 7px;
+    }
+    
+    .form__agendamento {
+        width: 700px;
+        height: 650px;
+    }
+
+    .obs { 
+        grid-area: obs;
+        width: 100%;
+        height: 90%;
+    }
+}
+
+@media(min-width: 1600px) {
+    main div {
+        width: 700px;
+        height: 650px;
+        padding: 7px;
+    }
+    
+    .form__agendamento {
+        width: 700px;
+        height: 650px;
+    }
+
+    .obs { 
+        grid-area: obs;
+        width: 100%;
+        height: 90%;
     }
 }
