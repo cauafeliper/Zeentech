@@ -540,7 +540,6 @@ main {
   .k8 { 
     grid-area: k8; 
     border: none;
-    font-size: small;
   }
   .k9 { 
     grid-area: k9; 
@@ -684,5 +683,11 @@ header ul {
       top: 2px;
       left: 8px;
       height: 1.6rem;
+  }
+}
+
+@media (max-height: 892px) {
+  footer {
+    position: relative;
   }
 }
