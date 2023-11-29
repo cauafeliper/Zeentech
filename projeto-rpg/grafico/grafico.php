@@ -1,3 +1,22 @@
+
+<?php 
+    include_once('../config/config.php');
+    session_start();
+    if (!isset($_SESSION['chapa']) || empty($_SESSION['chapa'])) {
+        session_unset();
+        header('Location: ../index.php');
+    }
+    
+    $chapa = $_SESSION['chapa'];
+    $query = "SELECT * FROM chapa_adm WHERE chapa = '$chapa'";
+    $result = mysqli_query($conexao, $query);
+    
+    if (!$result || mysqli_num_rows($result) === 0) {
+        session_unset();
+        header('Location: ../index.php');
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -87,7 +106,7 @@
                 echo '.' . "$fim" . '{background-color: #001e50; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
 
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
-                    $col = 'c' . $i;
+                    $col = 'd' . $i;
                     echo '.' . "$col" . '{background-color: #001e50; border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
             }
@@ -123,7 +142,7 @@
                 echo '.' . "$fim" . '{background-color: #4C7397; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
 
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
-                    $col = 'c' . $i;
+                    $col = 'e' . $i;
                     echo '.' . "$col" . '{background-color: #4C7397; border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
             }
@@ -139,7 +158,7 @@
             '15:00' => 'f10', '16:00' => 'f11', '17:00' => 'f12', '18:00' => 'f13',
             '19:00' => 'f14'
         );
-        $sql = "SELECT hora_inicio, hora_fim FROM agendamentos WHERE area_pista = 'NVH' AND dia='$dia' AND status='Aprovado'";
+        $sql = "SELECT hora_inicio, hora_fim FROM agendamentos WHERE area_pista = 'Rampa 12% e 20%' AND dia='$dia' AND status='Aprovado'";
         $result = $conexao->query($sql);
         $horariosMarcados = array();
         if ($result->num_rows > 0) {
@@ -159,7 +178,7 @@
                 echo '.' . "$fim" . '{background-color: #001e50; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
 
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
-                    $col = 'c' . $i;
+                    $col = 'f' . $i;
                     echo '.' . "$col" . '{background-color: #001e50; border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
             }
@@ -175,7 +194,7 @@
             '15:00' => 'g10', '16:00' => 'g11', '17:00' => 'g12', '18:00' => 'g13',
             '19:00' => 'g14'
         );
-        $sql = "SELECT hora_inicio, hora_fim FROM agendamentos WHERE area_pista = 'Obstáculos' AND dia='$dia' AND status='Aprovado'";
+        $sql = "SELECT hora_inicio, hora_fim FROM agendamentos WHERE area_pista = 'Rampa 40%' AND dia='$dia' AND status='Aprovado'";
         $result = $conexao->query($sql);
         $horariosMarcados = array();
         if ($result->num_rows > 0) {
@@ -195,7 +214,7 @@
                 echo '.' . "$fim" . '{background-color: #4C7397; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
 
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
-                    $col = 'c' . $i;
+                    $col = 'g' . $i;
                     echo '.' . "$col" . '{background-color: #4C7397; border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
             }
@@ -211,7 +230,7 @@
             '15:00' => 'h10', '16:00' => 'h11', '17:00' => 'h12', '18:00' => 'h13',
             '19:00' => 'h14'
         );
-        $sql = "SELECT hora_inicio, hora_fim FROM agendamentos WHERE area_pista = 'NVH' AND dia='$dia' AND status='Aprovado'";
+        $sql = "SELECT hora_inicio, hora_fim FROM agendamentos WHERE area_pista = 'Rampa 60%' AND dia='$dia' AND status='Aprovado'";
         $result = $conexao->query($sql);
         $horariosMarcados = array();
         if ($result->num_rows > 0) {
@@ -231,7 +250,7 @@
                 echo '.' . "$fim" . '{background-color: #001e50; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
 
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
-                    $col = 'c' . $i;
+                    $col = 'h' . $i;
                     echo '.' . "$col" . '{background-color: #001e50; border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
             }
@@ -247,7 +266,7 @@
             '15:00' => 'i10', '16:00' => 'i11', '17:00' => 'i12', '18:00' => 'i13',
             '19:00' => 'i14'
         );
-        $sql = "SELECT hora_inicio, hora_fim FROM agendamentos WHERE area_pista = 'Obstáculos' AND dia='$dia' AND status='Aprovado'";
+        $sql = "SELECT hora_inicio, hora_fim FROM agendamentos WHERE area_pista = 'Asfalto' AND dia='$dia' AND status='Aprovado'";
         $result = $conexao->query($sql);
         $horariosMarcados = array();
         if ($result->num_rows > 0) {
@@ -267,7 +286,7 @@
                 echo '.' . "$fim" . '{background-color: #4C7397; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
 
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
-                    $col = 'c' . $i;
+                    $col = 'i' . $i;
                     echo '.' . "$col" . '{background-color: #4C7397; border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
             }
@@ -283,7 +302,7 @@
             '15:00' => 'j10', '16:00' => 'j11', '17:00' => 'j12', '18:00' => 'j13',
             '19:00' => 'j14'
         );
-        $sql = "SELECT hora_inicio, hora_fim FROM agendamentos WHERE area_pista = 'NVH' AND dia='$dia' AND status='Aprovado'";
+        $sql = "SELECT hora_inicio, hora_fim FROM agendamentos WHERE area_pista = 'Pista Completa' AND dia='$dia' AND status='Aprovado'";
         $result = $conexao->query($sql);
         $horariosMarcados = array();
         if ($result->num_rows > 0) {
@@ -303,7 +322,7 @@
                 echo '.' . "$fim" . '{background-color: #001e50; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
 
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
-                    $col = 'c' . $i;
+                    $col = 'j' . $i;
                     echo '.' . "$col" . '{background-color: #001e50; border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
             }
@@ -312,23 +331,6 @@
     ?>
 </head>
 <body>
-    <?php 
-        include_once('../config/config.php');
-        session_start();
-        if (!isset($_SESSION['chapa']) || empty($_SESSION['chapa'])) {
-            session_unset();
-            header('Location: ../index.php');
-        }
-        
-        $chapa = $_SESSION['chapa'];
-        $query = "SELECT * FROM chapa_adm WHERE chapa = '$chapa'";
-        $result = mysqli_query($conexao, $query);
-        
-        if (!$result || mysqli_num_rows($result) === 0) {
-            session_unset();
-            header('Location: ../index.php');
-        }
-    ?>
     <header>
         <a href="https://www.vwco.com.br/" target="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus" style="height: 95%;"></a>
         <ul>
@@ -345,6 +347,7 @@
                 <div class="label"><label for="dia">Dia:</label></div>
                 <div class="input"><input type="date" name="dia" id="dia" required></div>
                 <div class="submit"><input type="submit" value="Filtrar"></div>
+                <?= $dia ?>
             </form>
             <div class="div__grafico">
                 <div class="grafico">
