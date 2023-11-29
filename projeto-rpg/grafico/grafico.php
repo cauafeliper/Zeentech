@@ -45,7 +45,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         $mapeamentoHorariosVDA = array(
-            '07:00' => 'c2', '08:00' => 'c3', '09:00' => 'c4', '10:00' => 'c5', 
+            '07:00' => 'c2', '08:00' => 'c3', '09:00' => 'c4', '10:00' => 'c5',
             '11:00' => 'c6', '12:00' => 'c7', '13:00' => 'c8', '14:00' => 'c9',
             '15:00' => 'c10', '16:00' => 'c11', '17:00' => 'c12', '18:00' => 'c13',
             '19:00' => 'c14'
@@ -55,34 +55,34 @@
         $horariosMarcados = array();
         if ($result->num_rows > 0) {
             echo '<style>';
-        
+       
             while ($row = $result->fetch_assoc()) {
                 $exclsv = $row["exclsv"];
                 $horaInicio = $row["hora_inicio"];
                 $horaFim = $row["hora_fim"];
-        
+       
                 $colInicio = $mapeamentoHorariosVDA[$horaInicio];
                 $colFim = $mapeamentoHorariosVDA[$horaFim];
-        
+       
                 $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
-        
+       
                 $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor);
             }
-        
+       
             foreach ($horariosMarcados as $tarefa) {
                 $inicio = $tarefa['inicio'];
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
-        
+       
                 echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
                 echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-        
+       
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
                     $col = 'c' . $i;
                     echo '.' . "$col" . '{background-color: '.$cor.'; border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
             }
-        
+       
             echo '</style>';
         }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         $mapeamentoHorariosNVH = array(
-            '07:00' => 'd2', '08:00' => 'd3', '09:00' => 'd4', '10:00' => 'd5', 
+            '07:00' => 'd2', '08:00' => 'd3', '09:00' => 'd4', '10:00' => 'd5',
             '11:00' => 'd6', '12:00' => 'd7', '13:00' => 'd8', '14:00' => 'd9',
             '15:00' => 'd10', '16:00' => 'd11', '17:00' => 'd12', '18:00' => 'd13',
             '19:00' => 'd14'
@@ -100,34 +100,34 @@
         $horariosMarcados = array();
         if ($result->num_rows > 0) {
             echo '<style>';
-        
+       
             while ($row = $result->fetch_assoc()) {
                 $exclsv = $row["exclsv"];
                 $horaInicio = $row["hora_inicio"];
                 $horaFim = $row["hora_fim"];
-        
+       
                 $colInicio = $mapeamentoHorariosNVH[$horaInicio];
                 $colFim = $mapeamentoHorariosNVH[$horaFim];
-        
+       
                 $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
-        
+       
                 $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor);
             }
-        
+       
             foreach ($horariosMarcados as $tarefa) {
                 $inicio = $tarefa['inicio'];
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
-        
+       
                 echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
                 echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-        
+       
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
                     $col = 'd' . $i;
                     echo '.' . "$col" . '{background-color: '.$cor.'; border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
             }
-        
+       
             echo '</style>';
         }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,7 +135,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         $mapeamentoHorariosOBS = array(
-            '07:00' => 'e2', '08:00' => 'e3', '09:00' => 'e4', '10:00' => 'e5', 
+            '07:00' => 'e2', '08:00' => 'e3', '09:00' => 'e4', '10:00' => 'e5',
             '11:00' => 'e6', '12:00' => 'e7', '13:00' => 'e8', '14:00' => 'e9',
             '15:00' => 'e10', '16:00' => 'e11', '17:00' => 'e12', '18:00' => 'e13',
             '19:00' => 'e14'
@@ -145,34 +145,34 @@
         $horariosMarcados = array();
         if ($result->num_rows > 0) {
             echo '<style>';
-        
+       
             while ($row = $result->fetch_assoc()) {
                 $exclsv = $row["exclsv"];
                 $horaInicio = $row["hora_inicio"];
                 $horaFim = $row["hora_fim"];
-        
+       
                 $colInicio = $mapeamentoHorariosOBS[$horaInicio];
                 $colFim = $mapeamentoHorariosOBS[$horaFim];
-        
+       
                 $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
-        
+       
                 $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor);
             }
-        
+       
             foreach ($horariosMarcados as $tarefa) {
                 $inicio = $tarefa['inicio'];
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
-        
+       
                 echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
                 echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-        
+       
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
                     $col = 'e' . $i;
                     echo '.' . "$col" . '{background-color: '.$cor.'; border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
             }
-        
+       
             echo '</style>';
         }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,7 +180,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         $mapeamentoHorariosR12_20 = array(
-            '07:00' => 'f2', '08:00' => 'f3', '09:00' => 'f4', '10:00' => 'f5', 
+            '07:00' => 'f2', '08:00' => 'f3', '09:00' => 'f4', '10:00' => 'f5',
             '11:00' => 'f6', '12:00' => 'f7', '13:00' => 'f8', '14:00' => 'f9',
             '15:00' => 'f10', '16:00' => 'f11', '17:00' => 'f12', '18:00' => 'f13',
             '19:00' => 'f14'
@@ -190,34 +190,34 @@
         $horariosMarcados = array();
         if ($result->num_rows > 0) {
             echo '<style>';
-        
+       
             while ($row = $result->fetch_assoc()) {
                 $exclsv = $row["exclsv"];
                 $horaInicio = $row["hora_inicio"];
                 $horaFim = $row["hora_fim"];
-        
+       
                 $colInicio = $mapeamentoHorariosR12_20[$horaInicio];
                 $colFim = $mapeamentoHorariosR12_20[$horaFim];
-        
+       
                 $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
-        
+       
                 $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor);
             }
-        
+       
             foreach ($horariosMarcados as $tarefa) {
                 $inicio = $tarefa['inicio'];
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
-        
+       
                 echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
                 echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-        
+       
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
                     $col = 'f' . $i;
                     echo '.' . "$col" . '{background-color: '.$cor.'; border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
             }
-        
+       
             echo '</style>';
         }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -225,7 +225,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         $mapeamentoHorariosR40 = array(
-            '07:00' => 'g2', '08:00' => 'g3', '09:00' => 'g4', '10:00' => 'g5', 
+            '07:00' => 'g2', '08:00' => 'g3', '09:00' => 'g4', '10:00' => 'g5',
             '11:00' => 'g6', '12:00' => 'g7', '13:00' => 'g8', '14:00' => 'g9',
             '15:00' => 'g10', '16:00' => 'g11', '17:00' => 'g12', '18:00' => 'g13',
             '19:00' => 'g14'
@@ -235,34 +235,34 @@
         $horariosMarcados = array();
         if ($result->num_rows > 0) {
             echo '<style>';
-        
+       
             while ($row = $result->fetch_assoc()) {
                 $exclsv = $row["exclsv"];
                 $horaInicio = $row["hora_inicio"];
                 $horaFim = $row["hora_fim"];
-        
+       
                 $colInicio = $mapeamentoHorariosR40[$horaInicio];
                 $colFim = $mapeamentoHorariosR40[$horaFim];
-        
+       
                 $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
-        
+       
                 $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor);
             }
-        
+       
             foreach ($horariosMarcados as $tarefa) {
                 $inicio = $tarefa['inicio'];
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
-        
+       
                 echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
                 echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-        
+       
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
                     $col = 'g' . $i;
                     echo '.' . "$col" . '{background-color: '.$cor.'; border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
             }
-        
+       
             echo '</style>';
         }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -270,7 +270,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         $mapeamentoHorariosR60 = array(
-            '07:00' => 'h2', '08:00' => 'h3', '09:00' => 'h4', '10:00' => 'h5', 
+            '07:00' => 'h2', '08:00' => 'h3', '09:00' => 'h4', '10:00' => 'h5',
             '11:00' => 'h6', '12:00' => 'h7', '13:00' => 'h8', '14:00' => 'h9',
             '15:00' => 'h10', '16:00' => 'h11', '17:00' => 'h12', '18:00' => 'h13',
             '19:00' => 'h14'
@@ -280,34 +280,34 @@
         $horariosMarcados = array();
         if ($result->num_rows > 0) {
             echo '<style>';
-        
+       
             while ($row = $result->fetch_assoc()) {
                 $exclsv = $row["exclsv"];
                 $horaInicio = $row["hora_inicio"];
                 $horaFim = $row["hora_fim"];
-        
+       
                 $colInicio = $mapeamentoHorariosR60[$horaInicio];
                 $colFim = $mapeamentoHorariosR60[$horaFim];
-        
+       
                 $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
-        
+       
                 $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor);
             }
-        
+       
             foreach ($horariosMarcados as $tarefa) {
                 $inicio = $tarefa['inicio'];
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
-        
+       
                 echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
                 echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-        
+       
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
                     $col = 'h' . $i;
                     echo '.' . "$col" . '{background-color: '.$cor.'; border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
             }
-        
+       
             echo '</style>';
         }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -315,7 +315,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         $mapeamentoHorariosASF = array(
-            '07:00' => 'i2', '08:00' => 'i3', '09:00' => 'i4', '10:00' => 'i5', 
+            '07:00' => 'i2', '08:00' => 'i3', '09:00' => 'i4', '10:00' => 'i5',
             '11:00' => 'i6', '12:00' => 'i7', '13:00' => 'i8', '14:00' => 'i9',
             '15:00' => 'i10', '16:00' => 'i11', '17:00' => 'i12', '18:00' => 'i13',
             '19:00' => 'i14'
@@ -325,34 +325,34 @@
         $horariosMarcados = array();
         if ($result->num_rows > 0) {
             echo '<style>';
-        
+       
             while ($row = $result->fetch_assoc()) {
                 $exclsv = $row["exclsv"];
                 $horaInicio = $row["hora_inicio"];
                 $horaFim = $row["hora_fim"];
-        
+       
                 $colInicio = $mapeamentoHorariosASF[$horaInicio];
                 $colFim = $mapeamentoHorariosASF[$horaFim];
-        
+       
                 $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
-        
+       
                 $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor);
             }
-        
+       
             foreach ($horariosMarcados as $tarefa) {
                 $inicio = $tarefa['inicio'];
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
-        
+       
                 echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
                 echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-        
+       
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
                     $col = 'i' . $i;
                     echo '.' . "$col" . '{background-color: '.$cor.'; border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
             }
-        
+       
             echo '</style>';
         }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -360,7 +360,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         $mapeamentoHorariosPC = array(
-            '07:00' => 'j2', '08:00' => 'j3', '09:00' => 'j4', '10:00' => 'j5', 
+            '07:00' => 'j2', '08:00' => 'j3', '09:00' => 'j4', '10:00' => 'j5',
             '11:00' => 'j6', '12:00' => 'j7', '13:00' => 'j8', '14:00' => 'j9',
             '15:00' => 'j10', '16:00' => 'j11', '17:00' => 'j12', '18:00' => 'j13',
             '19:00' => 'j14'
@@ -370,34 +370,34 @@
         $horariosMarcados = array();
         if ($result->num_rows > 0) {
             echo '<style>';
-        
+       
             while ($row = $result->fetch_assoc()) {
                 $exclsv = $row["exclsv"];
                 $horaInicio = $row["hora_inicio"];
                 $horaFim = $row["hora_fim"];
-        
+       
                 $colInicio = $mapeamentoHorariosPC[$horaInicio];
                 $colFim = $mapeamentoHorariosPC[$horaFim];
-        
+       
                 $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
-        
+       
                 $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor);
             }
-        
+       
             foreach ($horariosMarcados as $tarefa) {
                 $inicio = $tarefa['inicio'];
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
-        
+       
                 echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
                 echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-        
+       
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
                     $col = 'j' . $i;
                     echo '.' . "$col" . '{background-color: '.$cor.'; border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
             }
-        
+       
             echo '</style>';
         }
     ?>
