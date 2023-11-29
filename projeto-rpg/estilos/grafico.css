@@ -576,7 +576,7 @@ footer {
     padding: 15px;
     background-color: var(--escuro);
     width: 100%;
-    position: relative;
+    position: absolute;
     bottom: 0;
     height: 50px;
     color: white;
