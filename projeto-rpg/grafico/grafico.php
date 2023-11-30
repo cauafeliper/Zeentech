@@ -1,4 +1,3 @@
-
 <?php 
     include_once('../config/config.php');
     session_start();
@@ -45,10 +44,43 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+class Coordenada {
+    public string $Id;
+    public $HasItem = false;
+    public string $horario;
+
+    public function __construct(string $id, string $horario) {
+        $this->Id = $id;
+        $this->horario = $horario;
+    }
+}
+
+$coordenadas = array();
+for ($i = 2; $i <= 14; $i++) {
+    array_push($coordenadas, new Coordenada('c' . $i, $i+5));
+    array_push($coordenadas, new Coordenada('d' . $i, $i+5));
+    array_push($coordenadas, new Coordenada('e' . $i, $i+5));
+    array_push($coordenadas, new Coordenada('f' . $i, $i+5));
+    array_push($coordenadas, new Coordenada('g' . $i, $i+5));
+    array_push($coordenadas, new Coordenada('h' . $i, $i+5));
+    array_push($coordenadas, new Coordenada('i' . $i, $i+5));
+    array_push($coordenadas, new Coordenada('j' . $i, $i+5));
+}
+
+foreach($coordenadas as $coordenada) {
+    if (strlen($coordenada->horario) == 1){
+        $coordenada->horario = '0' . $coordenada->horario;
+    }
+}
+
 function porcentagemMinuto($minuto) {
     $minuto = intval($minuto);
     $porcentagem = intval(($minuto / 60) * 100);
     return $porcentagem;
+}
+
+function mostrarAgendamentos(){
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
