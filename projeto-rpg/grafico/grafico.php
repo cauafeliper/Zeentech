@@ -44,11 +44,22 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        $mapeamentoHorariosVDA = array(
-            '07:00' => 'c2', '08:00' => 'c3', '09:00' => 'c4', '10:00' => 'c5',
-            '11:00' => 'c6', '12:00' => 'c7', '13:00' => 'c8', '14:00' => 'c9',
-            '15:00' => 'c10', '16:00' => 'c11', '17:00' => 'c12', '18:00' => 'c13',
-            '19:00' => 'c14'
+
+function porcentagemMinuto($minuto) {
+    $minuto = intval($minuto);
+    $porcentagem = intval(($minuto / 60) * 100);
+    return $porcentagem;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+$mapeamentoHorariosVDA = array(
+            '07' => 'c2', '08' => 'c3', '09' => 'c4', '10' => 'c5',
+            '11' => 'c6', '12' => 'c7', '13' => 'c8', '14' => 'c9',
+            '15' => 'c10', '16' => 'c11', '17' => 'c12', '18' => 'c13',
+            '19' => 'c14'
         );
         $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'VDA' AND dia='$dia' AND status='Aprovado'";
         $result = $conexao->query($sql);
@@ -58,8 +69,14 @@
        
             while ($row = $result->fetch_assoc()) {
                 $exclsv = $row["exclsv"];
-                $horaInicio = $row["hora_inicio"];
-                $horaFim = $row["hora_fim"];
+                $horarioInicio = $row["hora_inicio"];
+                $horarioFim = $row["hora_fim"];
+                
+                $horaInicio = $horarioInicio[0] . $horarioInicio[1];
+                $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
+
+                $horaFim = $horarioFim[0] . $horarioFim[1];
+                $minutoFim = $horarioFim[3] . $horarioFim[4];
        
                 $colInicio = $mapeamentoHorariosVDA[$horaInicio];
                 $colFim = $mapeamentoHorariosVDA[$horaFim];
@@ -73,12 +90,29 @@
                 $inicio = $tarefa['inicio'];
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
-       
-                echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-                echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                
+                if($minutoInicio != '00'){
+                    $porcentagemInicio = porcentagemMinuto($minutoInicio);
+                    $porcentagemInicioMargin = 100 - $porcentagemInicio;
+                    
+                    echo '.' . "$inicio" . '{width: '.$porcentagemInicio.'%; margin: 0 0 0 '.$porcentagemInicioMargin.'%; justify-self: right; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                else{
+                    echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                if($minutoFim != '00'){
+                    $porcentagemFim = porcentagemMinuto($minutoFim);
+                    $porcentagemFimMargin = 100 - $porcentagemFim;
+                    
+                    echo '.' . "$fim" . '{width: '.$porcentagemFim.'%; margin: 0 '.$porcentagemFimMargin.'% 0 0; justify-self: left; background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                else{
+                    echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }                
        
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
                     $col = 'c' . $i;
+                    
                     echo '.' . "$col" . '{background-color: '.$cor.'; border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
             }
@@ -90,10 +124,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         $mapeamentoHorariosNVH = array(
-            '07:00' => 'd2', '08:00' => 'd3', '09:00' => 'd4', '10:00' => 'd5',
-            '11:00' => 'd6', '12:00' => 'd7', '13:00' => 'd8', '14:00' => 'd9',
-            '15:00' => 'd10', '16:00' => 'd11', '17:00' => 'd12', '18:00' => 'd13',
-            '19:00' => 'd14'
+                '07' => 'd2', '08' => 'd3', '09' => 'd4', '10' => 'd5',
+                '11' => 'd6', '12' => 'd7', '13' => 'd8', '14' => 'd9',
+                '15' => 'd10', '16' => 'd11', '17' => 'd12', '18' => 'd13',
+                '19' => 'd14'
         );
         $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'NVH' AND dia='$dia' AND status='Aprovado'";
         $result = $conexao->query($sql);
@@ -103,8 +137,14 @@
        
             while ($row = $result->fetch_assoc()) {
                 $exclsv = $row["exclsv"];
-                $horaInicio = $row["hora_inicio"];
-                $horaFim = $row["hora_fim"];
+                $horarioInicio = $row["hora_inicio"];
+                $horarioFim = $row["hora_fim"];
+                
+                $horaInicio = $horarioInicio[0] . $horarioInicio[1];
+                $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
+
+                $horaFim = $horarioFim[0] . $horarioFim[1];
+                $minutoFim = $horarioFim[3] . $horarioFim[4];
        
                 $colInicio = $mapeamentoHorariosNVH[$horaInicio];
                 $colFim = $mapeamentoHorariosNVH[$horaFim];
@@ -119,8 +159,24 @@
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
        
-                echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-                echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                if($minutoInicio != '00'){
+                    $porcentagemInicio = porcentagemMinuto($minutoInicio);
+                    $porcentagemInicioMargin = 100 - $porcentagemInicio;
+                    
+                    echo '.' . "$inicio" . '{width: '.$porcentagemInicio.'%; margin: 0 0 0 '.$porcentagemInicioMargin.'%; justify-self: right; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                else{
+                    echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                if($minutoFim != '00'){
+                    $porcentagemFim = porcentagemMinuto($minutoFim);
+                    $porcentagemFimMargin = 100 - $porcentagemFim;
+                    
+                    echo '.' . "$fim" . '{width: '.$porcentagemFim.'%; margin: 0 '.$porcentagemFimMargin.'% 0 0; justify-self: left; background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                else{
+                    echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }      
        
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
                     $col = 'd' . $i;
@@ -135,10 +191,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         $mapeamentoHorariosOBS = array(
-            '07:00' => 'e2', '08:00' => 'e3', '09:00' => 'e4', '10:00' => 'e5',
-            '11:00' => 'e6', '12:00' => 'e7', '13:00' => 'e8', '14:00' => 'e9',
-            '15:00' => 'e10', '16:00' => 'e11', '17:00' => 'e12', '18:00' => 'e13',
-            '19:00' => 'e14'
+            '07' => 'e2', '08' => 'e3', '09' => 'e4', '10' => 'e5',
+            '11' => 'e6', '12' => 'e7', '13' => 'e8', '14' => 'e9',
+            '15' => 'e10', '16' => 'e11', '17' => 'e12', '18' => 'e13',
+            '19' => 'e14'
         );
         $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Obstáculos' AND dia='$dia' AND status='Aprovado'";
         $result = $conexao->query($sql);
@@ -148,8 +204,14 @@
        
             while ($row = $result->fetch_assoc()) {
                 $exclsv = $row["exclsv"];
-                $horaInicio = $row["hora_inicio"];
-                $horaFim = $row["hora_fim"];
+                $horarioInicio = $row["hora_inicio"];
+                $horarioFim = $row["hora_fim"];
+                
+                $horaInicio = $horarioInicio[0] . $horarioInicio[1];
+                $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
+
+                $horaFim = $horarioFim[0] . $horarioFim[1];
+                $minutoFim = $horarioFim[3] . $horarioFim[4];
        
                 $colInicio = $mapeamentoHorariosOBS[$horaInicio];
                 $colFim = $mapeamentoHorariosOBS[$horaFim];
@@ -164,8 +226,24 @@
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
        
-                echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-                echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                if($minutoInicio != '00'){
+                    $porcentagemInicio = porcentagemMinuto($minutoInicio);
+                    $porcentagemInicioMargin = 100 - $porcentagemInicio;
+                    
+                    echo '.' . "$inicio" . '{width: '.$porcentagemInicio.'%; margin: 0 0 0 '.$porcentagemInicioMargin.'%; justify-self: right; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                else{
+                    echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                if($minutoFim != '00'){
+                    $porcentagemFim = porcentagemMinuto($minutoFim);
+                    $porcentagemFimMargin = 100 - $porcentagemFim;
+                    
+                    echo '.' . "$fim" . '{width: '.$porcentagemFim.'%; margin: 0 '.$porcentagemFimMargin.'% 0 0; justify-self: left; background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                else{
+                    echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }      
        
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
                     $col = 'e' . $i;
@@ -180,10 +258,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         $mapeamentoHorariosR12_20 = array(
-            '07:00' => 'f2', '08:00' => 'f3', '09:00' => 'f4', '10:00' => 'f5',
-            '11:00' => 'f6', '12:00' => 'f7', '13:00' => 'f8', '14:00' => 'f9',
-            '15:00' => 'f10', '16:00' => 'f11', '17:00' => 'f12', '18:00' => 'f13',
-            '19:00' => 'f14'
+            '07' => 'f2', '08' => 'f3', '09' => 'f4', '10' => 'f5',
+            '11' => 'f6', '12' => 'f7', '13' => 'f8', '14' => 'f9',
+            '15' => 'f10', '16' => 'f11', '17' => 'f12', '18' => 'f13',
+            '19' => 'f14'
         );
         $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Rampa 12% e 20%' AND dia='$dia' AND status='Aprovado'";
         $result = $conexao->query($sql);
@@ -193,8 +271,14 @@
        
             while ($row = $result->fetch_assoc()) {
                 $exclsv = $row["exclsv"];
-                $horaInicio = $row["hora_inicio"];
-                $horaFim = $row["hora_fim"];
+                $horarioInicio = $row["hora_inicio"];
+                $horarioFim = $row["hora_fim"];
+                
+                $horaInicio = $horarioInicio[0] . $horarioInicio[1];
+                $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
+
+                $horaFim = $horarioFim[0] . $horarioFim[1];
+                $minutoFim = $horarioFim[3] . $horarioFim[4];
        
                 $colInicio = $mapeamentoHorariosR12_20[$horaInicio];
                 $colFim = $mapeamentoHorariosR12_20[$horaFim];
@@ -209,8 +293,24 @@
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
        
-                echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-                echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                if($minutoInicio != '00'){
+                    $porcentagemInicio = porcentagemMinuto($minutoInicio);
+                    $porcentagemInicioMargin = 100 - $porcentagemInicio;
+                    
+                    echo '.' . "$inicio" . '{width: '.$porcentagemInicio.'%; margin: 0 0 0 '.$porcentagemInicioMargin.'%; justify-self: right; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                else{
+                    echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                if($minutoFim != '00'){
+                    $porcentagemFim = porcentagemMinuto($minutoFim);
+                    $porcentagemFimMargin = 100 - $porcentagemFim;
+                    
+                    echo '.' . "$fim" . '{width: '.$porcentagemFim.'%; margin: 0 '.$porcentagemFimMargin.'% 0 0; justify-self: left; background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                else{
+                    echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }      
        
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
                     $col = 'f' . $i;
@@ -225,10 +325,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         $mapeamentoHorariosR40 = array(
-            '07:00' => 'g2', '08:00' => 'g3', '09:00' => 'g4', '10:00' => 'g5',
-            '11:00' => 'g6', '12:00' => 'g7', '13:00' => 'g8', '14:00' => 'g9',
-            '15:00' => 'g10', '16:00' => 'g11', '17:00' => 'g12', '18:00' => 'g13',
-            '19:00' => 'g14'
+            '07' => 'g2', '08' => 'g3', '09' => 'g4', '10' => 'g5',
+            '11' => 'g6', '12' => 'g7', '13' => 'g8', '14' => 'g9',
+            '15' => 'g10', '16' => 'g11', '17' => 'g12', '18' => 'g13',
+            '19' => 'g14'
         );
         $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Rampa 40%' AND dia='$dia' AND status='Aprovado'";
         $result = $conexao->query($sql);
@@ -238,8 +338,14 @@
        
             while ($row = $result->fetch_assoc()) {
                 $exclsv = $row["exclsv"];
-                $horaInicio = $row["hora_inicio"];
-                $horaFim = $row["hora_fim"];
+                $horarioInicio = $row["hora_inicio"];
+                $horarioFim = $row["hora_fim"];
+                
+                $horaInicio = $horarioInicio[0] . $horarioInicio[1];
+                $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
+
+                $horaFim = $horarioFim[0] . $horarioFim[1];
+                $minutoFim = $horarioFim[3] . $horarioFim[4];
        
                 $colInicio = $mapeamentoHorariosR40[$horaInicio];
                 $colFim = $mapeamentoHorariosR40[$horaFim];
@@ -254,8 +360,24 @@
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
        
-                echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-                echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                if($minutoInicio != '00'){
+                    $porcentagemInicio = porcentagemMinuto($minutoInicio);
+                    $porcentagemInicioMargin = 100 - $porcentagemInicio;
+                    
+                    echo '.' . "$inicio" . '{width: '.$porcentagemInicio.'%; margin: 0 0 0 '.$porcentagemInicioMargin.'%; justify-self: right; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                else{
+                    echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                if($minutoFim != '00'){
+                    $porcentagemFim = porcentagemMinuto($minutoFim);
+                    $porcentagemFimMargin = 100 - $porcentagemFim;
+                    
+                    echo '.' . "$fim" . '{width: '.$porcentagemFim.'%; margin: 0 '.$porcentagemFimMargin.'% 0 0; justify-self: left; background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                else{
+                    echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }      
        
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
                     $col = 'g' . $i;
@@ -270,10 +392,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         $mapeamentoHorariosR60 = array(
-            '07:00' => 'h2', '08:00' => 'h3', '09:00' => 'h4', '10:00' => 'h5',
-            '11:00' => 'h6', '12:00' => 'h7', '13:00' => 'h8', '14:00' => 'h9',
-            '15:00' => 'h10', '16:00' => 'h11', '17:00' => 'h12', '18:00' => 'h13',
-            '19:00' => 'h14'
+            '07' => 'h2', '08' => 'h3', '09' => 'h4', '10' => 'h5',
+            '11' => 'h6', '12' => 'h7', '13' => 'h8', '14' => 'h9',
+            '15' => 'h10', '16' => 'h11', '17' => 'h12', '18' => 'h13',
+            '19' => 'h14'
         );
         $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Rampa 60%' AND dia='$dia' AND status='Aprovado'";
         $result = $conexao->query($sql);
@@ -283,8 +405,14 @@
        
             while ($row = $result->fetch_assoc()) {
                 $exclsv = $row["exclsv"];
-                $horaInicio = $row["hora_inicio"];
-                $horaFim = $row["hora_fim"];
+                $horarioInicio = $row["hora_inicio"];
+                $horarioFim = $row["hora_fim"];
+                
+                $horaInicio = $horarioInicio[0] . $horarioInicio[1];
+                $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
+
+                $horaFim = $horarioFim[0] . $horarioFim[1];
+                $minutoFim = $horarioFim[3] . $horarioFim[4];
        
                 $colInicio = $mapeamentoHorariosR60[$horaInicio];
                 $colFim = $mapeamentoHorariosR60[$horaFim];
@@ -299,8 +427,24 @@
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
        
-                echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-                echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                if($minutoInicio != '00'){
+                    $porcentagemInicio = porcentagemMinuto($minutoInicio);
+                    $porcentagemInicioMargin = 100 - $porcentagemInicio;
+                    
+                    echo '.' . "$inicio" . '{width: '.$porcentagemInicio.'%; margin: 0 0 0 '.$porcentagemInicioMargin.'%; justify-self: right; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                else{
+                    echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                if($minutoFim != '00'){
+                    $porcentagemFim = porcentagemMinuto($minutoFim);
+                    $porcentagemFimMargin = 100 - $porcentagemFim;
+                    
+                    echo '.' . "$fim" . '{width: '.$porcentagemFim.'%; margin: 0 '.$porcentagemFimMargin.'% 0 0; justify-self: left; background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                else{
+                    echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }      
        
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
                     $col = 'h' . $i;
@@ -315,10 +459,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         $mapeamentoHorariosASF = array(
-            '07:00' => 'i2', '08:00' => 'i3', '09:00' => 'i4', '10:00' => 'i5',
-            '11:00' => 'i6', '12:00' => 'i7', '13:00' => 'i8', '14:00' => 'i9',
-            '15:00' => 'i10', '16:00' => 'i11', '17:00' => 'i12', '18:00' => 'i13',
-            '19:00' => 'i14'
+            '07' => 'i2', '08' => 'i3', '09' => 'i4', '10' => 'i5',
+            '11' => 'i6', '12' => 'i7', '13' => 'i8', '14' => 'i9',
+            '15' => 'i10', '16' => 'i11', '17' => 'i12', '18' => 'i13',
+            '19' => 'i14'
         );
         $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Asfalto' AND dia='$dia' AND status='Aprovado'";
         $result = $conexao->query($sql);
@@ -328,8 +472,14 @@
        
             while ($row = $result->fetch_assoc()) {
                 $exclsv = $row["exclsv"];
-                $horaInicio = $row["hora_inicio"];
-                $horaFim = $row["hora_fim"];
+                $horarioInicio = $row["hora_inicio"];
+                $horarioFim = $row["hora_fim"];
+                
+                $horaInicio = $horarioInicio[0] . $horarioInicio[1];
+                $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
+
+                $horaFim = $horarioFim[0] . $horarioFim[1];
+                $minutoFim = $horarioFim[3] . $horarioFim[4];
        
                 $colInicio = $mapeamentoHorariosASF[$horaInicio];
                 $colFim = $mapeamentoHorariosASF[$horaFim];
@@ -343,9 +493,25 @@
                 $inicio = $tarefa['inicio'];
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
-       
-                echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-                echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+
+                if($minutoInicio != '00'){
+                    $porcentagemInicio = porcentagemMinuto($minutoInicio);
+                    $porcentagemInicioMargin = 100 - $porcentagemInicio;
+                    
+                    echo '.' . "$inicio" . '{width: '.$porcentagemInicio.'%; margin: 0 0 0 '.$porcentagemInicioMargin.'%; justify-self: right; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                else{
+                    echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                if($minutoFim != '00'){
+                    $porcentagemFim = porcentagemMinuto($minutoFim);
+                    $porcentagemFimMargin = 100 - $porcentagemFim;
+                    
+                    echo '.' . "$fim" . '{width: '.$porcentagemFim.'%; margin: 0 '.$porcentagemFimMargin.'% 0 0; justify-self: left; background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                else{
+                    echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }      
        
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
                     $col = 'i' . $i;
@@ -360,10 +526,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         $mapeamentoHorariosPC = array(
-            '07:00' => 'j2', '08:00' => 'j3', '09:00' => 'j4', '10:00' => 'j5',
-            '11:00' => 'j6', '12:00' => 'j7', '13:00' => 'j8', '14:00' => 'j9',
-            '15:00' => 'j10', '16:00' => 'j11', '17:00' => 'j12', '18:00' => 'j13',
-            '19:00' => 'j14'
+            '07' => 'j2', '08' => 'j3', '09' => 'j4', '10' => 'j5',
+            '11' => 'j6', '12' => 'j7', '13' => 'j8', '14' => 'j9',
+            '15' => 'j10', '16' => 'j11', '17' => 'j12', '18' => 'j13',
+            '19' => 'j14'
         );
         $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Pista Completa' AND dia='$dia' AND status='Aprovado'";
         $result = $conexao->query($sql);
@@ -373,8 +539,14 @@
        
             while ($row = $result->fetch_assoc()) {
                 $exclsv = $row["exclsv"];
-                $horaInicio = $row["hora_inicio"];
-                $horaFim = $row["hora_fim"];
+                $horarioInicio = $row["hora_inicio"];
+                $horarioFim = $row["hora_fim"];
+                
+                $horaInicio = $horarioInicio[0] . $horarioInicio[1];
+                $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
+
+                $horaFim = $horarioFim[0] . $horarioFim[1];
+                $minutoFim = $horarioFim[3] . $horarioFim[4];
        
                 $colInicio = $mapeamentoHorariosPC[$horaInicio];
                 $colFim = $mapeamentoHorariosPC[$horaFim];
@@ -388,9 +560,25 @@
                 $inicio = $tarefa['inicio'];
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
-       
-                echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-                echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+
+                if($minutoInicio != '00'){
+                    $porcentagemInicio = porcentagemMinuto($minutoInicio);
+                    $porcentagemInicioMargin = 100 - $porcentagemInicio;
+                    
+                    echo '.' . "$inicio" . '{width: '.$porcentagemInicio.'%; margin: 0 0 0 '.$porcentagemInicioMargin.'%; justify-self: right; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                else{
+                    echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                if($minutoFim != '00'){
+                    $porcentagemFim = porcentagemMinuto($minutoFim);
+                    $porcentagemFimMargin = 100 - $porcentagemFim;
+                    
+                    echo '.' . "$fim" . '{width: '.$porcentagemFim.'%; margin: 0 '.$porcentagemFimMargin.'% 0 0; justify-self: left; background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                else{
+                    echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }      
        
                 for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
                     $col = 'j' . $i;
@@ -443,131 +631,133 @@
                     </div>
                     <div class="vda">
                         <div class="c1 quad_graf">VDA</div>
-                        <div class="c2 quad_graf"></div>
-                        <div class="c3 quad_graf"></div>
-                        <div class="c4 quad_graf"></div>
-                        <div class="c5 quad_graf"></div>
-                        <div class="c6 quad_graf"></div>
-                        <div class="c7 quad_graf"></div>
-                        <div class="c8 quad_graf"></div>
-                        <div class="c9 quad_graf"></div>
-                        <div class="c10 quad_graf"></div>
-                        <div class="c11 quad_graf"></div>
-                        <div class="c12 quad_graf"></div>
-                        <div class="c13 quad_graf"></div>
-                        <div class="c14 quad_graf"></div>
+                        <div class="quad_graf">
+                            <div class="c2 preenchimento"></div>
+                        </div>
+                        <div class="quad_graf"><div class="c3 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="c4 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="c5 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="c6 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="c7 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="c8 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="c9 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="c10 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="c11 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="c12 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="c13 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="c14 preenchimento"></div></div>
                     </div>
                     <div class="nvh">
                         <div class="d1 quad_graf">NVH</div>
-                        <div class="d2 quad_graf"></div>
-                        <div class="d3 quad_graf"></div>
-                        <div class="d4 quad_graf"></div>
-                        <div class="d5 quad_graf"></div>
-                        <div class="d6 quad_graf"></div>
-                        <div class="d7 quad_graf"></div>
-                        <div class="d8 quad_graf"></div>
-                        <div class="d9 quad_graf"></div>
-                        <div class="d10 quad_graf"></div>
-                        <div class="d11 quad_graf"></div>
-                        <div class="d12 quad_graf"></div>
-                        <div class="d13 quad_graf"></div>
-                        <div class="d14 quad_graf"></div>
+                        <div class="quad_graf"><div class="d2 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="d3 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="d4 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="d5 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="d6 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="d7 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="d8 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="d9 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="d10 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="d11 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="d12 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="d13 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="d14 preenchimento"></div></div>
                     </div>
                     <div class="obs">
                         <div class="e1 quad_graf">Obsáculos</div>
-                        <div class="e2 quad_graf"></div>
-                        <div class="e3 quad_graf"></div>
-                        <div class="e4 quad_graf"></div>
-                        <div class="e5 quad_graf"></div>
-                        <div class="e6 quad_graf"></div>
-                        <div class="e7 quad_graf"></div>
-                        <div class="e8 quad_graf"></div>
-                        <div class="e9 quad_graf"></div>
-                        <div class="e10 quad_graf"></div>
-                        <div class="e11 quad_graf"></div>
-                        <div class="e12 quad_graf"></div>
-                        <div class="e13 quad_graf"></div>
-                        <div class="e14 quad_graf"></div>
+                        <div class="quad_graf"><div class="e2 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="e3 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="e4 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="e5 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="e6 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="e7 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="e8 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="e9 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="e10 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="e11 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="e12 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="e13 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="e14 preenchimento"></div></div>
                     </div>
                     <div class="r_12_20">
                         <div class="f1 quad_graf">Rampa 12% e 20%</div>
-                        <div class="f2 quad_graf"></div>
-                        <div class="f3 quad_graf"></div>
-                        <div class="f4 quad_graf"></div>
-                        <div class="f5 quad_graf"></div>
-                        <div class="f6 quad_graf"></div>
-                        <div class="f7 quad_graf"></div>
-                        <div class="f8 quad_graf"></div>
-                        <div class="f9 quad_graf"></div>
-                        <div class="f10 quad_graf"></div>
-                        <div class="f11 quad_graf"></div>
-                        <div class="f12 quad_graf"></div>
-                        <div class="f13 quad_graf"></div>
-                        <div class="f14 quad_graf"></div>
+                        <div class="quad_graf"><div class="f2 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="f3 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="f4 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="f5 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="f6 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="f7 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="f8 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="f9 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="f10 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="f11 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="f12 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="f13 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="f14 preenchimento"></div></div>
                     </div>
                     <div class="r_40">
                         <div class="g1 quad_graf">Rampa 40%</div>
-                        <div class="g2 quad_graf"></div>
-                        <div class="g3 quad_graf"></div>
-                        <div class="g4 quad_graf"></div>
-                        <div class="g5 quad_graf"></div>
-                        <div class="g6 quad_graf"></div>
-                        <div class="g7 quad_graf"></div>
-                        <div class="g8 quad_graf"></div>
-                        <div class="g9 quad_graf"></div>
-                        <div class="g10 quad_graf"></div>
-                        <div class="g11 quad_graf"></div>
-                        <div class="g12 quad_graf"></div>
-                        <div class="g13 quad_graf"></div>
-                        <div class="g14 quad_graf"></div>
+                        <div class="quad_graf"><div class="g2 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="g3 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="g4 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="g5 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="g6 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="g7 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="g8 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="g9 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="g10 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="g11 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="g12 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="g13 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="g14 preenchimento"></div></div>
                     </div>
                     <div class="r_60">
                         <div class="h1 quad_graf">Rampa 60%</div>
-                        <div class="h2 quad_graf"></div>
-                        <div class="h3 quad_graf"></div>
-                        <div class="h4 quad_graf"></div>
-                        <div class="h5 quad_graf"></div>
-                        <div class="h6 quad_graf"></div>
-                        <div class="h7 quad_graf"></div>
-                        <div class="h8 quad_graf"></div>
-                        <div class="h9 quad_graf"></div>
-                        <div class="h10 quad_graf"></div>
-                        <div class="h11 quad_graf"></div>
-                        <div class="h12 quad_graf"></div>
-                        <div class="h13 quad_graf"></div>
-                        <div class="h14 quad_graf"></div>
+                        <div class="quad_graf"><div class="h2 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="h3 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="h4 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="h5 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="h6 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="h7 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="h8 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="h9 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="h10 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="h11 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="h12 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="h13 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="h14 preenchimento"></div></div>
                     </div>
                     <div class="asf">
                         <div class="i1 quad_graf">Asfalto</div>
-                        <div class="i2 quad_graf"></div>
-                        <div class="i3 quad_graf"></div>
-                        <div class="i4 quad_graf"></div>
-                        <div class="i5 quad_graf"></div>
-                        <div class="i6 quad_graf"></div>
-                        <div class="i7 quad_graf"></div>
-                        <div class="i8 quad_graf"></div>
-                        <div class="i9 quad_graf"></div>
-                        <div class="i10 quad_graf"></div>
-                        <div class="i11 quad_graf"></div>
-                        <div class="i12 quad_graf"></div>
-                        <div class="i13 quad_graf"></div>
-                        <div class="i14 quad_graf"></div>
+                        <div class="quad_graf"><div class="i2 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="i3 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="i4 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="i5 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="i6 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="i7 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="i8 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="i9 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="i10 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="i11 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="i12 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="i13 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="i14 preenchimento"></div></div>
                     </div>
                     <div class="pc">
                         <div class="j1 quad_graf">Pista Completa</div>
-                        <div class="j2 quad_graf"></div>
-                        <div class="j3 quad_graf"></div>
-                        <div class="j4 quad_graf"></div>
-                        <div class="j5 quad_graf"></div>
-                        <div class="j6 quad_graf"></div>
-                        <div class="j7 quad_graf"></div>
-                        <div class="j8 quad_graf"></div>
-                        <div class="j9 quad_graf"></div>
-                        <div class="j10 quad_graf"></div>
-                        <div class="j11 quad_graf"></div>
-                        <div class="j12 quad_graf"></div>
-                        <div class="j13 quad_graf"></div>
-                        <div class="j14 quad_graf"></div>
+                        <div class="quad_graf"><div class="j2 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="j3 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="j4 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="j5 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="j6 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="j7 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="j8 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="j9 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="j10 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="j11 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="j12 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="j13 preenchimento"></div></div>
+                        <div class="quad_graf"><div class="j14 preenchimento"></div></div>
                     </div>
                     <div class="leg">
                         <div class="k1 quad_graf"></div>
