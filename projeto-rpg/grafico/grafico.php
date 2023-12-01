@@ -47,29 +47,12 @@
 class Coordenada {
     public string $Id;
     public $HasItem = false;
-    public string $horario;
+    public string $hora;
 
-    public function __construct(string $id, string $horario) {
+    public function __construct(string $id) {
         $this->Id = $id;
-        $this->horario = $horario;
-    }
-}
-
-$coordenadas = array();
-for ($i = 2; $i <= 14; $i++) {
-    array_push($coordenadas, new Coordenada('c' . $i, $i+5));
-    array_push($coordenadas, new Coordenada('d' . $i, $i+5));
-    array_push($coordenadas, new Coordenada('e' . $i, $i+5));
-    array_push($coordenadas, new Coordenada('f' . $i, $i+5));
-    array_push($coordenadas, new Coordenada('g' . $i, $i+5));
-    array_push($coordenadas, new Coordenada('h' . $i, $i+5));
-    array_push($coordenadas, new Coordenada('i' . $i, $i+5));
-    array_push($coordenadas, new Coordenada('j' . $i, $i+5));
-}
-
-foreach($coordenadas as $coordenada) {
-    if (strlen($coordenada->horario) == 1){
-        $coordenada->horario = '0' . $coordenada->horario;
+        switch ($id[]){}
+        $this->horario = ;
     }
 }
 
@@ -79,15 +62,139 @@ function porcentagemMinuto($minuto) {
     return $porcentagem;
 }
 
-function mostrarAgendamentos(){
+function identificarLinha($pista) {
+    $linha = '';
+    switch ($pista) {
+        case 'VDA':
+            $linha = 'c';
+            break;
+        case 'NVH':
+            $linha = 'd';
+            break;
+        case 'Obstáculos':
+            $linha = 'e';
+            break;
+        case 'Rampa 12% e 20%':
+            $linha = 'f';
+            break;
+        case 'Rampa 40%':
+            $linha = 'g';
+            break;
+        case 'Rampa 60%':
+            $linha = 'h';
+            break;
+        case 'Asfalto':
+            $linha = 'i';
+            break;
+        case 'Pista Completa':
+            $linha = 'j';
+            break;
+    }
+    return $linha;
+}
 
+function mostrarAgendamentos($conexao, $dia){
+    $listaPista = array('VDA', 'NVH', 'Obstáculos', 'Rampa 12% e 20%', 'Rampa 40%', 'Rampa 60%', 'Asfalto', 'Pista Completa');
+    
+
+    foreach($listaPista as $pista){
+        $l = identificarLinha($pista);
+        $mapeamentoHorariosVDA = array(
+        '07' => $l.'2', '08' => $l.'3', '09' => $l.'4', '10' => $l.'5',
+        '11' =>  $l.'6', '12' =>  $l.'7', '13' =>  $l.'8', '14' =>  $l.'9',
+        '15' =>  $l.'10', '16' =>  $l.'11', '17' =>  $l.'12', '18' =>  $l.'13',
+        '19' =>  $l.'14'
+        );
+        $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista= '$pista' AND dia='$dia' AND status='Aprovado'";
+        $result = $conexao->query($sql);
+        $horariosMarcados = array();
+        if ($result->num_rows > 0) {
+            echo '<style>';
+
+            while ($row = $result->fetch_assoc()) {
+                $exclsv = $row["exclsv"];
+                $horarioInicio = $row["hora_inicio"];
+                $horarioFim = $row["hora_fim"];
+                
+                $horaInicio = $horarioInicio[0] . $horarioInicio[1];
+                $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
+
+                $horaFim = $horarioFim[0] . $horarioFim[1];
+                $minutoFim = $horarioFim[3] . $horarioFim[4];
+
+                $colInicio = $mapeamentoHorariosVDA[$horaInicio];
+                $colFim = $mapeamentoHorariosVDA[$horaFim];
+
+                $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
+
+                $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor);
+            }
+
+            foreach ($horariosMarcados as $tarefa) {
+                $inicio = $tarefa['inicio'];
+                $fim = $tarefa['fim'];
+                $cor = $tarefa['cor'];
+                
+                if($minutoInicio != '00'){
+                    $porcentagemInicio = porcentagemMinuto($minutoInicio);
+                    $porcentagemInicioMargin = 100 - $porcentagemInicio;
+                    
+                    echo '.' . "$inicio" . '{width: '.$porcentagemInicio.'%; margin: 0 0 0 '.$porcentagemInicioMargin.'%; justify-self: right; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                else{
+                    echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                if($minutoFim != '00'){
+                    $porcentagemFim = porcentagemMinuto($minutoFim);
+                    $porcentagemFimMargin = 100 - $porcentagemFim;
+                    
+                    echo '.' . "$fim" . '{width: '.$porcentagemFim.'%; margin: 0 '.$porcentagemFimMargin.'% 0 0; justify-self: left; background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+                else{
+                    echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }                
+
+                for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
+                    $col = 'c' . $i;
+                    
+                    echo '.' . "$col" . '{background-color: '.$cor.'; border-top: 10px solid white; border-bottom: 10px solid white;}';
+                }
+            }
+
+            echo '</style>';
+        }
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-$mapeamentoHorariosVDA = array(
+
+$listaLetra = array('c', 'd', 'e', 'f', 'g', 'h', 'i', 'j');
+$coordenadas = array();
+for ($i = 2; $i <= 14; $i++) {
+    foreach ($listaLetra as $letra) {
+        $coord = new Coordenada($letra . $i);
+        array_push($coordenadas, $coordenada);
+    }
+}
+
+foreach($coordenadas as $coordenada) {
+    if (strlen($coordenada->horario) == 1){
+        $coordenada->horario = '0' . $coordenada->horario;
+    }
+}
+
+
+
+mostrarAgendamentos($conexao, $dia);
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /* $mapeamentoHorariosVDA = array(
             '07' => 'c2', '08' => 'c3', '09' => 'c4', '10' => 'c5',
             '11' => 'c6', '12' => 'c7', '13' => 'c8', '14' => 'c9',
             '15' => 'c10', '16' => 'c11', '17' => 'c12', '18' => 'c13',
@@ -150,7 +257,7 @@ $mapeamentoHorariosVDA = array(
             }
        
             echo '</style>';
-        }
+        }  *//*
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -619,8 +726,8 @@ $mapeamentoHorariosVDA = array(
             }
        
             echo '</style>';
-        }
-    ?>
+        }*/
+    ?> 
 </head>
 <body>
     <header>
