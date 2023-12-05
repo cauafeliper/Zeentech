@@ -44,7 +44,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class Coordenada {
+/* class Coordenada {
     public string $Id;
     public $HasItem = false;
     public string $hora;
@@ -54,15 +54,15 @@ class Coordenada {
         switch ($id[]){}
         $this->horario = ;
     }
-}
+} */
 
 function porcentagemMinuto($minuto) {
     $minuto = intval($minuto);
-    $porcentagem = intval(($minuto / 60) * 100);
+    $porcentagem = ($minuto / 60) * 100;
     return $porcentagem;
 }
 
-function identificarLinha($pista) {
+/* function identificarLinha($pista) {
     $linha = '';
     switch ($pista) {
         case 'VDA':
@@ -91,9 +91,9 @@ function identificarLinha($pista) {
             break;
     }
     return $linha;
-}
+} */
 
-function mostrarAgendamentos($conexao, $dia){
+/* function mostrarAgendamentos($conexao, $dia){
     $listaPista = array('VDA', 'NVH', 'Obstáculos', 'Rampa 12% e 20%', 'Rampa 40%', 'Rampa 60%', 'Asfalto', 'Pista Completa');
     
 
@@ -164,14 +164,14 @@ function mostrarAgendamentos($conexao, $dia){
             echo '</style>';
         }
     }
-}
+} */
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-$listaLetra = array('c', 'd', 'e', 'f', 'g', 'h', 'i', 'j');
+/* $listaLetra = array('c', 'd', 'e', 'f', 'g', 'h', 'i', 'j');
 $coordenadas = array();
 for ($i = 2; $i <= 14; $i++) {
     foreach ($listaLetra as $letra) {
@@ -188,13 +188,13 @@ foreach($coordenadas as $coordenada) {
 
 
 
-mostrarAgendamentos($conexao, $dia);
+mostrarAgendamentos($conexao, $dia); */
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
- /* $mapeamentoHorariosVDA = array(
+ $mapeamentoHorariosVDA = array(
             '07' => 'c2', '08' => 'c3', '09' => 'c4', '10' => 'c5',
             '11' => 'c6', '12' => 'c7', '13' => 'c8', '14' => 'c9',
             '15' => 'c10', '16' => 'c11', '17' => 'c12', '18' => 'c13',
@@ -257,7 +257,7 @@ mostrarAgendamentos($conexao, $dia);
             }
        
             echo '</style>';
-        }  *//*
+        }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -360,36 +360,35 @@ mostrarAgendamentos($conexao, $dia);
                 $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor);
             }
        
-            foreach ($horariosMarcados as $tarefa) {
-                $inicio = $tarefa['inicio'];
-                $fim = $tarefa['fim'];
-                $cor = $tarefa['cor'];
-       
-                if($minutoInicio != '00'){
-                    $porcentagemInicio = porcentagemMinuto($minutoInicio);
-                    $porcentagemInicioMargin = 100 - $porcentagemInicio;
-                    
-                    echo '.' . "$inicio" . '{width: '.$porcentagemInicio.'%; margin: 0 0 0 '.$porcentagemInicioMargin.'%; justify-self: right; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-                }
-                else{
-                    echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-                }
-                if($minutoFim != '00'){
-                    $porcentagemFim = porcentagemMinuto($minutoFim);
-                    $porcentagemFimMargin = 100 - $porcentagemFim;
-                    
-                    echo '.' . "$fim" . '{width: '.$porcentagemFim.'%; margin: 0 '.$porcentagemFimMargin.'% 0 0; justify-self: left; background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-                }
-                else{
-                    echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-                }      
-       
-                for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
-                    $col = 'e' . $i;
-                    echo '.' . "$col" . '{background-color: '.$cor.'; border-top: 10px solid white; border-bottom: 10px solid white;}';
-                }
+            
+            $inicio = $tarefa['inicio'];
+            $fim = $tarefa['fim'];
+            $cor = $tarefa['cor'];
+    
+            if($minutoInicio != '00'){
+                $porcentagemInicio = porcentagemMinuto($minutoInicio);
+                $porcentagemInicioMargin = 100 - $porcentagemInicio;
+                
+                echo '.' . "$inicio" . '{width: '.$porcentagemInicio.'%; margin: 0 0 0 '.$porcentagemInicioMargin.'%; justify-self: right; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
             }
-       
+            else{
+                echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+            }
+            if($minutoFim != '00'){
+                $porcentagemFim = porcentagemMinuto($minutoFim);
+                $porcentagemFimMargin = 100 - $porcentagemFim;
+                
+                echo '.' . "$fim" . '{width: '.$porcentagemFim.'%; margin: 0 '.$porcentagemFimMargin.'% 0 0; justify-self: left; background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+            }
+            else{
+                echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+            }      
+    
+            for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
+                $col = 'e' . $i;
+                echo '.' . "$col" . '{background-color: '.$cor.'; border-top: 10px solid white; border-bottom: 10px solid white;}';
+            }
+                   
             echo '</style>';
         }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -608,11 +607,13 @@ mostrarAgendamentos($conexao, $dia);
         $horariosMarcados = array();
         if ($result->num_rows > 0) {
             echo '<style>';
-       
+            
+            $j = 2;
             while ($row = $result->fetch_assoc()) {
                 $exclsv = $row["exclsv"];
                 $horarioInicio = $row["hora_inicio"];
                 $horarioFim = $row["hora_fim"];
+                $leftTotal = 0;
                 
                 $horaInicio = $horarioInicio[0] . $horarioInicio[1];
                 $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
@@ -625,37 +626,47 @@ mostrarAgendamentos($conexao, $dia);
        
                 $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
        
-                $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor);
-            }
-       
-            foreach ($horariosMarcados as $tarefa) {
-                $inicio = $tarefa['inicio'];
-                $fim = $tarefa['fim'];
-                $cor = $tarefa['cor'];
-
-                if($minutoInicio != '00'){
-                    $porcentagemInicio = porcentagemMinuto($minutoInicio);
-                    $porcentagemInicioMargin = 100 - $porcentagemInicio;
-                    
-                    echo '.' . "$inicio" . '{width: '.$porcentagemInicio.'%; margin: 0 0 0 '.$porcentagemInicioMargin.'%; justify-self: right; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                $horariosMarcados = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor);
+                
+                $inicio = $horariosMarcados['$inicio'];
+                $fim = $horariosMarcado['fim'];
+                $cor = $horariosMarcados['cor'];
+                
+                $tamanhoMeio = 0;
+                for ($i = intval($horaInicio) + 1; $i < intval($horaFim); $i++) {
+                    $tamanhoMeio += 78;
+                }
+                
+                if ($minutoInicio != '00'){
+                    $porcentagemInicioMargin = porcentagemMinuto($minutoInicio);
+                    $porcentagemInicio = 100 - $porcentagemInicioMargin;
+                    $porcentagemInicio = ($porcentagemInicioMargin / 100) * 78; 
+                    $porcentagemInicioMargin = intval(($porcentagemInicio / 100) * 78);
                 }
                 else{
-                    echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                    $porcentagemInicio = 78;
+                    $porcentagemInicioMargin = 0;
                 }
-                if($minutoFim != '00'){
+                
+                if ($minutoFim != '00'){
                     $porcentagemFim = porcentagemMinuto($minutoFim);
-                    $porcentagemFimMargin = 100 - $porcentagemFim;
-                    
-                    echo '.' . "$fim" . '{width: '.$porcentagemFim.'%; margin: 0 '.$porcentagemFimMargin.'% 0 0; justify-self: left; background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                    $porcentagemFim = intval(($porcentagemFim / 100) * 78);
                 }
                 else{
-                    echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-                }      
-       
-                for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
-                    $col = 'i' . $i;
-                    echo '.' . "$col" . '{background-color: '.$cor.'; border-top: 10px solid white; border-bottom: 10px solid white;}';
+                    $porcentagemFim = 0;
                 }
+
+                $tamanho = $tamanhoMeio + $porcentagemInicio + $porcentagemFim;
+
+                $indexInicio = $j-2;
+                $indexInicio = $indexInicio * 78;
+                $leftTotal += $indexInicio;
+                $leftTotal += $porcentagemInicioMargin;
+                
+                echo '.' . "quad_graf" . '{position: relative;}';
+                echo '.' . "i$j" . '{position: absolute; width: '.$tamanho.'px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
+
+                $j++;
             }
        
             echo '</style>';
@@ -687,8 +698,8 @@ mostrarAgendamentos($conexao, $dia);
                 $horaFim = $horarioFim[0] . $horarioFim[1];
                 $minutoFim = $horarioFim[3] . $horarioFim[4];
        
-                $colInicio = $mapeamentoHorariosPC[$horaInicio];
-                $colFim = $mapeamentoHorariosPC[$horaFim];
+                $colInicio = $mapeamentoHorariosR60[$horaInicio];
+                $colFim = $mapeamentoHorariosR60[$horaFim];
        
                 $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
        
@@ -699,7 +710,7 @@ mostrarAgendamentos($conexao, $dia);
                 $inicio = $tarefa['inicio'];
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
-
+       
                 if($minutoInicio != '00'){
                     $porcentagemInicio = porcentagemMinuto($minutoInicio);
                     $porcentagemInicioMargin = 100 - $porcentagemInicio;
@@ -726,7 +737,7 @@ mostrarAgendamentos($conexao, $dia);
             }
        
             echo '</style>';
-        }*/
+        }
     ?> 
 </head>
 <body>
@@ -768,135 +779,107 @@ mostrarAgendamentos($conexao, $dia);
                         <div class="b13 quad_graf">18:00</div>
                         <div class="b14 quad_graf">19:00</div>
                     </div>
-                    <div class="vda">
-                        <div class="c1 quad_graf">VDA</div>
-                        <div class="quad_graf">
-                            <div class="c2 preenchimento"></div>
+                    <div class="grafico_preenchimentos">
+                        <div class = nome_pistas>
+                            <div class="c1 quad_graf">VDA</div>
+                            <div class="d1 quad_graf">NVH</div>
+                            <div class="e1 quad_graf">Obstáculos</div>
+                            <div class="f1 quad_graf">Rampa 12% e 20%</div>
+                            <div class="g1 quad_graf">Rampa 40%</div>
+                            <div class="h1 quad_graf">Rampa 60%</div>
+                            <div class="i1 quad_graf">Asfalto</div>
+                            <div class="j1 quad_graf">Pista Completa</div>
                         </div>
-                        <div class="quad_graf"><div class="c3 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="c4 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="c5 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="c6 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="c7 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="c8 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="c9 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="c10 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="c11 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="c12 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="c13 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="c14 preenchimento"></div></div>
-                    </div>
-                    <div class="nvh">
-                        <div class="d1 quad_graf">NVH</div>
-                        <div class="quad_graf"><div class="d2 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="d3 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="d4 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="d5 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="d6 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="d7 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="d8 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="d9 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="d10 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="d11 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="d12 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="d13 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="d14 preenchimento"></div></div>
-                    </div>
-                    <div class="obs">
-                        <div class="e1 quad_graf">Obsáculos</div>
-                        <div class="quad_graf"><div class="e2 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="e3 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="e4 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="e5 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="e6 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="e7 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="e8 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="e9 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="e10 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="e11 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="e12 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="e13 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="e14 preenchimento"></div></div>
-                    </div>
-                    <div class="r_12_20">
-                        <div class="f1 quad_graf">Rampa 12% e 20%</div>
-                        <div class="quad_graf"><div class="f2 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="f3 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="f4 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="f5 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="f6 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="f7 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="f8 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="f9 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="f10 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="f11 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="f12 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="f13 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="f14 preenchimento"></div></div>
-                    </div>
-                    <div class="r_40">
-                        <div class="g1 quad_graf">Rampa 40%</div>
-                        <div class="quad_graf"><div class="g2 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="g3 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="g4 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="g5 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="g6 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="g7 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="g8 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="g9 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="g10 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="g11 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="g12 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="g13 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="g14 preenchimento"></div></div>
-                    </div>
-                    <div class="r_60">
-                        <div class="h1 quad_graf">Rampa 60%</div>
-                        <div class="quad_graf"><div class="h2 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="h3 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="h4 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="h5 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="h6 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="h7 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="h8 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="h9 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="h10 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="h11 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="h12 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="h13 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="h14 preenchimento"></div></div>
-                    </div>
-                    <div class="asf">
-                        <div class="i1 quad_graf">Asfalto</div>
-                        <div class="quad_graf"><div class="i2 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="i3 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="i4 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="i5 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="i6 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="i7 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="i8 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="i9 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="i10 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="i11 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="i12 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="i13 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="i14 preenchimento"></div></div>
-                    </div>
-                    <div class="pc">
-                        <div class="j1 quad_graf">Pista Completa</div>
-                        <div class="quad_graf"><div class="j2 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="j3 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="j4 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="j5 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="j6 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="j7 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="j8 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="j9 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="j10 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="j11 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="j12 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="j13 preenchimento"></div></div>
-                        <div class="quad_graf"><div class="j14 preenchimento"></div></div>
+                        <div class="grafico_linhas">
+                            <div class="vda">               
+                                <?php 
+                                    $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'VDA' AND dia='$dia' AND status='Aprovado'";
+                                    $result = $conexao->query($sql);
+                                    $j = 2;
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<div class="c'.$j.'"></div>';
+                                        $j++;
+                                    }                                        
+                                ?>
+                            </div>
+                            <div class="nvh">
+                                <?php 
+                                    $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'NVH' AND dia='$dia' AND status='Aprovado'";
+                                    $result = $conexao->query($sql);
+                                    $j = 2;
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<div class="d'.$j.'"></div>';
+                                        $j++;
+                                    }                                        
+                                ?>
+                            </div>
+                            <div class="obs">
+                                <?php 
+                                    $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Obstáculos' AND dia='$dia' AND status='Aprovado'";
+                                    $result = $conexao->query($sql);
+                                    $j = 2;
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<div class="e'.$j.'"></div>';
+                                        $j++;
+                                    }                                        
+                                ?>
+                            </div>
+                            <div class="r_12_20">
+                                <?php 
+                                    $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Rampa 12% e 20%' AND dia='$dia' AND status='Aprovado'";
+                                    $result = $conexao->query($sql);
+                                    $j = 2;
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<div class="f'.$j.'"></div>';
+                                        $j++;
+                                    }                                        
+                                ?>
+                            </div>
+                            <div class="r_40">
+                                <?php 
+                                    $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Rampa 40%' AND dia='$dia' AND status='Aprovado'";
+                                    $result = $conexao->query($sql);
+                                    $j = 2;
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<div class="g'.$j.'"></div>';
+                                        $j++;
+                                    }                                        
+                                ?>
+                            </div>
+                            <div class="r_60">
+                                <?php 
+                                    $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Rampa 60%' AND dia='$dia' AND status='Aprovado'";
+                                    $result = $conexao->query($sql);
+                                    $j = 2;
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<div class="h'.$j.'"></div>';
+                                        $j++;
+                                    }                                        
+                                ?>
+                            </div>
+                            <div class="asf">
+                                <?php 
+                                    $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Asfalto' AND dia='$dia' AND status='Aprovado'";
+                                    $result = $conexao->query($sql);
+                                    $j = 2;
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<div class="i'.$j.'"></div>';
+                                        $j++;
+                                    }                                        
+                                ?>
+                            </div>
+                            <div class="pc">
+                                <?php 
+                                    $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Pista Completa' AND dia='$dia' AND status='Aprovado'";
+                                    $result = $conexao->query($sql);
+                                    $j = 2;
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<div class="j'.$j.'"></div>';
+                                        $j++;
+                                    }                                        
+                                ?>
+                            </div>
+                        </div>
                     </div>
                     <div class="leg">
                         <div class="k1 quad_graf"></div>
