@@ -392,7 +392,8 @@ main form {
       "veic_addRmv area_addRmv objtv_addRmv";
     width: 100%;
     margin-top: 60px;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
   }
   
   .veic_addRmv {  

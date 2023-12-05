@@ -5,13 +5,6 @@
     box-sizing: border-box;
 }
 
-*:hover {
-    transition-duration: 0.3s;
-}
-
-*:not(:hover) {
-    transition-duration: 0.5s;
-}
 /* ELEMENTOS DA INTERFACE */
 
 body {

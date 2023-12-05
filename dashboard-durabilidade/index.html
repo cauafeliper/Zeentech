@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Durabilidade</title>
+    <link rel="shortcut icon" href="imgs/fav.png" type="image/x-icon">
+    <link rel="stylesheet" href="styles/style.css">
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+</head>
+<body>
+    <header>
+        <div>
+            <h1>DURABILIDADE</h1>
+        </div>
+        <div class="header__img">
+            <img src="imgs/zeentech-logo.png" alt="logo-zeentech">
+            <img src="imgs/vw-logo.png" alt="logo-vw" style="float: right;">
+        </div>
+    </header>
+    <main>
+        <div class="botoes">
+            <div class="rod botoes__animacao" id="rodagem">
+                <img src="imgs/rodagem.png" alt="rodagem">
+            </div>
+            <div class="scha botoes__animacao" id="schadenstisch">
+                <img src="imgs/schadenstisch.png" alt="schadenstisch">
+            </div>
+            <div class="cons botoes__animacao" id="consumo">
+                <img src="imgs/consumo.png" alt="consumo">
+            </div>
+            <div class="oleo botoes__animacao" id="oleo">
+                <img src="imgs/oleo.png" alt="oleo">
+            </div>
+        </div>
+    </main>
+    <script>
+        tippy('#rodagem', {
+        content: '<strong>Quadro de Rodagem</strong><br>Quadro de Rodagem mostra status todos veículos durabilidade como: Km de teste, Motorista atual,  turnos consecutivos parados,  localização, eng. responsável, ordem prioridade etc.',
+        allowHTML: true,
+      });
+      
+      tippy('#schadenstisch', {
+        content: '<strong>Schadenstisch</strong><br>Indicador Schadenstisch consiste em mostrar a evolução dos status dos KPM\'s, por diferentes FG\'s, total kpm fechados, e responsáveis semanalmente.',
+        allowHTML: true,
+        placement: 'left',
+      });
+
+      tippy('#consumo', {
+        content: '<strong>Consumo</strong><br>Controle de Consumo consiste em mostrar o comparativo dos veículos ativos, ônibus ou caminhão quanto ao consumo de Diesel e de Arla, e os custos de ambos.',
+        allowHTML: true,
+        placement: 'bottom',
+      });
+
+      tippy('#oleo', {
+        content: '<strong>Vareta de Óleo</strong><br>Controle de Óleo na Vareta consiste em controlar e analisar o nível de óleo dos veículos e acompanhar o consumo atual com nº dos lacres dos mesmos.',
+        allowHTML: true,
+        placement: 'right',
+      });
+    </script>
+</body>
+</html>

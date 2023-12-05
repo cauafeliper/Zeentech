@@ -135,15 +135,17 @@
         }
         
         .cancelar {
+            color: white; 
             background-color: #EE6352; 
-            width: 48%; 
+            font-size: larger; 
+            width: 580px; 
             float: right; 
             height: 50px; 
             border-radius: 5px; 
             border: 1px solid black;
             margin-bottom: 7px;
         }
-
+        
         .botao-cancelar {
             font-size: x-large;
             color: white;
@@ -165,14 +167,14 @@
             color: white; 
             background-color: #57A773; 
             font-size: larger; 
-            width: 48%; 
+            width: 580px; 
             float: left; 
             height: 50px; 
             border-radius: 5px; 
             border: 1px solid black;
             margin-bottom: 7px;
         }
-
+        
         .botao-aprovar {
             font-size: x-large;
             color: white;
@@ -195,7 +197,6 @@
             border-radius: 10px;
             padding: 15px 15px 15px 15px;
             margin-bottom: 5px;
-            width: 100%;
         }
     </style>
 </head>

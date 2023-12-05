@@ -1,4 +1,5 @@
 <?php
+    session_start();
     if(isset($_POST['submit']) && !empty($_POST['re']) && !empty($_POST['senha']))
     {
         include_once('config.php');
