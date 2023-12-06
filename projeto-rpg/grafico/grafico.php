@@ -44,151 +44,11 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/* class Coordenada {
-    public string $Id;
-    public $HasItem = false;
-    public string $hora;
-
-    public function __construct(string $id) {
-        $this->Id = $id;
-        switch ($id[]){}
-        $this->horario = ;
-    }
-} */
-
 function porcentagemMinuto($minuto) {
     $minuto = intval($minuto);
     $porcentagem = ($minuto / 60) * 100;
     return $porcentagem;
 }
-
-/* function identificarLinha($pista) {
-    $linha = '';
-    switch ($pista) {
-        case 'VDA':
-            $linha = 'c';
-            break;
-        case 'NVH':
-            $linha = 'd';
-            break;
-        case 'Obstáculos':
-            $linha = 'e';
-            break;
-        case 'Rampa 12% e 20%':
-            $linha = 'f';
-            break;
-        case 'Rampa 40%':
-            $linha = 'g';
-            break;
-        case 'Rampa 60%':
-            $linha = 'h';
-            break;
-        case 'Asfalto':
-            $linha = 'i';
-            break;
-        case 'Pista Completa':
-            $linha = 'j';
-            break;
-    }
-    return $linha;
-} */
-
-/* function mostrarAgendamentos($conexao, $dia){
-    $listaPista = array('VDA', 'NVH', 'Obstáculos', 'Rampa 12% e 20%', 'Rampa 40%', 'Rampa 60%', 'Asfalto', 'Pista Completa');
-    
-
-    foreach($listaPista as $pista){
-        $l = identificarLinha($pista);
-        $mapeamentoHorariosVDA = array(
-        '07' => $l.'2', '08' => $l.'3', '09' => $l.'4', '10' => $l.'5',
-        '11' =>  $l.'6', '12' =>  $l.'7', '13' =>  $l.'8', '14' =>  $l.'9',
-        '15' =>  $l.'10', '16' =>  $l.'11', '17' =>  $l.'12', '18' =>  $l.'13',
-        '19' =>  $l.'14'
-        );
-        $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista= '$pista' AND dia='$dia' AND status='Aprovado'";
-        $result = $conexao->query($sql);
-        $horariosMarcados = array();
-        if ($result->num_rows > 0) {
-            echo '<style>';
-
-            while ($row = $result->fetch_assoc()) {
-                $exclsv = $row["exclsv"];
-                $horarioInicio = $row["hora_inicio"];
-                $horarioFim = $row["hora_fim"];
-                
-                $horaInicio = $horarioInicio[0] . $horarioInicio[1];
-                $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
-
-                $horaFim = $horarioFim[0] . $horarioFim[1];
-                $minutoFim = $horarioFim[3] . $horarioFim[4];
-
-                $colInicio = $mapeamentoHorariosVDA[$horaInicio];
-                $colFim = $mapeamentoHorariosVDA[$horaFim];
-
-                $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
-
-                $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor);
-            }
-
-            foreach ($horariosMarcados as $tarefa) {
-                $inicio = $tarefa['inicio'];
-                $fim = $tarefa['fim'];
-                $cor = $tarefa['cor'];
-                
-                if($minutoInicio != '00'){
-                    $porcentagemInicio = porcentagemMinuto($minutoInicio);
-                    $porcentagemInicioMargin = 100 - $porcentagemInicio;
-                    
-                    echo '.' . "$inicio" . '{width: '.$porcentagemInicio.'%; margin: 0 0 0 '.$porcentagemInicioMargin.'%; justify-self: right; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-                }
-                else{
-                    echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-                }
-                if($minutoFim != '00'){
-                    $porcentagemFim = porcentagemMinuto($minutoFim);
-                    $porcentagemFimMargin = 100 - $porcentagemFim;
-                    
-                    echo '.' . "$fim" . '{width: '.$porcentagemFim.'%; margin: 0 '.$porcentagemFimMargin.'% 0 0; justify-self: left; background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-                }
-                else{
-                    echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-                }                
-
-                for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
-                    $col = 'c' . $i;
-                    
-                    echo '.' . "$col" . '{background-color: '.$cor.'; border-top: 10px solid white; border-bottom: 10px solid white;}';
-                }
-            }
-
-            echo '</style>';
-        }
-    }
-} */
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/* $listaLetra = array('c', 'd', 'e', 'f', 'g', 'h', 'i', 'j');
-$coordenadas = array();
-for ($i = 2; $i <= 14; $i++) {
-    foreach ($listaLetra as $letra) {
-        $coord = new Coordenada($letra . $i);
-        array_push($coordenadas, $coordenada);
-    }
-}
-
-foreach($coordenadas as $coordenada) {
-    if (strlen($coordenada->horario) == 1){
-        $coordenada->horario = '0' . $coordenada->horario;
-    }
-}
-
-
-
-mostrarAgendamentos($conexao, $dia); */
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -217,43 +77,53 @@ mostrarAgendamentos($conexao, $dia); */
                 $horaFim = $horarioFim[0] . $horarioFim[1];
                 $minutoFim = $horarioFim[3] . $horarioFim[4];
        
-                $colInicio = $mapeamentoHorariosVDA[$horaInicio];
-                $colFim = $mapeamentoHorariosVDA[$horaFim];
+                $colInicio = $mapeamentoHorariosR60[$horaInicio];
+                $colFim = $mapeamentoHorariosR60[$horaFim];
        
                 $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
        
-                $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor);
+                $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
             }
-       
+            $j = 2;
             foreach ($horariosMarcados as $tarefa) {
                 $inicio = $tarefa['inicio'];
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
-                
+                $horaInicio = $tarefa['horaInicio'];
+                $horaFim = $tarefa['horaFim'];
+                $minutoInicio = $tarefa['minutoInicio'];
+                $minutoFim = $tarefa['minutoFim'];
+       
                 if($minutoInicio != '00'){
-                    $porcentagemInicio = porcentagemMinuto($minutoInicio);
-                    $porcentagemInicioMargin = 100 - $porcentagemInicio;
-                    
-                    echo '.' . "$inicio" . '{width: '.$porcentagemInicio.'%; margin: 0 0 0 '.$porcentagemInicioMargin.'%; justify-self: right; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                    $porcentagemInicioMargin = porcentagemMinuto($minutoInicio);
+                    $porcentagemInicio = 100 - $porcentagemInicioMargin;
                 }
                 else{
-                    echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                    $porcentagemInicio = 100;
+                    $porcentagemInicioMargin = 0;
                 }
                 if($minutoFim != '00'){
                     $porcentagemFim = porcentagemMinuto($minutoFim);
-                    $porcentagemFimMargin = 100 - $porcentagemFim;
-                    
-                    echo '.' . "$fim" . '{width: '.$porcentagemFim.'%; margin: 0 '.$porcentagemFimMargin.'% 0 0; justify-self: left; background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
                 else{
-                    echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-                }                
-       
-                for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
-                    $col = 'c' . $i;
-                    
-                    echo '.' . "$col" . '{background-color: '.$cor.'; border-top: 10px solid white; border-bottom: 10px solid white;}';
+                    $porcentagemFim = 0;
+                }      
+                
+                $tamanho = 0;
+                for ($i = $horaInicio + 1; $i < $horaFim; $i++) {
+                    $tamanho += 100;
                 }
+                $tamanho += $porcentagemInicio + $porcentagemFim;
+                $tamanho = ($tamanho / 100) * 78;
+                $leftTotal = 0;
+                $indexInicio = ($horaInicio - 7) * 78;
+                $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
+                $leftTotal += $porcentagemInicioMargin + $indexInicio;
+
+                echo '.' . 'vda' . '{position: relative;}';
+                echo '.' . 'c'. $j . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
+
+                $j++;
             }
        
             echo '</style>';
@@ -285,42 +155,53 @@ mostrarAgendamentos($conexao, $dia); */
                 $horaFim = $horarioFim[0] . $horarioFim[1];
                 $minutoFim = $horarioFim[3] . $horarioFim[4];
        
-                $colInicio = $mapeamentoHorariosNVH[$horaInicio];
-                $colFim = $mapeamentoHorariosNVH[$horaFim];
+                $colInicio = $mapeamentoHorariosR60[$horaInicio];
+                $colFim = $mapeamentoHorariosR60[$horaFim];
        
                 $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
        
-                $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor);
+                $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
             }
-       
+            $j = 2;
             foreach ($horariosMarcados as $tarefa) {
                 $inicio = $tarefa['inicio'];
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
+                $horaInicio = $tarefa['horaInicio'];
+                $horaFim = $tarefa['horaFim'];
+                $minutoInicio = $tarefa['minutoInicio'];
+                $minutoFim = $tarefa['minutoFim'];
        
                 if($minutoInicio != '00'){
-                    $porcentagemInicio = porcentagemMinuto($minutoInicio);
-                    $porcentagemInicioMargin = 100 - $porcentagemInicio;
-                    
-                    echo '.' . "$inicio" . '{width: '.$porcentagemInicio.'%; margin: 0 0 0 '.$porcentagemInicioMargin.'%; justify-self: right; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                    $porcentagemInicioMargin = porcentagemMinuto($minutoInicio);
+                    $porcentagemInicio = 100 - $porcentagemInicioMargin;
                 }
                 else{
-                    echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                    $porcentagemInicio = 100;
+                    $porcentagemInicioMargin = 0;
                 }
                 if($minutoFim != '00'){
                     $porcentagemFim = porcentagemMinuto($minutoFim);
-                    $porcentagemFimMargin = 100 - $porcentagemFim;
-                    
-                    echo '.' . "$fim" . '{width: '.$porcentagemFim.'%; margin: 0 '.$porcentagemFimMargin.'% 0 0; justify-self: left; background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
                 else{
-                    echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                    $porcentagemFim = 0;
                 }      
-       
-                for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
-                    $col = 'd' . $i;
-                    echo '.' . "$col" . '{background-color: '.$cor.'; border-top: 10px solid white; border-bottom: 10px solid white;}';
+                
+                $tamanho = 0;
+                for ($i = $horaInicio + 1; $i < $horaFim; $i++) {
+                    $tamanho += 100;
                 }
+                $tamanho += $porcentagemInicio + $porcentagemFim;
+                $tamanho = ($tamanho / 100) * 78;
+                $leftTotal = 0;
+                $indexInicio = ($horaInicio - 7) * 78;
+                $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
+                $leftTotal += $porcentagemInicioMargin + $indexInicio;
+
+                echo '.' . 'nvh' . '{position: relative;}';
+                echo '.' . 'd'. $j . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
+
+                $j++;
             }
        
             echo '</style>';
@@ -352,41 +233,71 @@ mostrarAgendamentos($conexao, $dia); */
                 $horaFim = $horarioFim[0] . $horarioFim[1];
                 $minutoFim = $horarioFim[3] . $horarioFim[4];
        
-                $colInicio = $mapeamentoHorariosOBS[$horaInicio];
-                $colFim = $mapeamentoHorariosOBS[$horaFim];
+                $colInicio = $mapeamentoHorariosR60[$horaInicio];
+                $colFim = $mapeamentoHorariosR60[$horaFim];
        
                 $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
        
-                $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor);
+                $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
             }
-       
-            
-            $inicio = $tarefa['inicio'];
-            $fim = $tarefa['fim'];
-            $cor = $tarefa['cor'];
-    
-            if($minutoInicio != '00'){
-                $porcentagemInicio = porcentagemMinuto($minutoInicio);
-                $porcentagemInicioMargin = 100 - $porcentagemInicio;
+            $j = 2;
+            foreach ($horariosMarcados as $tarefa) {
+                $inicio = $tarefa['inicio'];
+                $fim = $tarefa['fim'];
+                $cor = $tarefa['cor'];
+                $horaInicio = $tarefa['horaInicio'];
+                $horaFim = $tarefa['horaFim'];
+                $minutoInicio = $tarefa['minutoInicio'];
+                $minutoFim = $tarefa['minutoFim'];
                 
-                echo '.' . "$inicio" . '{width: '.$porcentagemInicio.'%; margin: 0 0 0 '.$porcentagemInicioMargin.'%; justify-self: right; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-            }
-            else{
-                echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-            }
-            if($minutoFim != '00'){
-                $porcentagemFim = porcentagemMinuto($minutoFim);
-                $porcentagemFimMargin = 100 - $porcentagemFim;
-                
-                echo '.' . "$fim" . '{width: '.$porcentagemFim.'%; margin: 0 '.$porcentagemFimMargin.'% 0 0; justify-self: left; background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-            }
-            else{
-                echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
-            }      
-    
-            for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
-                $col = 'e' . $i;
-                echo '.' . "$col" . '{background-color: '.$cor.'; border-top: 10px solid white; border-bottom: 10px solid white;}';
+                if ($horaInicio != $horaFim){
+                    if($minutoInicio != '00'){
+                        $porcentagemInicioMargin = porcentagemMinuto($minutoInicio);
+                        $porcentagemInicio = 100 - $porcentagemInicioMargin;
+                    }
+                    else{
+                        $porcentagemInicio = 100;
+                        $porcentagemInicioMargin = 0;
+                    }
+                    if($minutoFim != '00'){
+                        $porcentagemFim = porcentagemMinuto($minutoFim);
+                    }
+                    else{
+                        $porcentagemFim = 0;
+                    }      
+                    
+                    $tamanho = 0;
+                    for ($i = $horaInicio + 1; $i < $horaFim; $i++) {
+                        $tamanho += 100;
+                    }
+                    $tamanho += $porcentagemInicio + $porcentagemFim;
+                    $tamanho = ($tamanho / 100) * 78;
+                    $leftTotal = 0;
+                    $indexInicio = ($horaInicio - 7) * 78;
+                    $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
+                    $leftTotal += $porcentagemInicioMargin + $indexInicio;
+                }
+                else{
+                    $tamanho = 0;
+                    $leftTotal = 0;
+                    $minutos = $minutoFim - $minutoInicio;
+                    $porcentagemMinutos = porcentagemMinuto($minutos);
+                    $tamanho = ($porcentagemMinutos / 100) * 78;
+                    if ($minutoInicio != '00'){
+                        $porcentagemInicioMargin = 100 - $porcentagemMinutos;
+                        $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
+                    }
+                    else{
+                        $porcentagemInicioMargin = 0;
+                    }
+                    $indexInicio = ($horaInicio - 7) * 78;
+                    $leftTotal = $porcentagemInicioMargin + $indexInicio;
+                }
+
+                echo '.' . 'obs' . '{position: relative;}';
+                echo '.' . 'e'. $j . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
+
+                $j++;
             }
                    
             echo '</style>';
@@ -418,42 +329,53 @@ mostrarAgendamentos($conexao, $dia); */
                 $horaFim = $horarioFim[0] . $horarioFim[1];
                 $minutoFim = $horarioFim[3] . $horarioFim[4];
        
-                $colInicio = $mapeamentoHorariosR12_20[$horaInicio];
-                $colFim = $mapeamentoHorariosR12_20[$horaFim];
+                $colInicio = $mapeamentoHorariosR60[$horaInicio];
+                $colFim = $mapeamentoHorariosR60[$horaFim];
        
                 $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
        
-                $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor);
+                $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
             }
-       
+            $j = 2;
             foreach ($horariosMarcados as $tarefa) {
                 $inicio = $tarefa['inicio'];
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
+                $horaInicio = $tarefa['horaInicio'];
+                $horaFim = $tarefa['horaFim'];
+                $minutoInicio = $tarefa['minutoInicio'];
+                $minutoFim = $tarefa['minutoFim'];
        
                 if($minutoInicio != '00'){
-                    $porcentagemInicio = porcentagemMinuto($minutoInicio);
-                    $porcentagemInicioMargin = 100 - $porcentagemInicio;
-                    
-                    echo '.' . "$inicio" . '{width: '.$porcentagemInicio.'%; margin: 0 0 0 '.$porcentagemInicioMargin.'%; justify-self: right; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                    $porcentagemInicioMargin = porcentagemMinuto($minutoInicio);
+                    $porcentagemInicio = 100 - $porcentagemInicioMargin;
                 }
                 else{
-                    echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                    $porcentagemInicio = 100;
+                    $porcentagemInicioMargin = 0;
                 }
                 if($minutoFim != '00'){
                     $porcentagemFim = porcentagemMinuto($minutoFim);
-                    $porcentagemFimMargin = 100 - $porcentagemFim;
-                    
-                    echo '.' . "$fim" . '{width: '.$porcentagemFim.'%; margin: 0 '.$porcentagemFimMargin.'% 0 0; justify-self: left; background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
                 else{
-                    echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                    $porcentagemFim = 0;
                 }      
-       
-                for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
-                    $col = 'f' . $i;
-                    echo '.' . "$col" . '{background-color: '.$cor.'; border-top: 10px solid white; border-bottom: 10px solid white;}';
+                
+                $tamanho = 0;
+                for ($i = $horaInicio + 1; $i < $horaFim; $i++) {
+                    $tamanho += 100;
                 }
+                $tamanho += $porcentagemInicio + $porcentagemFim;
+                $tamanho = ($tamanho / 100) * 78;
+                $leftTotal = 0;
+                $indexInicio = ($horaInicio - 7) * 78;
+                $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
+                $leftTotal += $porcentagemInicioMargin + $indexInicio;
+
+                echo '.' . 'r_12_20' . '{position: relative;}';
+                echo '.' . 'f'. $j . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
+
+                $j++;
             }
        
             echo '</style>';
@@ -485,42 +407,53 @@ mostrarAgendamentos($conexao, $dia); */
                 $horaFim = $horarioFim[0] . $horarioFim[1];
                 $minutoFim = $horarioFim[3] . $horarioFim[4];
        
-                $colInicio = $mapeamentoHorariosR40[$horaInicio];
-                $colFim = $mapeamentoHorariosR40[$horaFim];
+                $colInicio = $mapeamentoHorariosR60[$horaInicio];
+                $colFim = $mapeamentoHorariosR60[$horaFim];
        
                 $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
        
-                $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor);
+                $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
             }
-       
+            $j = 2;
             foreach ($horariosMarcados as $tarefa) {
                 $inicio = $tarefa['inicio'];
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
+                $horaInicio = $tarefa['horaInicio'];
+                $horaFim = $tarefa['horaFim'];
+                $minutoInicio = $tarefa['minutoInicio'];
+                $minutoFim = $tarefa['minutoFim'];
        
                 if($minutoInicio != '00'){
-                    $porcentagemInicio = porcentagemMinuto($minutoInicio);
-                    $porcentagemInicioMargin = 100 - $porcentagemInicio;
-                    
-                    echo '.' . "$inicio" . '{width: '.$porcentagemInicio.'%; margin: 0 0 0 '.$porcentagemInicioMargin.'%; justify-self: right; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                    $porcentagemInicioMargin = porcentagemMinuto($minutoInicio);
+                    $porcentagemInicio = 100 - $porcentagemInicioMargin;
                 }
                 else{
-                    echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                    $porcentagemInicio = 100;
+                    $porcentagemInicioMargin = 0;
                 }
                 if($minutoFim != '00'){
                     $porcentagemFim = porcentagemMinuto($minutoFim);
-                    $porcentagemFimMargin = 100 - $porcentagemFim;
-                    
-                    echo '.' . "$fim" . '{width: '.$porcentagemFim.'%; margin: 0 '.$porcentagemFimMargin.'% 0 0; justify-self: left; background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
                 else{
-                    echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                    $porcentagemFim = 0;
                 }      
-       
-                for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
-                    $col = 'g' . $i;
-                    echo '.' . "$col" . '{background-color: '.$cor.'; border-top: 10px solid white; border-bottom: 10px solid white;}';
+                
+                $tamanho = 0;
+                for ($i = $horaInicio + 1; $i < $horaFim; $i++) {
+                    $tamanho += 100;
                 }
+                $tamanho += $porcentagemInicio + $porcentagemFim;
+                $tamanho = ($tamanho / 100) * 78;
+                $leftTotal = 0;
+                $indexInicio = ($horaInicio - 7) * 78;
+                $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
+                $leftTotal += $porcentagemInicioMargin + $indexInicio;
+
+                echo '.' . 'r_40' . '{position: relative;}';
+                echo '.' . 'g'. $j . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
+
+                $j++;
             }
        
             echo '</style>';
@@ -557,37 +490,48 @@ mostrarAgendamentos($conexao, $dia); */
        
                 $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
        
-                $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor);
+                $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
             }
-       
+            $j = 2;
             foreach ($horariosMarcados as $tarefa) {
                 $inicio = $tarefa['inicio'];
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
+                $horaInicio = $tarefa['horaInicio'];
+                $horaFim = $tarefa['horaFim'];
+                $minutoInicio = $tarefa['minutoInicio'];
+                $minutoFim = $tarefa['minutoFim'];
        
                 if($minutoInicio != '00'){
-                    $porcentagemInicio = porcentagemMinuto($minutoInicio);
-                    $porcentagemInicioMargin = 100 - $porcentagemInicio;
-                    
-                    echo '.' . "$inicio" . '{width: '.$porcentagemInicio.'%; margin: 0 0 0 '.$porcentagemInicioMargin.'%; justify-self: right; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                    $porcentagemInicioMargin = porcentagemMinuto($minutoInicio);
+                    $porcentagemInicio = 100 - $porcentagemInicioMargin;
                 }
                 else{
-                    echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                    $porcentagemInicio = 100;
+                    $porcentagemInicioMargin = 0;
                 }
                 if($minutoFim != '00'){
                     $porcentagemFim = porcentagemMinuto($minutoFim);
-                    $porcentagemFimMargin = 100 - $porcentagemFim;
-                    
-                    echo '.' . "$fim" . '{width: '.$porcentagemFim.'%; margin: 0 '.$porcentagemFimMargin.'% 0 0; justify-self: left; background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
                 else{
-                    echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                    $porcentagemFim = 0;
                 }      
-       
-                for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
-                    $col = 'h' . $i;
-                    echo '.' . "$col" . '{background-color: '.$cor.'; border-top: 10px solid white; border-bottom: 10px solid white;}';
+                
+                $tamanho = 0;
+                for ($i = $horaInicio + 1; $i < $horaFim; $i++) {
+                    $tamanho += 100;
                 }
+                $tamanho += $porcentagemInicio + $porcentagemFim;
+                $tamanho = ($tamanho / 100) * 78;
+                $leftTotal = 0;
+                $indexInicio = ($horaInicio - 7) * 78;
+                $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
+                $leftTotal += $porcentagemInicioMargin + $indexInicio;
+
+                echo '.' . 'r_60' . '{position: relative;}';
+                echo '.' . 'h'. $j . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
+
+                $j++;
             }
        
             echo '</style>';
@@ -613,7 +557,6 @@ mostrarAgendamentos($conexao, $dia); */
                 $exclsv = $row["exclsv"];
                 $horarioInicio = $row["hora_inicio"];
                 $horarioFim = $row["hora_fim"];
-                $leftTotal = 0;
                 
                 $horaInicio = $horarioInicio[0] . $horarioInicio[1];
                 $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
@@ -621,50 +564,51 @@ mostrarAgendamentos($conexao, $dia); */
                 $horaFim = $horarioFim[0] . $horarioFim[1];
                 $minutoFim = $horarioFim[3] . $horarioFim[4];
        
-                $colInicio = $mapeamentoHorariosASF[$horaInicio];
-                $colFim = $mapeamentoHorariosASF[$horaFim];
+                $colInicio = $mapeamentoHorariosR60[$horaInicio];
+                $colFim = $mapeamentoHorariosR60[$horaFim];
        
                 $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
        
-                $horariosMarcados = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor);
-                
-                $inicio = $horariosMarcados['$inicio'];
-                $fim = $horariosMarcado['fim'];
-                $cor = $horariosMarcados['cor'];
-                
-                $tamanhoMeio = 0;
-                for ($i = intval($horaInicio) + 1; $i < intval($horaFim); $i++) {
-                    $tamanhoMeio += 78;
-                }
-                
-                if ($minutoInicio != '00'){
+                $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
+            }
+            $j = 2;
+            foreach ($horariosMarcados as $tarefa) {
+                $inicio = $tarefa['inicio'];
+                $fim = $tarefa['fim'];
+                $cor = $tarefa['cor'];
+                $horaInicio = $tarefa['horaInicio'];
+                $horaFim = $tarefa['horaFim'];
+                $minutoInicio = $tarefa['minutoInicio'];
+                $minutoFim = $tarefa['minutoFim'];
+       
+                if($minutoInicio != '00'){
                     $porcentagemInicioMargin = porcentagemMinuto($minutoInicio);
                     $porcentagemInicio = 100 - $porcentagemInicioMargin;
-                    $porcentagemInicio = ($porcentagemInicioMargin / 100) * 78; 
-                    $porcentagemInicioMargin = intval(($porcentagemInicio / 100) * 78);
                 }
                 else{
-                    $porcentagemInicio = 78;
+                    $porcentagemInicio = 100;
                     $porcentagemInicioMargin = 0;
                 }
-                
-                if ($minutoFim != '00'){
+                if($minutoFim != '00'){
                     $porcentagemFim = porcentagemMinuto($minutoFim);
-                    $porcentagemFim = intval(($porcentagemFim / 100) * 78);
                 }
                 else{
                     $porcentagemFim = 0;
-                }
-
-                $tamanho = $tamanhoMeio + $porcentagemInicio + $porcentagemFim;
-
-                $indexInicio = $j-2;
-                $indexInicio = $indexInicio * 78;
-                $leftTotal += $indexInicio;
-                $leftTotal += $porcentagemInicioMargin;
+                }      
                 
-                echo '.' . "quad_graf" . '{position: relative;}';
-                echo '.' . "i$j" . '{position: absolute; width: '.$tamanho.'px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
+                $tamanho = 0;
+                for ($i = $horaInicio + 1; $i < $horaFim; $i++) {
+                    $tamanho += 100;
+                }
+                $tamanho += $porcentagemInicio + $porcentagemFim;
+                $tamanho = ($tamanho / 100) * 78;
+                $leftTotal = 0;
+                $indexInicio = ($horaInicio - 7) * 78;
+                $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
+                $leftTotal += $porcentagemInicioMargin + $indexInicio;
+
+                echo '.' . 'asf' . '{position: relative;}';
+                echo '.' . 'i'. $j . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
 
                 $j++;
             }
@@ -703,37 +647,48 @@ mostrarAgendamentos($conexao, $dia); */
        
                 $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
        
-                $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor);
+                $horariosMarcados[] = array('inicio' => $colInicio, 'fim' => $colFim, 'exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
             }
-       
+            $j = 2;
             foreach ($horariosMarcados as $tarefa) {
                 $inicio = $tarefa['inicio'];
                 $fim = $tarefa['fim'];
                 $cor = $tarefa['cor'];
+                $horaInicio = $tarefa['horaInicio'];
+                $horaFim = $tarefa['horaFim'];
+                $minutoInicio = $tarefa['minutoInicio'];
+                $minutoFim = $tarefa['minutoFim'];
        
                 if($minutoInicio != '00'){
-                    $porcentagemInicio = porcentagemMinuto($minutoInicio);
-                    $porcentagemInicioMargin = 100 - $porcentagemInicio;
-                    
-                    echo '.' . "$inicio" . '{width: '.$porcentagemInicio.'%; margin: 0 0 0 '.$porcentagemInicioMargin.'%; justify-self: right; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                    $porcentagemInicioMargin = porcentagemMinuto($minutoInicio);
+                    $porcentagemInicio = 100 - $porcentagemInicioMargin;
                 }
                 else{
-                    echo '.' . "$inicio" . '{background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                    $porcentagemInicio = 100;
+                    $porcentagemInicioMargin = 0;
                 }
                 if($minutoFim != '00'){
                     $porcentagemFim = porcentagemMinuto($minutoFim);
-                    $porcentagemFimMargin = 100 - $porcentagemFim;
-                    
-                    echo '.' . "$fim" . '{width: '.$porcentagemFim.'%; margin: 0 '.$porcentagemFimMargin.'% 0 0; justify-self: left; background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
                 }
                 else{
-                    echo '.' . "$fim" . '{background-color: '.$cor.'; border-top-right-radius: 15px; border-bottom-right-radius: 15px;  border-top: 10px solid white; border-bottom: 10px solid white;}';
+                    $porcentagemFim = 0;
                 }      
-       
-                for ($i = intval(substr($inicio, 1)) + 1; $i < intval(substr($fim, 1)); $i++) {
-                    $col = 'j' . $i;
-                    echo '.' . "$col" . '{background-color: '.$cor.'; border-top: 10px solid white; border-bottom: 10px solid white;}';
+                
+                $tamanho = 0;
+                for ($i = $horaInicio + 1; $i < $horaFim; $i++) {
+                    $tamanho += 100;
                 }
+                $tamanho += $porcentagemInicio + $porcentagemFim;
+                $tamanho = ($tamanho / 100) * 78;
+                $leftTotal = 0;
+                $indexInicio = ($horaInicio - 7) * 78;
+                $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
+                $leftTotal += $porcentagemInicioMargin + $indexInicio;
+
+                echo '.' . 'pc' . '{position: relative;}';
+                echo '.' . 'j'. $j . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
+
+                $j++;
             }
        
             echo '</style>';
@@ -869,14 +824,15 @@ mostrarAgendamentos($conexao, $dia); */
                                 ?>
                             </div>
                             <div class="pc">
-                                <?php 
-                                    $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Pista Completa' AND dia='$dia' AND status='Aprovado'";
+                            <?php 
+                                    $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Asfalto' AND dia='$dia' AND status='Aprovado'";
                                     $result = $conexao->query($sql);
-                                    $j = 2;
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<div class="j'.$j.'"></div>';
-                                        $j++;
-                                    }                                        
+                                    $numLinha = $result->num_rows;
+                                    if ($numLinha > 0) {
+                                        for ($i = 2; $i < $numLinha+1; $i++) {
+                                            echo '<div class="j'.$i.'"></div>';
+                                        }                           
+                                    }             
                                 ?>
                             </div>
                         </div>
