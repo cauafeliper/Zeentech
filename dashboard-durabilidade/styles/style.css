@@ -28,21 +28,19 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    overflow: hidden;
 }
 
 header {
-    background-color: transparent;
+    background-color: #00102c;
     width: 100%;
-    height: fit-content;
+    height: 140px;
     justify-content: space-between;
     display: flex;
+    align-items: center;
     padding: 15px;
     position: absolute;
     top: 0;
-}
-
-header h1 {
-    color: white;
 }
 
 header img {
@@ -50,49 +48,163 @@ header img {
 }
 
 .header__img {
-    width: 450px;
+    width: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 main {
-    width: 440px;
-    height: 440px;
+    width: 450px;
+    height: 450px;
 }
 
 .botoes {  
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
     gap: 20px 20px;
+    height: 100%;
     grid-auto-flow: row;
     grid-template-areas:
-      ". rod ."
-      "scha . oleo"
-      ". cons .";
+      "rod scha"
+      "oleo cons";
   }
 
-  .botoes__animacao {
+.botoes__animacao {
     display: grid;
-    background-color: black;
-    border-radius: 1000px;
-    justify-content: center;
-    align-items: center;
+    background-color: #010e24;
     transition: box-shadow 0.3s ease-in-out;
     box-shadow: 0 0 0 white;
+    padding: 5px;
 }
 
 .botoes__animacao:hover {
     box-shadow: 0 0 20px white;
+    cursor: pointer;
 }
 
 .botoes__animacao img {
-    height: 70%;
+    height: 55%;
 }
   
-.rod { grid-area: rod; }
+.rod { 
+    grid-area: rod; 
+    border-top-left-radius: 500px;
+    border-bottom-right-radius: 10px;
+}
 
-.scha { grid-area: scha; }
+.rod img {
+    position: relative;
+    top: 40%;
+    left: 27%;
+}
 
-.cons { grid-area: cons; }
+.scha { 
+    grid-area: scha; 
+    border-top-right-radius: 500px;
+}
 
-.oleo { grid-area: oleo; }
-  
+.scha img {
+    position: relative;
+    left: 15%;
+    top: 32%;
+}
+
+.cons { 
+    grid-area: cons; 
+    border-bottom-right-radius: 500px;
+}
+
+.cons img {
+    position: relative;
+    left: 13%;
+    top: 13%;
+}
+
+.oleo { 
+    grid-area: oleo; 
+    border-bottom-left-radius: 500px;
+}
+
+.oleo img {
+    position: relative;
+    top: 13%;
+    left: 28%;
+}
+
+.caminhao__1 {
+    opacity: 30%;
+    position: absolute;
+    right: -10%;
+    bottom: 30%;
+    width: 569px;
+    height: 379px;
+}
+
+.caminhao__2 {
+    transform: scaleX(-1);
+    opacity: 30%;
+    position: absolute;
+    left: -10%;
+    bottom: 30%;
+    width: 569px;
+    height: 379px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 59.5%;
+    left: 50%;
+    width: 80%;
+    height: 80%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 10px;
+    z-index: 9999;
+}
+
+#popupIframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 10px;
+}
+
+.botoes__iframe {
+    font-weight: bolder;
+    font-size: 30px;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1000px;
+    transform: translateY(-50%);
+    background-color: white;
+    border: none;
+}
+
+.botao__direita {
+    position: absolute; 
+    top: 50%; 
+    right: -45px;
+}
+
+.botao__esquerda {
+    position: absolute; 
+    top: 50%; 
+    left: -45px;
+}
+
+.botao__fechar {
+    cursor: pointer; 
+    position: absolute; 
+    top: -30px; 
+    right: 10px;
+}
+
+.botoes__iframe:hover {
+    cursor: pointer;
+}

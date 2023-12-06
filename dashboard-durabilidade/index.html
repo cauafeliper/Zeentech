@@ -14,52 +14,86 @@
 <body>
     <header>
         <div>
-            <h1>DURABILIDADE</h1>
+            <img src="imgs/logo-dur-cla.png" alt="">
         </div>
         <div class="header__img">
-            <img src="imgs/zeentech-logo.png" alt="logo-zeentech">
-            <img src="imgs/vw-logo.png" alt="logo-vw" style="float: right;">
+            <img src="imgs/zeentech-logo.png" alt="logo-zeentech" style="height: 35px;">
+            <img src="imgs/truckBus.png" alt="logo-vw" style="float: right; height: 90px;">
         </div>
     </header>
     <main>
         <div class="botoes">
-            <div class="rod botoes__animacao" id="rodagem">
+            <div class="rod botoes__animacao" onclick="openPopup(0)">
                 <img src="imgs/rodagem.png" alt="rodagem">
             </div>
-            <div class="scha botoes__animacao" id="schadenstisch">
+            <div class="scha botoes__animacao" onclick="openPopup(1)">
                 <img src="imgs/schadenstisch.png" alt="schadenstisch">
             </div>
-            <div class="cons botoes__animacao" id="consumo">
+            <div class="cons botoes__animacao" onclick="openPopup(2)">
                 <img src="imgs/consumo.png" alt="consumo">
             </div>
-            <div class="oleo botoes__animacao" id="oleo">
+            <div class="oleo botoes__animacao" onclick="openPopup(3)">
                 <img src="imgs/oleo.png" alt="oleo">
             </div>
         </div>
     </main>
+    <img src="imgs/caminhao-2.png" alt="caminhao1" class="caminhao__1">
+    <img src="imgs/caminhao.png" alt="caminhao2" class="caminhao__2">
+    <div class="modal" id="myModal" style="display: none;">
+        <button onclick="changeIframe(-1)" class="botoes__iframe botao__esquerda">&lt;</button>
+        <button onclick="changeIframe(1)" class="botoes__iframe botao__direita">&gt;</button>
+        <span onclick="closePopup()" class="botoes__iframe botao__fechar">&times;</span>
+        <iframe id="popupIframe" src=""></iframe>
+    </div>
     <script>
-        tippy('#rodagem', {
-        content: '<strong>Quadro de Rodagem</strong><br>Quadro de Rodagem mostra status todos veículos durabilidade como: Km de teste, Motorista atual,  turnos consecutivos parados,  localização, eng. responsável, ordem prioridade etc.',
-        allowHTML: true,
-      });
-      
-      tippy('#schadenstisch', {
-        content: '<strong>Schadenstisch</strong><br>Indicador Schadenstisch consiste em mostrar a evolução dos status dos KPM\'s, por diferentes FG\'s, total kpm fechados, e responsáveis semanalmente.',
-        allowHTML: true,
-        placement: 'left',
-      });
+        tippy('.rod', {
+            content: '<strong>Quadro de Rodagem</strong><br>Quadro de Rodagem mostra status todos veículos durabilidade como: Km de teste, Motorista atual,  turnos consecutivos parados,  localização, eng. responsável, ordem prioridade etc.',
+            allowHTML: true,
+            placement: 'left',
+        });
+        
+        tippy('.scha', {
+            content: '<strong>Schadenstisch</strong><br>Indicador Schadenstisch consiste em mostrar a evolução dos status dos KPM\'s, por diferentes FG\'s, total kpm fechados, e responsáveis semanalmente.',
+            allowHTML: true,
+            placement: 'right',
+        });
 
-      tippy('#consumo', {
-        content: '<strong>Consumo</strong><br>Controle de Consumo consiste em mostrar o comparativo dos veículos ativos, ônibus ou caminhão quanto ao consumo de Diesel e de Arla, e os custos de ambos.',
-        allowHTML: true,
-        placement: 'bottom',
-      });
+        tippy('.cons', {
+            content: '<strong>Consumo</strong><br>Controle de Consumo consiste em mostrar o comparativo dos veículos ativos, ônibus ou caminhão quanto ao consumo de Diesel e de Arla, e os custos de ambos.',
+            allowHTML: true,
+            placement: 'right',
+        });
 
-      tippy('#oleo', {
-        content: '<strong>Vareta de Óleo</strong><br>Controle de Óleo na Vareta consiste em controlar e analisar o nível de óleo dos veículos e acompanhar o consumo atual com nº dos lacres dos mesmos.',
-        allowHTML: true,
-        placement: 'right',
-      });
+        tippy('.oleo', {
+            content: '<strong>Vareta de Óleo</strong><br>Controle de Óleo na Vareta consiste em controlar e analisar o nível de óleo dos veículos e acompanhar o consumo atual com nº dos lacres dos mesmos.',
+            allowHTML: true,
+            placement: 'left',
+        });
+
+        let currentIframeIndex = 0;
+        const iframeSources = [
+            'https://app.powerbi.com/reportEmbed?reportId=0e667a6f-23c4-48ee-8a73-940ccb239b68&autoAuth=true&ctid=959ebf68-bcaf-4dec-b44a-6934403eb9f3',
+            'https://app.powerbi.com/reportEmbed?reportId=ab18bd18-e88d-4326-bdcc-e1525de6034c&autoAuth=true&ctid=959ebf68-bcaf-4dec-b44a-6934403eb9f3',
+            'https://app.powerbi.com/reportEmbed?reportId=b233dd20-7326-46b1-b018-d2b316dafb43&autoAuth=true&ctid=959ebf68-bcaf-4dec-b44a-6934403eb9f3',
+            'https://app.powerbi.com/reportEmbed?reportId=13b403db-f2ef-49b0-ba12-71fc6273536f&autoAuth=true&ctid=959ebf68-bcaf-4dec-b44a-6934403eb9f3'
+        ];
+
+        function openPopup(index) {
+            currentIframeIndex = index;
+            var popupIframe = document.getElementById('popupIframe');
+            popupIframe.src = iframeSources[index];
+            document.getElementById('myModal').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+
+        function changeIframe(delta) {
+            currentIframeIndex = (currentIframeIndex + delta + iframeSources.length) % iframeSources.length;
+            var popupIframe = document.getElementById('popupIframe');
+            popupIframe.src = iframeSources[currentIframeIndex];
+        }
     </script>
 </body>
 </html>
