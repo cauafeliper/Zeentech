@@ -714,143 +714,157 @@ function porcentagemMinuto($minuto) {
                 <div class="submit"><input type="submit" value="Filtrar"></div>
             </form>
             <div class="div__grafico">
-                <div class="grafico">
-                    <div class="tit">
-                        <div class="all_tit"><h2>Agendamentos por Dia</h2></div>
-                    </div>
-                    <div class="scl">
-                        <div class="b1 quad_graf"></div>
-                        <div class="b2 quad_graf">07:00</div>
-                        <div class="b3 quad_graf">08:00</div>
-                        <div class="b4 quad_graf">09:00</div>
-                        <div class="b5 quad_graf">10:00</div>
-                        <div class="b6 quad_graf">11:00</div>
-                        <div class="b7 quad_graf">12:00</div>
-                        <div class="b8 quad_graf">13:00</div>
-                        <div class="b9 quad_graf">14:00</div>
-                        <div class="b10 quad_graf">15:00</div>
-                        <div class="b11 quad_graf">16:00</div>
-                        <div class="b12 quad_graf">17:00</div>
-                        <div class="b13 quad_graf">18:00</div>
-                        <div class="b14 quad_graf">19:00</div>
-                    </div>
-                    <div class="grafico_preenchimentos">
-                        <div class = nome_pistas>
-                            <div class="c1 quad_graf">VDA</div>
-                            <div class="d1 quad_graf">NVH</div>
-                            <div class="e1 quad_graf">Obstáculos</div>
-                            <div class="f1 quad_graf">Rampa 12% e 20%</div>
-                            <div class="g1 quad_graf">Rampa 40%</div>
-                            <div class="h1 quad_graf">Rampa 60%</div>
-                            <div class="i1 quad_graf">Asfalto</div>
-                            <div class="j1 quad_graf">Pista Completa</div>
+                <div class="tit">
+                    <div class="all_tit"><h2 style="color: white;">Agendamentos por Dia</h2></div>
+                </div>
+                <div class="out_grafico">
+                    <div class="grafico" style="position: relative">
+                        <hr style="width: 1px; position: absolute;left: 170px;height: 374px;z-index: 1;top: 10%;">
+                        <hr style="width: 1px; position: absolute;left: 248px;height: 374px;z-index: 1;top: 10%;">
+                        <hr style="width: 1px; position: absolute;left: 326px;height: 374px;z-index: 1;top: 10%;">
+                        <hr style="width: 1px; position: absolute;left: 404px;height: 374px;z-index: 1;top: 10%;">
+                        <hr style="width: 1px; position: absolute;left: 482px;height: 374px;z-index: 1;top: 10%;">
+                        <hr style="width: 1px; position: absolute;left: 560px;height: 374px;z-index: 1;top: 10%;">
+                        <hr style="width: 1px; position: absolute;left: 638px;height: 374px;z-index: 1;top: 10%;">
+                        <hr style="width: 1px; position: absolute;left: 716px;height: 374px;z-index: 1;top: 10%;">
+                        <hr style="width: 1px; position: absolute;left: 794px;height: 374px;z-index: 1;top: 10%;">
+                        <hr style="width: 1px; position: absolute;left: 872px;height: 374px;z-index: 1;top: 10%;">
+                        <hr style="width: 1px; position: absolute;left: 950px;height: 374px;z-index: 1;top: 10%;">
+                        <div class="scl">
+                            <div class="quad_graf"></div>
+                            <div class="quad_graf" style="border: none"><div class="b2" style="z-index: 2;">07:00</div></div>                            
+                            <div class="quad_graf" style="border: none"><div class="b3" style="z-index: 2;">08:00</div></div>
+                            <div class="quad_graf" style="border: none"><div class="b4" style="z-index: 2;">09:00</div></div>
+                            <div class="quad_graf" style="border: none"><div class="b5" style="z-index: 2;">10:00</div></div>
+                            <div class="quad_graf" style="border: none"><div class="b6" style="z-index: 2;">11:00</div></div>
+                            <div class="quad_graf" style="border: none"><div class="b7" style="z-index: 2;">12:00</div></div>
+                            <div class="quad_graf" style="border: none"><div class="b8" style="z-index: 2;">13:00</div></div>
+                            <div class="quad_graf" style="border: none"><div class="b9" style="z-index: 2;">14:00</div></div>
+                            <div class="quad_graf" style="border: none"><div class="b10" style="z-index: 2;">15:00</div></div>
+                            <div class="quad_graf" style="border: none"><div class="b11" style="z-index: 2;">16:00</div></div>
+                            <div class="quad_graf" style="border: none"><div class="b12" style="z-index: 2;">17:00</div></div>
+                            <div class="quad_graf"><div class="b13" style="z-index: 2;">18:00</div></div>
+                            <div class="quad_graf" style="border: none"><div class="b14" style="z-index: 2;">19:00</div></div>
                         </div>
-                        <div class="grafico_linhas">
-                            <div class="vda">               
+                        <div class="grafico_preenchimentos">
+                            <div class = nome_pistas>
+                                <div class="c1 quad_graf">VDA</div>
+                                <div class="d1 quad_graf">NVH</div>
+                                <div class="e1 quad_graf">Obstáculos</div>
+                                <div class="f1 quad_graf">Rampa 12% e 20%</div>
+                                <div class="g1 quad_graf">Rampa 40%</div>
+                                <div class="h1 quad_graf">Rampa 60%</div>
+                                <div class="i1 quad_graf">Asfalto</div>
+                                <div class="j1 quad_graf">Pista Completa</div>
+                            </div>
+                            <div class="grafico_linhas">
+                                <div class="vda">               
+                                    <?php 
+                                        $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'VDA' AND dia='$dia' AND status='Aprovado'";
+                                        $result = $conexao->query($sql);
+                                        $j = 2;
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo '<div class="c'.$j.'"></div>';
+                                            $j++;
+                                        }                                        
+                                    ?>
+                                </div>
+                                <div class="nvh">
+                                    <?php 
+                                        $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'NVH' AND dia='$dia' AND status='Aprovado'";
+                                        $result = $conexao->query($sql);
+                                        $j = 2;
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo '<div class="d'.$j.'"></div>';
+                                            $j++;
+                                        }                                        
+                                    ?>
+                                </div>
+                                <div class="obs">
+                                    <?php 
+                                        $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Obstáculos' AND dia='$dia' AND status='Aprovado'";
+                                        $result = $conexao->query($sql);
+                                        $j = 2;
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo '<div class="e'.$j.'"></div>';
+                                            $j++;
+                                        }                                        
+                                    ?>
+                                </div>
+                                <div class="r_12_20">
+                                    <?php 
+                                        $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Rampa 12% e 20%' AND dia='$dia' AND status='Aprovado'";
+                                        $result = $conexao->query($sql);
+                                        $j = 2;
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo '<div class="f'.$j.'"></div>';
+                                            $j++;
+                                        }                                        
+                                    ?>
+                                </div>
+                                <div class="r_40">
+                                    <?php 
+                                        $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Rampa 40%' AND dia='$dia' AND status='Aprovado'";
+                                        $result = $conexao->query($sql);
+                                        $j = 2;
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo '<div class="g'.$j.'"></div>';
+                                            $j++;
+                                        }                                        
+                                    ?>
+                                </div>
+                                <div class="r_60">
+                                    <?php 
+                                        $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Rampa 60%' AND dia='$dia' AND status='Aprovado'";
+                                        $result = $conexao->query($sql);
+                                        $j = 2;
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo '<div class="h'.$j.'"></div>';
+                                            $j++;
+                                        }                                        
+                                    ?>
+                                </div>
+                                <div class="asf">
+                                    <?php 
+                                        $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Asfalto' AND dia='$dia' AND status='Aprovado'";
+                                        $result = $conexao->query($sql);
+                                        $j = 2;
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo '<div class="i'.$j.'"></div>';
+                                            $j++;
+                                        }                                        
+                                    ?>
+                                </div>
+                                <div class="pc">
                                 <?php 
-                                    $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'VDA' AND dia='$dia' AND status='Aprovado'";
-                                    $result = $conexao->query($sql);
-                                    $j = 2;
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<div class="c'.$j.'"></div>';
-                                        $j++;
-                                    }                                        
-                                ?>
+                                        $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Asfalto' AND dia='$dia' AND status='Aprovado'";
+                                        $result = $conexao->query($sql);
+                                        $numLinha = $result->num_rows;
+                                        if ($numLinha > 0) {
+                                            for ($i = 2; $i < $numLinha+1; $i++) {
+                                                echo '<div class="j'.$i.'"></div>';
+                                            }                           
+                                        }             
+                                    ?>
+                                </div>
                             </div>
-                            <div class="nvh">
-                                <?php 
-                                    $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'NVH' AND dia='$dia' AND status='Aprovado'";
-                                    $result = $conexao->query($sql);
-                                    $j = 2;
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<div class="d'.$j.'"></div>';
-                                        $j++;
-                                    }                                        
-                                ?>
-                            </div>
-                            <div class="obs">
-                                <?php 
-                                    $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Obstáculos' AND dia='$dia' AND status='Aprovado'";
-                                    $result = $conexao->query($sql);
-                                    $j = 2;
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<div class="e'.$j.'"></div>';
-                                        $j++;
-                                    }                                        
-                                ?>
-                            </div>
-                            <div class="r_12_20">
-                                <?php 
-                                    $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Rampa 12% e 20%' AND dia='$dia' AND status='Aprovado'";
-                                    $result = $conexao->query($sql);
-                                    $j = 2;
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<div class="f'.$j.'"></div>';
-                                        $j++;
-                                    }                                        
-                                ?>
-                            </div>
-                            <div class="r_40">
-                                <?php 
-                                    $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Rampa 40%' AND dia='$dia' AND status='Aprovado'";
-                                    $result = $conexao->query($sql);
-                                    $j = 2;
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<div class="g'.$j.'"></div>';
-                                        $j++;
-                                    }                                        
-                                ?>
-                            </div>
-                            <div class="r_60">
-                                <?php 
-                                    $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Rampa 60%' AND dia='$dia' AND status='Aprovado'";
-                                    $result = $conexao->query($sql);
-                                    $j = 2;
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<div class="h'.$j.'"></div>';
-                                        $j++;
-                                    }                                        
-                                ?>
-                            </div>
-                            <div class="asf">
-                                <?php 
-                                    $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Asfalto' AND dia='$dia' AND status='Aprovado'";
-                                    $result = $conexao->query($sql);
-                                    $j = 2;
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<div class="i'.$j.'"></div>';
-                                        $j++;
-                                    }                                        
-                                ?>
-                            </div>
-                            <div class="pc">
-                            <?php 
-                                    $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Asfalto' AND dia='$dia' AND status='Aprovado'";
-                                    $result = $conexao->query($sql);
-                                    $numLinha = $result->num_rows;
-                                    if ($numLinha > 0) {
-                                        for ($i = 2; $i < $numLinha+1; $i++) {
-                                            echo '<div class="j'.$i.'"></div>';
-                                        }                           
-                                    }             
-                                ?>
-                            </div>
+                            <div class="espaco"></div>
                         </div>
-                    </div>
-                    <div class="leg">
-                        <div class="k1 quad_graf"></div>
-                        <div class="k2 quad_graf"></div>
-                        <div class="k3 quad_graf"></div>
-                        <div class="k4 quad_graf"></div>
-                        <div class="k5 quad_graf"></div>
-                        <div class="k6 quad_graf"><p>Exclusivo</p></div>
-                        <div class="k7 quad_graf"></div>
-                        <div class="k8 quad_graf"><p>Não<br>Exlusivo</p></div>
-                        <div class="k9 quad_graf"></div>
-                        <div class="k10 quad_graf"></div>
-                        <div class="k11 quad_graf"></div>
-                        <div class="k12 quad_graf"></div>
-                        <div class="k13 quad_graf"></div>
+                        <div class="leg">
+                            <div class="k1 quad_graf"></div>
+                            <div class="k2 quad_graf"></div>
+                            <div class="k3 quad_graf"></div>
+                            <div class="k4 quad_graf"></div>
+                            <div class="k5 quad_graf"></div>
+                            <div class="k6 quad_graf"><p>Exclusivo</p></div>
+                            <div class="k7 quad_graf"></div>
+                            <div class="k8 quad_graf"><p>Não<br>Exlusivo</p></div>
+                            <div class="k9 quad_graf"></div>
+                            <div class="k10 quad_graf"></div>
+                            <div class="k11 quad_graf"></div>
+                            <div class="k12 quad_graf"></div>
+                            <div class="k13 quad_graf"></div>
+                        </div>
                     </div>
                 </div>
             </div>

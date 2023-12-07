@@ -164,6 +164,7 @@ main {
   width: 83%;
   padding: 15px;
   display: flex;
+  flex-direction: column;
   border-radius: 15px;
 }
 
@@ -173,10 +174,16 @@ main {
   border-radius: 15px;
   height: fit-content;
   width: 1120px;
+  position: relative;
+}
+
+.out_grafico {
+  overflow: auto;
+  border-radius: 15px;
 }
 
 .quad_graf {
-  border-right: 1px solid lightgray;
+  border-right: 2px solid lightgray;
   text-align: center;
   width: 78px;
   height: 45px;
@@ -188,7 +195,7 @@ main {
 
 .grafico_preenchimentos {
   display: flex;
-  width: 100%;
+  width: 1082px;
   height: 100%;
   flex-direction: row;
 }
@@ -196,7 +203,7 @@ main {
 .grafico_linhas {
   display: flex;
   flex-direction: column;;
-  width: 100%;
+  width: 1082px;
   height: 100%;
   align-items: center;
 }
@@ -209,6 +216,11 @@ main {
   width: 78px;
   height: 100%;
   border-right: 1px solid lightgray;
+}
+
+.espaco {
+  width: 78px;
+  height: 100%;
 }
 
 .gantt {
@@ -239,6 +251,7 @@ main {
     "all_tit"; 
   grid-area: tit;
   text-align: center; 
+  color: white;
 }
 .all_tit { 
   grid-area: all_tit;
@@ -247,47 +260,75 @@ main {
 
 .scl {
     display: grid; 
+    width: 1090px;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; 
     grid-template-rows: 1fr; 
     gap: 0px 0px; 
     grid-template-areas: 
       "b1 b2 b3 b4 b5 b6 b7 b8 b9 b10 b11 b12 b13 b14"; 
     grid-area: scl;
-    border-bottom: 1px solid lightgray;
+    border-bottom: 2px solid lightgray;
   }
   .b1 { 
     grid-area: b1;
   }
   .b2 { 
     grid-area: b2;
+    position: absolute;
+    left: -20px;
   }
   .b3 { 
     grid-area: b3;
+    position: absolute;
+    left: -20px;
   }
   .b4 { 
     grid-area: b4;
+    position: absolute;
+    left: -20px;
   }
   .b5 { 
     grid-area: b5;
+    position: absolute;
+    left: -20px;
   }
-  .b6 { grid-area: b6; }
-  .b7 { grid-area: b7; }
-  .b8 { grid-area: b8; }
-  .b9 { grid-area: b9; }
-  .b10 { grid-area: b10; }
-  .b11 { grid-area: b11; }
-  .b12 { grid-area: b12; }
-  .b13 { grid-area: b13; }
+  .b6 { grid-area: b6;
+    position: absolute;
+    left: -20px; }
+  .b7 { grid-area: b7;
+    position: absolute;
+    left: -20px; }
+  .b8 { grid-area: b8;
+    position: absolute;
+    left: -20px; }
+  .b9 { grid-area: b9;
+    position: absolute;
+  left: -20px; }
+  .b10 { grid-area: b10;
+    position: absolute;
+  left: -20px; }
+  .b11 { grid-area: b11;
+    position: absolute;
+  left: -20px; }
+  .b12 { grid-area: b12;
+    position: absolute; 
+  left: -20px; }
+  .b13 { grid-area: b13;
+    position: absolute;
+  left: -20px; }
   .b14 { 
-    grid-area: b14; 
+    grid-area: b14;
+    position: absolute; 
     border: none;
+    left: -20px;
   }
 
   .vda {
     display: flex;
     height:45px;
     width: 100%;
-    border-bottom: 1px solid lightgray;
+    border-bottom: 2px solid lightgray;
+    border-right: 2px solid lightgray;
     position: relative;
   }
   .c1 { 
@@ -298,7 +339,8 @@ main {
     display: flex; 
     height:45px;
     width: 100%;
-    border-bottom: 1px solid lightgray; 
+    border-bottom: 2px solid lightgray; 
+    border-right: 2px solid lightgray;
     position: relative;
   }
   .d1 {
@@ -309,7 +351,8 @@ main {
     display: flex; 
     height:45px;
     width: 100%;
-    border-bottom: 1px solid lightgray; 
+    border-bottom: 2px solid lightgray; 
+    border-right: 2px solid lightgray;
     position: relative;
   }
   .e1 { 
@@ -320,7 +363,8 @@ main {
     display: flex; 
     height:45px;
     width: 100%;
-    border-bottom: 1px solid lightgray;
+    border-bottom: 2px solid lightgray;
+    border-right: 2px solid lightgray;
     position: relative; 
   }
   .f1 { 
@@ -331,7 +375,8 @@ main {
     display: flex; 
     height:45px;
     width: 100%;
-    border-bottom: 1px solid lightgray;  
+    border-bottom: 2px solid lightgray;  
+    border-right: 2px solid lightgray;
     position: relative;
   }
   .g1 { 
@@ -342,7 +387,8 @@ main {
     display: flex; 
     height:45px;
     width: 100%;
-    border-bottom: 1px solid lightgray;  
+    border-bottom: 2px solid lightgray; 
+    border-right: 2px solid lightgray; 
     position: relative;
   }
   .h1 { 
@@ -353,7 +399,8 @@ main {
     display: flex; 
     height:45px;
     width: 100%;
-    border-bottom: 1px solid lightgray; 
+    border-bottom: 2px solid lightgray; 
+    border-right: 2px solid lightgray;
     position: relative;
   }
   .i1 { grid-area: i1;
@@ -363,7 +410,8 @@ main {
     display: flex; 
     height:45px;
     width: 100%;
-    border-bottom: 1px solid lightgray; 
+    border-bottom: 2px solid lightgray; 
+    border-right: 2px solid lightgray;
     position: relative; 
   }
   .j1 { 
