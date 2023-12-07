@@ -18,7 +18,7 @@
         </div>
         <div class="header__img">
             <img src="imgs/zeentech-logo.png" alt="logo-zeentech" style="height: 35px;">
-            <img src="imgs/truckBus.png" alt="logo-vw" style="float: right; height: 90px;">
+            <img src="imgs/truckBus.png" alt="logo-vw" style="float: right; height: 90px; margin-right: 30px;">
         </div>
     </header>
     <main>
@@ -40,8 +40,11 @@
     <img src="imgs/caminhao-2.png" alt="caminhao1" class="caminhao__1">
     <img src="imgs/caminhao.png" alt="caminhao2" class="caminhao__2">
     <div class="modal" id="myModal" style="display: none;">
+        <button onclick="toggleAutoChange()" id="btnAutoChange" class="botao__loop botoes__iframe">
+            <img src="https://icons.iconarchive.com/icons/iconoir-team/iconoir/24/refresh-double-icon.png" width="24" height="24">
+        </button>
         <button onclick="changeIframe(-1)" class="botoes__iframe botao__esquerda">&lt;</button>
-        <button onclick="changeIframe(1)" class="botoes__iframe botao__direita">&gt;</button>
+        <button onclick="changeIframe(1)" id="btnNext" class="botoes__iframe botao__direita">&gt;</button>
         <span onclick="closePopup()" class="botoes__iframe botao__fechar">&times;</span>
         <iframe id="popupIframe" src=""></iframe>
     </div>
@@ -93,6 +96,26 @@
             currentIframeIndex = (currentIframeIndex + delta + iframeSources.length) % iframeSources.length;
             var popupIframe = document.getElementById('popupIframe');
             popupIframe.src = iframeSources[currentIframeIndex];
+        }
+
+        let isAutoChangeEnabled = false; // Definindo a variável
+
+        function toggleAutoChange() {
+            const button = document.getElementById('btnAutoChange');
+
+            if (!isAutoChangeEnabled) {
+                autoChangeInterval = setInterval(clickNextButton, 40000); // Clicar a cada 1 minuto (60000 milissegundos)
+                button.style.backgroundColor = '#158544'; // Define a cor de fundo para indicar que está ativado
+            } else {
+                clearInterval(autoChangeInterval);
+                button.style.backgroundColor = ''; // Remove a cor de fundo para indicar que está desativado
+            }
+
+            isAutoChangeEnabled = !isAutoChangeEnabled;
+        }
+
+        function clickNextButton() {
+            document.getElementById('btnNext').click(); // Simula um clique no botão de próxima iframe
         }
     </script>
 </body>
