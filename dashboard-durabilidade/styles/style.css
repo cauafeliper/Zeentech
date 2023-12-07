@@ -212,6 +212,6 @@ main {
 
 .botao__loop {
     position: absolute;
-    bottom: 0px;
-    right: -40px;
+    top: -30px;
+    right: 60px;
 }
