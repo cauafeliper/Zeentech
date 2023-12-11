@@ -1,6 +1,9 @@
 @charset "UTF-8";
 
-@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@font-face {
+    font-family: "ztc";
+    src: url(../font/Circular-Std-Bold.ttf);
+}
 
 * {
     box-sizing: border-box;
@@ -214,4 +217,13 @@ main {
     position: absolute;
     top: -30px;
     right: 60px;
+}
+
+.idt {
+    font-family: "ztc";
+    font-weight: bold;
+    color: white;
+    position: absolute;
+    right: 9.8%;
+    bottom: 33%;
 }
