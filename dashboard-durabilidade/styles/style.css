@@ -219,24 +219,15 @@ main {
     right: 60px;
 }
 
-.div__idt {
-    display: grid; 
-  grid-template-columns: 1fr; 
-  grid-template-rows: 1.7fr 0.3fr; 
-  gap: 0px 0px; 
-  grid-template-areas: 
-    "img"
-    "idt__txt"; 
+.img {
+    position: absolute;
 }
-.img { grid-area: img; }
-.idt__txt { grid-area: idt__txt; }
 
 .idt {
     font-family: "ztc";
     font-weight: bold;
     color: white;
-    display: flex;
-    justify-content: end;
     position: relative;
-    bottom: 0px;
+    bottom: -29px;
+    right: -177px;
 }
