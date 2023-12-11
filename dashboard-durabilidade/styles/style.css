@@ -231,3 +231,50 @@ main {
     bottom: -29px;
     right: -177px;
 }
+
+@media (max-width: 1336px) {
+    .caminhao__sumir {
+        display: none;
+    }
+}
+
+@media (max-width: 905px) {
+    header {
+        height: 250px;
+    }
+
+    .header__grid {
+        display: grid; 
+        grid-template-columns: 1fr; 
+        grid-template-rows: 1fr 1fr; 
+        gap: 0px 0px; 
+        grid-template-areas: 
+            "dur__grid"
+            "logos__grid"; 
+        }
+        
+        .dur__grid { 
+            grid-area: dur__grid; 
+            display: flex;
+            justify-content: center;
+        }
+
+        .logos__grid { 
+            grid-area: logos__grid;
+        }
+
+        .header__img {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .img__margin {
+            margin-right: 20px;
+        }
+
+        .toca__sumir {
+            display: none;
+        }
+}
