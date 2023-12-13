@@ -57,6 +57,12 @@ header img {
     justify-content: space-between;
 }
 
+.toca {
+    position: absolute; 
+    right: 45px; 
+    top: 25px;
+}
+
 main {
     margin-top: 120px;
     width: 450px;
@@ -72,7 +78,7 @@ main {
     grid-auto-flow: row;
     grid-template-areas:
       "rod scha"
-      "oleo cons";
+      "oleo oleo";
   }
 
 .botoes__animacao {
@@ -115,26 +121,16 @@ main {
     top: 32%;
 }
 
-.cons { 
-    grid-area: cons; 
-    border-bottom-right-radius: 500px;
-}
-
-.cons img {
-    position: relative;
-    left: 13%;
-    top: 13%;
-}
-
 .oleo { 
     grid-area: oleo; 
-    border-bottom-left-radius: 500px;
+    border-bottom-left-radius: 1000px;
+    border-bottom-right-radius: 1000px;
 }
 
 .oleo img {
     position: relative;
-    top: 13%;
-    left: 28%;
+    top: 20%;
+    left: 37%;
 }
 
 .caminhao__1 {
@@ -159,10 +155,10 @@ main {
 .modal {
     display: none;
     position: fixed;
-    top: 59.5%;
+    top: 58%;
     left: 50%;
-    width: 60%;
-    height: 67.8%;
+    width: 72%;
+    height: 84%;
     transform: translate(-50%, -50%);
     background-color: white;
     border-radius: 10px;
@@ -205,8 +201,8 @@ main {
 .botao__fechar {
     cursor: pointer; 
     position: absolute; 
-    top: -30px; 
-    right: 10px;
+    top: 15px; 
+    right: -40px;
 }
 
 .botoes__iframe:hover {
@@ -215,8 +211,8 @@ main {
 
 .botao__loop {
     position: absolute;
-    top: -30px;
-    right: 60px;
+    top: 55px;
+    right: -40px;
 }
 
 .img {
@@ -274,7 +270,24 @@ main {
             margin-right: 20px;
         }
 
-        .toca__sumir {
+        .toca {
             display: none;
         }
+}
+
+@media(min-height: 967px) {
+    .caminhao__1 {
+        right: -10%;
+    }
+    
+    .caminhao__2 {
+        left: -10%;
+    }
+    
+    .modal {
+        top: 57%;
+        left: 50%;
+        width: 80.5%;
+        height: 84%;
+    }
 }
