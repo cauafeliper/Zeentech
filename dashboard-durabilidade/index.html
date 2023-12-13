@@ -29,9 +29,12 @@
     <main>
         <div class="botoes">
             <canvas id="myChart" style="position: absolute;"></canvas>
-            <img src="imgs/rodagem.png" alt="rodagem" id="rod" style="position: relative; right: -260px; top: 110px;" onclick="openPopup(0)">
-            <img src="imgs/schadenstisch.png" alt="schadenstisch" id="scha" style="position: relative; right: 74px; top: 270px;" onclick="openPopup(1)">
-            <img src="imgs/oleo.png" alt="oleo" id="oleo" style="position: relative; bottom: 110px; left: 50px;" onclick="openPopup(2)">
+            <img src="imgs/rodagem.png" alt="rodagem" id="rod" style="position: relative; right: -260px; top: 110px;" class="img__rod" onclick="openPopup(0)">
+            <span class="exp__rod"><strong>Quadro de Rodagem</strong><br>Quadro de Rodagem mostra status de todos veículos durabilidade como: Km de teste, Motorista atual, turnos consecutivos parados, localização, eng. responsável, ordem prioridade etc.</span>
+            <img src="imgs/schadenstisch.png" alt="schadenstisch" id="scha" style="position: relative; right: 74px; top: 270px;" class="img__scha" onclick="openPopup(1)">
+            <span class="exp__scha"><strong>Schadenstisch</strong><br>Indicador Schadenstisch consiste em mostrar a evolução dos status dos KPM's, por diferentes FG's, total kpm fechados, e responsáveis semanalmente.</span>
+            <img src="imgs/oleo.png" alt="oleo" id="oleo" style="position: relative; bottom: 110px; left: 50px;" class="img__oleo" onclick="openPopup(2)">
+            <span class="exp__oleo"><strong>Vareta de Óleo</strong><br>Controle de Óleo na Vareta consiste em controlar e analisar o nível de óleo dos veículos e acompanhar o consumo atual com nº dos lacres dos mesmos.</span>
         </div>
     </main>
     <img src="imgs/caminhao-2.png" alt="caminhao1" class="caminhao__1 caminhao__sumir">

@@ -215,8 +215,59 @@ main {
     right: -40px;
 }
 
-.img {
+.exp__rod {
     position: absolute;
+    right: 500px;
+    width: 300px;
+    background-color: rgb(81, 84, 87);
+    border: 2px solid #00102c;
+    color: white;
+    padding: 5px;
+    border-radius: 10px;
+    text-align: justify;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.img__rod:hover + .exp__rod {
+    opacity: 1;
+}
+
+.exp__scha {
+    position: absolute;
+    right: 800px;
+    bottom: 150px;
+    width: 300px;
+    background-color: rgb(81, 84, 87);
+    border: 2px solid #00102c;
+    color: white;
+    padding: 5px;
+    border-radius: 10px;
+    text-align: justify;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.img__scha:hover + .exp__scha {
+    opacity: 1;
+}
+
+.exp__oleo {
+    position: absolute;
+    left: 500px;
+    width: 300px;
+    background-color: rgb(81, 84, 87);
+    border: 2px solid #00102c;
+    color: white;
+    padding: 5px;
+    border-radius: 10px;
+    text-align: justify;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.img__oleo:hover + .exp__oleo {
+    opacity: 1;
 }
 
 .idt {
@@ -224,7 +275,7 @@ main {
     font-weight: bold;
     color: white;
     position: relative;
-    bottom: -29px;
+    bottom: 10px;
     right: -177px;
 }
 
