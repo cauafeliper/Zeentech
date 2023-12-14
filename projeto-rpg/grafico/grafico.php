@@ -49,110 +49,127 @@ use PhpOffice\PhpSpreadsheet\Writer\Ods\Content;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function porcentagemMinuto($minuto) {
+function PorcentagemMinuto($minuto) { // retorna a porcentagem do minuto em relação a 60 minutos
     $minuto = intval($minuto);
     $porcentagem = ($minuto / 60) * 100;
     return $porcentagem;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function CriarCSS($conexao, $dia, $area_pista, $letra, $pistaClasse, $y){ // cria as classes com os horários agendados
+    $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = '$area_pista' AND dia='$dia' AND status='Aprovado'";
+    $result = $conexao->query($sql);
+    $horariosMarcados = array();
+    if ($result->num_rows > 0) {
 
-$sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'VDA' AND dia='$dia' AND status='Aprovado'";
-$result = $conexao->query($sql);
-$horariosMarcados = array();
-if ($result->num_rows > 0) {
-    
+        while ($row = $result->fetch_assoc()) {
+            $exclsv = $row["exclsv"];
+            $horarioInicio = $row["hora_inicio"];
+            $horarioFim = $row["hora_fim"];
+            
+            $horaInicio = $horarioInicio[0] . $horarioInicio[1];
+            $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
 
+            $horaFim = $horarioFim[0] . $horarioFim[1];
+            $minutoFim = $horarioFim[3] . $horarioFim[4];
+
+            $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
+
+            $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
+        }
+        $j = 2;
+        foreach ($horariosMarcados as $tarefa) {
+            $cor = $tarefa['cor'];
+            $horaInicio = $tarefa['horaInicio'];
+            $horaFim = $tarefa['horaFim'];
+            $minutoInicio = $tarefa['minutoInicio'];
+            $minutoFim = $tarefa['minutoFim'];
+            
+            if ($horaInicio != $horaFim){
+                if($minutoInicio != '00'){
+                    $porcentagemInicioMargin = PorcentagemMinuto($minutoInicio);
+                    $porcentagemInicio = 100 - $porcentagemInicioMargin;
+                }
+                else{
+                    $porcentagemInicio = 100;
+                    $porcentagemInicioMargin = 0;
+                }
+                if($minutoFim != '00'){
+                    $porcentagemFim = PorcentagemMinuto($minutoFim);
+                }
+                else{
+                    $porcentagemFim = 0;
+                }      
+                
+                $tamanho = 0;
+                for ($i = $horaInicio + 1; $i < $horaFim; $i++) {
+                    $tamanho += 100;
+                }
+                $tamanho += $porcentagemInicio + $porcentagemFim;
+                $tamanho = ($tamanho / 100) * 78;
+                $leftTotal = 0;
+                $indexInicio = ($horaInicio - 7) * 78;
+                $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
+                $leftTotal += $porcentagemInicioMargin + $indexInicio;
+            }
+            else{
+                $tamanho = 0;
+                $leftTotal = 0;
+                $minutos = $minutoFim - $minutoInicio;
+                $porcentagemMinutos = PorcentagemMinuto($minutos);
+                $tamanho = ($porcentagemMinutos / 100) * 78;
+                if ($minutoInicio != '00'){
+                    $porcentagemInicioMargin = 100 - $porcentagemMinutos;
+                    $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
+                }
+                else{
+                    $porcentagemInicioMargin = 0;
+                }
+                $indexInicio = ($horaInicio - 7) * 78;
+                $leftTotal = $porcentagemInicioMargin + $indexInicio;
+            }
+
+            $classe = $letra.$j;
+            $classeTip = 'tip_'.$classe;
+            $horario = "$horaInicio - $horaFim";
+            $leftTip = $leftTotal + ($tamanho/2) - 100;
+            if ($leftTip < 0){
+                $leftTip = 0;
+            }
+            if ($leftTip > 827){
+                $leftTip = 827;
+            }
+
+            echo '<style>';
+            echo '.' . $pistaClasse . '{position: relative;}';
+            echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
+
+            echo '.'.$classeTip. '{position: absolute; justify-content: center; '.$y.': 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
+            echo ".$classe:hover + .$classeTip".'{display: flex;}';
+            echo ".$classeTip:hover {display: flex;}";
+            echo '</style>';
+
+            $j++;
+        }
+    }
+}
+
+function CriarHTML($conexao, $dia, $area_pista, $letra){ // cria as divs com as classes para cada pista
+    $sql = "SELECT hora_inicio, hora_fim, solicitante, area_solicitante, veic FROM agendamentos WHERE area_pista = '$area_pista' AND dia='$dia' AND status='Aprovado'";
+    $result = $conexao->query($sql);
+    $j = 2;
     while ($row = $result->fetch_assoc()) {
-        $exclsv = $row["exclsv"];
         $horarioInicio = $row["hora_inicio"];
         $horarioFim = $row["hora_fim"];
-        
-        $horaInicio = $horarioInicio[0] . $horarioInicio[1];
-        $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
-
-        $horaFim = $horarioFim[0] . $horarioFim[1];
-        $minutoFim = $horarioFim[3] . $horarioFim[4];
-
-        $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
-
-        $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
-    }
-    $j = 2;
-    foreach ($horariosMarcados as $tarefa) {
-        $cor = $tarefa['cor'];
-        $horaInicio = $tarefa['horaInicio'];
-        $horaFim = $tarefa['horaFim'];
-        $minutoInicio = $tarefa['minutoInicio'];
-        $minutoFim = $tarefa['minutoFim'];
-        
-        if ($horaInicio != $horaFim){
-            if($minutoInicio != '00'){
-                $porcentagemInicioMargin = porcentagemMinuto($minutoInicio);
-                $porcentagemInicio = 100 - $porcentagemInicioMargin;
-            }
-            else{
-                $porcentagemInicio = 100;
-                $porcentagemInicioMargin = 0;
-            }
-            if($minutoFim != '00'){
-                $porcentagemFim = porcentagemMinuto($minutoFim);
-            }
-            else{
-                $porcentagemFim = 0;
-            }      
-            
-            $tamanho = 0;
-            for ($i = $horaInicio + 1; $i < $horaFim; $i++) {
-                $tamanho += 100;
-            }
-            $tamanho += $porcentagemInicio + $porcentagemFim;
-            $tamanho = ($tamanho / 100) * 78;
-            $leftTotal = 0;
-            $indexInicio = ($horaInicio - 7) * 78;
-            $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-            $leftTotal += $porcentagemInicioMargin + $indexInicio;
-        }
-        else{
-            $tamanho = 0;
-            $leftTotal = 0;
-            $minutos = $minutoFim - $minutoInicio;
-            $porcentagemMinutos = porcentagemMinuto($minutos);
-            $tamanho = ($porcentagemMinutos / 100) * 78;
-            if ($minutoInicio != '00'){
-                $porcentagemInicioMargin = 100 - $porcentagemMinutos;
-                $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-            }
-            else{
-                $porcentagemInicioMargin = 0;
-            }
-            $indexInicio = ($horaInicio - 7) * 78;
-            $leftTotal = $porcentagemInicioMargin + $indexInicio;
-        }
-
-        $classe = 'c'. $j;
-        $classeTip = 'tip_'.$classe;
-        $horario = "$horaInicio - $horaFim";
-        $leftTip = $leftTotal + ($tamanho/2) - 100;
-        if ($leftTip < 0){
-            $leftTip = 0;
-        }
-        if ($leftTip > 827){
-            $leftTip = 827;
-        }
-
-        echo '<style>';
-        echo '.' . 'vda' . '{position: relative;}';
-        echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
-
-        echo '.'.$classeTip. '{position: absolute; justify-content: center; top: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
-        echo ".$classe:hover + .$classeTip".'{display: flex;}';
-        echo ".$classeTip:hover {display: flex;}";
-        echo '</style>';
-
+        $horario = "$horarioInicio - $horarioFim";
+        $solicitante = $row["solicitante"];
+        $areaSolicitante = $row["area_solicitante"];
+        $veic = $row["veic"];
+        $classe = "$letra".$j;
+        echo '<div class="'.$classe.'"></div>';
+        echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
+            '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
+            '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
+        '</div>';
         $j++;
     }
 }
@@ -161,727 +178,16 @@ if ($result->num_rows > 0) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-$mapeamentoHorariosOBS = array(
-    '07' => 'e2', '08' => 'e3', '09' => 'e4', '10' => 'e5',
-    '11' => 'e6', '12' => 'e7', '13' => 'e8', '14' => 'e9',
-    '15' => 'e10', '16' => 'e11', '17' => 'e12', '18' => 'e13',
-    '19' => 'e14'
-);
-$sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'NVH' AND dia='$dia' AND status='Aprovado'";
-$result = $conexao->query($sql);
-$horariosMarcados = array();
-if ($result->num_rows > 0) {
-    echo '<style>';
 
-    while ($row = $result->fetch_assoc()) {
-        $exclsv = $row["exclsv"];
-        $horarioInicio = $row["hora_inicio"];
-        $horarioFim = $row["hora_fim"];
-        
-        $horaInicio = $horarioInicio[0] . $horarioInicio[1];
-        $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
 
-        $horaFim = $horarioFim[0] . $horarioFim[1];
-        $minutoFim = $horarioFim[3] . $horarioFim[4];
+$listaPistas = array('VDA', 'NVH', 'Obstáculos', 'Rampa 12% e 20%', 'Rampa 40%', 'Rampa 60%', 'Asfalto', 'Pista Completa');
+$listaPistasClasse = array('vda', 'nvh', 'obs', 'r_12_20', 'r_40', 'r_60', 'asf', 'pista_comp');
+$listaLetras = array('c', 'd', 'e', 'f', 'g', 'h', 'i', 'j');
+$listaY = array('top', 'top', 'top', 'top', 'bottom', 'bottom', 'bottom', 'bottom');
 
-        $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
-
-        $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
-    }
-    $j = 2;
-    foreach ($horariosMarcados as $tarefa) {
-        $cor = $tarefa['cor'];
-        $horaInicio = $tarefa['horaInicio'];
-        $horaFim = $tarefa['horaFim'];
-        $minutoInicio = $tarefa['minutoInicio'];
-        $minutoFim = $tarefa['minutoFim'];
-        
-        if ($horaInicio != $horaFim){
-            if($minutoInicio != '00'){
-                $porcentagemInicioMargin = porcentagemMinuto($minutoInicio);
-                $porcentagemInicio = 100 - $porcentagemInicioMargin;
-            }
-            else{
-                $porcentagemInicio = 100;
-                $porcentagemInicioMargin = 0;
-            }
-            if($minutoFim != '00'){
-                $porcentagemFim = porcentagemMinuto($minutoFim);
-            }
-            else{
-                $porcentagemFim = 0;
-            }      
-            
-            $tamanho = 0;
-            for ($i = $horaInicio + 1; $i < $horaFim; $i++) {
-                $tamanho += 100;
-            }
-            $tamanho += $porcentagemInicio + $porcentagemFim;
-            $tamanho = ($tamanho / 100) * 78;
-            $leftTotal = 0;
-            $indexInicio = ($horaInicio - 7) * 78;
-            $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-            $leftTotal += $porcentagemInicioMargin + $indexInicio;
-        }
-        else{
-            $tamanho = 0;
-            $leftTotal = 0;
-            $minutos = $minutoFim - $minutoInicio;
-            $porcentagemMinutos = porcentagemMinuto($minutos);
-            $tamanho = ($porcentagemMinutos / 100) * 78;
-            if ($minutoInicio != '00'){
-                $porcentagemInicioMargin = 100 - $porcentagemMinutos;
-                $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-            }
-            else{
-                $porcentagemInicioMargin = 0;
-            }
-            $indexInicio = ($horaInicio - 7) * 78;
-            $leftTotal = $porcentagemInicioMargin + $indexInicio;
-        }
-
-        $classe = 'd'. $j;
-        $classeTip = 'tip_'.$classe;
-        $horario = "$horaInicio - $horaFim";
-        $leftTip = $leftTotal + ($tamanho/2) - 100;
-        if ($leftTip < 0){
-            $leftTip = 0;
-        }
-        if ($leftTip > 827){
-            $leftTip = 827;
-        }
-
-        echo '<style>';
-        echo '.' . 'nvh' . '{position: relative;}';
-        echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
-
-        echo '.'.$classeTip. '{position: absolute; justify-content: center; top: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
-        echo ".$classe:hover + .$classeTip".'{display: flex;}';
-        echo ".$classeTip:hover {display: flex;}";
-        echo '</style>';
-
-        $j++;
-    }                                                                                                                           
-           
-    echo '</style>';
-}
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-$mapeamentoHorariosOBS = array(
-    '07' => 'e2', '08' => 'e3', '09' => 'e4', '10' => 'e5',
-    '11' => 'e6', '12' => 'e7', '13' => 'e8', '14' => 'e9',
-    '15' => 'e10', '16' => 'e11', '17' => 'e12', '18' => 'e13',
-    '19' => 'e14'
-);
-$sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Obstáculos' AND dia='$dia' AND status='Aprovado'";
-$result = $conexao->query($sql);
-$horariosMarcados = array();
-if ($result->num_rows > 0) {
-    echo '<style>';
-
-    while ($row = $result->fetch_assoc()) {
-        $exclsv = $row["exclsv"];
-        $horarioInicio = $row["hora_inicio"];
-        $horarioFim = $row["hora_fim"];
-        
-        $horaInicio = $horarioInicio[0] . $horarioInicio[1];
-        $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
-
-        $horaFim = $horarioFim[0] . $horarioFim[1];
-        $minutoFim = $horarioFim[3] . $horarioFim[4];
-
-        $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
-
-        $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
-    }
-    $j = 2;
-    foreach ($horariosMarcados as $tarefa) {
-        $cor = $tarefa['cor'];
-        $horaInicio = $tarefa['horaInicio'];
-        $horaFim = $tarefa['horaFim'];
-        $minutoInicio = $tarefa['minutoInicio'];
-        $minutoFim = $tarefa['minutoFim'];
-        
-        if ($horaInicio != $horaFim){
-            if($minutoInicio != '00'){
-                $porcentagemInicioMargin = porcentagemMinuto($minutoInicio);
-                $porcentagemInicio = 100 - $porcentagemInicioMargin;
-            }
-            else{
-                $porcentagemInicio = 100;
-                $porcentagemInicioMargin = 0;
-            }
-            if($minutoFim != '00'){
-                $porcentagemFim = porcentagemMinuto($minutoFim);
-            }
-            else{
-                $porcentagemFim = 0;
-            }      
-            
-            $tamanho = 0;
-            for ($i = $horaInicio + 1; $i < $horaFim; $i++) {
-                $tamanho += 100;
-            }
-            $tamanho += $porcentagemInicio + $porcentagemFim;
-            $tamanho = ($tamanho / 100) * 78;
-            $leftTotal = 0;
-            $indexInicio = ($horaInicio - 7) * 78;
-            $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-            $leftTotal += $porcentagemInicioMargin + $indexInicio;
-        }
-        else{
-            $tamanho = 0;
-            $leftTotal = 0;
-            $minutos = $minutoFim - $minutoInicio;
-            $porcentagemMinutos = porcentagemMinuto($minutos);
-            $tamanho = ($porcentagemMinutos / 100) * 78;
-            if ($minutoInicio != '00'){
-                $porcentagemInicioMargin = 100 - $porcentagemMinutos;
-                $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-            }
-            else{
-                $porcentagemInicioMargin = 0;
-            }
-            $indexInicio = ($horaInicio - 7) * 78;
-            $leftTotal = $porcentagemInicioMargin + $indexInicio;
-        }
-
-        $classe = 'e'. $j;
-        $classeTip = 'tip_'.$classe;
-        $horario = "$horaInicio - $horaFim";
-        $leftTip = $leftTotal + ($tamanho/2) - 100;
-        if ($leftTip < 0){
-            $leftTip = 0;
-        }
-        if ($leftTip > 827){
-            $leftTip = 827;
-        }
-
-        echo '<style>';
-        echo '.' . 'obs' . '{position: relative;}';
-        echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
-
-        echo '.'.$classeTip. '{position: absolute; justify-content: center; top: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
-        echo ".$classe:hover + .$classeTip".'{display: flex;}';
-        echo ".$classeTip:hover {display: flex;}";
-        echo '</style>';
-
-        $j++;
-    }                                                                                                                           
-           
-    echo '</style>';
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-$sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Rampa 12% e 20%' AND dia='$dia' AND status='Aprovado'";
-$result = $conexao->query($sql);
-$horariosMarcados = array();
-if ($result->num_rows > 0) {
-    
-
-    while ($row = $result->fetch_assoc()) {
-        $exclsv = $row["exclsv"];
-        $horarioInicio = $row["hora_inicio"];
-        $horarioFim = $row["hora_fim"];
-        
-        $horaInicio = $horarioInicio[0] . $horarioInicio[1];
-        $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
-
-        $horaFim = $horarioFim[0] . $horarioFim[1];
-        $minutoFim = $horarioFim[3] . $horarioFim[4];
-
-        $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
-
-        $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
-    }
-    $j = 2;
-    foreach ($horariosMarcados as $tarefa) {
-        $cor = $tarefa['cor'];
-        $horaInicio = $tarefa['horaInicio'];
-        $horaFim = $tarefa['horaFim'];
-        $minutoInicio = $tarefa['minutoInicio'];
-        $minutoFim = $tarefa['minutoFim'];
-        
-        if ($horaInicio != $horaFim){
-            if($minutoInicio != '00'){
-                $porcentagemInicioMargin = porcentagemMinuto($minutoInicio);
-                $porcentagemInicio = 100 - $porcentagemInicioMargin;
-            }
-            else{
-                $porcentagemInicio = 100;
-                $porcentagemInicioMargin = 0;
-            }
-            if($minutoFim != '00'){
-                $porcentagemFim = porcentagemMinuto($minutoFim);
-            }
-            else{
-                $porcentagemFim = 0;
-            }      
-            
-            $tamanho = 0;
-            for ($i = $horaInicio + 1; $i < $horaFim; $i++) {
-                $tamanho += 100;
-            }
-            $tamanho += $porcentagemInicio + $porcentagemFim;
-            $tamanho = ($tamanho / 100) * 78;
-            $leftTotal = 0;
-            $indexInicio = ($horaInicio - 7) * 78;
-            $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-            $leftTotal += $porcentagemInicioMargin + $indexInicio;
-        }
-        else{
-            $tamanho = 0;
-            $leftTotal = 0;
-            $minutos = $minutoFim - $minutoInicio;
-            $porcentagemMinutos = porcentagemMinuto($minutos);
-            $tamanho = ($porcentagemMinutos / 100) * 78;
-            if ($minutoInicio != '00'){
-                $porcentagemInicioMargin = 100 - $porcentagemMinutos;
-                $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-            }
-            else{
-                $porcentagemInicioMargin = 0;
-            }
-            $indexInicio = ($horaInicio - 7) * 78;
-            $leftTotal = $porcentagemInicioMargin + $indexInicio;
-        }
-
-        $classe = 'f'. $j;
-        $classeTip = 'tip_'.$classe;
-        $horario = "$horaInicio - $horaFim";
-        $leftTip = $leftTotal + ($tamanho/2) - 100;
-        if ($leftTip < 0){
-            $leftTip = 0;
-        }
-        if ($leftTip > 827){
-            $leftTip = 827;
-        }
-
-        echo '<style>';
-        echo '.' . 'r_12_20' . '{position: relative;}';
-        echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
-
-        echo '.'.$classeTip. '{position: absolute; justify-content: center; top: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
-        echo ".$classe:hover + .$classeTip".'{display: flex;}';
-        echo ".$classeTip:hover {display: flex;}";
-        echo '</style>';
-
-        $j++;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-$sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Rampa 40%' AND dia='$dia' AND status='Aprovado'";
-$result = $conexao->query($sql);
-$horariosMarcados = array();
-if ($result->num_rows > 0) {
-    
-
-    while ($row = $result->fetch_assoc()) {
-        $exclsv = $row["exclsv"];
-        $horarioInicio = $row["hora_inicio"];
-        $horarioFim = $row["hora_fim"];
-        
-        $horaInicio = $horarioInicio[0] . $horarioInicio[1];
-        $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
-
-        $horaFim = $horarioFim[0] . $horarioFim[1];
-        $minutoFim = $horarioFim[3] . $horarioFim[4];
-
-        $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
-
-        $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
-    }
-    $j = 2;
-    foreach ($horariosMarcados as $tarefa) {
-        $cor = $tarefa['cor'];
-        $horaInicio = $tarefa['horaInicio'];
-        $horaFim = $tarefa['horaFim'];
-        $minutoInicio = $tarefa['minutoInicio'];
-        $minutoFim = $tarefa['minutoFim'];
-        
-        if ($horaInicio != $horaFim){
-            if($minutoInicio != '00'){
-                $porcentagemInicioMargin = porcentagemMinuto($minutoInicio);
-                $porcentagemInicio = 100 - $porcentagemInicioMargin;
-            }
-            else{
-                $porcentagemInicio = 100;
-                $porcentagemInicioMargin = 0;
-            }
-            if($minutoFim != '00'){
-                $porcentagemFim = porcentagemMinuto($minutoFim);
-            }
-            else{
-                $porcentagemFim = 0;
-            }      
-            
-            $tamanho = 0;
-            for ($i = $horaInicio + 1; $i < $horaFim; $i++) {
-                $tamanho += 100;
-            }
-            $tamanho += $porcentagemInicio + $porcentagemFim;
-            $tamanho = ($tamanho / 100) * 78;
-            $leftTotal = 0;
-            $indexInicio = ($horaInicio - 7) * 78;
-            $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-            $leftTotal += $porcentagemInicioMargin + $indexInicio;
-        }
-        else{
-            $tamanho = 0;
-            $leftTotal = 0;
-            $minutos = $minutoFim - $minutoInicio;
-            $porcentagemMinutos = porcentagemMinuto($minutos);
-            $tamanho = ($porcentagemMinutos / 100) * 78;
-            if ($minutoInicio != '00'){
-                $porcentagemInicioMargin = 100 - $porcentagemMinutos;
-                $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-            }
-            else{
-                $porcentagemInicioMargin = 0;
-            }
-            $indexInicio = ($horaInicio - 7) * 78;
-            $leftTotal = $porcentagemInicioMargin + $indexInicio;
-        }
-
-        $classe = 'g'. $j;
-        $classeTip = 'tip_'.$classe;
-        $horario = "$horaInicio - $horaFim";
-        $leftTip = $leftTotal + ($tamanho/2) - 100;
-        if ($leftTip < 0){
-            $leftTip = 0;
-        }
-        if ($leftTip > 827){
-            $leftTip = 827;
-        }
-
-        echo '<style>';
-        echo '.' . 'r_40' . '{position: relative;}';
-        echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
-
-        echo '.'.$classeTip. '{position: absolute; justify-content: center; bottom: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
-        echo ".$classe:hover + .$classeTip".'{display: flex;}';
-        echo ".$classeTip:hover {display: flex;}";
-        echo '</style>';
-
-        $j++;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-$sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Rampa 60%' AND dia='$dia' AND status='Aprovado'";
-$result = $conexao->query($sql);
-$horariosMarcados = array();
-if ($result->num_rows > 0) {
-    
-
-    while ($row = $result->fetch_assoc()) {
-        $exclsv = $row["exclsv"];
-        $horarioInicio = $row["hora_inicio"];
-        $horarioFim = $row["hora_fim"];
-        
-        $horaInicio = $horarioInicio[0] . $horarioInicio[1];
-        $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
-
-        $horaFim = $horarioFim[0] . $horarioFim[1];
-        $minutoFim = $horarioFim[3] . $horarioFim[4];
-
-        $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
-
-        $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
-    }
-    $j = 2;
-    foreach ($horariosMarcados as $tarefa) {
-        $cor = $tarefa['cor'];
-        $horaInicio = $tarefa['horaInicio'];
-        $horaFim = $tarefa['horaFim'];
-        $minutoInicio = $tarefa['minutoInicio'];
-        $minutoFim = $tarefa['minutoFim'];
-        
-        if ($horaInicio != $horaFim){
-            if($minutoInicio != '00'){
-                $porcentagemInicioMargin = porcentagemMinuto($minutoInicio);
-                $porcentagemInicio = 100 - $porcentagemInicioMargin;
-            }
-            else{
-                $porcentagemInicio = 100;
-                $porcentagemInicioMargin = 0;
-            }
-            if($minutoFim != '00'){
-                $porcentagemFim = porcentagemMinuto($minutoFim);
-            }
-            else{
-                $porcentagemFim = 0;
-            }      
-            
-            $tamanho = 0;
-            for ($i = $horaInicio + 1; $i < $horaFim; $i++) {
-                $tamanho += 100;
-            }
-            $tamanho += $porcentagemInicio + $porcentagemFim;
-            $tamanho = ($tamanho / 100) * 78;
-            $leftTotal = 0;
-            $indexInicio = ($horaInicio - 7) * 78;
-            $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-            $leftTotal += $porcentagemInicioMargin + $indexInicio;
-        }
-        else{
-            $tamanho = 0;
-            $leftTotal = 0;
-            $minutos = $minutoFim - $minutoInicio;
-            $porcentagemMinutos = porcentagemMinuto($minutos);
-            $tamanho = ($porcentagemMinutos / 100) * 78;
-            if ($minutoInicio != '00'){
-                $porcentagemInicioMargin = 100 - $porcentagemMinutos;
-                $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-            }
-            else{
-                $porcentagemInicioMargin = 0;
-            }
-            $indexInicio = ($horaInicio - 7) * 78;
-            $leftTotal = $porcentagemInicioMargin + $indexInicio;
-        }
-
-        $classe = 'h'. $j;
-        $classeTip = 'tip_'.$classe;
-        $horario = "$horaInicio - $horaFim";
-        $leftTip = $leftTotal + ($tamanho/2) - 100;
-        if ($leftTip < 0){
-            $leftTip = 0;
-        }
-        if ($leftTip > 827){
-            $leftTip = 827;
-        }
-
-        echo '<style>';
-        echo '.' . 'r_60' . '{position: relative;}';
-        echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
-
-        echo '.'.$classeTip. '{position: absolute; justify-content: center; bottom: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
-        echo ".$classe:hover + .$classeTip".'{display: flex;}';
-        echo ".$classeTip:hover {display: flex;}";
-        echo '</style>';
-
-        $j++;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-$sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Asfalto' AND dia='$dia' AND status='Aprovado'";
-$result = $conexao->query($sql);
-$horariosMarcados = array();
-if ($result->num_rows > 0) {
-    
-
-    while ($row = $result->fetch_assoc()) {
-        $exclsv = $row["exclsv"];
-        $horarioInicio = $row["hora_inicio"];
-        $horarioFim = $row["hora_fim"];
-        
-        $horaInicio = $horarioInicio[0] . $horarioInicio[1];
-        $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
-
-        $horaFim = $horarioFim[0] . $horarioFim[1];
-        $minutoFim = $horarioFim[3] . $horarioFim[4];
-
-        $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
-
-        $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
-    }
-    $j = 2;
-    foreach ($horariosMarcados as $tarefa) {
-        $cor = $tarefa['cor'];
-        $horaInicio = $tarefa['horaInicio'];
-        $horaFim = $tarefa['horaFim'];
-        $minutoInicio = $tarefa['minutoInicio'];
-        $minutoFim = $tarefa['minutoFim'];
-        
-        if ($horaInicio != $horaFim){
-            if($minutoInicio != '00'){
-                $porcentagemInicioMargin = porcentagemMinuto($minutoInicio);
-                $porcentagemInicio = 100 - $porcentagemInicioMargin;
-            }
-            else{
-                $porcentagemInicio = 100;
-                $porcentagemInicioMargin = 0;
-            }
-            if($minutoFim != '00'){
-                $porcentagemFim = porcentagemMinuto($minutoFim);
-            }
-            else{
-                $porcentagemFim = 0;
-            }      
-            
-            $tamanho = 0;
-            for ($i = $horaInicio + 1; $i < $horaFim; $i++) {
-                $tamanho += 100;
-            }
-            $tamanho += $porcentagemInicio + $porcentagemFim;
-            $tamanho = ($tamanho / 100) * 78;
-            $leftTotal = 0;
-            $indexInicio = ($horaInicio - 7) * 78;
-            $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-            $leftTotal += $porcentagemInicioMargin + $indexInicio;
-        }
-        else{
-            $tamanho = 0;
-            $leftTotal = 0;
-            $minutos = $minutoFim - $minutoInicio;
-            $porcentagemMinutos = porcentagemMinuto($minutos);
-            $tamanho = ($porcentagemMinutos / 100) * 78;
-            if ($minutoInicio != '00'){
-                $porcentagemInicioMargin = 100 - $porcentagemMinutos;
-                $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-            }
-            else{
-                $porcentagemInicioMargin = 0;
-            }
-            $indexInicio = ($horaInicio - 7) * 78;
-            $leftTotal = $porcentagemInicioMargin + $indexInicio;
-        }
-
-        $classe = 'i'. $j;
-        $classeTip = 'tip_'.$classe;
-        $horario = "$horaInicio - $horaFim";
-        $leftTip = $leftTotal + ($tamanho/2) - 100;
-        if ($leftTip < 0){
-            $leftTip = 0;
-        }
-        if ($leftTip > 827){
-            $leftTip = 827;
-        }
-
-        echo '<style>';
-        echo '.' . 'asf' . '{position: relative;}';
-        echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
-
-        echo '.'.$classeTip. '{position: absolute; justify-content: center; bottom: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
-        echo ".$classe:hover + .$classeTip".'{display: flex;}';
-        echo ".$classeTip:hover {display: flex;}";
-        echo '</style>';
-
-        $j++;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-$sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = 'Pista Completa' AND dia='$dia' AND status='Aprovado'";
-$result = $conexao->query($sql);
-$horariosMarcados = array();
-if ($result->num_rows > 0) {
-    
-
-    while ($row = $result->fetch_assoc()) {
-        $exclsv = $row["exclsv"];
-        $horarioInicio = $row["hora_inicio"];
-        $horarioFim = $row["hora_fim"];
-        
-        $horaInicio = $horarioInicio[0] . $horarioInicio[1];
-        $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
-
-        $horaFim = $horarioFim[0] . $horarioFim[1];
-        $minutoFim = $horarioFim[3] . $horarioFim[4];
-
-        $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
-
-        $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
-    }
-    $j = 2;
-    foreach ($horariosMarcados as $tarefa) {
-        $cor = $tarefa['cor'];
-        $horaInicio = $tarefa['horaInicio'];
-        $horaFim = $tarefa['horaFim'];
-        $minutoInicio = $tarefa['minutoInicio'];
-        $minutoFim = $tarefa['minutoFim'];
-        
-        if ($horaInicio != $horaFim){
-            if($minutoInicio != '00'){
-                $porcentagemInicioMargin = porcentagemMinuto($minutoInicio);
-                $porcentagemInicio = 100 - $porcentagemInicioMargin;
-            }
-            else{
-                $porcentagemInicio = 100;
-                $porcentagemInicioMargin = 0;
-            }
-            if($minutoFim != '00'){
-                $porcentagemFim = porcentagemMinuto($minutoFim);
-            }
-            else{
-                $porcentagemFim = 0;
-            }      
-            
-            $tamanho = 0;
-            for ($i = $horaInicio + 1; $i < $horaFim; $i++) {
-                $tamanho += 100;
-            }
-            $tamanho += $porcentagemInicio + $porcentagemFim;
-            $tamanho = ($tamanho / 100) * 78;
-            $leftTotal = 0;
-            $indexInicio = ($horaInicio - 7) * 78;
-            $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-            $leftTotal += $porcentagemInicioMargin + $indexInicio;
-        }
-        else{
-            $tamanho = 0;
-            $leftTotal = 0;
-            $minutos = $minutoFim - $minutoInicio;
-            $porcentagemMinutos = porcentagemMinuto($minutos);
-            $tamanho = ($porcentagemMinutos / 100) * 78;
-            if ($minutoInicio != '00'){
-                $porcentagemInicioMargin = 100 - $porcentagemMinutos;
-                $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-            }
-            else{
-                $porcentagemInicioMargin = 0;
-            }
-            $indexInicio = ($horaInicio - 7) * 78;
-            $leftTotal = $porcentagemInicioMargin + $indexInicio;
-        }
-
-        $classe = 'j'. $j;
-        $classeTip = 'tip_'.$classe;
-        $horario = "$horaInicio - $horaFim";
-        $leftTip = $leftTotal + ($tamanho/2) - 100;
-        if ($leftTip < 0){
-            $leftTip = 0;
-        }
-        if ($leftTip > 827){
-            $leftTip = 827;
-        }
-
-        echo '<style>';
-        echo '.' . 'pc' . '{position: relative;}';
-        echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
-
-        echo '.'.$classeTip. '{position: absolute; justify-content: center; bottom: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
-        echo ".$classe:hover + .$classeTip".'{display: flex;}';
-        echo ".$classeTip:hover {display: flex;}";
-        echo '</style>';
-
-        $j++;
-    }
+// preenche as classes com os horários agendados
+for ($i = 0; $i < 8; $i++){
+    CriarCSS($conexao, $dia, $listaPistas[$i], $listaLetras[$i], $listaPistasClasse[$i], $listaY[$i]);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -953,182 +259,14 @@ if ($result->num_rows > 0) {
                                 <div class="j1 quad_graf">Pista Completa</div>
                             </div>
                             <div class="grafico_linhas">
-                                <div class="vda">               
-                                    <?php
-                                        $sql = "SELECT hora_inicio, hora_fim, solicitante, area_solicitante, veic FROM agendamentos WHERE area_pista = 'VDA' AND dia='$dia' AND status='Aprovado'";
-                                        $result = $conexao->query($sql);
-                                        $j = 2;
-                                        while ($row = $result->fetch_assoc()) {
-                                            $horarioInicio = $row["hora_inicio"];
-                                            $horarioFim = $row["hora_fim"];
-                                            $horario = "$horarioInicio - $horarioFim";
-                                            $solicitante = $row["solicitante"];
-                                            $areaSolicitante = $row["area_solicitante"];
-                                            $veic = $row["veic"];
-                                            $classe = "c".$j;
-                                            echo '<div class="'.$classe.'"></div>';
-                                            echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
-                                                '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
-                                                '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
-                                            '</div>';
-                                            $j++;
-                                        }
-                                    ?>
-                                </div>
-                                <div class="nvh">
-                                <?php
-                                        $sql = "SELECT hora_inicio, hora_fim, solicitante, area_solicitante, veic FROM agendamentos WHERE area_pista = 'NVH' AND dia='$dia' AND status='Aprovado'";
-                                        $result = $conexao->query($sql);
-                                        $j = 2;
-                                        while ($row = $result->fetch_assoc()) {
-                                            $horarioInicio = $row["hora_inicio"];
-                                            $horarioFim = $row["hora_fim"];
-                                            $horario = "$horarioInicio - $horarioFim";
-                                            $solicitante = $row["solicitante"];
-                                            $areaSolicitante = $row["area_solicitante"];
-                                            $veic = $row["veic"];
-                                            $classe = "d".$j;
-                                            echo '<div class="'.$classe.'"></div>';
-                                            echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
-                                                '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
-                                                '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
-                                            '</div>';
-                                            $j++;
-                                        }
-                                    ?>
-                                </div>
-                                <div class="obs">
-                                    <?php
-                                        $sql = "SELECT hora_inicio, hora_fim, solicitante, area_solicitante, veic FROM agendamentos WHERE area_pista = 'Obstáculos' AND dia='$dia' AND status='Aprovado'";
-                                        $result = $conexao->query($sql);
-                                        $j = 2;
-                                        while ($row = $result->fetch_assoc()) {
-                                            $horarioInicio = $row["hora_inicio"];
-                                            $horarioFim = $row["hora_fim"];
-                                            $horario = "$horarioInicio - $horarioFim";
-                                            $solicitante = $row["solicitante"];
-                                            $areaSolicitante = $row["area_solicitante"];
-                                            $veic = $row["veic"];
-                                            $classe = "e".$j;
-                                            echo '<div class="'.$classe.'"></div>';
-                                            echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
-                                                '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
-                                                '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
-                                            '</div>';
-                                            $j++;
-                                        }
-                                    ?>
-                                </div>
-                                <div class="r_12_20">
-                                    <?php
-                                        $sql = "SELECT hora_inicio, hora_fim, solicitante, area_solicitante, veic FROM agendamentos WHERE area_pista = 'Rampa 12% e 20%' AND dia='$dia' AND status='Aprovado'";
-                                        $result = $conexao->query($sql);
-                                        $j = 2;
-                                        while ($row = $result->fetch_assoc()) {
-                                            $horarioInicio = $row["hora_inicio"];
-                                            $horarioFim = $row["hora_fim"];
-                                            $horario = "$horarioInicio - $horarioFim";
-                                            $solicitante = $row["solicitante"];
-                                            $areaSolicitante = $row["area_solicitante"];
-                                            $veic = $row["veic"];
-                                            $classe = "f".$j;
-                                            echo '<div class="'.$classe.'"></div>';
-                                            echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
-                                                '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
-                                                '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
-                                            '</div>';
-                                            $j++;
-                                        }
-                                    ?>
-                                </div>
-                                <div class="r_40">
-                                    <?php
-                                        $sql = "SELECT hora_inicio, hora_fim, solicitante, area_solicitante, veic FROM agendamentos WHERE area_pista = 'Rampa 40%' AND dia='$dia' AND status='Aprovado'";
-                                        $result = $conexao->query($sql);
-                                        $j = 2;
-                                        while ($row = $result->fetch_assoc()) {
-                                            $horarioInicio = $row["hora_inicio"];
-                                            $horarioFim = $row["hora_fim"];
-                                            $horario = "$horarioInicio - $horarioFim";
-                                            $solicitante = $row["solicitante"];
-                                            $areaSolicitante = $row["area_solicitante"];
-                                            $veic = $row["veic"];
-                                            $classe = "g".$j;
-                                            echo '<div class="'.$classe.'"></div>';
-                                            echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
-                                                '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
-                                                '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
-                                            '</div>';
-                                            $j++;
-                                        }
-                                    ?>
-                                </div>
-                                <div class="r_60">
-                                <?php
-                                        $sql = "SELECT hora_inicio, hora_fim, solicitante, area_solicitante, veic FROM agendamentos WHERE area_pista = 'Rampa 60%' AND dia='$dia' AND status='Aprovado'";
-                                        $result = $conexao->query($sql);
-                                        $j = 2;
-                                        while ($row = $result->fetch_assoc()) {
-                                            $horarioInicio = $row["hora_inicio"];
-                                            $horarioFim = $row["hora_fim"];
-                                            $horario = "$horarioInicio - $horarioFim";
-                                            $solicitante = $row["solicitante"];
-                                            $areaSolicitante = $row["area_solicitante"];
-                                            $veic = $row["veic"];
-                                            $classe = "h".$j;
-                                            echo '<div class="'.$classe.'"></div>';
-                                            echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
-                                                '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
-                                                '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
-                                            '</div>';
-                                            $j++;
-                                        }
-                                    ?>
-                                </div>
-                                <div class="asf">
-                                    <?php
-                                        $sql = "SELECT hora_inicio, hora_fim, solicitante, area_solicitante, veic FROM agendamentos WHERE area_pista = 'Asfalto' AND dia='$dia' AND status='Aprovado'";
-                                        $result = $conexao->query($sql);
-                                        $j = 2;
-                                        while ($row = $result->fetch_assoc()) {
-                                            $horarioInicio = $row["hora_inicio"];
-                                            $horarioFim = $row["hora_fim"];
-                                            $horario = "$horarioInicio - $horarioFim";
-                                            $solicitante = $row["solicitante"];
-                                            $areaSolicitante = $row["area_solicitante"];
-                                            $veic = $row["veic"];
-                                            $classe = "i".$j;
-                                            echo '<div class="'.$classe.'"></div>';
-                                            echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
-                                                '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
-                                                '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
-                                            '</div>';
-                                            $j++;
-                                        }
-                                    ?>
-                                </div>
-                                <div class="pc">
-                                    <?php
-                                        $sql = "SELECT hora_inicio, hora_fim, solicitante, area_solicitante, veic FROM agendamentos WHERE area_pista = 'Pista Completa' AND dia='$dia' AND status='Aprovado'";
-                                        $result = $conexao->query($sql);
-                                        $j = 2;
-                                        while ($row = $result->fetch_assoc()) {
-                                            $horarioInicio = $row["hora_inicio"];
-                                            $horarioFim = $row["hora_fim"];
-                                            $horario = "$horarioInicio - $horarioFim";
-                                            $solicitante = $row["solicitante"];
-                                            $areaSolicitante = $row["area_solicitante"];
-                                            $veic = $row["veic"];
-                                            $classe = "j".$j;
-                                            echo '<div class="'.$classe.'"></div>';
-                                            echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
-                                                '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
-                                                '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
-                                            '</div>';
-                                            $j++;
-                                        }
-                                    ?>
-                                </div>
+                            <?php
+                            // cria as divs com as classes para cada pista
+                                for ($i = 0; $i < 8; $i++){
+                                    echo '<div class="'.$listaPistasClasse[$i].'">';
+                                    CriarHTML($conexao, $dia, $listaPistas[$i], $listaLetras[$i]);
+                                    echo '</div>';
+                                }
+                            ?>
                             </div>
                             <div class="espaco"></div>
                         </div>
