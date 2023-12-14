@@ -148,7 +148,7 @@ if ($result->num_rows > 0) {
         echo '.' . 'vda' . '{position: relative;}';
         echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
 
-        echo '.'.$classeTip. '{position: absolute; justify-content: center; top: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; background-color: gray; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9caddd; font-size: 14px;}';
+        echo '.'.$classeTip. '{position: absolute; justify-content: center; top: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
         echo ".$classe:hover + .$classeTip".'{display: flex;}';
         echo ".$classeTip:hover {display: flex;}";
         echo '</style>';
@@ -255,7 +255,7 @@ if ($result->num_rows > 0) {
         echo '.' . 'nvh' . '{position: relative;}';
         echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
 
-        echo '.'.$classeTip. '{position: absolute; justify-content: center; top: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; background-color: gray; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9caddd; font-size: 14px;}';
+        echo '.'.$classeTip. '{position: absolute; justify-content: center; top: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
         echo ".$classe:hover + .$classeTip".'{display: flex;}';
         echo ".$classeTip:hover {display: flex;}";
         echo '</style>';
@@ -363,7 +363,7 @@ if ($result->num_rows > 0) {
         echo '.' . 'obs' . '{position: relative;}';
         echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
 
-        echo '.'.$classeTip. '{position: absolute; justify-content: center; top: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; background-color: gray; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9caddd; font-size: 14px;}';
+        echo '.'.$classeTip. '{position: absolute; justify-content: center; top: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
         echo ".$classe:hover + .$classeTip".'{display: flex;}';
         echo ".$classeTip:hover {display: flex;}";
         echo '</style>';
@@ -467,7 +467,7 @@ if ($result->num_rows > 0) {
         echo '.' . 'r_12_20' . '{position: relative;}';
         echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
 
-        echo '.'.$classeTip. '{position: absolute; justify-content: center; top: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; background-color: gray; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9caddd; font-size: 14px;}';
+        echo '.'.$classeTip. '{position: absolute; justify-content: center; top: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
         echo ".$classe:hover + .$classeTip".'{display: flex;}';
         echo ".$classeTip:hover {display: flex;}";
         echo '</style>';
@@ -569,7 +569,7 @@ if ($result->num_rows > 0) {
         echo '.' . 'r_40' . '{position: relative;}';
         echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
 
-        echo '.'.$classeTip. '{position: absolute; justify-content: center; bottom: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; background-color: gray; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9caddd; font-size: 14px;}';
+        echo '.'.$classeTip. '{position: absolute; justify-content: center; bottom: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
         echo ".$classe:hover + .$classeTip".'{display: flex;}';
         echo ".$classeTip:hover {display: flex;}";
         echo '</style>';
@@ -671,7 +671,7 @@ if ($result->num_rows > 0) {
         echo '.' . 'r_60' . '{position: relative;}';
         echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
 
-        echo '.'.$classeTip. '{position: absolute; justify-content: center; bottom: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; background-color: gray; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9caddd; font-size: 14px;}';
+        echo '.'.$classeTip. '{position: absolute; justify-content: center; bottom: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
         echo ".$classe:hover + .$classeTip".'{display: flex;}';
         echo ".$classeTip:hover {display: flex;}";
         echo '</style>';
@@ -773,7 +773,7 @@ if ($result->num_rows > 0) {
         echo '.' . 'asf' . '{position: relative;}';
         echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
 
-        echo '.'.$classeTip. '{position: absolute; justify-content: center; bottom: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; background-color: gray; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9caddd; font-size: 14px;}';
+        echo '.'.$classeTip. '{position: absolute; justify-content: center; bottom: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
         echo ".$classe:hover + .$classeTip".'{display: flex;}';
         echo ".$classeTip:hover {display: flex;}";
         echo '</style>';
@@ -875,7 +875,7 @@ if ($result->num_rows > 0) {
         echo '.' . 'pc' . '{position: relative;}';
         echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
 
-        echo '.'.$classeTip. '{position: absolute; justify-content: center; bottom: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; background-color: gray; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9caddd; font-size: 14px;}';
+        echo '.'.$classeTip. '{position: absolute; justify-content: center; bottom: 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
         echo ".$classe:hover + .$classeTip".'{display: flex;}';
         echo ".$classeTip:hover {display: flex;}";
         echo '</style>';
@@ -968,9 +968,8 @@ if ($result->num_rows > 0) {
                                             $classe = "c".$j;
                                             echo '<div class="'.$classe.'"></div>';
                                             echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
-                                                '<h4 style="color: #4C7397;">Solicitante:</h4>'.
-                                                $solicitante.'<br>'.
-                                                '<div style="display: flex;"><h4 style="color: #4C7397; padding-right: 3px;">Área Solicitante: </h4>'." $areaSolicitante".'</div>'.
+                                                '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
+                                                '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
                                             '</div>';
                                             $j++;
                                         }
@@ -991,9 +990,8 @@ if ($result->num_rows > 0) {
                                             $classe = "d".$j;
                                             echo '<div class="'.$classe.'"></div>';
                                             echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
-                                                '<h4 style="color: #4C7397;">Solicitante:</h4>'.
-                                                $solicitante.'<br>'.
-                                                '<div style="display: flex;"><h4 style="color: #4C7397; padding-right: 3px;">Área Solicitante: </h4>'." $areaSolicitante".'</div>'.
+                                                '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
+                                                '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
                                             '</div>';
                                             $j++;
                                         }
@@ -1014,9 +1012,8 @@ if ($result->num_rows > 0) {
                                             $classe = "e".$j;
                                             echo '<div class="'.$classe.'"></div>';
                                             echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
-                                                '<h4 style="color: #4C7397;">Solicitante:</h4>'.
-                                                $solicitante.'<br>'.
-                                                '<div style="display: flex;"><h4 style="color: #4C7397; padding-right: 3px;">Área Solicitante: </h4>'." $areaSolicitante".'</div>'.
+                                                '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
+                                                '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
                                             '</div>';
                                             $j++;
                                         }
@@ -1037,9 +1034,8 @@ if ($result->num_rows > 0) {
                                             $classe = "f".$j;
                                             echo '<div class="'.$classe.'"></div>';
                                             echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
-                                                '<h4 style="color: #4C7397;">Solicitante:</h4>'.
-                                                $solicitante.'<br>'.
-                                                '<div style="display: flex;"><h4 style="color: #4C7397; padding-right: 3px;">Área Solicitante: </h4>'." $areaSolicitante".'</div>'.
+                                                '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
+                                                '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
                                             '</div>';
                                             $j++;
                                         }
@@ -1060,9 +1056,8 @@ if ($result->num_rows > 0) {
                                             $classe = "g".$j;
                                             echo '<div class="'.$classe.'"></div>';
                                             echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
-                                                '<h4 style="color: #4C7397;">Solicitante:</h4>'.
-                                                $solicitante.'<br>'.
-                                                '<div style="display: flex;"><h4 style="color: #4C7397; padding-right: 3px;">Área Solicitante: </h4>'." $areaSolicitante".'</div>'.
+                                                '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
+                                                '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
                                             '</div>';
                                             $j++;
                                         }
@@ -1083,9 +1078,8 @@ if ($result->num_rows > 0) {
                                             $classe = "h".$j;
                                             echo '<div class="'.$classe.'"></div>';
                                             echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
-                                                '<h4 style="color: #4C7397;">Solicitante:</h4>'.
-                                                $solicitante.'<br>'.
-                                                '<div style="display: flex;"><h4 style="color: #4C7397; padding-right: 3px;">Área Solicitante: </h4>'." $areaSolicitante".'</div>'.
+                                                '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
+                                                '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
                                             '</div>';
                                             $j++;
                                         }
@@ -1106,9 +1100,8 @@ if ($result->num_rows > 0) {
                                             $classe = "i".$j;
                                             echo '<div class="'.$classe.'"></div>';
                                             echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
-                                                '<h4 style="color: #4C7397;">Solicitante:</h4>'.
-                                                $solicitante.'<br>'.
-                                                '<div style="display: flex;"><h4 style="color: #4C7397; padding-right: 3px;">Área Solicitante: </h4>'." $areaSolicitante".'</div>'.
+                                                '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
+                                                '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
                                             '</div>';
                                             $j++;
                                         }
@@ -1129,9 +1122,8 @@ if ($result->num_rows > 0) {
                                             $classe = "j".$j;
                                             echo '<div class="'.$classe.'"></div>';
                                             echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
-                                                '<h4 style="color: #4C7397;">Solicitante:</h4>'.
-                                                $solicitante.'<br>'.
-                                                '<div style="display: flex;"><h4 style="color: #4C7397; padding-right: 3px;">Área Solicitante: </h4>'." $areaSolicitante".'</div>'.
+                                                '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
+                                                '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
                                             '</div>';
                                             $j++;
                                         }
