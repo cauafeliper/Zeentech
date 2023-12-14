@@ -5,7 +5,6 @@
         header('Location: index.php');
         exit();
     }
-    $_SESSION['email'];
 ?>
 
 <!DOCTYPE html>
@@ -76,18 +75,18 @@
             <ul class="menu">
                 <li><a href="pagprincipal.php">Página Principal</a></li>
                 <?php 
-                    include_once('config.php');
+                include_once('config.php');
 
-                    $re = $_SESSION['re'];
+                $re = $_SESSION['re'];
 
-                    $query = "SELECT COUNT(*) as count FROM re_adm WHERE re = '$re'";
-                    $resultado = mysqli_query($conexao, $query);
-                    $linha = mysqli_fetch_assoc($resultado);
-                    $admTrue = ($linha['count'] > 0);
+                $query = "SELECT COUNT(*) as count FROM re_adm WHERE re = '$re'";
+                $resultado = mysqli_query($conexao, $query);
+                $linha = mysqli_fetch_assoc($resultado);
+                $admTrue = ($linha['count'] > 0);
 
-                    if ($admTrue) {
-                        echo '<li><a href="adm.php">Administrador</a></li>';
-                    }
+                if ($admTrue) {
+                    echo '<li><a href="adm.php">Administrador</a></li>';
+                }
                 ?>
                 <li><a href="sair.php">Sair</a></li>
             </ul>

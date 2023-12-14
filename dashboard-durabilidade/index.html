@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Durabilidade</title>
+    <link rel="shortcut icon" href="imgs/fav.png" type="image/x-icon">
+    <link rel="stylesheet" href="styles/style.css">
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header class="header__grid">
+        <div class="dur__grid">
+            <img src="imgs/logo-dur-cla.png" alt="" style="margin-left: 30px;">
+        </div>
+        <div class="header__img logos__grid">
+            <div style="width: 203px; height: 35px;">
+                <img src="imgs/zeentech-logo.png" alt="logo-zeentech" class="img" style="width: 203px; height: 35px;">
+                <span class="idt">IDT</span>
+            </div>
+            <img src="imgs/truckBus.png" alt="logo-vw" style="float: right; height: 90px; margin-right: 30px;">
+            <img src="imgs/toca.png" alt="toca-papainoel" class="toca">
+        </div>
+    </header>
+    <main>
+        <div class="botoes">
+            <canvas id="myChart" style="position: absolute;"></canvas>
+            <img src="imgs/rodagem.png" alt="rodagem" id="rod" style="position: relative; right: -260px; top: 110px;" class="img__rod" onclick="openPopup(0)">
+            <span class="exp__rod"><strong>Quadro de Rodagem</strong><br>Quadro de Rodagem mostra status de todos veículos durabilidade como: Km de teste, Motorista atual, turnos consecutivos parados, localização, eng. responsável, ordem prioridade etc.</span>
+            <img src="imgs/schadenstisch.png" alt="schadenstisch" id="scha" style="position: relative; right: 74px; top: 270px;" class="img__scha" onclick="openPopup(1)">
+            <span class="exp__scha"><strong>Schadenstisch</strong><br>Indicador Schadenstisch consiste em mostrar a evolução dos status dos KPM's, por diferentes FG's, total kpm fechados, e responsáveis semanalmente.</span>
+            <img src="imgs/oleo.png" alt="oleo" id="oleo" style="position: relative; bottom: 110px; left: 50px;" class="img__oleo" onclick="openPopup(2)">
+            <span class="exp__oleo"><strong>Vareta de Óleo</strong><br>Controle de Óleo na Vareta consiste em controlar e analisar o nível de óleo dos veículos e acompanhar o consumo atual com nº dos lacres dos mesmos.</span>
+        </div>
+    </main>
+    <img src="imgs/caminhao-2.png" alt="caminhao1" class="caminhao__1 caminhao__sumir">
+    <img src="imgs/caminhao.png" alt="caminhao2" class="caminhao__2 caminhao__sumir">
+    <div class="modal" id="myModal" style="display: none;">
+        <button onclick="toggleAutoChange()" id="btnAutoChange" class="botao__loop botoes__iframe">
+            <img src="imgs/refresh-icon.png" width="24" height="24">
+        </button>
+        <button onclick="changeIframe(-1)" class="botoes__iframe botao__esquerda">&lt;</button>
+        <button onclick="changeIframe(1)" id="btnNext" class="botoes__iframe botao__direita">&gt;</button>
+        <span onclick="closePopup()" class="botoes__iframe botao__fechar">&times;</span>
+        <iframe id="popupIframe" src=""></iframe>
+    </div>
+    <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+    
+        const data = {
+            datasets: [{
+                data: [1, 1, 1],
+                backgroundColor: ['#010e24', '#010e24', '#010e24'],
+                borderColor: ['#001e50', '#001e50', '#001e50'],
+                borderWidth: 10
+            }]
+        };
+    
+        const chart = new Chart(ctx, {
+            type: 'pie',
+            data: data,
+            options: {
+                plugins: {
+                    tooltip: {
+                        enabled: false // Desativa os tooltips
+                    }
+                },
+                legend: {
+                    display: false
+                },
+                onClick: handleClick // Chama a função handleClick quando o gráfico é clicado
+            }
+        });
+    
+        // Evento mousemove para detectar quando o cursor está sobre uma fatia
+        chart.canvas.addEventListener('mousemove', function (evt) {
+            const activePoints = chart.getElementsAtEventForMode(evt, 'point', { intersect: true });
+    
+            if (activePoints.length > 0) {
+                const activeElement = activePoints[0];
+                const activeIndex = activeElement.index;
+    
+                chart.config.data.datasets[0].hoverBackgroundColor = chart.config.data.datasets[0].backgroundColor.map((color, index) => {
+                    return (index === activeIndex) ? '#565E6D' : color; // Define a cor da fatia que está sob o cursor como branco
+                });
+                chart.update();
+            } else {
+                chart.config.data.datasets[0].hoverBackgroundColor = '';
+                chart.update();
+            }
+        });
+    
+        function handleClick(event) {
+            const activeElements = chart.getElementsAtEventForMode(event, 'point', { intersect: true });
+    
+            if (activeElements.length > 0) {
+                const clickedElementIndex = activeElements[0].index;
+    
+                switch (clickedElementIndex) {
+                    case 0:
+                        openPopup(0);
+                        break;
+                    case 1:
+                        openPopup(1);
+                        break;
+                    case 2:
+                        openPopup(2);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    
+        function openPopup(index) {
+            // Implemente o que deseja fazer ao clicar na seção correspondente aqui
+            console.log(`Seção ${index + 1} clicada!`);
+        }
+    </script>
+    <script>
+        let currentIframeIndex = 0;
+        const iframeSources = [
+            'https://app.powerbi.com/reportEmbed?reportId=0e667a6f-23c4-48ee-8a73-940ccb239b68&autoAuth=true&ctid=959ebf68-bcaf-4dec-b44a-6934403eb9f3',
+            'https://app.powerbi.com/reportEmbed?reportId=ab18bd18-e88d-4326-bdcc-e1525de6034c&autoAuth=true&ctid=959ebf68-bcaf-4dec-b44a-6934403eb9f3',
+            'https://app.powerbi.com/reportEmbed?reportId=13b403db-f2ef-49b0-ba12-71fc6273536f&autoAuth=true&ctid=959ebf68-bcaf-4dec-b44a-6934403eb9f3'
+        ];
+
+        function openPopup(index) {
+            currentIframeIndex = index;
+            var popupIframe = document.getElementById('popupIframe');
+            popupIframe.src = iframeSources[index];
+            document.getElementById('myModal').style.display = 'block';
+            document.querySelector('.caminhao__1').style.right = '-380px';
+            document.querySelector('.caminhao__2').style.left = '-380px';
+        }
+
+        function closePopup() {
+            document.getElementById('myModal').style.display = 'none';
+            
+            document.querySelector('.caminhao__1').style.right = '';
+            document.querySelector('.caminhao__2').style.left = '';
+        }
+
+        function changeIframe(delta) {
+            currentIframeIndex = (currentIframeIndex + delta + iframeSources.length) % iframeSources.length;
+            var popupIframe = document.getElementById('popupIframe');
+            popupIframe.src = iframeSources[currentIframeIndex];
+        }
+
+        let isAutoChangeEnabled = false; // Definindo a variável
+
+        function toggleAutoChange() {
+            const button = document.getElementById('btnAutoChange');
+
+            if (!isAutoChangeEnabled) {
+                autoChangeInterval = setInterval(clickNextButton, 40000); // Clicar a cada 1 minuto (60000 milissegundos)
+                button.style.backgroundColor = '#158544'; // Define a cor de fundo para indicar que está ativado
+            } else {
+                clearInterval(autoChangeInterval);
+                button.style.backgroundColor = ''; // Remove a cor de fundo para indicar que está desativado
+            }
+
+            isAutoChangeEnabled = !isAutoChangeEnabled;
+        }
+
+        function clickNextButton() {
+            document.getElementById('btnNext').click(); // Simula um clique no botão de próxima iframe
+        }
+    </script>
+</body>
+</html>

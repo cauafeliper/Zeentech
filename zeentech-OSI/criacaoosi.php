@@ -99,6 +99,7 @@
     $destinationDirectory = 'excel/';
     $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
     $writer->save($destinationDirectory . $newExcelFileName);
+    $excelFilePath = $destinationDirectory . $newExcelFileName;
 
     $diretorio_base = __DIR__ . "/anexos/";
 
@@ -130,37 +131,37 @@
     $mail = new PHPMailer(true);
     try
     {
+      // Email para o solicitante.
       $mail->isSMTP();  
       $mail->SMTPAuth = true;
-      $mail->Username = 'empresa@email.com';
-      $mail->Password = 'secret';
+      $mail->Username = 'admin@equipzeentech.com';
+      $mail->Password = 'Z3en7ech';
       $mail->SMTPSecure = 'tls';
-      $mail->Host = 'dominio.com';
+      $mail->Host = 'equipzeentech.com';
       $mail->Port = 587;
       // Define o remetente
-      $mail->setFrom('empresa@email.com', 'Empresa');
+      $mail->setFrom('admin@equipzeentech.com', 'Zeentech');
       // Define o destinatário
       $mail->addAddress($email);
       // Conteúdo da mensagem
       $mail->isHTML(true); // Seta o formato do e-mail para aceitar o conteúdo HTML
-      $mail->Subject = 'Assunto do email.';
-      $mail->Body = utf8_decode('Mensagem corpo do texto.');
-      $mail->AltBody = utf8_decode('Mensagem corpo do texto(sem formatação HTML).');
-      $mail->AddAttachment($caminho_arquivo);
-      // Enviar
+      $mail->Subject = 'Nova OSI criada com sucesso!';
+      $mail->Body = utf8_decode('Sua nova OSI foi criada com <span style="color: green;">sucesso</span> e já foi enviada para o</br>engenheiro <u><b>'. $eng_nome .'</b></u> para que o mesmo possa aprová-la ou não.</br></br>Segue em anexo a sua nova OSI.</br></br></br>Atenciosamente,</br><span style="color: red;">Equipe Zeentech</span>.');
+      $mail->AltBody = 'Sua nova OSI foi criada com sucesso e já foi enviada para o engenheiro '. $eng_nome .' para que o mesmo possa aprová-la ou não. Segue em anexo a sua nova OSI.Atenciosamente, Equipe Zeentech.';
+      $mail->AddAttachment($excelFilePath, 'OSI_' . $osi_id . '.xlsx');
       $mail->send();
-
+      
       $mail->ClearAddresses();
       // Email para o engenheiro.
       
-      $mail->addAddress($email2);
-      $mail->Subject = 'Segundo assunto!';
-      $mail->Body = utf8_decode('Segunda mensagem');
-      $mail->AltBody = 'Segunda mensagem.';
-      $mail->AddAttachment($caminho_aquivo2);
+      $mail->addAddress($eng_email);
+      $mail->Subject = 'Nova OSI criada com sucesso!';
+      $mail->Body = utf8_decode('Uma nova OSI foi criada pelo solocitante <u><b>'. $solic .'</b></u></br>e está aguardando sua aprovação.</br></br>Segue em anexo a OSI.</br></br></br>Atenciosamente,</br><span style="color: red;">Equipe Zeentech</span>.');
+      $mail->AltBody = 'Uma nova OSI foi criada pelo solocitante '. $solic .' e está aguardando sua aprovação. Segue em anexo a OSI. Atenciosamente, Equipe Zeentech.';
+      $mail->AddAttachment($excelFilePath, 'OSI_' . $osi_id . '.xlsx');
       // Enviar
       $mail->send();
-      echo '<script>window.location.href = "sla.php";</script>';
+      echo '<script>window.location.href = "osicriada.php";</script>';
     }
     catch (Exception $e)
     {
