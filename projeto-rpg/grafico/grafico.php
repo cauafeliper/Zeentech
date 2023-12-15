@@ -181,7 +181,7 @@ function CriarHTML($conexao, $dia, $area_pista, $letra){ // cria as divs com as 
 
 
 $listaPistas = array('VDA', 'NVH', 'Obstáculos', 'Rampa 12% e 20%', 'Rampa 40%', 'Rampa 60%', 'Asfalto', 'Pista Completa');
-$listaPistasClasse = array('vda', 'nvh', 'obs', 'r_12_20', 'r_40', 'r_60', 'asf', 'pista_comp');
+$listaPistasClasse = array('vda', 'nvh', 'obs', 'r_12_20', 'r_40', 'r_60', 'asf', 'pc');
 $listaLetras = array('c', 'd', 'e', 'f', 'g', 'h', 'i', 'j');
 $listaY = array('top', 'top', 'top', 'top', 'bottom', 'bottom', 'bottom', 'bottom');
 
