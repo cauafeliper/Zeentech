@@ -28,14 +28,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Ods\Content;
     <link rel="shortcut icon" href="../imgs/logo-volks.png" type="image/x-icon">
     <link rel="stylesheet" href="../estilos/grafico.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-bundle.min.js"></script>
-    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
     
     <?php
         if (isset($_POST['dia'])) {
@@ -146,6 +139,7 @@ function CriarCSS($conexao, $dia, $area_pista, $letra, $pistaClasse, $y){ // cri
             echo '.'.$classeTip. '{position: absolute; justify-content: center; '.$y.': 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-top-left-radius: 15px; border-bottom-left-radius: 15px;  border-top-right-radius: 15px; border-bottom-right-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
             echo ".$classe:hover + .$classeTip".'{display: flex;}';
             echo ".$classeTip:hover {display: flex;}";
+            echo ".$classe:hover {opacity: 0.5;}";
             echo '</style>';
 
             $j++;
@@ -214,79 +208,233 @@ for ($i = 0; $i < 8; $i++){
                 <div class="input"><input type="date" name="dia" id="dia" required></div>
                 <div class="submit"><input type="submit" value="Filtrar"></div>
             </form>
-            <div class="div__grafico">
-                <div class="tit">
-                    <div class="all_tit"><h2 style="color: white;">Agendamentos por Dia</h2></div>
-                </div>
-                <div class="out_grafico">
-                    <div class="grafico" style="position: relative">
-                        <hr style="width: 1px; position: absolute;left: 170px;height: 374px;z-index: 1;top: 10%;">
-                        <hr style="width: 1px; position: absolute;left: 248px;height: 374px;z-index: 1;top: 10%;">
-                        <hr style="width: 1px; position: absolute;left: 326px;height: 374px;z-index: 1;top: 10%;">
-                        <hr style="width: 1px; position: absolute;left: 404px;height: 374px;z-index: 1;top: 10%;">
-                        <hr style="width: 1px; position: absolute;left: 482px;height: 374px;z-index: 1;top: 10%;">
-                        <hr style="width: 1px; position: absolute;left: 560px;height: 374px;z-index: 1;top: 10%;">
-                        <hr style="width: 1px; position: absolute;left: 638px;height: 374px;z-index: 1;top: 10%;">
-                        <hr style="width: 1px; position: absolute;left: 716px;height: 374px;z-index: 1;top: 10%;">
-                        <hr style="width: 1px; position: absolute;left: 794px;height: 374px;z-index: 1;top: 10%;">
-                        <hr style="width: 1px; position: absolute;left: 872px;height: 374px;z-index: 1;top: 10%;">
-                        <hr style="width: 1px; position: absolute;left: 950px;height: 374px;z-index: 1;top: 10%;">
-                        <div class="scl">
-                            <div class="quad_graf"></div>
-                            <div class="quad_graf" style="border: none"><div class="b2" style="z-index: 2;">07:00</div></div>                            
-                            <div class="quad_graf" style="border: none"><div class="b3" style="z-index: 2;">08:00</div></div>
-                            <div class="quad_graf" style="border: none"><div class="b4" style="z-index: 2;">09:00</div></div>
-                            <div class="quad_graf" style="border: none"><div class="b5" style="z-index: 2;">10:00</div></div>
-                            <div class="quad_graf" style="border: none"><div class="b6" style="z-index: 2;">11:00</div></div>
-                            <div class="quad_graf" style="border: none"><div class="b7" style="z-index: 2;">12:00</div></div>
-                            <div class="quad_graf" style="border: none"><div class="b8" style="z-index: 2;">13:00</div></div>
-                            <div class="quad_graf" style="border: none"><div class="b9" style="z-index: 2;">14:00</div></div>
-                            <div class="quad_graf" style="border: none"><div class="b10" style="z-index: 2;">15:00</div></div>
-                            <div class="quad_graf" style="border: none"><div class="b11" style="z-index: 2;">16:00</div></div>
-                            <div class="quad_graf" style="border: none"><div class="b12" style="z-index: 2;">17:00</div></div>
-                            <div class="quad_graf"><div class="b13" style="z-index: 2;">18:00</div></div>
-                            <div class="quad_graf" style="border: none"><div class="b14" style="z-index: 2;">19:00</div></div>
+            <div style="display: flex; flex-flow: row; justify-content: center; align-items: center; width: 100%;">
+                <div class="arrow left_arrow" style="left: 10px;">&lt;</div>
+                <div class='graf_container'>
+                    <div id="graf_dia" class="div__grafico ativo">
+                        <div class="tit">
+                            <div class="all_tit"><h2 style="color: white;">Agendamentos por Dia</h2></div>
                         </div>
-                        <div class="grafico_preenchimentos">
-                            <div class = nome_pistas>
-                                <div class="c1 quad_graf">VDA</div>
-                                <div class="d1 quad_graf">NVH</div>
-                                <div class="e1 quad_graf">Obstáculos</div>
-                                <div class="f1 quad_graf">Rampa 12% e 20%</div>
-                                <div class="g1 quad_graf">Rampa 40%</div>
-                                <div class="h1 quad_graf">Rampa 60%</div>
-                                <div class="i1 quad_graf">Asfalto</div>
-                                <div class="j1 quad_graf">Pista Completa</div>
+                        <div class="out_grafico">
+                            <div class="grafico" style="position: relative">
+                                <hr style="width: 1px; position: absolute;left: 170px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 248px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 326px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 404px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 482px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 560px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 638px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 716px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 794px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 872px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 950px;height: 374px;z-index: 1;top: 10%;">
+                                <div class="scl">
+                                    <div class="quad_graf"></div>
+                                    <div class="quad_graf" style="border: none"><div class="b2" style="z-index: 2;">07:00</div></div>                            
+                                    <div class="quad_graf" style="border: none"><div class="b3" style="z-index: 2;">08:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b4" style="z-index: 2;">09:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b5" style="z-index: 2;">10:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b6" style="z-index: 2;">11:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b7" style="z-index: 2;">12:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b8" style="z-index: 2;">13:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b9" style="z-index: 2;">14:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b10" style="z-index: 2;">15:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b11" style="z-index: 2;">16:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b12" style="z-index: 2;">17:00</div></div>
+                                    <div class="quad_graf"><div class="b13" style="z-index: 2;">18:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b14" style="z-index: 2;">19:00</div></div>
+                                </div>
+                                <div class="grafico_preenchimentos">
+                                    <div class = nome_pistas>
+                                        <div class="c1 quad_graf">VDA</div>
+                                        <div class="d1 quad_graf">NVH</div>
+                                        <div class="e1 quad_graf">Obstáculos</div>
+                                        <div class="f1 quad_graf">Rampa 12% e 20%</div>
+                                        <div class="g1 quad_graf">Rampa 40%</div>
+                                        <div class="h1 quad_graf">Rampa 60%</div>
+                                        <div class="i1 quad_graf">Asfalto</div>
+                                        <div class="j1 quad_graf">Pista Completa</div>
+                                    </div>
+                                    <div class="grafico_linhas">
+                                    <?php
+                                    // cria as divs com as classes para cada pista
+                                        for ($i = 0; $i < 8; $i++){
+                                            echo '<div class="'.$listaPistasClasse[$i].'">';
+                                            CriarHTML($conexao, $dia, $listaPistas[$i], $listaLetras[$i]);
+                                            echo '</div>';
+                                        }
+                                    ?>
+                                    </div>
+                                    <div class="espaco"></div>
+                                </div>
+                                <div class="leg">
+                                    <div class="k1 quad_graf"></div>
+                                    <div class="k2 quad_graf"></div>
+                                    <div class="k3 quad_graf"></div>
+                                    <div class="k4 quad_graf"></div>
+                                    <div class="k5 quad_graf"></div>
+                                    <div class="k6 quad_graf"><p>Exclusivo</p></div>
+                                    <div class="k7 quad_graf"></div>
+                                    <div class="k8 quad_graf"><p>Não<br>Exlusivo</p></div>
+                                    <div class="k9 quad_graf"></div>
+                                    <div class="k10 quad_graf"></div>
+                                    <div class="k11 quad_graf"></div>
+                                    <div class="k12 quad_graf"></div>
+                                    <div class="k13 quad_graf"></div>
+                                </div>
                             </div>
-                            <div class="grafico_linhas">
-                            <?php
-                            // cria as divs com as classes para cada pista
-                                for ($i = 0; $i < 8; $i++){
-                                    echo '<div class="'.$listaPistasClasse[$i].'">';
-                                    CriarHTML($conexao, $dia, $listaPistas[$i], $listaLetras[$i]);
-                                    echo '</div>';
-                                }
-                            ?>
-                            </div>
-                            <div class="espaco"></div>
                         </div>
-                        <div class="leg">
-                            <div class="k1 quad_graf"></div>
-                            <div class="k2 quad_graf"></div>
-                            <div class="k3 quad_graf"></div>
-                            <div class="k4 quad_graf"></div>
-                            <div class="k5 quad_graf"></div>
-                            <div class="k6 quad_graf"><p>Exclusivo</p></div>
-                            <div class="k7 quad_graf"></div>
-                            <div class="k8 quad_graf"><p>Não<br>Exlusivo</p></div>
-                            <div class="k9 quad_graf"></div>
-                            <div class="k10 quad_graf"></div>
-                            <div class="k11 quad_graf"></div>
-                            <div class="k12 quad_graf"></div>
-                            <div class="k13 quad_graf"></div>
+                    </div>
+                    <div id="graf_semana" class="div__grafico">
+                        <div class="tit">
+                            <div class="all_tit"><h2 style="color: white;">Agendamentos por Semana</h2></div>
+                        </div>
+                        <div class="out_grafico">
+                            <div class="grafico" style="position: relative">
+                                <hr style="width: 1px; position: absolute;left: 170px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 248px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 326px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 404px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 482px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 560px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 638px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 716px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 794px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 872px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 950px;height: 374px;z-index: 1;top: 10%;">
+                                <div class="scl">
+                                    <div class="quad_graf"></div>
+                                    <div class="quad_graf" style="border: none"><div class="b2" style="z-index: 2;">07:00</div></div>                            
+                                    <div class="quad_graf" style="border: none"><div class="b3" style="z-index: 2;">08:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b4" style="z-index: 2;">09:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b5" style="z-index: 2;">10:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b6" style="z-index: 2;">11:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b7" style="z-index: 2;">12:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b8" style="z-index: 2;">13:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b9" style="z-index: 2;">14:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b10" style="z-index: 2;">15:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b11" style="z-index: 2;">16:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b12" style="z-index: 2;">17:00</div></div>
+                                    <div class="quad_graf"><div class="b13" style="z-index: 2;">18:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b14" style="z-index: 2;">19:00</div></div>
+                                </div>
+                                <div class="grafico_preenchimentos">
+                                    <div class = nome_pistas>
+                                        <div class="c1 quad_graf">VDA</div>
+                                        <div class="d1 quad_graf">NVH</div>
+                                        <div class="e1 quad_graf">Obstáculos</div>
+                                        <div class="f1 quad_graf">Rampa 12% e 20%</div>
+                                        <div class="g1 quad_graf">Rampa 40%</div>
+                                        <div class="h1 quad_graf">Rampa 60%</div>
+                                        <div class="i1 quad_graf">Asfalto</div>
+                                        <div class="j1 quad_graf">Pista Completa</div>
+                                    </div>
+                                    <div class="grafico_linhas">
+                                    <?php
+                                    // cria as divs com as classes para cada pista
+                                        for ($i = 0; $i < 8; $i++){
+                                            echo '<div class="'.$listaPistasClasse[$i].'">';
+                                            CriarHTML($conexao, $dia, $listaPistas[$i], $listaLetras[$i]);
+                                            echo '</div>';
+                                        }
+                                    ?>
+                                    </div>
+                                    <div class="espaco"></div>
+                                </div>
+                                <div class="leg">
+                                    <div class="k1 quad_graf"></div>
+                                    <div class="k2 quad_graf"></div>
+                                    <div class="k3 quad_graf"></div>
+                                    <div class="k4 quad_graf"></div>
+                                    <div class="k5 quad_graf"></div>
+                                    <div class="k6 quad_graf"><p>Exclusivo</p></div>
+                                    <div class="k7 quad_graf"></div>
+                                    <div class="k8 quad_graf"><p>Não<br>Exlusivo</p></div>
+                                    <div class="k9 quad_graf"></div>
+                                    <div class="k10 quad_graf"></div>
+                                    <div class="k11 quad_graf"></div>
+                                    <div class="k12 quad_graf"></div>
+                                    <div class="k13 quad_graf"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="graf_mes" class="div__grafico">
+                        <div class="tit">
+                            <div class="all_tit"><h2 style="color: white;">Agendamentos por Mês</h2></div>
+                        </div>
+                        <div class="out_grafico">
+                            <div class="grafico" style="position: relative">
+                                <hr style="width: 1px; position: absolute;left: 170px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 248px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 326px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 404px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 482px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 560px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 638px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 716px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 794px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 872px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 950px;height: 374px;z-index: 1;top: 10%;">
+                                <div class="scl">
+                                    <div class="quad_graf"></div>
+                                    <div class="quad_graf" style="border: none"><div class="b2" style="z-index: 2;">07:00</div></div>                            
+                                    <div class="quad_graf" style="border: none"><div class="b3" style="z-index: 2;">08:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b4" style="z-index: 2;">09:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b5" style="z-index: 2;">10:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b6" style="z-index: 2;">11:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b7" style="z-index: 2;">12:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b8" style="z-index: 2;">13:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b9" style="z-index: 2;">14:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b10" style="z-index: 2;">15:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b11" style="z-index: 2;">16:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b12" style="z-index: 2;">17:00</div></div>
+                                    <div class="quad_graf"><div class="b13" style="z-index: 2;">18:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b14" style="z-index: 2;">19:00</div></div>
+                                </div>
+                                <div class="grafico_preenchimentos">
+                                    <div class = nome_pistas>
+                                        <div class="c1 quad_graf">VDA</div>
+                                        <div class="d1 quad_graf">NVH</div>
+                                        <div class="e1 quad_graf">Obstáculos</div>
+                                        <div class="f1 quad_graf">Rampa 12% e 20%</div>
+                                        <div class="g1 quad_graf">Rampa 40%</div>
+                                        <div class="h1 quad_graf">Rampa 60%</div>
+                                        <div class="i1 quad_graf">Asfalto</div>
+                                        <div class="j1 quad_graf">Pista Completa</div>
+                                    </div>
+                                    <div class="grafico_linhas">
+                                    <?php
+                                    // cria as divs com as classes para cada pista
+                                        for ($i = 0; $i < 8; $i++){
+                                            echo '<div class="'.$listaPistasClasse[$i].'">';
+                                            CriarHTML($conexao, $dia, $listaPistas[$i], $listaLetras[$i]);
+                                            echo '</div>';
+                                        }
+                                    ?>
+                                    </div>
+                                    <div class="espaco"></div>
+                                </div>
+                                <div class="leg">
+                                    <div class="k1 quad_graf"></div>
+                                    <div class="k2 quad_graf"></div>
+                                    <div class="k3 quad_graf"></div>
+                                    <div class="k4 quad_graf"></div>
+                                    <div class="k5 quad_graf"></div>
+                                    <div class="k6 quad_graf"><p>Exclusivo</p></div>
+                                    <div class="k7 quad_graf"></div>
+                                    <div class="k8 quad_graf"><p>Não<br>Exlusivo</p></div>
+                                    <div class="k9 quad_graf"></div>
+                                    <div class="k10 quad_graf"></div>
+                                    <div class="k11 quad_graf"></div>
+                                    <div class="k12 quad_graf"></div>
+                                    <div class="k13 quad_graf"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div class="arrow right_arrow" style="right: 10px;">&gt;</div>
             </div>
         </main>
     <footer>
@@ -297,5 +445,67 @@ for ($i = 0; $i < 8; $i++){
             <span>Copyright © 2023 de Zeentech os direitos reservados</span>
         </div>
     </footer>
+
+    <!-- ///////////////////////////////////////////////////////// -->
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-bundle.min.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="script.js"></script>
+
+    <!-- ///////////////////////////////////////////////////////// -->
+
+    <script>
+        const grafContainer = document.querySelector('.graf_container');
+        const leftArrow = document.querySelector('.left_arrow');
+        const rightArrow = document.querySelector('.right_arrow');
+        const graficos = document.querySelectorAll('.div__grafico');
+        const ativo = document.querySelector('.ativo');
+
+        let currentIndex = 0;
+/* 
+        function updateTransform(div) {
+            const translateValue = -currentIndex * 100 + '%';
+            div.style.transform = 'translateX(' + translateValue + ')';
+        } */
+
+        leftArrow.addEventListener('click', function () {
+            if (currentIndex > 0) {
+                antigo = graficos[currentIndex];
+                antigo.classList.remove('ativo');
+                currentIndex--;
+                novo = graficos[currentIndex];
+                novo.classList.add('ativo');
+            } else {
+                // Se já estiver no primeiro gráfico, vá para o último (loop)
+                graficos[currentIndex].classList.remove('ativo');
+                currentIndex = graficos.length - 1;
+                graficos[currentIndex].classList.add('ativo');
+                
+            }
+        });
+
+        rightArrow.addEventListener('click', function () {
+            if (currentIndex < graficos.length - 1) {
+                graficos[currentIndex].classList.remove('ativo');
+                currentIndex++;
+                graficos[currentIndex].classList.add('ativo');
+            } else {
+                // Se já estiver no último gráfico, volte para o primeiro (loop)
+                graficos[currentIndex].classList.remove('ativo');
+                currentIndex = 0;
+                graficos[currentIndex].classList.add('ativo');
+                
+            }
+        });
+    </script>
+
+
+    <!-- ///////////////////////////////////////////////////////// -->
 </body>
 </html>
