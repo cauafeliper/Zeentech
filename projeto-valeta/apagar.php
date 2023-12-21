@@ -22,9 +22,9 @@ if (isset($_GET['id']) && isset($_GET['tabela'])) {
             echo "Erro ao excluir registro: " . mysqli_error($conexao);
         }
     } else {
-        echo "Tabela não permitida.";
+        echo "Tabela n達o permitida.";
     }
 } else {
-    echo "ID ou tabela não fornecidos.";
+    echo "ID ou tabela n達o fornecidos.";
 }
 ?>

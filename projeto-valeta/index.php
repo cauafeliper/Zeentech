@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,12 +9,12 @@
     <link rel="stylesheet" href="estilos/style2.css">
 </head>
 <style>
-    body {
-        background-image: linear-gradient(to top, rgba(116, 3, 3, 0.637), rgba(83, 82, 82, 0.801));
-        background-repeat: no-repeat;
-        background-size: cover;  
-    } 
-</style>
+        body {
+            background-image: linear-gradient(to top, rgba(116, 3, 3, 0.637), rgba(83, 82, 82, 0.801));
+            background-repeat: no-repeat;
+            background-size: cover;  
+        } 
+    </style>
 <body>
     <main>
         <form action="cadastro-login/login.php" method="post">
