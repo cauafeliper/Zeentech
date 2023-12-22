@@ -146,6 +146,17 @@ main {
     width: 100%;
     height: 100%;
   }
+
+  .title_semana input {
+    width: 90%;
+    height: 100%;
+    border-radius: 7px;
+    background-color: var(--escuro);
+    color: white;
+    border: none;
+    font-size: large;
+    cursor: pointer;
+  }
   
   .submit { grid-area: submit; }
   
@@ -200,7 +211,7 @@ main {
 }
 
 .out_grafico {
-  overflow: hidden;
+  overflow-x: auto;
   border-radius: 15px;
 }
 
@@ -208,6 +219,17 @@ main {
   border-right: 2px solid lightgray;
   text-align: center;
   width: 78px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.quad_graf_semana {
+  border-right: 2px solid lightgray;
+  text-align: center;
+  width: 140px;
   height: 45px;
   display: flex;
   align-items: center;
@@ -228,6 +250,18 @@ main {
   width: 1082px;
   height: 100%;
   align-items: center;
+}
+
+.grafico_linhas_semana {
+  display: flex;
+  flex-flow: row;
+}
+
+.semana {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 140px;
 }
 
 .nome_pistas {
@@ -345,6 +379,14 @@ main {
     left: -20px;
   }
 
+  .title_semana {
+    position: unset;
+    display: flex;
+    justify-content: center;
+    flex-flow: column;
+    align-items: center;
+  }
+
   .vda {
     display: flex;
     height:45px;
@@ -451,6 +493,7 @@ main {
   }
   .k1 { 
     grid-area: k1;
+    border: none;
   }
   .k2 { 
     grid-area: k2; 
@@ -510,6 +553,7 @@ main {
   }
   .k13 { 
     grid-area: k13; 
+    border: none;
   }
   .k14 { 
     grid-area: k14;
