@@ -59,14 +59,14 @@ function PorcentagemMinuto($minuto) { // retorna a porcentagem do minuto em rela
 function calcularDiasDaSemana($dataSelecionada) {
     $data = new DateTime($dataSelecionada);
 
-    // Obtém o número do dia da semana (0 = domingo, 1 = segunda, ..., 6 = sábado)
-    $diaDaSemana = $data->format('w');
+    // Obtém o número do dia da semana (1 = segunda, 2 = terça, ..., 7 = domingo)
+    $diaDaSemana = $data->format('N');
 
-    // Calcula o início da semana (domingo) subtraindo o número do dia da semana
+    // Calcula o início da semana (segunda) subtraindo o número do dia da semana
     $inicioDaSemana = clone $data;
-    $inicioDaSemana->sub(new DateInterval('P' . $diaDaSemana . 'D'));
+    $inicioDaSemana->sub(new DateInterval('P' . ($diaDaSemana - 1) . 'D'));
 
-    // Calcula o final da semana (sábado) adicionando o restante dos dias
+    // Calcula o final da semana (domingo) adicionando o restante dos dias
     $finalDaSemana = clone $inicioDaSemana;
     $finalDaSemana->add(new DateInterval('P6D'));
 
@@ -80,6 +80,28 @@ function calcularDiasDaSemana($dataSelecionada) {
     }
 
     return $datasDaSemana;
+}
+
+
+function calcularDiasDoMes($dataSelecionada) {
+    $data = new DateTime($dataSelecionada);
+
+    // Obtém o primeiro dia do mês
+    $primeiroDiaDoMes = new DateTime($data->format('Y-m-01'));
+
+    // Obtém o último dia do mês
+    $ultimoDiaDoMes = new DateTime($data->format('Y-m-t'));
+
+    // Cria um array para armazenar as datas do mês
+    $datasDoMes = [];
+
+    // Preenche o array com as datas do mês
+    while ($primeiroDiaDoMes <= $ultimoDiaDoMes) {
+        $datasDoMes[] = $primeiroDiaDoMes->format('Y-m-d');
+        $primeiroDiaDoMes->add(new DateInterval('P1D')); // Adiciona um dia
+    }
+
+    return $datasDoMes;
 }
 
 function CriarCSSdia($conexao, $dia, $area_pista, $letra, $pistaClasse, $y){ // cria as classes com os horários agendados
@@ -334,18 +356,209 @@ function CriarCSSsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaC
     }
 }
 
+function CriarHTMLmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClasse){ // cria as divs com as classes para cada pista
+    for ($i = 0; $i < 8; $i++){
+        $sql = "SELECT hora_inicio, hora_fim, solicitante, area_solicitante, veic FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND status='Aprovado'";
+        $result = $conexao->query($sql);
+        $j = 2;
+        echo '<div class="'.$listaPistaClasse[$i].'" style="width: 140px">';
+        while ($row = $result->fetch_assoc()) {
+            $horarioInicio = $row["hora_inicio"];
+            $horarioFim = $row["hora_fim"];
+            $horario = "$horarioInicio - $horarioFim";
+            $solicitante = $row["solicitante"];
+            $areaSolicitante = $row["area_solicitante"];
+            $veic = $row["veic"];
+            $classe = "$listaLetras[$i]".$j.'_semana';
+            echo '<div class="'.$classe.'"></div>';
+            echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
+                '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
+                '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
+            '</div>';
+            $j++;
+        }
+        echo '</div>';
+    
+    }
+}
+
+function CriarCSSmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClasse, $listaY){ // cria as classes com os horários agendados
+    for ($i = 0; $i < 8; $i++){
+        $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND status='Aprovado'";
+        $result = $conexao->query($sql);
+        $horariosMarcados = array();
+        if ($result->num_rows > 0) {
+
+            while ($row = $result->fetch_assoc()) {
+                $exclsv = $row["exclsv"];
+                $horarioInicio = $row["hora_inicio"];
+                $horarioFim = $row["hora_fim"];
+                
+                $horaInicio = $horarioInicio[0] . $horarioInicio[1];
+                $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
+
+                $horaFim = $horarioFim[0] . $horarioFim[1];
+                $minutoFim = $horarioFim[3] . $horarioFim[4];
+
+                $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
+
+                $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
+            }
+            $j = 2;
+            foreach ($horariosMarcados as $tarefa) {
+                $cor = $tarefa['cor'];
+                $horaInicio = $tarefa['horaInicio'];
+                $horaFim = $tarefa['horaFim'];
+                $minutoInicio = $tarefa['minutoInicio'];
+                $minutoFim = $tarefa['minutoFim'];
+                
+                if ($horaInicio != $horaFim){
+                    if($minutoInicio != '00'){
+                        $porcentagemInicioMargin = PorcentagemMinuto($minutoInicio);
+                        $porcentagemInicio = 100 - $porcentagemInicioMargin;
+                    }
+                    else{
+                        $porcentagemInicio = 100;
+                        $porcentagemInicioMargin = 0;
+                    }
+                    if($minutoFim != '00'){
+                        $porcentagemFim = PorcentagemMinuto($minutoFim);
+                    }
+                    else{
+                        $porcentagemFim = 0;
+                    }      
+                    
+                    $tamanho = 0;
+                    for ($k = $horaInicio + 1; $k < $horaFim; $k++) {
+                        $tamanho += 100;
+                    }
+                    $tamanho += $porcentagemInicio + $porcentagemFim;
+                    $tamanho = ($tamanho / 100) * 78;
+                    $leftTotal = 0;
+                    $indexInicio = ($horaInicio - 7) * 78;
+                    $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
+                    $leftTotal += $porcentagemInicioMargin + $indexInicio;
+                }
+                else{
+                    $tamanho = 0;
+                    $leftTotal = 0;
+                    $minutos = $minutoFim - $minutoInicio;
+                    $porcentagemMinutos = PorcentagemMinuto($minutos);
+                    $tamanho = ($porcentagemMinutos / 100) * 78;
+                    if ($minutoInicio != '00'){
+                        $porcentagemInicioMargin = 100 - $porcentagemMinutos;
+                        $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
+                    }
+                    else{
+                        $porcentagemInicioMargin = 0;
+                    }
+                    $indexInicio = ($horaInicio - 7) * 78;
+                    $leftTotal = $porcentagemInicioMargin + $indexInicio;
+                }
+
+                $tamanho = ($tamanho / 936) * 140;
+                
+                $leftTotal = ($leftTotal / 936) * 140;
+                
+
+                $classe = $listaLetras[$i].$j.'_semana';
+                $classeTip = 'tip_'.$classe;
+                $horario = "$horaInicio - $horaFim";
+                $leftTip = $leftTotal + ($tamanho/2) - 100;
+                if ($leftTip < 0){
+                    $leftTip = 0;
+                }
+                if ($leftTip > 827){
+                    $leftTip = 827;
+                }
+
+                echo '<style>';
+                echo '.' . $listaPistaClasse[$i] . '{position: relative;}';
+                echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-radius: 40%; border-top: 10px solid white; border-bottom: 10px solid white;}';
+
+                echo '.'.$classeTip. '{position: absolute; justify-content: center; '.$listaY[$i].': 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
+                echo ".$classe:hover + .$classeTip".'{display: flex;}';
+                echo ".$classeTip:hover {display: flex;}";
+                echo ".$classe:hover {opacity: 0.5;}";
+                echo '</style>';
+
+                $j++;
+            }
+        }
+    }
+}
+
+function CriarListaMeses($conexao, $dia, $listaPistas, $listaPistasClasse){ // cria as divs com as classes para cada pista
+    $listaMeses = [$Janeiro = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Fevereiro = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Março = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Abril = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Maio = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Junho = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0], $Julho = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Agosto = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Setembro = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Outubro = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Novembro = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Dezembro = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $totalAno = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0]];
+    $primeirosDias = obterPrimeirosDiasDosMesesDoAno($dia);
+    for ($i = 0; $i < 12; $i++){
+        $total = 0;
+        $anoMes = substr($primeirosDias[$i], 0, 7); // Extrai os primeiros 7 caracteres ('Y-m') da data
+        for ($j = 0; $j < 8; $j++){
+            $sql = "SELECT area_pista, dia FROM agendamentos WHERE area_pista = '$listaPistas[$j]' AND SUBSTRING(dia, 1, 7) = '$anoMes' AND status='Aprovado'";
+            $result = $conexao->query($sql);
+            while ($row = $result->fetch_assoc()) {
+                $listaMeses[$i][$listaPistasClasse[$j]]++;
+                $total++;
+            }
+            $listaMeses[12][$listaPistasClasse[$j]] += $listaMeses[$i][$listaPistasClasse[$j]]; 
+        }
+        $listaMeses[$i]['total'] = $total;
+        $listaMeses[12]['total'] += $total;
+    }
+    return $listaMeses;
+}
+
+function obterPrimeirosDiasDosMesesDoAno($data) {
+    $dataObj = new DateTime($data);
+    $ano = $dataObj->format('Y');
+
+    $primeirosDiasDosMeses = [];
+
+    for ($mes = 1; $mes <= 12; $mes++) {
+        $primeiroDiaDoMes = new DateTime("$ano-$mes-01");
+        $primeirosDiasDosMeses[] = $primeiroDiaDoMes->format('Y-m-d');
+    }
+
+    return $primeirosDiasDosMeses;
+}
+
+function obterNumeroDoMes($data) {
+    // Converte a string de data para um objeto DateTime
+    $dataObj = new DateTime($data);
+
+    // Obtém o número do mês (1 para janeiro, 2 para fevereiro, etc.)
+    $numeroDoMes = (int)$dataObj->format('n');
+
+    return $numeroDoMes;
+}
+
+function calcularCW($dataSelecionada) {
+    $data = new DateTime($dataSelecionada);
+
+    // Obtém o número da semana (CW) da data
+    $numeroDaSemana = $data->format('W');
+
+
+    return $numeroDaSemana;
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 $listaPistas = array('VDA', 'NVH', 'Obstáculos', 'Rampa 12% e 20%', 'Rampa 40%', 'Rampa 60%', 'Asfalto', 'Pista Completa');
 $listaPistasClasse = array('vda', 'nvh', 'obs', 'r_12_20', 'r_40', 'r_60', 'asf', 'pc');
+$listaPistasAno = array('VDA', 'NVH', 'Obstáculos', 'Rampa 12% e 20%', 'Rampa 40%', 'Rampa 60%', 'Asfalto', 'Pista Completa', 'Total');
+$listaPistasClasseAno = array('vda', 'nvh', 'obs', 'r_12_20', 'r_40', 'r_60', 'asf', 'pc', 'total');
 $listaLetras = array('c', 'd', 'e', 'f', 'g', 'h', 'i', 'j');
 $listaY = array('top', 'top', 'top', 'top', 'bottom', 'bottom', 'bottom', 'bottom');
-$listaSemana = array('domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado');
+$listaSemana = array('segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado', 'domingo');
+$listaAno = array('janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembo', 'outubro', 'novembro', 'dezembro');
 $semana = calcularDiasDaSemana($dia);
+$mes = calcularDiasDoMes($dia);
+$primeirosDiasDosMeses = obterPrimeirosDiasDosMesesDoAno($dia);
 
 // preenche as classes com os horários agendados
 for ($i = 0; $i < 8; $i++){
@@ -353,10 +566,17 @@ for ($i = 0; $i < 8; $i++){
 }
 
 for ($i = 0; $i < 7; $i++){
-    $semana = calcularDiasDaSemana($dia);
     $diaSemana = $semana[$i]; 
     CriarCSSsemana($conexao, $diaSemana, $listaPistas, $listaLetras, $listaPistasClasse, $listaY);
 }
+
+foreach ($mes as $diaMes){
+    CriarCSSmes($conexao, $diaMes, $listaPistas, $listaLetras, $listaPistasClasse, $listaY);
+}
+
+$WidthGraficoMes = count($mes) * 140 + 78 + 78;
+
+$listaMeses = CriarListaMeses($conexao, $dia, $listaPistas, $listaPistasClasse);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -406,7 +626,7 @@ for ($i = 0; $i < 7; $i++){
                                 <hr style="width: 1px; position: absolute;left: 872px;height: 374px;z-index: 1;top: 10%;">
                                 <hr style="width: 1px; position: absolute;left: 950px;height: 374px;z-index: 1;top: 10%;">
                                 <div class="scl">
-                                    <div class="quad_graf"></div>
+                                    <div class="quad_graf" style="border-bottom: none"></div>
                                     <div class="quad_graf" style="border: none"><div class="b2" style="z-index: 2;">07:00</div></div>                            
                                     <div class="quad_graf" style="border: none"><div class="b3" style="z-index: 2;">08:00</div></div>
                                     <div class="quad_graf" style="border: none"><div class="b4" style="z-index: 2;">09:00</div></div>
@@ -444,75 +664,59 @@ for ($i = 0; $i < 7; $i++){
                                     </div>
                                     <div class="espaco"></div>
                                 </div>
-                                <div class="leg">
-                                    <div class="k1 quad_graf"></div>
-                                    <div class="k2 quad_graf"></div>
-                                    <div class="k3 quad_graf"></div>
-                                    <div class="k4 quad_graf"></div>
-                                    <div class="k5 quad_graf"></div>
-                                    <div class="k6 quad_graf"><p>Exclusivo</p></div>
-                                    <div class="k7 quad_graf"></div>
-                                    <div class="k8 quad_graf"><p>Não<br>Exlusivo</p></div>
-                                    <div class="k9 quad_graf"></div>
-                                    <div class="k10 quad_graf"></div>
-                                    <div class="k11 quad_graf"></div>
-                                    <div class="k12 quad_graf"></div>
-                                    <div class="k13 quad_graf"></div>
-                                </div>
                             </div>
+                        </div>
+                        <div class="leg_mes">
+                            <div class="k6 quad_graf"><p>Exclusivo</p></div>
+                            <div class="k7 quad_graf"></div>
+                            <div class="k8 quad_graf"><p>Não<br>Exlusivo</p></div>
+                            <div class="k9 quad_graf"></div>
                         </div>
                     </div>
                     <div id="graf_semana" class="div__grafico">
                         <div class="tit">
                             <?php
                             $diastr = strtotime($dia);
-                            echo '<div class="all_tit"><h2 style="color: white;">Agendamentos por Semana ('.date('d/m/Y', $diastr).')</h2></div>'
+                            echo '<div class="all_tit"><h2 style="color: white;">Agendamentos por Semana (CW'.calcularCW($dia).')</h2></div>'
                             ?>
                         </div>
                         <div class="out_grafico">
                             <div class="grafico" style="position: relative">
-                                <hr style="width: 1px; position: absolute;left: 232px;height: 374px;z-index: 1;top: 10%;">
-                                <hr style="width: 1px; position: absolute;left: 372px;height: 374px;z-index: 1;top: 10%;">
-                                <hr style="width: 1px; position: absolute;left: 512px;height: 374px;z-index: 1;top: 10%;">
-                                <hr style="width: 1px; position: absolute;left: 652px;height: 374px;z-index: 1;top: 10%;">
-                                <hr style="width: 1px; position: absolute;left: 792px;height: 374px;z-index: 1;top: 10%;">
-                                <hr style="width: 1px; position: absolute;left: 932px;height: 374px;z-index: 1;top: 10%;">
-                                <hr style="width: 1px; position: absolute;left: 1072px;height: 374px;z-index: 1;top: 10%;">
                                 <div class="scl">
-                                <div class="quad_graf"></div>
+                                <div class="quad_graf" style="border-bottom: none"></div>
                                     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" class="quad_graf_semana">
                                         <?php
-                                        echo '<div class="quad_graf_semana domingo" style="border: none"><div class="b2 title_semana" style="z-index: 2;"><input type="submit" value="domingo"><input style="background-color: unset; color:#001e50; text-align: center; cursor: unset; padding-left: 10%;" type="date" readonly name="dia" id="dia" value="'.$semana[0].'"></div></div>  ';
+                                        echo '<div class="quad_graf_semana segunda" style="border: none"><div class="b3 title_semana" style="z-index: 2;"><input type="submit" value="segunda"><input style="background-color: unset; color:#001e50; text-align: center; cursor: unset; padding-left: 10%;" type="date" readonly name="dia" id="dia" value="'.$semana[0].'"></div></div>  ';
                                         ?>
                                     </form>
                                     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" class="quad_graf_semana">
                                         <?php
-                                        echo '<div class="quad_graf_semana segunda" style="border: none"><div class="b3 title_semana" style="z-index: 2;"><input type="submit" value="segunda"><input style="background-color: unset; color:#001e50; text-align: center; cursor: unset; padding-left: 10%;" type="date" readonly name="dia" id="dia" value="'.$semana[1].'"></div></div>  ';
+                                        echo '<div class="quad_graf_semana terca" style="border: none"><div class="b4 title_semana" style="z-index: 2;"><input type="submit" value="terça"><input style="background-color: unset; color:#001e50; text-align: center; cursor: unset; padding-left: 10%;" type="date" readonly name="dia" id="dia" value="'.$semana[1].'"></div></div>  ';
                                         ?>
                                     </form>
                                     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" class="quad_graf_semana">
                                         <?php
-                                        echo '<div class="quad_graf_semana terca" style="border: none"><div class="b4 title_semana" style="z-index: 2;"><input type="submit" value="terça"><input style="background-color: unset; color:#001e50; text-align: center; cursor: unset; padding-left: 10%;" type="date" readonly name="dia" id="dia" value="'.$semana[2].'"></div></div>  ';
+                                        echo '<div class="quad_graf_semana quarta" style="border: none"><div class="b5 title_semana" style="z-index: 2;"><input type="submit" value="quarta"><input style="background-color: unset; color:#001e50; text-align: center; cursor: unset; padding-left: 10%;" type="date" readonly name="dia" id="dia" value="'.$semana[2].'"></div></div>  ';
                                         ?>
                                     </form>
                                     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" class="quad_graf_semana">
                                         <?php
-                                        echo '<div class="quad_graf_semana quarta" style="border: none"><div class="b5 title_semana" style="z-index: 2;"><input type="submit" value="quarta"><input style="background-color: unset; color:#001e50; text-align: center; cursor: unset; padding-left: 10%;" type="date" readonly name="dia" id="dia" value="'.$semana[3].'"></div></div>  ';
+                                        echo '<div class="quad_graf_semana quinta" style="border: none"><div class="b6 title_semana" style="z-index: 2;"><input type="submit" value="quinta"><input style="background-color: unset; color:#001e50; text-align: center; cursor: unset; padding-left: 10%;" type="date" readonly name="dia" id="dia" value="'.$semana[3].'"></div></div>  ';
                                         ?>
                                     </form>
                                     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" class="quad_graf_semana">
                                         <?php
-                                        echo '<div class="quad_graf_semana quinta" style="border: none"><div class="b6 title_semana" style="z-index: 2;"><input type="submit" value="quinta"><input style="background-color: unset; color:#001e50; text-align: center; cursor: unset; padding-left: 10%;" type="date" readonly name="dia" id="dia" value="'.$semana[4].'"></div></div>  ';
+                                        echo '<div class="quad_graf_semana sexta" style="border: none"><div class="b7 title_semana" style="z-index: 2;"><input type="submit" value="sexta"><input style="background-color: unset; color:#001e50; text-align: center; cursor: unset; padding-left: 10%;" type="date" readonly name="dia" id="dia" value="'.$semana[4].'"></div></div>  ';
                                         ?>
                                     </form>
                                     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" class="quad_graf_semana">
                                         <?php
-                                        echo '<div class="quad_graf_semana sexta" style="border: none"><div class="b7 title_semana" style="z-index: 2;"><input type="submit" value="sexta"><input style="background-color: unset; color:#001e50; text-align: center; cursor: unset; padding-left: 10%;" type="date" readonly name="dia" id="dia" value="'.$semana[5].'"></div></div>  ';
+                                        echo '<div class="quad_graf_semana sabado" style="border: none"><div class="b8 title_semana" style="z-index: 2;"><input type="submit" value="sábado"><input style="background-color: unset; color:#001e50; text-align: center; cursor: unset; padding-left: 10%;" type="date" readonly name="dia" id="dia" value="'.$semana[5].'"></div></div>  ';
                                         ?>
                                     </form>
                                     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" class="quad_graf_semana">
                                         <?php
-                                        echo '<div class="quad_graf_semana sabado" style="border: none"><div class="b8 title_semana" style="z-index: 2;"><input type="submit" value="sábado"><input style="background-color: unset; color:#001e50; text-align: center; cursor: unset; padding-left: 10%;" type="date" readonly name="dia" id="dia" value="'.$semana[6].'"></div></div>  ';
+                                        echo '<div class="quad_graf_semana domingo" style="border: none"><div class="b2 title_semana" style="z-index: 2;"><input type="submit" value="domingo"><input style="background-color: unset; color:#001e50; text-align: center; cursor: unset; padding-left: 10%;" type="date" readonly name="dia" id="dia" value="'.$semana[6].'"></div></div>  ';
                                         ?>
                                     </form>
                                 </div>
@@ -540,21 +744,183 @@ for ($i = 0; $i < 7; $i++){
                                     </div>
                                     <div class="espaco"></div>
                                 </div>
-                                <div class="leg">
-                                    <div class="k1 quad_graf"></div>
-                                    <div class="k2 quad_graf"></div>
-                                    <div class="k3 quad_graf"></div>
-                                    <div class="k4 quad_graf"></div>
-                                    <div class="k5 quad_graf"></div>
-                                    <div class="k6 quad_graf"><p>Exclusivo</p></div>
-                                    <div class="k7 quad_graf"></div>
-                                    <div class="k8 quad_graf"><p>Não<br>Exlusivo</p></div>
-                                    <div class="k9 quad_graf"></div>
-                                    <div class="k10 quad_graf"></div>
-                                    <div class="k11 quad_graf"></div>
-                                    <div class="k12 quad_graf"></div>
-                                    <div class="k13 quad_graf"></div>
+                            </div>
+                        </div>
+                        <div class="leg_mes">
+                            <div class="k6 quad_graf"><p>Exclusivo</p></div>
+                            <div class="k7 quad_graf"></div>
+                            <div class="k8 quad_graf"><p>Não<br>Exlusivo</p></div>
+                            <div class="k9 quad_graf"></div>
+                        </div>
+                    </div>
+                    <div id="graf_mes" class="div__grafico grafico_mes">
+                        <div class="tit">
+                            <?php
+                            $diastr = strtotime($dia);
+                            echo '<div class="all_tit"><h2 style="color: white;">Agendamentos por Mês ('.ucfirst($listaAno[obterNumeroDoMes($dia)-1]).')</h2></div>'
+                            ?>
+                        </div>
+                        <div class="out_grafico">
+                            <div class = nome_pistas_over>
+                                <div class="c1 quad_graf_over">VDA</div>
+                                <div class="d1 quad_graf_over">NVH</div>
+                                <div class="e1 quad_graf_over">Obstáculos</div>
+                                <div class="f1 quad_graf_over">Rampa 12% e 20%</div>
+                                <div class="g1 quad_graf_over">Rampa 40%</div>
+                                <div class="h1 quad_graf_over">Rampa 60%</div>
+                                <div class="i1 quad_graf_over">Asfalto</div>
+                                <div class="j1 quad_graf_over">Pista Completa</div>
+                            </div>
+                            <?php
+                                echo '<div class="grafico" style="position: relative; width: '.$WidthGraficoMes.'px;">';
+                            ?>
+                                <div class="scl" style="width: auto; display: flex;">
+                                    <div class="quad_graf" style="border-bottom: none"></div>
+                                    <?php
+                                        foreach ($mes as $diaMes){
+                                            echo '<form action="'.$_SERVER['PHP_SELF'].'" method="POST" class="quad_graf_semana">';
+                                            echo '<div class="quad_graf_semana" style="border: none"><div class="title_mes" style="z-index: 2;"><input type="submit" value="'.date('d/m', strtotime($diaMes)).'"><input style="background-color: unset; color:#001e50; text-align: center; cursor: unset; padding-left: 10%;" type="hidden" readonly name="dia" id="dia" value="'.$diaMes.'"></div></div>';
+                                            echo '</form>';
+                                        }
+                                    ?>
                                 </div>
+                                <div class="grafico_preenchimentos_ano">
+                                    <div class="grafico_linhas_semana">
+                                    <?php
+                                    // cria as divs com as classes para cada pista
+                                        foreach ($mes as $diaMes){
+                                            echo '<div id="'.$diaMes.'" class="semana">';  
+                                            CriarHTMLmes($conexao, $diaMes, $listaPistas, $listaLetras, $listaPistasClasse);
+                                            echo '</div>';
+                                        }
+                                    ?>
+                                    </div>
+                                    <div class="espaco"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="leg_mes">
+                            <div class="k6 quad_graf"><p>Exclusivo</p></div>
+                            <div class="k7 quad_graf"></div>
+                            <div class="k8 quad_graf"><p>Não<br>Exlusivo</p></div>
+                            <div class="k9 quad_graf"></div>
+                        </div>
+                    </div>
+                    <div id="graf_ano" class="div__grafico grafico_mes">
+                        <div class="tit">
+                            <?php
+                            $diastr = strtotime($dia);
+                            echo '<div class="all_tit"><h2 style="color: white;">Agendamentos por Ano ('.date('Y', $diastr).')</h2></div>'
+                            ?>
+                        </div>
+                        <div class="out_grafico" style="height: 600px;">
+                            <?php
+                            echo '<div class="grafico grafico_ano" style="position: relative;">';
+                            ?>
+                                <div class="dupla_meses">
+                                    <div id="ano" class="graf_barras" style="width: 600px;">
+                                        <div class="barras_titulo"><h3>
+                                            Ano Completo
+                                        </h3></div>
+                                        <?php
+                                            echo '<div style="justify-content: center; display: flex"><p>Total: '.$listaMeses[12]['total'].'</p></div>';
+                                        ?>
+                                        <div class="barras">
+                                            <?php
+                                                $maior = 1;
+                                                for ($i = 0; $i < 8; $i++){
+                                                    if ($listaMeses[12][$listaPistasClasse[$i]] > $maior){
+                                                        $maior = $listaMeses[12][$listaPistasClasse[$i]];
+                                                    }
+                                                }
+                                                for ($i = 0; $i < 8; $i++){
+                                                    if ($i % 2 == 0){
+                                                        $cor = "#4C7397";
+                                                    }
+                                                    else{
+                                                        $cor = "#001e50";
+                                                    }
+                                                    $porcentagemBarra = ($listaMeses[12][$listaPistasClasse[$i]] * 100) / $maior;
+                                                    echo '<div class="barra_ano_'.$listaPistasClasse[$i].'"> <p style="color: white"> '.$listaMeses[12][$listaPistasClasse[$i]].' </p> </div>';
+                                                    echo '<style>';
+                                                    echo '.barra_ano_'.$listaPistasClasse[$i].' {background-color: '.$cor.'; width: 50px; display: flex; justify-content: center; align-items: end;}';
+                                                    if ($listaMeses[12][$listaPistasClasse[$i]] > 0){
+                                                        echo '.barra_ano_'.$listaPistasClasse[$i].' {height: '.$porcentagemBarra.'%;}';
+                                                    }
+                                                    else{
+                                                        echo '.barra_ano_'.$listaPistasClasse[$i].' {height: 1%;}';
+                                                    }
+                                                    echo '</style>';
+                                                }
+                                            ?>
+                                        </div>
+                                        <div class="barras_legenda">
+                                            <?php 
+                                                for ($i = 0; $i < 8; $i++){
+                                                    echo '<div class="legenda barra_legenda_tudo_'.$listaPistasClasse[$i].'"> '.$listaPistasAno[$i].' </div>';
+                                                    echo '<style>';
+                                                    echo '.barra_legenda_tudo_'.$listaPistasClasse[$i].' {color: black; transform: rotate(45deg); width: 80px; align-items: end; height: 100%; align-items:  start;  display: flex; justify-content: space-between; position: absolute; left: '.(-20 + ($i * 75)).'px; bottom: -20px;}';
+                                                    echo '</style>';
+                                                }
+                                            ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php
+                                $maiorMeses = 1;
+                                $z = 0;
+                                for ($l = 0; $l < 12; $l++){
+                                    for ($k = 0; $k < 8; $k++){
+                                        if ($listaMeses[$l][$listaPistasClasse[$k]] > $maiorMeses){
+                                            $maiorMeses = $listaMeses[$l][$listaPistasClasse[$k]];
+                                        }
+                                    }
+                                }
+                                for ($i = 0; $i < 6; $i++){                                    
+                                    echo '<div id="'.$i.'_meses" class="dupla_meses">';
+                                        for ($j = 0; $j < 2; $j++){
+                                            echo '<div id="'.ucfirst($listaAno[$z]).'" class="graf_barras">
+                                                <div class="barras_titulo"><form action="'.$_SERVER['PHP_SELF'].'" method="POST" class="quad_graf_semana"><div class="quad_graf_semana" style="border: none"><div class="title_ano" style="z-index: 2;"><input type="submit" value="'.ucfirst($listaAno[$z]).'"><input style="background-color: unset; color:#001e50; text-align: center; cursor: unset; padding-left: 10%;" type="hidden" readonly name="dia" id="dia" value="'.date('Y-m-d', strtotime($primeirosDiasDosMeses[$z])).'"></div></div></form></div>
+                                                <div style="justify-content: center; display: flex"><p>Total: '.$listaMeses[$z]['total'].'</p></div>
+                                                <div class="barras">';
+                                                    for ($l = 0; $l < 8; $l++){
+                                                        if ($l % 2 == 0){
+                                                            $cor = "#4C7397";
+                                                        }
+                                                        else{
+                                                            $cor = "#001e50";
+                                                        }
+                                                        $porcentagemBarra = ($listaMeses[$z][$listaPistasClasse[$l]] * 100) / $maiorMeses;
+                                                        echo '<div class="barra_'.$listaAno[$z].'_'.$listaPistasClasse[$l].'">';
+                                                        if ($listaMeses[$z][$listaPistasClasse[$l]] > 0){
+                                                        echo '<p style="color: white"> '.$listaMeses[$z][$listaPistasClasse[$l]].' </p>';
+                                                        }
+                                                        echo '</div>
+                                                        <style>
+                                                            .barra_'.$listaAno[$z].'_'.$listaPistasClasse[$l].' {background-color: '.$cor.'; width: 50px; display: flex; justify-content: center; align-items: end;}';
+                                                            if ($listaMeses[$z][$listaPistasClasse[$l]] > 0){
+                                                                echo '.barra_'.$listaAno[$z].'_'.$listaPistasClasse[$l].' {height: '.$porcentagemBarra.'%;}';
+                                                            }
+                                                            else{
+                                                                echo '.barra_'.$listaAno[$z].'_'.$listaPistasClasse[$l].' {height: 1%;}';
+                                                            }
+                                                        echo'</style>';
+                                                    }
+                                                echo '</div>
+                                                <div class="barras_legenda">';
+                                                    for ($l = 0; $l < 8; $l++){
+                                                        echo '<div class="legenda barra_legenda_'.$listaAno[$z].'_'.$listaPistasClasse[$l].'"> '.$listaPistasAno[$l].' </div>
+                                                        <style>
+                                                            .barra_legenda_'.$listaAno[$z].'_'.$listaPistasClasse[$l].' {color: black; transform: rotate(45deg); width: 80px; align-items: end; height: 100%; align-items:  start;  display: flex; justify-content: space-between; position: absolute; left: '.(-20 + ($l * 68)).'px; bottom: -20px;}
+                                                        </style>';
+                                                    }
+                                                echo '</div>
+                                            </div>';
+                                            $z++;
+                                        }
+                                    echo '</div>';
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
@@ -581,7 +947,6 @@ for ($i = 0; $i < 7; $i++){
     <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-bundle.min.js"></script>
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="script.js"></script>
 
     <!-- ///////////////////////////////////////////////////////// -->
 
@@ -593,11 +958,6 @@ for ($i = 0; $i < 7; $i++){
         const ativo = document.querySelector('.ativo');
 
         let currentIndex = 0;
-/* 
-        function updateTransform(div) {
-            const translateValue = -currentIndex * 100 + '%';
-            div.style.transform = 'translateX(' + translateValue + ')';
-        } */
 
         leftArrow.addEventListener('click', function () {
             if (currentIndex > 0) {
@@ -629,9 +989,6 @@ for ($i = 0; $i < 7; $i++){
             }
         });
 
-        function PegarSemana(dia) {
-            
-        }
 
     </script>
 

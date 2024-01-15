@@ -157,6 +157,35 @@ main {
     font-size: large;
     cursor: pointer;
   }
+
+  .title_mes input {
+    width: 50%;
+    height: 70%;
+    border-radius: 7px;
+    background-color: var(--escuro);
+    color: white;
+    border: none;
+    font-size: large;
+    cursor: pointer;
+    position: absolute;
+    top: 15%;
+    left: 25%;
+  }
+
+  .title_ano input {
+    width: 70%;
+    height: 70%;
+    border-radius: 7px;
+    background-color: var(--escuro);
+    color: white;
+    border: none;
+    font-size: large;
+    cursor: pointer;
+    position: absolute;
+    padding: 0 5%;
+    top: 15%;
+    left: 15%;
+  }
   
   .submit { grid-area: submit; }
   
@@ -206,8 +235,66 @@ main {
   padding: 15px;
   border-radius: 15px;
   height: fit-content;
-  width: 1120px;
+  width: max-content;
   position: relative;
+}
+
+.grafico_ano {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 30px;
+}
+
+.trimestre {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dupla_meses {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 15px;
+}
+
+.graf_barras {
+  display: flex;
+  flex-direction: column;
+  width: 550px;
+  justify-content: center;
+  background-color: lightgray;
+  padding: 10px;
+  border-radius: 15px;
+  height: 300px;
+}
+
+.barras {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  align-items: end;
+  height: 80%;
+}
+
+.barras_titulo {
+  display: flex;
+  justify-content: center;
+}
+
+.barras_legenda {
+  display: flex;
+  flex-flow: row;
+  position: relative;
+  justify-content: space-between;
+  height: 45%;
 }
 
 .out_grafico {
@@ -224,9 +311,34 @@ main {
   align-items: center;
   justify-content: center;
   position: relative;
+  border-bottom: 2px solid lightgray;
+}
+
+.quad_graf_over {
+  border-right: 2px solid lightgray;
+  border-bottom: 2px solid lightgray;
+  text-align: center;
+  width: 78px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-color: white;
 }
 
 .quad_graf_semana {
+  border-right: 2px solid lightgray;
+  text-align: center;
+  width: 140px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.soma_total {
   border-right: 2px solid lightgray;
   text-align: center;
   width: 140px;
@@ -244,6 +356,14 @@ main {
   flex-direction: row;
 }
 
+.grafico_preenchimentos_ano {
+  display: flex;
+  width: 1082px;
+  height: 100%;
+  flex-direction: row;
+  padding-left: 78px;;
+}
+
 .grafico_linhas {
   display: flex;
   flex-direction: column;;
@@ -257,11 +377,30 @@ main {
   flex-flow: row;
 }
 
+.grafico_linhas_ano {
+  display: flex;
+  flex-flow: row;
+  border-bottom: 2px solid lightgray;
+}
+
 .semana {
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 140px;
+}
+
+.mes {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 140px;
+}
+
+.pista_ano{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .nome_pistas {
@@ -270,8 +409,20 @@ main {
   justify-content: center;
   align-items: center;
   width: 78px;
-  height: 100%;
   border-right: 1px solid lightgray;
+}
+
+.nome_pistas_over {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 78px;
+  border-right: 1px solid lightgray;
+  position: absolute;
+  z-index: 1;
+  margin-top: 62px;
+  left: 30px;
 }
 
 .espaco {
@@ -491,6 +642,17 @@ main {
       "k1 k2 k3 k4 k5 k6 k7 k8 k9 k10 k11 k12 k13 k14"; 
     grid-area: leg; 
   }
+
+  .leg_mes {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: white;
+    border-radius: 15px;
+    margin: auto;
+    margin-top: 5px;
+  }
+
   .k1 { 
     grid-area: k1;
     border: none;
@@ -601,6 +763,10 @@ footer img {
     width: auto;
   }
 
+  .grafico_mes {
+    width: 83%;
+  }
+
   .filtro__dia {
     width: 322px;
 }
@@ -612,8 +778,7 @@ footer img {
     padding: 15px;
     border-radius: 15px;
     height: fit-content;
-    width: 1120px;
-    overflow-x: auto;
+    width: max-content;
   }
 }
 
