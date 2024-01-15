@@ -605,7 +605,7 @@ $listaMeses = CriarListaMeses($conexao, $dia, $listaPistas, $listaPistasClasse);
             <div style="display: flex; flex-flow: row; justify-content: center; align-items: center; width: 100%;">
                 <div class="arrow left_arrow" style="left: 10px;">&lt;</div>
                 <div class='graf_container'>
-                    <div id="graf_dia" class="div__grafico ativo">
+                    <div id="graf_dia" class="div__grafico ativo div_width">
                         <div class="tit">
                         <?php
                             $diastr = strtotime($dia);
@@ -673,11 +673,11 @@ $listaMeses = CriarListaMeses($conexao, $dia, $listaPistas, $listaPistasClasse);
                             <div class="k9 quad_graf"></div>
                         </div>
                     </div>
-                    <div id="graf_semana" class="div__grafico">
+                    <div id="graf_semana" class="div__grafico div_width">
                         <div class="tit">
                             <?php
                             $diastr = strtotime($dia);
-                            echo '<div class="all_tit"><h2 style="color: white;">Agendamentos por Semana (CW'.calcularCW($dia).')</h2></div>'
+                            echo '<div class="all_tit"><h2 style="color: white;">Agendamentos por Semana (CW'.calcularCW($dia).')</h2></div>';
                             ?>
                         </div>
                         <div class="out_grafico">
@@ -753,7 +753,7 @@ $listaMeses = CriarListaMeses($conexao, $dia, $listaPistas, $listaPistasClasse);
                             <div class="k9 quad_graf"></div>
                         </div>
                     </div>
-                    <div id="graf_mes" class="div__grafico grafico_mes">
+                    <div id="graf_mes" class="grafico_mes div__grafico">
                         <div class="tit">
                             <?php
                             $diastr = strtotime($dia);
@@ -806,7 +806,7 @@ $listaMeses = CriarListaMeses($conexao, $dia, $listaPistas, $listaPistasClasse);
                             <div class="k9 quad_graf"></div>
                         </div>
                     </div>
-                    <div id="graf_ano" class="div__grafico grafico_mes">
+                    <div id="graf_ano" class="div__grafico div_width">
                         <div class="tit">
                             <?php
                             $diastr = strtotime($dia);
