@@ -1,7 +1,7 @@
 <?php
     if(isset($_POST['submit']) && !empty($_POST['re']) && !empty($_POST['senha']))
     {
-        include_once('../config.php');
+        include_once('config.php');
         $re = $_POST['re'];
         $senha = $_POST['senha'];
 
@@ -14,7 +14,13 @@
             session_start();
             unset($_SESSION['re']);
             unset($_SESSION['senha']);
-            header('Location: erroLogin.php');
+            echo '<script>
+            Swal.fire({
+                icon: "warning",
+                title: "ATENÇÃO!",
+                html: "RE ou senha estão incorretos! Caso esteja tendo problemas com sua senha, como esquecimento, entre em contato com o suporte. Se ainda não possui um login, realize seu cadastro."
+            });
+            </script>';
         }
         else
         {
@@ -27,11 +33,11 @@
             $_SESSION['senha'] = $senha;
             $_SESSION['nome'] = $nomeC;
             $_SESSION['email'] = $email;
-            header('Location: ../tabela-agendamentos.php');
+            header('Location: tabela-agendamentos.php');
         } 
     }
     else
     {
-        header('Location: ../index.php');
+        
     }
 ?>
