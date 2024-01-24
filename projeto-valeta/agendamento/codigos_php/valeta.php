@@ -4,5 +4,5 @@
     session_start();
     $_SESSION['valeta'] = $valeta;
 
-    header('Location: agendamento-dia.php');
+    header('Location: ../agendamento-dia.php');
 ?>
