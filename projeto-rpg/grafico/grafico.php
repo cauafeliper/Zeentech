@@ -532,25 +532,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                                         CriarGraficoSolicitante($conexao, $listaAreasSolicitantes, $dataInicial, $dataFinal, $listaPistas);
                                         ?>
                                     </div>
-                                    <div id="bar_totais" class="bar_totais">
-                                        <?php
-                                        foreach ($listaAreasSolicitantes as $area){
-                                            $totalVezes = 0;
-                                            $totalTempo = 0;
-                                            $valores = valorAreas($conexao, $listaAreasSolicitantes, $dataInicial, $dataFinal, $listaPistas);
-                                            $listaValorAreas = $valores[0];
-                                            foreach ($listaValorAreas as $solicitante){
-                                                foreach ($solicitante as $pista){
-                                                    if ($pista['solicitante'] == $area){
-                                                        $totalVezes += $pista['vezes'];
-                                                        $totalTempo += $pista['tempo'];
-                                                    }
-                                                }
-                                            }
-                                            echo '<div id="bar_total" class="bar_total">'.$totalVezes.'</div>';
-                                        }
-                                        ?>
-                                    </div>
+                                    
                                 </div>
                                 <div class="legenda_pistas">
                                     <?php
@@ -688,9 +670,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
 
                     const nomes = document.querySelector(`#bar_names #bar_name:nth-child(${index + 1})`);
                     nomes.style.display = checkbox.checked ? 'flex' : 'none';
-
-                    const totais = document.querySelector(`#bar_totais #bar_total:nth-child(${index + 1})`);
-                    totais.style.display = checkbox.checked ? 'flex' : 'none';
                 });
             }
 

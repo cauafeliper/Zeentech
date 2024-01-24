@@ -548,8 +548,10 @@ function CriarGraficoSolicitante($conexao, $listaAreasSolicitantes, $dataInicial
     $n = 0;
     $cor = 'steelblue';
     foreach ($listaValorAreas as $solicitante){
+        $totalVezes = 0;
         echo '<div id="bar" name="barra_'.$keys[$n].'" class="barra_solicitante">';
         foreach ($solicitante as $pista){
+            $totalVezes += $pista['vezes'];
             if ($maiorVezes == 0){
                 $tamanho = 0;
             }
@@ -589,6 +591,7 @@ function CriarGraficoSolicitante($conexao, $listaAreasSolicitantes, $dataInicial
                 echo '<div id="bar_pista" class="bar" name="'.$pista['pista'].'" style="display: none; width: 0"></div>';
             }
         }
+        echo  '<div id="bar_total" class="bar_total">'.$totalVezes.'</div>';
         echo '</div>';
         $n++;
     }
@@ -605,8 +608,10 @@ function CriarNovoGraficoSolicitante($conexao, $listaAreasSolicitantes, $dataIni
     $n = 0;
     $cor = 'steelblue';
     foreach ($listaValorAreas as $solicitante){
+        $totalVezes = 0;
         $novoGraficoHTML .= '<div id="bar" name="barra_'.$keys[$n].'" class="barra_solicitante">';
         foreach ($solicitante as $pista){
+            $totalVezes += $pista['vezes'];
             if ($maiorVezes == 0){
                 $tamanho = 0;
             }
@@ -646,6 +651,7 @@ function CriarNovoGraficoSolicitante($conexao, $listaAreasSolicitantes, $dataIni
                 $novoGraficoHTML .= '<div id="bar_pista" class="bar" name="'.$pista['pista'].'" style="display: none; width: 0"></div>';
             }
         }
+        $novoGraficoHTML .= '<div id="bar_total" class="bar_total">'.$totalVezes.'</div>';
         $novoGraficoHTML .= '</div>';
         $n++;
     }
