@@ -299,11 +299,14 @@
                             <td>
                                 <?php if ($row['status'] === 'Pendente') { ?>
                                     <a href="javascript:void(0);" data-id="<?php echo $row['id']; ?>"><input type="button" value="✔" class="aprovar"></a>
+                                    <input type="hidden" name="solicitante" value="<?php echo $row['solicitante']; ?>">
                                     <a href="javascript:void(0);" data-id="<?php echo $row['id']; ?>"><input type="button" value="✖︎" class="cancelar"></a>
                                 <?php } elseif ($row['status'] === 'Aprovado') { ?>
                                     <a href="javascript:void(0);" data-id="<?php echo $row['id']; ?>"><input type="button" value="✖︎" class="cancelar"></a>
+                                    <input type="hidden" name="solicitante" value="<?php echo $row['solicitante']; ?>">
                                 <?php } else { ?>
                                     <a href="javascript:void(0);" data-id="<?php echo $row['id']; ?>"><input type="button" value="✔" class="aprovar"></a>
+                                    <input type="hidden" name="solicitante" value="<?php echo $row['solicitante']; ?>">
                                 <?php } ?>
                             </td>
                             </tr>
