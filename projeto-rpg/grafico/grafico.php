@@ -1,5 +1,7 @@
 <?php
 
+include 'functions.php';
+
 use PhpOffice\PhpSpreadsheet\Writer\Ods\Content;
 
     include_once('../config/config.php');
@@ -49,505 +51,6 @@ use PhpOffice\PhpSpreadsheet\Writer\Ods\Content;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function PorcentagemMinuto($minuto) { // retorna a porcentagem do minuto em relação a 60 minutos
-    $minuto = intval($minuto);
-    $porcentagem = ($minuto / 60) * 100;
-    return $porcentagem;
-}
-
-// Função para calcular os dias da semana com base em uma data
-function calcularDiasDaSemana($dataSelecionada) {
-    $data = new DateTime($dataSelecionada);
-
-    // Obtém o número do dia da semana (1 = segunda, 2 = terça, ..., 7 = domingo)
-    $diaDaSemana = $data->format('N');
-
-    // Calcula o início da semana (segunda) subtraindo o número do dia da semana
-    $inicioDaSemana = clone $data;
-    $inicioDaSemana->sub(new DateInterval('P' . ($diaDaSemana - 1) . 'D'));
-
-    // Calcula o final da semana (domingo) adicionando o restante dos dias
-    $finalDaSemana = clone $inicioDaSemana;
-    $finalDaSemana->add(new DateInterval('P6D'));
-
-    // Cria um array para armazenar as datas da semana
-    $datasDaSemana = [];
-
-    // Preenche o array com as datas da semana
-    while ($inicioDaSemana <= $finalDaSemana) {
-        $datasDaSemana[] = $inicioDaSemana->format('Y-m-d');
-        $inicioDaSemana->add(new DateInterval('P1D')); // Adiciona um dia
-    }
-
-    return $datasDaSemana;
-}
-
-
-function calcularDiasDoMes($dataSelecionada) {
-    $data = new DateTime($dataSelecionada);
-
-    // Obtém o primeiro dia do mês
-    $primeiroDiaDoMes = new DateTime($data->format('Y-m-01'));
-
-    // Obtém o último dia do mês
-    $ultimoDiaDoMes = new DateTime($data->format('Y-m-t'));
-
-    // Cria um array para armazenar as datas do mês
-    $datasDoMes = [];
-
-    // Preenche o array com as datas do mês
-    while ($primeiroDiaDoMes <= $ultimoDiaDoMes) {
-        $datasDoMes[] = $primeiroDiaDoMes->format('Y-m-d');
-        $primeiroDiaDoMes->add(new DateInterval('P1D')); // Adiciona um dia
-    }
-
-    return $datasDoMes;
-}
-
-function CriarCSSdia($conexao, $dia, $area_pista, $letra, $pistaClasse, $y){ // cria as classes com os horários agendados
-    $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = '$area_pista' AND dia='$dia' AND status='Aprovado'";
-    $result = $conexao->query($sql);
-    $horariosMarcados = array();
-    if ($result->num_rows > 0) {
-
-        while ($row = $result->fetch_assoc()) {
-            $exclsv = $row["exclsv"];
-            $horarioInicio = $row["hora_inicio"];
-            $horarioFim = $row["hora_fim"];
-            
-            $horaInicio = $horarioInicio[0] . $horarioInicio[1];
-            $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
-
-            $horaFim = $horarioFim[0] . $horarioFim[1];
-            $minutoFim = $horarioFim[3] . $horarioFim[4];
-
-            $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
-
-            $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
-        }
-        $j = 2;
-        foreach ($horariosMarcados as $tarefa) {
-            $cor = $tarefa['cor'];
-            $horaInicio = $tarefa['horaInicio'];
-            $horaFim = $tarefa['horaFim'];
-            $minutoInicio = $tarefa['minutoInicio'];
-            $minutoFim = $tarefa['minutoFim'];
-            
-            if ($horaInicio != $horaFim){
-                if($minutoInicio != '00'){
-                    $porcentagemInicioMargin = PorcentagemMinuto($minutoInicio);
-                    $porcentagemInicio = 100 - $porcentagemInicioMargin;
-                }
-                else{
-                    $porcentagemInicio = 100;
-                    $porcentagemInicioMargin = 0;
-                }
-                if($minutoFim != '00'){
-                    $porcentagemFim = PorcentagemMinuto($minutoFim);
-                }
-                else{
-                    $porcentagemFim = 0;
-                }      
-                
-                $tamanho = 0;
-                for ($i = $horaInicio + 1; $i < $horaFim; $i++) {
-                    $tamanho += 100;
-                }
-                $tamanho += $porcentagemInicio + $porcentagemFim;
-                $tamanho = ($tamanho / 100) * 78;
-                $leftTotal = 0;
-                $indexInicio = ($horaInicio - 7) * 78;
-                $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-                $leftTotal += $porcentagemInicioMargin + $indexInicio;
-            }
-            else{
-                $tamanho = 0;
-                $leftTotal = 0;
-                $minutos = $minutoFim - $minutoInicio;
-                $porcentagemMinutos = PorcentagemMinuto($minutos);
-                $tamanho = ($porcentagemMinutos / 100) * 78;
-                if ($minutoInicio != '00'){
-                    $porcentagemInicioMargin = 100 - $porcentagemMinutos;
-                    $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-                }
-                else{
-                    $porcentagemInicioMargin = 0;
-                }
-                $indexInicio = ($horaInicio - 7) * 78;
-                $leftTotal = $porcentagemInicioMargin + $indexInicio;
-            }
-
-            $classe = $letra.$j;
-            $classeTip = 'tip_'.$classe;
-            $horario = "$horaInicio - $horaFim";
-            $leftTip = $leftTotal + ($tamanho/2) - 100;
-            if ($leftTip < 0){
-                $leftTip = 0;
-            }
-            if ($leftTip > 827){
-                $leftTip = 827;
-            }
-
-            echo '<style>';
-            echo '.' . $pistaClasse . '{position: relative;}';
-            echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
-
-            echo '.'.$classeTip. '{position: absolute; justify-content: center; '.$y.': 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
-            echo ".$classe:hover + .$classeTip".'{display: flex;}';
-            echo ".$classeTip:hover {display: flex;}";
-            echo ".$classe:hover {opacity: 0.5;}";
-            echo '</style>';
-
-            $j++;
-        }
-    }
-}
-
-function CriarHTMLdia($conexao, $dia, $area_pista, $letra){ // cria as divs com as classes para cada pista
-    $sql = "SELECT hora_inicio, hora_fim, solicitante, area_solicitante, veic FROM agendamentos WHERE area_pista = '$area_pista' AND dia='$dia' AND status='Aprovado'";
-    $result = $conexao->query($sql);
-    $j = 2;
-    while ($row = $result->fetch_assoc()) {
-        $horarioInicio = $row["hora_inicio"];
-        $horarioFim = $row["hora_fim"];
-        $horario = "$horarioInicio - $horarioFim";
-        $solicitante = $row["solicitante"];
-        $areaSolicitante = $row["area_solicitante"];
-        $veic = $row["veic"];
-        $classe = "$letra".$j;
-        echo '<div class="'.$classe.'"></div>';
-        echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
-            '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
-            '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
-        '</div>';
-        $j++;
-    }
-}
-
-function CriarHTMLsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClasse){ // cria as divs com as classes para cada pista
-    for ($i = 0; $i < 8; $i++){
-        $sql = "SELECT hora_inicio, hora_fim, solicitante, area_solicitante, veic FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND status='Aprovado'";
-        $result = $conexao->query($sql);
-        $j = 2;
-        echo '<div class="'.$listaPistaClasse[$i].'" style="width: 140px">';
-        while ($row = $result->fetch_assoc()) {
-            $horarioInicio = $row["hora_inicio"];
-            $horarioFim = $row["hora_fim"];
-            $horario = "$horarioInicio - $horarioFim";
-            $solicitante = $row["solicitante"];
-            $areaSolicitante = $row["area_solicitante"];
-            $veic = $row["veic"];
-            $classe = "$listaLetras[$i]".$j.'_semana';
-            echo '<div class="'.$classe.'"></div>';
-            echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
-                '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
-                '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
-            '</div>';
-            $j++;
-        }
-        echo '</div>';
-    
-    }
-}
-
-function CriarCSSsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClasse, $listaY){ // cria as classes com os horários agendados
-    for ($i = 0; $i < 8; $i++){
-        $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND status='Aprovado'";
-        $result = $conexao->query($sql);
-        $horariosMarcados = array();
-        if ($result->num_rows > 0) {
-
-            while ($row = $result->fetch_assoc()) {
-                $exclsv = $row["exclsv"];
-                $horarioInicio = $row["hora_inicio"];
-                $horarioFim = $row["hora_fim"];
-                
-                $horaInicio = $horarioInicio[0] . $horarioInicio[1];
-                $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
-
-                $horaFim = $horarioFim[0] . $horarioFim[1];
-                $minutoFim = $horarioFim[3] . $horarioFim[4];
-
-                $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
-
-                $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
-            }
-            $j = 2;
-            foreach ($horariosMarcados as $tarefa) {
-                $cor = $tarefa['cor'];
-                $horaInicio = $tarefa['horaInicio'];
-                $horaFim = $tarefa['horaFim'];
-                $minutoInicio = $tarefa['minutoInicio'];
-                $minutoFim = $tarefa['minutoFim'];
-                
-                if ($horaInicio != $horaFim){
-                    if($minutoInicio != '00'){
-                        $porcentagemInicioMargin = PorcentagemMinuto($minutoInicio);
-                        $porcentagemInicio = 100 - $porcentagemInicioMargin;
-                    }
-                    else{
-                        $porcentagemInicio = 100;
-                        $porcentagemInicioMargin = 0;
-                    }
-                    if($minutoFim != '00'){
-                        $porcentagemFim = PorcentagemMinuto($minutoFim);
-                    }
-                    else{
-                        $porcentagemFim = 0;
-                    }      
-                    
-                    $tamanho = 0;
-                    for ($k = $horaInicio + 1; $k < $horaFim; $k++) {
-                        $tamanho += 100;
-                    }
-                    $tamanho += $porcentagemInicio + $porcentagemFim;
-                    $tamanho = ($tamanho / 100) * 78;
-                    $leftTotal = 0;
-                    $indexInicio = ($horaInicio - 7) * 78;
-                    $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-                    $leftTotal += $porcentagemInicioMargin + $indexInicio;
-                }
-                else{
-                    $tamanho = 0;
-                    $leftTotal = 0;
-                    $minutos = $minutoFim - $minutoInicio;
-                    $porcentagemMinutos = PorcentagemMinuto($minutos);
-                    $tamanho = ($porcentagemMinutos / 100) * 78;
-                    if ($minutoInicio != '00'){
-                        $porcentagemInicioMargin = 100 - $porcentagemMinutos;
-                        $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-                    }
-                    else{
-                        $porcentagemInicioMargin = 0;
-                    }
-                    $indexInicio = ($horaInicio - 7) * 78;
-                    $leftTotal = $porcentagemInicioMargin + $indexInicio;
-                }
-
-                $tamanho = ($tamanho / 936) * 140;
-                
-                $leftTotal = ($leftTotal / 936) * 140;
-                
-
-                $classe = $listaLetras[$i].$j.'_semana';
-                $classeTip = 'tip_'.$classe;
-                $horario = "$horaInicio - $horaFim";
-                $leftTip = $leftTotal + ($tamanho/2) - 100;
-                if ($leftTip < 0){
-                    $leftTip = 0;
-                }
-                if ($leftTip > 827){
-                    $leftTip = 827;
-                }
-
-                echo '<style>';
-                echo '.' . $listaPistaClasse[$i] . '{position: relative;}';
-                echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-radius: 40%; border-top: 10px solid white; border-bottom: 10px solid white;}';
-
-                echo '.'.$classeTip. '{position: absolute; justify-content: center; '.$listaY[$i].': 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
-                echo ".$classe:hover + .$classeTip".'{display: flex;}';
-                echo ".$classeTip:hover {display: flex;}";
-                echo ".$classe:hover {opacity: 0.5;}";
-                echo '</style>';
-
-                $j++;
-            }
-        }
-    }
-}
-
-function CriarHTMLmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClasse){ // cria as divs com as classes para cada pista
-    for ($i = 0; $i < 8; $i++){
-        $sql = "SELECT hora_inicio, hora_fim, solicitante, area_solicitante, veic FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND status='Aprovado'";
-        $result = $conexao->query($sql);
-        $j = 2;
-        echo '<div class="'.$listaPistaClasse[$i].'" style="width: 140px">';
-        while ($row = $result->fetch_assoc()) {
-            $horarioInicio = $row["hora_inicio"];
-            $horarioFim = $row["hora_fim"];
-            $horario = "$horarioInicio - $horarioFim";
-            $solicitante = $row["solicitante"];
-            $areaSolicitante = $row["area_solicitante"];
-            $veic = $row["veic"];
-            $classe = "$listaLetras[$i]".$j.'_semana';
-            echo '<div class="'.$classe.'"></div>';
-            echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
-                '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
-                '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
-            '</div>';
-            $j++;
-        }
-        echo '</div>';
-    
-    }
-}
-
-function CriarCSSmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClasse, $listaY){ // cria as classes com os horários agendados
-    for ($i = 0; $i < 8; $i++){
-        $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND status='Aprovado'";
-        $result = $conexao->query($sql);
-        $horariosMarcados = array();
-        if ($result->num_rows > 0) {
-
-            while ($row = $result->fetch_assoc()) {
-                $exclsv = $row["exclsv"];
-                $horarioInicio = $row["hora_inicio"];
-                $horarioFim = $row["hora_fim"];
-                
-                $horaInicio = $horarioInicio[0] . $horarioInicio[1];
-                $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
-
-                $horaFim = $horarioFim[0] . $horarioFim[1];
-                $minutoFim = $horarioFim[3] . $horarioFim[4];
-
-                $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
-
-                $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
-            }
-            $j = 2;
-            foreach ($horariosMarcados as $tarefa) {
-                $cor = $tarefa['cor'];
-                $horaInicio = $tarefa['horaInicio'];
-                $horaFim = $tarefa['horaFim'];
-                $minutoInicio = $tarefa['minutoInicio'];
-                $minutoFim = $tarefa['minutoFim'];
-                
-                if ($horaInicio != $horaFim){
-                    if($minutoInicio != '00'){
-                        $porcentagemInicioMargin = PorcentagemMinuto($minutoInicio);
-                        $porcentagemInicio = 100 - $porcentagemInicioMargin;
-                    }
-                    else{
-                        $porcentagemInicio = 100;
-                        $porcentagemInicioMargin = 0;
-                    }
-                    if($minutoFim != '00'){
-                        $porcentagemFim = PorcentagemMinuto($minutoFim);
-                    }
-                    else{
-                        $porcentagemFim = 0;
-                    }      
-                    
-                    $tamanho = 0;
-                    for ($k = $horaInicio + 1; $k < $horaFim; $k++) {
-                        $tamanho += 100;
-                    }
-                    $tamanho += $porcentagemInicio + $porcentagemFim;
-                    $tamanho = ($tamanho / 100) * 78;
-                    $leftTotal = 0;
-                    $indexInicio = ($horaInicio - 7) * 78;
-                    $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-                    $leftTotal += $porcentagemInicioMargin + $indexInicio;
-                }
-                else{
-                    $tamanho = 0;
-                    $leftTotal = 0;
-                    $minutos = $minutoFim - $minutoInicio;
-                    $porcentagemMinutos = PorcentagemMinuto($minutos);
-                    $tamanho = ($porcentagemMinutos / 100) * 78;
-                    if ($minutoInicio != '00'){
-                        $porcentagemInicioMargin = 100 - $porcentagemMinutos;
-                        $porcentagemInicioMargin = ($porcentagemInicioMargin / 100) * 78;
-                    }
-                    else{
-                        $porcentagemInicioMargin = 0;
-                    }
-                    $indexInicio = ($horaInicio - 7) * 78;
-                    $leftTotal = $porcentagemInicioMargin + $indexInicio;
-                }
-
-                $tamanho = ($tamanho / 936) * 140;
-                
-                $leftTotal = ($leftTotal / 936) * 140;
-                
-
-                $classe = $listaLetras[$i].$j.'_semana';
-                $classeTip = 'tip_'.$classe;
-                $horario = "$horaInicio - $horaFim";
-                $leftTip = $leftTotal + ($tamanho/2) - 100;
-                if ($leftTip < 0){
-                    $leftTip = 0;
-                }
-                if ($leftTip > 827){
-                    $leftTip = 827;
-                }
-
-                echo '<style>';
-                echo '.' . $listaPistaClasse[$i] . '{position: relative;}';
-                echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-radius: 40%; border-top: 10px solid white; border-bottom: 10px solid white;}';
-
-                echo '.'.$classeTip. '{position: absolute; justify-content: center; '.$listaY[$i].': 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
-                echo ".$classe:hover + .$classeTip".'{display: flex;}';
-                echo ".$classeTip:hover {display: flex;}";
-                echo ".$classe:hover {opacity: 0.5;}";
-                echo '</style>';
-
-                $j++;
-            }
-        }
-    }
-}
-
-function CriarListaMeses($conexao, $dia, $listaPistas, $listaPistasClasse){ // cria as divs com as classes para cada pista
-    $listaMeses = [$Janeiro = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Fevereiro = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Março = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Abril = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Maio = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Junho = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0], $Julho = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Agosto = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Setembro = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Outubro = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Novembro = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Dezembro = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $totalAno = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0]];
-    $primeirosDias = obterPrimeirosDiasDosMesesDoAno($dia);
-    for ($i = 0; $i < 12; $i++){
-        $total = 0;
-        $anoMes = substr($primeirosDias[$i], 0, 7); // Extrai os primeiros 7 caracteres ('Y-m') da data
-        for ($j = 0; $j < 8; $j++){
-            $sql = "SELECT area_pista, dia FROM agendamentos WHERE area_pista = '$listaPistas[$j]' AND SUBSTRING(dia, 1, 7) = '$anoMes' AND status='Aprovado'";
-            $result = $conexao->query($sql);
-            while ($row = $result->fetch_assoc()) {
-                $listaMeses[$i][$listaPistasClasse[$j]]++;
-                $total++;
-            }
-            $listaMeses[12][$listaPistasClasse[$j]] += $listaMeses[$i][$listaPistasClasse[$j]]; 
-        }
-        $listaMeses[$i]['total'] = $total;
-        $listaMeses[12]['total'] += $total;
-    }
-    return $listaMeses;
-}
-
-function obterPrimeirosDiasDosMesesDoAno($data) {
-    $dataObj = new DateTime($data);
-    $ano = $dataObj->format('Y');
-
-    $primeirosDiasDosMeses = [];
-
-    for ($mes = 1; $mes <= 12; $mes++) {
-        $primeiroDiaDoMes = new DateTime("$ano-$mes-01");
-        $primeirosDiasDosMeses[] = $primeiroDiaDoMes->format('Y-m-d');
-    }
-
-    return $primeirosDiasDosMeses;
-}
-
-function obterNumeroDoMes($data) {
-    // Converte a string de data para um objeto DateTime
-    $dataObj = new DateTime($data);
-
-    // Obtém o número do mês (1 para janeiro, 2 para fevereiro, etc.)
-    $numeroDoMes = (int)$dataObj->format('n');
-
-    return $numeroDoMes;
-}
-
-function calcularCW($dataSelecionada) {
-    $data = new DateTime($dataSelecionada);
-
-    // Obtém o número da semana (CW) da data
-    $numeroDaSemana = $data->format('W');
-
-
-    return $numeroDaSemana;
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 $listaPistas = array('VDA', 'NVH', 'Obstáculos', 'Rampa 12% e 20%', 'Rampa 40%', 'Rampa 60%', 'Asfalto', 'Pista Completa');
 $listaPistasClasse = array('vda', 'nvh', 'obs', 'r_12_20', 'r_40', 'r_60', 'asf', 'pc');
 $listaPistasAno = array('VDA', 'NVH', 'Obstáculos', 'Rampa 12% e 20%', 'Rampa 40%', 'Rampa 60%', 'Asfalto', 'Pista Completa', 'Total');
@@ -559,6 +62,14 @@ $listaAno = array('janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'j
 $semana = calcularDiasDaSemana($dia);
 $mes = calcularDiasDoMes($dia);
 $primeirosDiasDosMeses = obterPrimeirosDiasDosMesesDoAno($dia);
+$listaAreasSolicitantes = criarListaAreas($conexao);
+$listaAreasPista = array('VDA', 'NVH', 'Obstáculos', 'Rampa 12% e 20%', 'Rampa 40%', 'Rampa 60%', 'Asfalto', 'Pista Completa');
+
+$ano = date('Y', strtotime($dia));
+$dataInicial = date("$ano-01-01");
+$dataInicialD = strtotime($dataInicial);
+$dataFinal = date("$ano-12-31");
+$dataFinalD = strtotime($dataFinal);
 
 // preenche as classes com os horários agendados
 for ($i = 0; $i < 8; $i++){
@@ -574,9 +85,33 @@ foreach ($mes as $diaMes){
     CriarCSSmes($conexao, $diaMes, $listaPistas, $listaLetras, $listaPistasClasse, $listaY);
 }
 
+
+
 $WidthGraficoMes = count($mes) * 140 + 78 + 78;
 
 $listaMeses = CriarListaMeses($conexao, $dia, $listaPistas, $listaPistasClasse);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
+    // Aqui você processa os dados do formulário e gera as informações para o novo gráfico
+    // Substitua esta parte pelo seu código real
+
+    $dataInicial = $_POST['dataInicial'];
+    $dataFinal = $_POST['dataFinal'];
+
+    // ... seu código de processamento ...
+
+    // Supondo que você tenha um array $novosDados que contém as informações do novo gráfico
+    // Você precisará adaptar esta parte conforme a estrutura real dos seus dados
+
+    // Chame a função para gerar as divs
+    $novoGraficoHTML = CriarNovoGraficoSolicitante($conexao, $listaAreasSolicitantes, $dataInicial, $dataFinal, $listaPistas);
+    
+    // Saída dos dados HTML gerados
+    echo $novoGraficoHTML;
+
+    // Encerre a execução para evitar que o restante da página seja exibido desnecessariamente
+    exit();
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -605,7 +140,7 @@ $listaMeses = CriarListaMeses($conexao, $dia, $listaPistas, $listaPistasClasse);
             <div style="display: flex; flex-flow: row; justify-content: center; align-items: center; width: 100%;">
                 <div class="arrow left_arrow" style="left: 10px;">&lt;</div>
                 <div class='graf_container'>
-                    <div id="graf_dia" class="div__grafico ativo">
+                    <div id="graf_dia" class="div__grafico div__width ativo">
                         <div class="tit">
                         <?php
                             $diastr = strtotime($dia);
@@ -673,7 +208,7 @@ $listaMeses = CriarListaMeses($conexao, $dia, $listaPistas, $listaPistasClasse);
                             <div class="k9 quad_graf"></div>
                         </div>
                     </div>
-                    <div id="graf_semana" class="div__grafico">
+                    <div id="graf_semana" class="div__grafico div__width">
                         <div class="tit">
                             <?php
                             $diastr = strtotime($dia);
@@ -753,7 +288,7 @@ $listaMeses = CriarListaMeses($conexao, $dia, $listaPistas, $listaPistasClasse);
                             <div class="k9 quad_graf"></div>
                         </div>
                     </div>
-                    <div id="graf_mes" class="div__grafico grafico_mes">
+                    <div id="graf_mes" class="div__grafico div__width grafico_mes">
                         <div class="tit">
                             <?php
                             $diastr = strtotime($dia);
@@ -806,7 +341,7 @@ $listaMeses = CriarListaMeses($conexao, $dia, $listaPistas, $listaPistasClasse);
                             <div class="k9 quad_graf"></div>
                         </div>
                     </div>
-                    <div id="graf_ano" class="div__grafico grafico_mes">
+                    <div id="graf_ano" class="div__grafico div__width">
                         <div class="tit">
                             <?php
                             $diastr = strtotime($dia);
@@ -924,6 +459,158 @@ $listaMeses = CriarListaMeses($conexao, $dia, $listaPistas, $listaPistasClasse);
                             </div>
                         </div>
                     </div>
+                    <div id="graf_area" class="div__grafico div__width">
+                        <div class="tit">
+                            <?php
+                            $diastr = strtotime($dia);
+                            echo '<div id="chart-title" class="all_tit"><h2 style="color: white;">Agendamentos por Área Solicitante ('.$dataInicial.' -> '.$dataFinal.')</h2></div>'
+                            ?>
+                        </div>
+                        <div class="out_grafico" style="height: fit-content;">
+                            <?php
+                            echo '<div class="grafico grafico_ano" style="position: relative; width: 70rem;">';
+                            ?>
+                                <div id="filter-form">
+                                    <form id="checkbox-form" class="form_filtro">
+                                        <div class="filtro_data">
+                                            <div>
+                                            <label nome='lblInicio' for="dataInicial">Data Inicial:</label>
+                                            <div class="input"><input type="date" name="dataInicial" id="dataInicial" required></div>
+                                            </div>
+
+                                            <div>
+                                            <label nome='lblFinal' for="dataFinal">Data Final:</label>
+                                            <div class="input"><input type="date" name="dataFinal" id="dataFinal" required></div>
+                                            </div>
+
+                                            <div style="display:flex; flex-direction:column; justify-content:space-around; align-items:start; gap:5px">
+                                            <label>
+                                                <input type="radio" name="opcaoFiltro" value="Quantidade" checked>
+                                                Quantidade
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="opcaoFiltro" value="Horas">
+                                                Horas
+                                            </label>
+                                            </div>
+                                             
+
+                                            <div class="submit" style="width: 100%"><button type="button" onclick="filtrarAgendamentos()">Filtrar</button></div>
+                                        </div>                                 
+                                        <div class="filtro_solicitante">
+                                        <?php foreach ($listaAreasSolicitantes as $solicitante){
+                                            echo'<div style="display:flex; flex-direction: row"; width:auto;>';
+                                            echo '<label>
+                                                <input type="checkbox" class="filter-checkbox" checked>
+                                                '.$solicitante.'
+                                            </label>';
+                                            echo'</div>';
+                                        }
+                                        echo'</div>';
+                                        echo'<div class="filtro_pista">';
+                                        foreach ($listaPistas as $pista){
+                                            echo'<div>';
+                                            echo '<label>
+                                                <input type="checkbox" class="filter-pista" data-pista="'.$pista.'" checked>
+                                                '.$pista.'
+                                            </label>';
+                                            echo'</div>';
+                                        }
+                                        ?>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="graf_solicit">
+                                    <div id="bar_names" class="bar_names">
+                                    <?php foreach ($listaAreasSolicitantes as $solicitante){
+                                        echo '<div id="bar_name" class="bar_name">'.$solicitante.'</div>';
+                                        }
+                                    ?>
+                                    </div>
+                                    <div class="bar-chart" id="bar-chart">
+                                        <?php
+                                        CriarGraficoSolicitante($conexao, $listaAreasSolicitantes, $dataInicial, $dataFinal, $listaPistas);
+                                        ?>
+                                    </div>
+                                    <div id="bar_totais" class="bar_totais">
+                                        <?php
+                                        foreach ($listaAreasSolicitantes as $area){
+                                            $totalVezes = 0;
+                                            $totalTempo = 0;
+                                            $valores = valorAreas($conexao, $listaAreasSolicitantes, $dataInicial, $dataFinal, $listaPistas);
+                                            $listaValorAreas = $valores[0];
+                                            foreach ($listaValorAreas as $solicitante){
+                                                foreach ($solicitante as $pista){
+                                                    if ($pista['solicitante'] == $area){
+                                                        $totalVezes += $pista['vezes'];
+                                                        $totalTempo += $pista['tempo'];
+                                                    }
+                                                }
+                                            }
+                                            echo '<div id="bar_total" class="bar_total">'.$totalVezes.'</div>';
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                                <div class="legenda_pistas">
+                                    <?php
+                                    $n = 0;
+                                    foreach($listaPistasClasse as $pista){
+                                        echo '<div class="legenda_div">';
+                                            echo '<div class="legenda_cor" id="legenda_cor_'.$pista.'"></div>';
+                                            echo '<div>';
+                                            echo '<p>'.$listaPistas[$n].'</p>';
+                                            echo '</div>';
+                                        echo '</div>';
+                                        switch($pista){
+                                            case 'vda':
+                                                echo '<style>';
+                                                echo '#legenda_cor_'.$pista.' {background-color: #6393BA;}';
+                                                echo '</style>';
+                                                break;
+                                            case 'nvh':
+                                                echo '<style>';
+                                                echo '#legenda_cor_'.$pista.' {background-color: #46ABFB;}';
+                                                echo '</style>';
+                                                break;
+                                            case 'obs':
+                                                echo '<style>';
+                                                echo '#legenda_cor_'.$pista.' {background-color: #5F6E7A;}';
+                                                echo '</style>';
+                                                break;
+                                            case 'r_12_20':
+                                                echo '<style>';
+                                                echo '#legenda_cor_'.$pista.' {background-color: #A58C65;}';
+                                                echo '</style>';
+                                                break;
+                                            case 'r_40':
+                                                echo '<style>';
+                                                echo '#legenda_cor_'.$pista.' {background-color: #FAB346;}';
+                                                echo '</style>';
+                                                break;
+                                            case 'r_60':
+                                                echo '<style>';
+                                                echo '#legenda_cor_'.$pista.' {background-color: #A1BFFB;}';
+                                                echo '</style>';
+                                                break;
+                                            case 'asf':
+                                                echo '<style>';
+                                                echo '#legenda_cor_'.$pista.' {background-color: #FADEA0;}';
+                                                echo '</style>';
+                                                break;
+                                            case 'pc':
+                                                echo '<style>';
+                                                echo '#legenda_cor_'.$pista.' {background-color: #636BBA;}';
+                                                echo '</style>';
+                                                break;
+                                        }
+                                        $n++;
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="arrow right_arrow" style="right: 10px;">&gt;</div>
             </div>
@@ -988,6 +675,84 @@ $listaMeses = CriarListaMeses($conexao, $dia, $listaPistas, $listaPistasClasse);
                 
             }
         });
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkboxes = document.querySelectorAll('.filter-checkbox');
+            const checkboxesPista = document.querySelectorAll('.filter-pista');
+
+            function updateChart() {
+                checkboxes.forEach((checkbox, index) => {
+                    const bar = document.querySelector(`#bar-chart #bar:nth-child(${index + 1})`);
+                    bar.style.display = checkbox.checked ? 'flex' : 'none';
+
+                    const nomes = document.querySelector(`#bar_names #bar_name:nth-child(${index + 1})`);
+                    nomes.style.display = checkbox.checked ? 'flex' : 'none';
+
+                    const totais = document.querySelector(`#bar_totais #bar_total:nth-child(${index + 1})`);
+                    totais.style.display = checkbox.checked ? 'flex' : 'none';
+                });
+            }
+
+            function updateChartPista() {
+                checkboxesPista.forEach((checkboxPista) => {
+                    const pista = checkboxPista.getAttribute('data-pista');
+                    const bars = document.querySelectorAll(`#bar-chart #bar_pista[name="${pista}"]`);
+
+                    bars.forEach((bar) => {
+                        bar.style.display = checkboxPista.checked ? 'flex' : 'none';
+                    });
+                });
+            }
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', updateChart);
+            });
+
+            checkboxesPista.forEach(checkbox => {
+                checkbox.addEventListener('change', updateChartPista);
+            });
+        });
+
+        function filtrarAgendamentos() {
+            // Obtém os valores dos campos do formulário
+            var dataInicial = document.getElementById('dataInicial').value;
+            var dataFinal = document.getElementById('dataFinal').value;
+
+            if(dataInicial == '' || dataFinal == ''){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Preencha os campos de data!',
+                })
+                return;
+            }
+            else{
+
+                // Faz a requisição AJAX para chamar a função PHP
+                $.ajax({
+                    url: '<?php echo $_SERVER['PHP_SELF']; ?>',
+                    type: 'POST',
+                    data: { dataInicial: dataInicial, dataFinal: dataFinal, filtroData: true },
+                    success: function (novoGraficoHTML) {
+                        // Encontrar o índice do primeiro <div id="bar"
+                        var startIndex = novoGraficoHTML.indexOf('<div id="bar"');
+
+                        // Extrair a parte relevante da string
+                        var parteCorreta = novoGraficoHTML.substring(startIndex);
+
+                        // Substitui o conteúdo do contêiner do gráfico com as novas divs geradas pelo PHP
+                        document.getElementById('bar-chart').innerHTML = parteCorreta;
+
+                        const chartTitle = document.getElementById('chart-title');
+                        chartTitle.innerHTML = `<h2 style="color: white;">Agendamentos por Área Solicitante (${dataInicial} -> ${dataFinal})</h2>`;
+                    },
+                    error: function (error) {
+                        console.error('Erro na requisição AJAX:', error);
+                    }
+                });
+            }
+        }
 
 
     </script>
