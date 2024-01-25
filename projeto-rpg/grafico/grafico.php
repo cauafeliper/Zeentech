@@ -509,6 +509,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                                             </div>  
                                         </div>
                                         <div class="filtro_solicitante">
+                                            <div style="font-size: 20px">Áreas Solicitantes</div>
                                         <?php foreach ($listaAreasSolicitantes as $solicitante){
                                             echo'<div style="display:flex; flex-direction: row"; width:auto;>';
                                             echo '<label>
@@ -519,6 +520,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                                         }
                                         echo'</div>';
                                         echo'<div class="filtro_pista">';
+                                            echo'<div style="font-size: 20px">Áreas da Pista</div>';
                                         foreach ($listaPistas as $pista){
                                             echo'<div>';
                                             echo '<label>
