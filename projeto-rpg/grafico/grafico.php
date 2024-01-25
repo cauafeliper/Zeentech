@@ -67,9 +67,7 @@ $listaAreasPista = array('VDA', 'NVH', 'Obstáculos', 'Rampa 12% e 20%', 'Rampa 
 
 $ano = date('Y', strtotime($dia));
 $dataInicial = date("$ano-01-01");
-$dataInicialD = strtotime($dataInicial);
 $dataFinal = date("$ano-12-31");
-$dataFinalD = strtotime($dataFinal);
 
 // preenche as classes com os horários agendados
 for ($i = 0; $i < 8; $i++){
@@ -295,7 +293,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                         </div>
                     </div>
 
-                    <div id="graf_mes" class="div__grafico div__width grafico_mes">
+                    <div id="graf_mes" class="div__grafico grafico_mes">
 
                         <div class="tit">
                             <?php
@@ -794,23 +792,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
 
                         const chartTitle = document.getElementById('chart-title');
 
-                        // Criar uma instância de Date
-                        var dataObj = new Date(dataInicial);
-                        // Obter o dia, mês e ano
-                        var dia = dataObj.getDate();
-                        var mes = dataObj.getMonth() + 1; // Meses são indexados de 0 a 11
-                        var ano = dataObj.getFullYear();
-                        // Formatar a data como "dd//mm//yyyy"
-                        var dataFormatadaInicial = dia + "/" + mes + "/" + ano;
 
-                        // Criar uma instância de Date
-                        var dataObj = new Date(dataFinal);
-                        // Obter o dia, mês e ano
-                        var dia = dataObj.getDate();
-                        var mes = dataObj.getMonth() + 1; // Meses são indexados de 0 a 11
-                        var ano = dataObj.getFullYear();
-                        // Formatar a data como "dd//mm//yyyy"
-                        var dataFormatadaFinal = dia + "/" + mes + "/" + ano;
+                       var parts = dataInicial.split('-');
+
+                        // Formatar a data como 'dd/mm/yyyy'
+                        var dataFormatadaInicial = parts[2] + '/' + parts[1] + '/' + parts[0];
+
+                        var parts = dataFinal.split('-');
+
+                        // Formatar a data como 'dd/mm/yyyy'
+                        var dataFormatadaFinal = parts[2] + '/' + parts[1] + '/' + parts[0];
 
                         chartTitle.innerHTML = `<h2 style="color: white;">Agendamentos por Área Solicitante (${dataFormatadaInicial} -> ${dataFormatadaFinal})</h2>`;
                     },

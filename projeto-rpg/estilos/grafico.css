@@ -944,7 +944,7 @@ footer img {
 
 @media (min-width: 1441px) {
   
-  .div_width {
+  .div__width {
     width: auto;
   }
 
@@ -962,6 +962,7 @@ footer img {
     width: max-content;
   }
 }
+
 
 @media (max-width: 1234px) {
   .filtro__dia {
