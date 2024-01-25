@@ -91,20 +91,14 @@ $listaMeses = CriarListaMeses($conexao, $dia, $listaPistas, $listaPistasClasse);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
     // Aqui você processa os dados do formulário e gera as informações para o novo gráfico
-    // Substitua esta parte pelo seu código real
 
     $dataInicial = $_POST['dataInicial'];
     $dataFinal = $_POST['dataFinal'];
 
-    // ... seu código de processamento ...
-
-    // Supondo que você tenha um array $novosDados que contém as informações do novo gráfico
-    // Você precisará adaptar esta parte conforme a estrutura real dos seus dados
-
     // Chame a função para gerar as divs
     $novoGraficoHTML = CriarNovoGraficoSolicitante($conexao, $listaAreasSolicitantes, $dataInicial, $dataFinal, $listaPistas);
     $novoGraficoHTMLHoras = CriarNovoGraficoSolicitanteHoras($conexao, $listaAreasSolicitantes, $dataInicial, $dataFinal, $listaPistas);
-    
+
     // Saída dos dados HTML gerados
     $graficosNovos = $novoGraficoHTML.'///divisao///'.$novoGraficoHTMLHoras;
     echo $graficosNovos;
@@ -138,8 +132,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                 <div class="submit"><input type="submit" value="Filtrar"></div>
             </form>
             <div style="display: flex; flex-flow: row; justify-content: center; align-items: center; width: 100%;">
-                <div class="arrow left_arrow" style="left: 10px;">&lt;</div>
+                
                 <div class='graf_container'>
+                    <div class="circle circle-left">
+                        <div class="arrow left_arrow" style="left: 10px;"></div>
+                    </div>
 
                     <div id="graf_dia" class="div__grafico div__width ativo">
 
@@ -151,17 +148,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                         </div>
                         <div class="out_grafico">
                             <div class="grafico" style="position: relative">
-                                <hr style="width: 1px; position: absolute;left: 170px;height: 374px;z-index: 1;top: 10%;">
-                                <hr style="width: 1px; position: absolute;left: 248px;height: 374px;z-index: 1;top: 10%;">
-                                <hr style="width: 1px; position: absolute;left: 326px;height: 374px;z-index: 1;top: 10%;">
-                                <hr style="width: 1px; position: absolute;left: 404px;height: 374px;z-index: 1;top: 10%;">
-                                <hr style="width: 1px; position: absolute;left: 482px;height: 374px;z-index: 1;top: 10%;">
-                                <hr style="width: 1px; position: absolute;left: 560px;height: 374px;z-index: 1;top: 10%;">
-                                <hr style="width: 1px; position: absolute;left: 638px;height: 374px;z-index: 1;top: 10%;">
-                                <hr style="width: 1px; position: absolute;left: 716px;height: 374px;z-index: 1;top: 10%;">
-                                <hr style="width: 1px; position: absolute;left: 794px;height: 374px;z-index: 1;top: 10%;">
-                                <hr style="width: 1px; position: absolute;left: 872px;height: 374px;z-index: 1;top: 10%;">
-                                <hr style="width: 1px; position: absolute;left: 950px;height: 374px;z-index: 1;top: 10%;">
+                                <hr style="width: 1px; position: absolute;left: 170px;height: 374px;z-index: 1;top: 11%;">
+                                <hr style="width: 1px; position: absolute;left: 248px;height: 374px;z-index: 1;top: 11%;">
+                                <hr style="width: 1px; position: absolute;left: 326px;height: 374px;z-index: 1;top: 11%;">
+                                <hr style="width: 1px; position: absolute;left: 404px;height: 374px;z-index: 1;top: 11%;">
+                                <hr style="width: 1px; position: absolute;left: 482px;height: 374px;z-index: 1;top: 11%;">
+                                <hr style="width: 1px; position: absolute;left: 560px;height: 374px;z-index: 1;top: 11%;">
+                                <hr style="width: 1px; position: absolute;left: 638px;height: 374px;z-index: 1;top: 11%;">
+                                <hr style="width: 1px; position: absolute;left: 716px;height: 374px;z-index: 1;top: 11%;">
+                                <hr style="width: 1px; position: absolute;left: 794px;height: 374px;z-index: 1;top: 11%;">
+                                <hr style="width: 1px; position: absolute;left: 872px;height: 374px;z-index: 1;top: 11%;">
+                                <hr style="width: 1px; position: absolute;left: 950px;height: 374px;z-index: 1;top: 11%;">
                                 <div class="scl">
                                     <div class="quad_graf" style="border-bottom: none"></div>
                                     <div class="quad_graf" style="border: none"><div class="b2" style="z-index: 2;">07:00</div></div>                            
@@ -175,7 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                                     <div class="quad_graf" style="border: none"><div class="b10" style="z-index: 2;">15:00</div></div>
                                     <div class="quad_graf" style="border: none"><div class="b11" style="z-index: 2;">16:00</div></div>
                                     <div class="quad_graf" style="border: none"><div class="b12" style="z-index: 2;">17:00</div></div>
-                                    <div class="quad_graf"><div class="b13" style="z-index: 2;">18:00</div></div>
+                                    <div class="quad_graf" style="border: none"><div class="b13" style="z-index: 2;">18:00</div></div>
                                     <div class="quad_graf" style="border: none"><div class="b14" style="z-index: 2;">19:00</div></div>
                                 </div>
                                 <div class="grafico_preenchimentos">
@@ -361,7 +358,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                             echo '<div class="grafico grafico_ano" style="position: relative;">';
                             ?>
                                 <div class="dupla_meses">
-                                    <div id="ano" class="graf_barras" style="width: 600px;">
+                                    <div id="ano" class="graf_barras" style="width: 800px; height:400px">
                                         <div class="barras_titulo"><h3>
                                             Ano Completo
                                         </h3></div>
@@ -402,7 +399,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                                                 for ($i = 0; $i < 8; $i++){
                                                     echo '<div class="legenda barra_legenda_tudo_'.$listaPistasClasse[$i].'"> '.$listaPistasAno[$i].' </div>';
                                                     echo '<style>';
-                                                    echo '.barra_legenda_tudo_'.$listaPistasClasse[$i].' {color: black; transform: rotate(45deg); width: 80px; align-items: end; height: 100%; align-items:  start;  display: flex; justify-content: space-between; position: absolute; left: '.(-20 + ($i * 75)).'px; bottom: -20px;}';
+                                                    echo '.barra_legenda_tudo_'.$listaPistasClasse[$i].' {color: black; transform: rotate(45deg); width: 80px; align-items: end; height: 100%; align-items:  start;  display: flex; justify-content: space-between; position: absolute; left: '.(-30 + ($i * 103)).'px; bottom: -20px;}';
                                                     echo '</style>';
                                                 }
                                             ?>
@@ -423,7 +420,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                                     echo '<div id="'.$i.'_meses" class="dupla_meses">';
                                         for ($j = 0; $j < 2; $j++){
                                             echo '<div id="'.ucfirst($listaAno[$z]).'" class="graf_barras">
-                                                <div class="barras_titulo"><form action="'.$_SERVER['PHP_SELF'].'" method="POST" class="quad_graf_semana"><div class="quad_graf_semana" style="border: none"><div class="title_ano" style="z-index: 2;"><input type="submit" value="'.ucfirst($listaAno[$z]).'"><input style="background-color: unset; color:#001e50; text-align: center; cursor: unset; padding-left: 10%;" type="hidden" readonly name="dia" id="dia" value="'.date('Y-m-d', strtotime($primeirosDiasDosMeses[$z])).'"></div></div></form></div>
+                                                <div class="barras_titulo"><form action="'.$_SERVER['PHP_SELF'].'" method="POST" class="quad_graf_ano"><div class="quad_graf_ano" style="border: none"><div class="title_ano" style="z-index: 2;"><input type="submit" value="'.ucfirst($listaAno[$z]).'"><input style="background-color: unset; color:#001e50; text-align: center; cursor: unset; padding-left: 10%;" type="hidden" readonly name="dia" id="dia" value="'.date('Y-m-d', strtotime($primeirosDiasDosMeses[$z])).'"></div></div></form></div>
                                                 <div style="justify-content: center; display: flex"><p>Total: '.$listaMeses[$z]['total'].'</p></div>
                                                 <div class="barras">';
                                                     for ($l = 0; $l < 8; $l++){
@@ -485,51 +482,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                                 <div id="filter-form">
                                     <form id="checkbox-form" class="form_filtro quad_filtro">
                                         <div class="filtro_data">
-                                            <div>
-                                            <label nome='lblInicio' for="dataInicial">Data Inicial:</label>
-                                            <div class="input"><input type="date" name="dataInicial" id="dataInicial" required></div>
+                                            <div style="width:100%">
+                                            <label style="font-size: 20px;" nome='lblInicio' for="dataInicial">Data Inicial:</label>
+                                            <div class="input"><input style="height:30px" type="date" name="dataInicial" id="dataInicial" required></div>
                                             </div>
 
-                                            <div>
-                                            <label nome='lblFinal' for="dataFinal">Data Final:</label>
-                                            <div class="input"><input type="date" name="dataFinal" id="dataFinal" required></div>
+                                            <div style="width:100%">
+                                            <label style="font-size: 20px;" nome='lblFinal' for="dataFinal">Data Final:</label>
+                                            <div class="input"><input style="height:30px" type="date" name="dataFinal" id="dataFinal" required></div>
                                             </div>
 
-                                            <div class="submit" style="width: 100%"><button type="button" onclick="filtrarAgendamentos()">Filtrar</button></div>
+                                            <div class="submit" style="width: 100%; height:30px"><button style="font-size: 16px;" type="button" onclick="filtrarAgendamentos()">Filtrar</button></div>
 
-                                            <div style="display:flex; flex-direction:column; justify-content:space-around; align-items:start; gap:5px" id="filtro_opcao">
-                                                <label>
-                                                    <input class="opcao" type="radio" name="opcaoFiltro" value="Quantidade" checked>
+                                            <div style="display:flex; flex-direction:column; justify-content:space-around; align-items:start; gap:5px; width:100%" id="filtro_opcao">
+                                                <label style="font-size: 18px;">
+                                                    <input style="font-size: 20px;" class="opcao" type="radio" name="opcaoFiltro" value="Quantidade" checked>
                                                     Quantidade
                                                 </label>
-                                                <label>
+                                                <label style="font-size: 18px;">
                                                     <input class="opcao" type="radio" name="opcaoFiltro" value="Horas">
                                                     Horas
                                                 </label>
                                             </div>  
                                         </div>
-                                        <div class="filtro_solicitante">
-                                            <div style="font-size: 20px">Áreas Solicitantes</div>
-                                        <?php foreach ($listaAreasSolicitantes as $solicitante){
-                                            echo'<div style="display:flex; flex-direction: row"; width:auto;>';
-                                            echo '<label>
-                                                <input type="checkbox" class="filter-checkbox" checked>
-                                                '.$solicitante.'
-                                            </label>';
+                                        <hr class="linha">
+                                        <div class="borda_filtros">
+                                            <div style="height:25px; width: 100%;">
+                                                <div style="font-size: 20px; display: flex; justify-content: center;">Áreas Solicitantes</div>
+                                            </div>
+                                            <div class="filtro_solicitante">
+                                                
+                                            <?php foreach ($listaAreasSolicitantes as $solicitante){
+                                                echo'<div style="display:flex; flex-direction: row"; width:auto;>';
+                                                echo '<label>
+                                                    <input type="checkbox" class="filter-checkbox" checked>
+                                                    '.$solicitante.'
+                                                </label>';
+                                                echo'</div>';
+                                            }
                                             echo'</div>';
-                                        }
                                         echo'</div>';
-                                        echo'<div class="filtro_pista">';
-                                            echo'<div style="font-size: 20px">Áreas da Pista</div>';
-                                        foreach ($listaPistas as $pista){
-                                            echo'<div>';
-                                            echo '<label>
-                                                <input type="checkbox" class="filter-pista" data-pista="'.$pista.'" checked>
-                                                '.$pista.'
-                                            </label>';
-                                            echo'</div>';
-                                        }
                                         ?>
+                                        <hr class="linha">
+                                        <div>
+                                            <div style="height:25px; width: 100%;">
+                                                <div style="font-size: 20px; display: flex; justify-content: center;">Áreas da Pista</div>
+                                            </div>
+                                            <?php
+                                            echo'<div class="filtro_pista">';
+                                            foreach ($listaPistas as $pista){
+                                                echo'<div>';
+                                                echo '<label>
+                                                    <input type="checkbox" class="filter-pista" data-pista="'.$pista.'" checked>
+                                                    '.$pista.'
+                                                </label>';
+                                                echo'</div>';
+                                            }
+                                            ?>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>
@@ -611,8 +621,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                             </div>
                         </div>
                     </div>
+                    <div class="circle circle-right">
+                        <div class="arrow right_arrow" style="right: 10px;"></div>
+                    </div>
                 </div>
-                <div class="arrow right_arrow" style="right: 10px;">&gt;</div>
             </div>
         </main>
     <footer>
@@ -634,15 +646,85 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
     <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-bundle.min.js"></script>
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- Include Tippy.js CSS (you can customize the theme) -->
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js/dist/tippy.css" />
+    <!-- Include Tippy.js script -->
+    <script src="https://unpkg.com/tippy.js@6.3.1/dist/tippy-bundle.umd.js"></script>
 
     <!-- ///////////////////////////////////////////////////////// -->
 
     <script>
         const grafContainer = document.querySelector('.graf_container');
-        const leftArrow = document.querySelector('.left_arrow');
-        const rightArrow = document.querySelector('.right_arrow');
+        const leftArrow = document.querySelector('.circle-left');
+        const rightArrow = document.querySelector('.circle-right');
         const graficos = document.querySelectorAll('.div__grafico');
         const ativo = document.querySelector('.ativo');
+        
+        tippy('#bar_pista[name="VDA"]', {
+            content: 'VDA',
+            arrow: true,
+            placement: 'top', // Tooltip placement
+            theme: 'light', // Tooltip theme
+            duration: 300, // Tooltip animation duration in milliseconds
+        });
+
+        tippy('#bar_pista[name="NVH"]', {
+            content: 'NVH',
+            arrow: true,
+            placement: 'top', // Tooltip placement
+            theme: 'light', // Tooltip theme
+            duration: 300, // Tooltip animation duration in milliseconds
+        });
+
+        tippy('#bar_pista[name="Obstáculos"]', {
+            content: 'Obstáculos',
+            arrow: true,
+            placement: 'top', // Tooltip placement
+            theme: 'light', // Tooltip theme
+            duration: 300, // Tooltip animation duration in milliseconds
+        });
+
+        tippy('#bar_pista[name="Rampa 12% e 20%"]', {
+            content: 'Rampa 12% e 20%',
+            arrow: true,
+            placement: 'top', // Tooltip placement
+            theme: 'light', // Tooltip theme
+            duration: 300, // Tooltip animation duration in milliseconds
+        });
+
+        tippy('#bar_pista[name="Rampa 40%"]', {
+            content: 'Rampa 40%',
+            arrow: true,
+            placement: 'top', // Tooltip placement
+            theme: 'light', // Tooltip theme
+            duration: 300, // Tooltip animation duration in milliseconds
+        });
+
+        tippy('#bar_pista[name="Rampa 60%"]', {
+            content: 'Rampa 60%',
+            arrow: true,
+            placement: 'top', // Tooltip placement
+            theme: 'light', // Tooltip theme
+            duration: 300, // Tooltip animation duration in milliseconds
+        });
+
+        tippy('#bar_pista[name="Asfalto"]', {
+            content: 'Asfalto',
+            arrow: true,
+            placement: 'top', // Tooltip placement
+            theme: 'light', // Tooltip theme
+            duration: 300, // Tooltip animation duration in milliseconds
+        });
+
+        tippy('#bar_pista[name="Pista Completa"]', {
+            content: 'Pista Completa',
+            arrow: true,
+            placement: 'top', // Tooltip placement
+            theme: 'light', // Tooltip theme
+            duration: 300, // Tooltip animation duration in milliseconds
+        });
+        
+        
 
         let currentIndex = 0;
 

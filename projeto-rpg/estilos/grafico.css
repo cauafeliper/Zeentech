@@ -159,6 +159,11 @@ main {
     cursor: pointer;
   }
 
+.title_semana input:hover {
+    opacity: 0.6;
+    transition-duration: 0.3s;
+  }
+
   .title_mes input {
     width: 50%;
     height: 70%;
@@ -171,6 +176,11 @@ main {
     position: absolute;
     top: 15%;
     left: 25%;
+  }
+
+  .title_mes input:hover {
+    opacity: 0.6;
+    transition-duration: 0.3s;
   }
 
   .title_ano input {
@@ -186,6 +196,11 @@ main {
     padding: 0 5%;
     top: 15%;
     left: 15%;
+  }
+
+  .title_ano input:hover {
+    opacity: 0.6;
+    transition-duration: 0.3s;
   }
   
   .submit { grid-area: submit; }
@@ -209,12 +224,61 @@ main {
     border: none;
     cursor: pointer;
   }
+
+  .submit:hover {
+    opacity: 0.6;
+    transition-duration: 0.3s;
+  }
 /*===============================================================================================================*/
+.circle {
+  width: 50px;
+  height: 50px;
+  background-color: var(--claro); /* Adjust the background color */
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.3s ease-in-out;
+  border-color: var(--escuro);
+  border-style: solid;
+  position: absolute;
+  top: 50%;
+}
+
+.circle-right {
+  right: 0;
+}
+
+.circle-left {
+  left: 0;
+}
+
+.circle:hover {
+  opacity: 0.5; /* Adjust the opacity on hover */
+}
+
+.arrow {
+  width: 0;
+  height: 0;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+}
+
+.left_arrow {
+  border-right: 18px solid var(--escuro); /* Adjust the arrow color and size */
+}
+
+.right_arrow {
+  border-left: 18px solid var(--escuro); /* Adjust the arrow color and size */
+}
+
 .graf_container {
   display: flex;
   transition: transform 0.5s ease-in-out; /* Adiciona uma transição suave durante o movimento */
   width: 100%;
   justify-content: center;
+  position: relative;
 }
 
 .div__grafico {
@@ -275,6 +339,7 @@ main {
   align-items: center;
   width: 100%;
   height: 30px;
+  transition: width 1s ease;
 }
 
 .bar {
@@ -320,6 +385,7 @@ color: #001e50;
 font-size: 20px;
 height: 30px;
 padding-left: 2px;
+padding-right: 2px;
 }
 
 .bar_inv{
@@ -328,7 +394,7 @@ padding-left: 2px;
 
 .quad_filtro{
   background-color: #4c739741;
-  border-radius: 50px;
+  border-radius: 15px;
 }
 
 /* Estilos para o formulário de filtro */
@@ -339,13 +405,26 @@ padding-left: 2px;
   width: 100%;
 }
 
+.borda_filtros{
+  display: flex;
+  justify-content: center;
+  flex-direction:column;
+}
+
+.linha{
+  width: 2px;
+  height: 95%;
+  background-color: #638cb360;
+  border: none;
+}
+
 .form_filtro{
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  gap: 10px;
-  width: 70%;
+  width: 100%;
+  padding: 20px 30px;
 }
 
 .filtro_data{
@@ -354,6 +433,7 @@ padding-left: 2px;
   justify-content: center;
   align-items: center;
   gap: 10px;
+  width: 20%;
 }
 
 .filtro_solicitante{
@@ -364,6 +444,7 @@ padding-left: 2px;
   gap: 10px;
   flex-wrap: wrap;
   height: 300px;
+  position: relative;
 }
 
 .filtro_pista{
@@ -443,7 +524,7 @@ label {
   flex-direction: column;
   width: 550px;
   justify-content: center;
-  background-color: lightgray;
+  background-color: #eaeaea69;
   padding: 10px;
   border-radius: 15px;
   height: 300px;
@@ -503,6 +584,16 @@ label {
 
 .quad_graf_semana {
   border-right: 2px solid lightgray;
+  text-align: center;
+  width: 140px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.quad_graf_ano {
   text-align: center;
   width: 140px;
   height: 45px;
