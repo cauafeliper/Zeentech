@@ -296,7 +296,37 @@
                                     }
                                 });
                             </script>';
-                        } else {
+                            $query_email = "SELECT email FROM logins WHERE chapa = '$chapa'";
+                            $result_email = mysqli_query($conexao, $query_email);
+                            $row_email = mysqli_fetch_assoc($result_email);
+                            $email = $row_email['email'];
+                            
+                            require("../PHPMailer-master/src/PHPMailer.php"); 
+                            require("../PHPMailer-master/src/SMTP.php"); 
+                            $mail = new PHPMailer\PHPMailer\PHPMailer(); 
+                            $mail->IsSMTP();
+                            $mail->SMTPDebug = 1;
+                            $mail->SMTPAuth = true;
+                            $mail->SMTPSecure = 'ssl'; 
+                            $mail->Host = "zeentech.com.br"; 
+                            $mail->Port = 587;
+                            $mail->IsHTML(true); 
+                            $mail->Username = "admin@equipzeentech.com"; 
+                            $mail->Password = "Z3en7ech"; 
+                            $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
+                            $mail->AddAddress($email); 
+                            $mail->Subject = "Solicitação criada com sucesso!"; 
+                            $mail->Body = utf8_decode('Sua soicitação foi criada com sucesso!<br>Assim que houver uma resposta do Gestor encarregado, você receberá um email dizendo se sua solicitação foi aprovada ou não.<br>Atenciosamente,<br>Equipe Zeentech.'); 
+                            $mail->send();
+
+                            $mail->ClearAddresses();
+
+                            $mail->addAddress('crpereira@zeentech.com.br');
+                            $mail->Subject = 'Nova solicitação de agendamento para pista a Pista de Teste!';
+                            $mail->Body = utf8_decode('Uma nova solicitação para o agendamento da Pista de Teste foi criada pelo colaborador(a) ' . $solicitante .' no dia ' . $data . ' e horário de ' . $hora_inicio . ' até ' . $hora_fim . ' com objetivo de ' . $objetivo . ' para o veículo ' . $veiculo . '. Essa nova solicitação aguarda sua resposta!<br>Atenciosamente,<br>Equipe Zeentech.');
+                            $mail->send();
+                        } 
+                        else {
                             echo '<script>
                                 Swal.fire({
                                     icon: "warning",

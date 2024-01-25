@@ -228,6 +228,18 @@ main {
   transition: transform 1s ease;
 }
 
+.grafico_mes {
+  background-color: var(--escuro);
+  height: fit-content;
+  width: 83%;
+  padding: 15px;
+  display: none;
+  flex-direction: column;
+  border-radius: 15px;
+  position: relative;
+  transition: transform 1s ease;
+}
+
 .ativo {
   display: flex;
   transform: translateX(0);
@@ -882,6 +894,11 @@ label {
     grid-area: k14;
     border: none;
   }
+
+  .grafico_mes {
+    width: 83%;
+  }
+
 /*============================================================================================================*/
 footer {
     padding: 15px;
@@ -919,13 +936,16 @@ footer img {
     font-size: medium;
 }
 
-@media (min-width: 1441px) {
-  .div__grafico {
+@media (min-width: 5300px) {
+  .grafico_mes {
     width: auto;
   }
+}
 
-  .grafico_mes {
-    width: 83%;
+@media (min-width: 1441px) {
+  
+  .div_width {
+    width: auto;
   }
 
   .filtro__dia {

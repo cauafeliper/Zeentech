@@ -142,7 +142,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
             <div style="display: flex; flex-flow: row; justify-content: center; align-items: center; width: 100%;">
                 <div class="arrow left_arrow" style="left: 10px;">&lt;</div>
                 <div class='graf_container'>
+
                     <div id="graf_dia" class="div__grafico div__width ativo">
+
                         <div class="tit">
                         <?php
                             $diastr = strtotime($dia);
@@ -210,11 +212,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                             <div class="k9 quad_graf"></div>
                         </div>
                     </div>
+
                     <div id="graf_semana" class="div__grafico div__width">
+
                         <div class="tit">
                             <?php
                             $diastr = strtotime($dia);
-                            echo '<div class="all_tit"><h2 style="color: white;">Agendamentos por Semana (CW'.calcularCW($dia).')</h2></div>'
+                            echo '<div class="all_tit"><h2 style="color: white;">Agendamentos por Semana (CW'.calcularCW($dia).')</h2></div>';
                             ?>
                         </div>
                         <div class="out_grafico">
@@ -290,7 +294,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                             <div class="k9 quad_graf"></div>
                         </div>
                     </div>
+
                     <div id="graf_mes" class="div__grafico div__width grafico_mes">
+
                         <div class="tit">
                             <?php
                             $diastr = strtotime($dia);
@@ -343,7 +349,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                             <div class="k9 quad_graf"></div>
                         </div>
                     </div>
+
                     <div id="graf_ano" class="div__grafico div__width">
+
                         <div class="tit">
                             <?php
                             $diastr = strtotime($dia);
