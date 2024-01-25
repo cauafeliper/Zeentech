@@ -141,11 +141,11 @@ function CriarCSSdia($conexao, $dia, $area_pista, $letra, $pistaClasse, $y){ // 
 
             echo '<style>';
             echo '.' . $pistaClasse . '{position: relative;}';
-            echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
+            echo '.' . $classe . '{transition: opacity 0.3s ease-in-out;position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
 
-            echo '.'.$classeTip. '{position: absolute; justify-content: center; '.$y.': 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
-            echo ".$classe:hover + .$classeTip".'{display: flex;}';
-            echo ".$classeTip:hover {display: flex;}";
+            echo '.'.$classeTip. '{visibility:hidden; opacity:0; transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; position: absolute; justify-content: center; '.$y.': 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-radius: 15px; z-index: 3; display: flex; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
+            echo ".$classe:hover + .$classeTip".'{visibility:visible;opacity:1}';
+            echo ".$classeTip:hover {visibility:visible;opacity:1}";
             echo ".$classe:hover {opacity: 0.5;}";
             echo '</style>';
 
@@ -293,11 +293,11 @@ function CriarCSSsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaC
 
                 echo '<style>';
                 echo '.' . $listaPistaClasse[$i] . '{position: relative;}';
-                echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-radius: 40%; border-top: 10px solid white; border-bottom: 10px solid white;}';
+                echo '.' . $classe . '{transition: opacity 0.3s ease-in-out;position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-radius: 40%; border-top: 10px solid white; border-bottom: 10px solid white;}';
 
-                echo '.'.$classeTip. '{position: absolute; justify-content: center; '.$listaY[$i].': 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
-                echo ".$classe:hover + .$classeTip".'{display: flex;}';
-                echo ".$classeTip:hover {display: flex;}";
+                echo '.'.$classeTip. '{visibility:hidden; opacity:0; transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;position: absolute; justify-content: center; '.$listaY[$i].': 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-radius: 15px; z-index: 3; display: flex; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
+                echo ".$classe:hover + .$classeTip".'{visibility:visible;opacity:1}';
+                echo ".$classeTip:hover {visibility:visible;opacity:1}";
                 echo ".$classe:hover {opacity: 0.5;}";
                 echo '</style>';
 
@@ -425,11 +425,11 @@ function CriarCSSmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClas
 
                 echo '<style>';
                 echo '.' . $listaPistaClasse[$i] . '{position: relative;}';
-                echo '.' . $classe . '{position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-radius: 40%; border-top: 10px solid white; border-bottom: 10px solid white;}';
+                echo '.' . $classe . '{transition: opacity 0.3s ease-in-out;position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-radius: 40%; border-top: 10px solid white; border-bottom: 10px solid white;}';
 
-                echo '.'.$classeTip. '{position: absolute; justify-content: center; '.$listaY[$i].': 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-radius: 15px; z-index: 3; display: none; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
-                echo ".$classe:hover + .$classeTip".'{display: flex;}';
-                echo ".$classeTip:hover {display: flex;}";
+                echo '.'.$classeTip. '{visibility:hidden; opacity:0; transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;position: absolute; justify-content: center; '.$listaY[$i].': 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-radius: 15px; z-index: 3; display: flex; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
+                echo ".$classe:hover + .$classeTip".'{visibility:visible;opacity:1}';
+                echo ".$classeTip:hover {visibility:visible;opacity:1}";
                 echo ".$classe:hover {opacity: 0.5;}";
                 echo '</style>';
 
