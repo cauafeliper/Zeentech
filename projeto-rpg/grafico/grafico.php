@@ -105,9 +105,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
 
     // Chame a função para gerar as divs
     $novoGraficoHTML = CriarNovoGraficoSolicitante($conexao, $listaAreasSolicitantes, $dataInicial, $dataFinal, $listaPistas);
+    $novoGraficoHTMLHoras = CriarNovoGraficoSolicitanteHoras($conexao, $listaAreasSolicitantes, $dataInicial, $dataFinal, $listaPistas);
     
     // Saída dos dados HTML gerados
-    echo $novoGraficoHTML;
+    $graficosNovos = $novoGraficoHTML.'///divisao///'.$novoGraficoHTMLHoras;
+    echo $graficosNovos;
 
     // Encerre a execução para evitar que o restante da página seja exibido desnecessariamente
     exit();
@@ -463,7 +465,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                         <div class="tit">
                             <?php
                             $diastr = strtotime($dia);
-                            echo '<div id="chart-title" class="all_tit"><h2 style="color: white;">Agendamentos por Área Solicitante ('.$dataInicial.' -> '.$dataFinal.')</h2></div>'
+                            
+                            $dataFormatadaInicial = date("d/m/Y", strtotime($dataInicial));
+                            $dataFormatadaFinal = date("d/m/Y", strtotime($dataFinal));
+
+                            echo '<div id="chart-title" class="all_tit"><h2 style="color: white;">Agendamentos por Área Solicitante ('.$dataFormatadaInicial.' -> '.$dataFormatadaFinal.')</h2></div>'
                             ?>
                         </div>
                         <div class="out_grafico" style="height: fit-content;">
@@ -471,7 +477,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                             echo '<div class="grafico grafico_ano" style="position: relative; width: 70rem;">';
                             ?>
                                 <div id="filter-form">
-                                    <form id="checkbox-form" class="form_filtro">
+                                    <form id="checkbox-form" class="form_filtro quad_filtro">
                                         <div class="filtro_data">
                                             <div>
                                             <label nome='lblInicio' for="dataInicial">Data Inicial:</label>
@@ -483,20 +489,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                                             <div class="input"><input type="date" name="dataFinal" id="dataFinal" required></div>
                                             </div>
 
-                                            <div style="display:flex; flex-direction:column; justify-content:space-around; align-items:start; gap:5px">
-                                            <label>
-                                                <input type="radio" name="opcaoFiltro" value="Quantidade" checked>
-                                                Quantidade
-                                            </label>
-                                            <label>
-                                                <input type="radio" name="opcaoFiltro" value="Horas">
-                                                Horas
-                                            </label>
-                                            </div>
-                                             
-
                                             <div class="submit" style="width: 100%"><button type="button" onclick="filtrarAgendamentos()">Filtrar</button></div>
-                                        </div>                                 
+
+                                            <div style="display:flex; flex-direction:column; justify-content:space-around; align-items:start; gap:5px" id="filtro_opcao">
+                                                <label>
+                                                    <input class="opcao" type="radio" name="opcaoFiltro" value="Quantidade" checked>
+                                                    Quantidade
+                                                </label>
+                                                <label>
+                                                    <input class="opcao" type="radio" name="opcaoFiltro" value="Horas">
+                                                    Horas
+                                                </label>
+                                            </div>  
+                                        </div>
                                         <div class="filtro_solicitante">
                                         <?php foreach ($listaAreasSolicitantes as $solicitante){
                                             echo'<div style="display:flex; flex-direction: row"; width:auto;>';
@@ -527,9 +532,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                                         }
                                     ?>
                                     </div>
-                                    <div class="bar-chart" id="bar-chart">
+                                    <div class="bar-chart" id="bar-chart-vezes" name="bar_vezes">
                                         <?php
                                         CriarGraficoSolicitante($conexao, $listaAreasSolicitantes, $dataInicial, $dataFinal, $listaPistas);
+                                        ?>
+                                    </div>
+                                    <div class="bar-chart bar_inv" id="bar-chart-horas" name="bar_horas">
+                                        <?php
+                                        CriarGraficoSolicitanteHoras($conexao, $listaAreasSolicitantes, $dataInicial, $dataFinal, $listaPistas);
                                         ?>
                                     </div>
                                     
@@ -662,11 +672,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
         document.addEventListener('DOMContentLoaded', function () {
             const checkboxes = document.querySelectorAll('.filter-checkbox');
             const checkboxesPista = document.querySelectorAll('.filter-pista');
+            const options =document.querySelectorAll('.opcao');
 
             function updateChart() {
                 checkboxes.forEach((checkbox, index) => {
-                    const bar = document.querySelector(`#bar-chart #bar:nth-child(${index + 1})`);
+                    const bar = document.querySelector(`#bar-chart-vezes #bar:nth-child(${index + 1})`);
                     bar.style.display = checkbox.checked ? 'flex' : 'none';
+
+                    const barH = document.querySelector(`#bar-chart-horas #bar:nth-child(${index + 1})`);
+                    barH.style.display = checkbox.checked ? 'flex' : 'none';
 
                     const nomes = document.querySelector(`#bar_names #bar_name:nth-child(${index + 1})`);
                     nomes.style.display = checkbox.checked ? 'flex' : 'none';
@@ -676,11 +690,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
             function updateChartPista() {
                 checkboxesPista.forEach((checkboxPista) => {
                     const pista = checkboxPista.getAttribute('data-pista');
-                    const bars = document.querySelectorAll(`#bar-chart #bar_pista[name="${pista}"]`);
+                    const bars = document.querySelectorAll(`#bar-chart-vezes #bar_pista[name="${pista}"]`);
+                    const barsH = document.querySelectorAll(`#bar-chart-horas #bar_pista[name="${pista}"]`);
 
                     bars.forEach((bar) => {
                         bar.style.display = checkboxPista.checked ? 'flex' : 'none';
                     });
+
+                    barsH.forEach((bar) => {
+                        bar.style.display = checkboxPista.checked ? 'flex' : 'none';
+                    });
+                });
+            }
+
+            function updateOption() {
+                const bar_charts = document.querySelectorAll('.bar-chart');
+
+                bar_charts.forEach((bar_chart) => {
+                    if (bar_chart.getAttribute('name') == 'bar_vezes'){
+                        if (options[0].checked){
+                            bar_chart.style.display = 'flex';
+                        }
+                        else{
+                            bar_chart.style.display = 'none';
+                        }
+                    }
+                    else{
+                        if (options[1].checked){
+                            bar_chart.style.display = 'flex';
+                        }
+                        else{
+                            bar_chart.style.display = 'none';
+                        }
+                    }
                 });
             }
 
@@ -691,6 +733,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
             checkboxesPista.forEach(checkbox => {
                 checkbox.addEventListener('change', updateChartPista);
             });
+
+            options.forEach(option => {
+                option.addEventListener('change', updateOption)
+            });
+
         });
 
         function filtrarAgendamentos() {
@@ -713,18 +760,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                     url: '<?php echo $_SERVER['PHP_SELF']; ?>',
                     type: 'POST',
                     data: { dataInicial: dataInicial, dataFinal: dataFinal, filtroData: true },
-                    success: function (novoGraficoHTML) {
-                        // Encontrar o índice do primeiro <div id="bar"
-                        var startIndex = novoGraficoHTML.indexOf('<div id="bar"');
+                    success: function (graficosNovos) {
+                        // Dividir a string com base no marcador '///divisao///'
+                        var partes = graficosNovos.split('///divisao///');
 
+                        // A primeira parte contém o texto antes do marcador
+                        var antesMarcador = partes[0];
+
+                        // A segunda parte contém o texto depois do marcador
+                        var depoisMarcador = partes[1];
+
+                        // Encontrar o índice do primeiro <div id="bar"
+                        var startIndex = antesMarcador.indexOf('<div id="bar"');
                         // Extrair a parte relevante da string
-                        var parteCorreta = novoGraficoHTML.substring(startIndex);
+                        var parteCorretaV = antesMarcador.substring(startIndex);
+
+                        // Encontrar o índice do primeiro <div id="bar"
+                        var startIndex = depoisMarcador.indexOf('<div id="bar"');
+                        // Extrair a parte relevante da string
+                        var parteCorretaH = depoisMarcador.substring(startIndex);
 
                         // Substitui o conteúdo do contêiner do gráfico com as novas divs geradas pelo PHP
-                        document.getElementById('bar-chart').innerHTML = parteCorreta;
+                        document.getElementById('bar-chart-vezes').innerHTML = parteCorretaV;
+                        document.getElementById('bar-chart-horas').innerHTML = parteCorretaH;
 
                         const chartTitle = document.getElementById('chart-title');
-                        chartTitle.innerHTML = `<h2 style="color: white;">Agendamentos por Área Solicitante (${dataInicial} -> ${dataFinal})</h2>`;
+
+                        // Criar uma instância de Date
+                        var dataObj = new Date(dataInicial);
+                        // Obter o dia, mês e ano
+                        var dia = dataObj.getDate();
+                        var mes = dataObj.getMonth() + 1; // Meses são indexados de 0 a 11
+                        var ano = dataObj.getFullYear();
+                        // Formatar a data como "dd//mm//yyyy"
+                        var dataFormatadaInicial = dia + "/" + mes + "/" + ano;
+
+                        // Criar uma instância de Date
+                        var dataObj = new Date(dataFinal);
+                        // Obter o dia, mês e ano
+                        var dia = dataObj.getDate();
+                        var mes = dataObj.getMonth() + 1; // Meses são indexados de 0 a 11
+                        var ano = dataObj.getFullYear();
+                        // Formatar a data como "dd//mm//yyyy"
+                        var dataFormatadaFinal = dia + "/" + mes + "/" + ano;
+
+                        chartTitle.innerHTML = `<h2 style="color: white;">Agendamentos por Área Solicitante (${dataFormatadaInicial} -> ${dataFormatadaFinal})</h2>`;
                     },
                     error: function (error) {
                         console.error('Erro na requisição AJAX:', error);

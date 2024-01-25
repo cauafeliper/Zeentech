@@ -520,10 +520,19 @@ function valorAreas($conexao, $listaAreasSolicitantes, $dataInicial, $dataFinal,
             $result = $conexao->query($sql);
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                    $inicio = intval($row['hora_inicio'][0].$row['hora_inicio'][1]);
-                    $fim = intval($row['hora_fim'][0].$row['hora_fim'][1]);
+                    
+                    $inicioHora = intval($row['hora_inicio'][0].$row['hora_inicio'][1]);
+                    $fimHora = intval($row['hora_fim'][0].$row['hora_fim'][1]);
+                    
+                    $inicioMinuto = intval($row['hora_inicio'][3].$row['hora_inicio'][4]);
+                    $fimMinuto = intval($row['hora_fim'][3].$row['hora_fim'][4]);
+
+                    $inicio = $inicioHora * 60 + $inicioMinuto;
+                    $fim = $fimHora * 60 + $fimMinuto;
+                    
                     $tempo = $fim - $inicio;
                     $tempoTotal += $tempo;
+                    
                     $vezes ++;
                     if ($vezes > $maiorVezes){
                         $maiorVezes = $vezes;
@@ -543,7 +552,6 @@ function CriarGraficoSolicitante($conexao, $listaAreasSolicitantes, $dataInicial
     $valores = valorAreas($conexao, $listaAreasSolicitantes, $dataInicial, $dataFinal, $listaPistas);
     $listaValorAreas = $valores[0];
     $maiorVezes = $valores[1][0];
-    $maiorTempo = $valores[1][1];
     $keys = array_keys($listaValorAreas);
     $n = 0;
     $cor = 'steelblue';
@@ -597,11 +605,77 @@ function CriarGraficoSolicitante($conexao, $listaAreasSolicitantes, $dataInicial
     }
 }
 
+function CriarGraficoSolicitanteHoras($conexao, $listaAreasSolicitantes, $dataInicial, $dataFinal, $listaPistas) {
+    $valores = valorAreas($conexao, $listaAreasSolicitantes, $dataInicial, $dataFinal, $listaPistas);
+    $listaValorAreas = $valores[0];
+    $maiorTempo = $valores[1][1];
+    $keys = array_keys($listaValorAreas);
+    $n = 0;
+    $cor = 'steelblue';
+    foreach ($listaValorAreas as $solicitante){
+        $totalTempo = 0;
+        echo '<div id="bar" name="barra_'.$keys[$n].'" class="barra_solicitante">';
+        foreach ($solicitante as $pista){
+            $totalTempo += $pista['tempo'];
+            if ($maiorTempo == 0){
+                $tamanho = 0;
+            }
+            else{
+                $tamanho = ($pista['tempo'] / $maiorTempo) * 100;
+            }
+            if ($tamanho != 0){
+                switch ($pista['pista']){
+                    case 'VDA':
+                        $cor = '#6393BA';
+                        break;
+                    case 'NVH':
+                        $cor = '#46ABFB';
+                        break;
+                    case 'Obstáculos':
+                        $cor = '#5F6E7A';
+                        break;
+                    case 'Rampa 12% e 20%':
+                        $cor = '#A58C65';
+                        break;
+                    case 'Rampa 40%':
+                        $cor = '#FAB346';
+                        break;
+                    case 'Rampa 60%':
+                        $cor = '#A1BFFB';
+                        break;
+                    case 'Asfalto':
+                        $cor = '#FADEA0';
+                        break;
+                    case 'Pista Completa':
+                        $cor = '#636BBA';
+                        break;
+                }
+                $hora = $pista['tempo'] / 60;
+                $minuto = $pista['tempo'] % 60;
+                if ($minuto == 0){
+                    $minuto = '';
+                }
+                echo '<div id="bar_pista" class="bar" name="'.$pista['pista'].'" style="width: '.$tamanho.'%; background-color: '.$cor.'; display:flex;justify-content:center"><p style="display:flex;justify-content:center; align-items:center">'.intval($hora).'h'.$minuto.'</p></div>';
+            }
+            else{
+                echo '<div id="bar_pista" class="bar" name="'.$pista['pista'].'" style="display: none; width: 0"></div>';
+            }
+        }
+        $tempoHoras = intval($totalTempo / 60);
+        $tempoMinutos = $totalTempo % 60;
+        if ($tempoMinutos == 0){
+            $tempoMinutos = '';
+        }
+        echo  '<div id="bar_total" class="bar_total">'.$tempoHoras.'h'.$tempoMinutos.'</div>';
+        echo '</div>';
+        $n++;
+    }
+}
+
 function CriarNovoGraficoSolicitante($conexao, $listaAreasSolicitantes, $dataInicial, $dataFinal, $listaPistas) {
     $valores = valorAreas($conexao, $listaAreasSolicitantes, $dataInicial, $dataFinal, $listaPistas);
     $listaValorAreas = $valores[0];
     $maiorVezes = $valores[1][0];
-    $maiorTempo = $valores[1][1];
     $novoGraficoHTML = '';
 
     $keys = array_keys($listaValorAreas);
@@ -652,6 +726,75 @@ function CriarNovoGraficoSolicitante($conexao, $listaAreasSolicitantes, $dataIni
             }
         }
         $novoGraficoHTML .= '<div id="bar_total" class="bar_total">'.$totalVezes.'</div>';
+        $novoGraficoHTML .= '</div>';
+        $n++;
+    }
+    return $novoGraficoHTML;
+}
+
+function CriarNovoGraficoSolicitanteHoras($conexao, $listaAreasSolicitantes, $dataInicial, $dataFinal, $listaPistas) {
+    $valores = valorAreas($conexao, $listaAreasSolicitantes, $dataInicial, $dataFinal, $listaPistas);
+    $listaValorAreas = $valores[0];
+    $maiorTempo = $valores[1][1];
+    $novoGraficoHTML = '';
+    $keys = array_keys($listaValorAreas);
+    $n = 0;
+    $cor = 'steelblue';
+    foreach ($listaValorAreas as $solicitante){
+        $totalTempo = 0;
+        $novoGraficoHTML .= '<div id="bar" name="barra_'.$keys[$n].'" class="barra_solicitante">';
+        foreach ($solicitante as $pista){
+            $totalTempo += $pista['tempo'];
+            if ($maiorTempo == 0){
+                $tamanho = 0;
+            }
+            else{
+                $tamanho = ($pista['tempo'] / $maiorTempo) * 100;
+            }
+            if ($tamanho != 0){
+                switch ($pista['pista']){
+                    case 'VDA':
+                        $cor = '#6393BA';
+                        break;
+                    case 'NVH':
+                        $cor = '#46ABFB';
+                        break;
+                    case 'Obstáculos':
+                        $cor = '#5F6E7A';
+                        break;
+                    case 'Rampa 12% e 20%':
+                        $cor = '#A58C65';
+                        break;
+                    case 'Rampa 40%':
+                        $cor = '#FAB346';
+                        break;
+                    case 'Rampa 60%':
+                        $cor = '#A1BFFB';
+                        break;
+                    case 'Asfalto':
+                        $cor = '#FADEA0';
+                        break;
+                    case 'Pista Completa':
+                        $cor = '#636BBA';
+                        break;
+                }
+                $hora = $pista['tempo'] / 60;
+                $minuto = $pista['tempo'] % 60;
+                if ($minuto == 0){
+                    $minuto = '';
+                }
+                $novoGraficoHTML .= '<div id="bar_pista" class="bar" name="'.$pista['pista'].'" style="width: '.$tamanho.'%; background-color: '.$cor.'; display:flex;justify-content:center"><p style="display:flex;justify-content:center; align-items:center">'.intval($hora).'h'.$minuto.'</p></div>';
+            }
+            else{
+                $novoGraficoHTML .= '<div id="bar_pista" class="bar" name="'.$pista['pista'].'" style="display: none; width: 0"></div>';
+            }
+        }
+        $tempoHoras = intval($totalTempo / 60);
+        $tempoMinutos = $totalTempo % 60;
+        if ($tempoMinutos == 0){
+            $tempoMinutos = '';
+        }
+        $novoGraficoHTML .=  '<div id="bar_total" class="bar_total">'.$tempoHoras.'h'.$tempoMinutos.'</div>';
         $novoGraficoHTML .= '</div>';
         $n++;
     }
