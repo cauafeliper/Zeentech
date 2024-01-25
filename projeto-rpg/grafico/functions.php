@@ -599,7 +599,9 @@ function CriarGraficoSolicitante($conexao, $listaAreasSolicitantes, $dataInicial
                 echo '<div id="bar_pista" class="bar" name="'.$pista['pista'].'" style="display: none; width: 0"></div>';
             }
         }
-        echo  '<div id="bar_total" class="bar_total">'.$totalVezes.'</div>';
+        if ($totalVezes > 0){
+            echo  '<div id="bar_total" class="bar_total">'.$totalVezes.'</div>';
+        }
         echo '</div>';
         $n++;
     }
@@ -666,7 +668,9 @@ function CriarGraficoSolicitanteHoras($conexao, $listaAreasSolicitantes, $dataIn
         if ($tempoMinutos == 0){
             $tempoMinutos = '';
         }
-        echo  '<div id="bar_total" class="bar_total">'.$tempoHoras.'h'.$tempoMinutos.'</div>';
+        if ($tempoHoras > 0 || $tempoMinutos > 0){
+            echo  '<div id="bar_total" class="bar_total">'.$tempoHoras.'h'.$tempoMinutos.'</div>';
+        }
         echo '</div>';
         $n++;
     }
@@ -725,7 +729,9 @@ function CriarNovoGraficoSolicitante($conexao, $listaAreasSolicitantes, $dataIni
                 $novoGraficoHTML .= '<div id="bar_pista" class="bar" name="'.$pista['pista'].'" style="display: none; width: 0"></div>';
             }
         }
-        $novoGraficoHTML .= '<div id="bar_total" class="bar_total">'.$totalVezes.'</div>';
+        if ($totalVezes > 0){
+            $novoGraficoHTML .= '<div id="bar_total" class="bar_total">'.$totalVezes.'</div>';
+        }
         $novoGraficoHTML .= '</div>';
         $n++;
     }
@@ -794,7 +800,9 @@ function CriarNovoGraficoSolicitanteHoras($conexao, $listaAreasSolicitantes, $da
         if ($tempoMinutos == 0){
             $tempoMinutos = '';
         }
-        $novoGraficoHTML .=  '<div id="bar_total" class="bar_total">'.$tempoHoras.'h'.$tempoMinutos.'</div>';
+        if ($tempoHoras > 0 || $tempoMinutos > 0){
+            $novoGraficoHTML .=  '<div id="bar_total" class="bar_total">'.$tempoHoras.'h'.$tempoMinutos.'</div>';
+        }
         $novoGraficoHTML .= '</div>';
         $n++;
     }
