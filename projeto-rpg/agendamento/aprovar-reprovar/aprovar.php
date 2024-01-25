@@ -14,10 +14,43 @@ if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
     $query_cancelar = "UPDATE agendamentos SET status = 'Aprovado' WHERE id = $id";
+
+
+
+    $query = "SELECT * FROM agendamentos WHERE id = $id";
+    $result = mysqli_query($conexao, $query);
+    $row = mysqli_fetch_assoc($result);
+    $solicitante = $row['solicitante'];
+    $dia = $row['dia'];
+    $hora_inicio = $row['hora_inicio'];
+    $hora_fim = $row['hora_fim'];
+
+    $query_email = "SELECT email FROM logins WHERE nome = '$solicitante'";
+    $result_email = mysqli_query($conexao, $query_email);
+    $row_email = mysqli_fetch_assoc($result_email);
+    $email = $row_email['email'];
     
     if (mysqli_query($conexao, $query_cancelar)) {
         $affected_rows = mysqli_affected_rows($conexao);
         if ($affected_rows > 0) {
+            require("../../PHPMailer-master/src/PHPMailer.php"); 
+            require("../../PHPMailer-master/src/SMTP.php"); 
+            $mail = new PHPMailer\PHPMailer\PHPMailer(); 
+            $mail->IsSMTP();
+            $mail->SMTPDebug = 1;
+            $mail->SMTPAuth = true;
+            $mail->SMTPSecure = 'ssl'; 
+            $mail->Host = "zeentech.com.br"; 
+            $mail->Port = 587;
+            $mail->IsHTML(true); 
+            $mail->Username = "admin@equipzeentech.com"; 
+            $mail->Password = "Z3en7ech"; 
+            $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
+            $mail->AddAddress($email); 
+            $mail->Subject = "Solicitação Aprovada!"; 
+            $mail->Body = utf8_decode('Sua solicitação de agendamento para o dia ' . $dia . ' de ' . $hora_inicio . ' até ' . $hora_fim . ' foi aprovada!.<br>Atenciosamente,<br>Equipe Zeentech.'); 
+            $mail->send();
+
             echo '<script>
                 Swal.fire({
                     icon: "success",

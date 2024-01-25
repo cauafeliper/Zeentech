@@ -54,7 +54,16 @@
             else {
                 $result = mysqli_query($conexao, "INSERT INTO logins(re, nome, email, senha) VALUES('$reCad','$nome','$email','$senhaCad')");
 
-                header('Location: ../index.php');
+                echo '
+                <script>
+                Swal.fire({
+                    icon: \'success\',
+                    title: \'Sucesso!\',
+                    text: \'Cadastro realizado com sucesso!\',
+                }).then(function() {
+                    window.location.href = \'../index.php\';
+                });
+                </script>';
             }
         }
         else {

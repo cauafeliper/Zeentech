@@ -95,7 +95,7 @@ main {
     width: 100%;
     display: flex;
     flex-wrap: nowrap;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
     padding: 15px 80px 15px 80px;
 }

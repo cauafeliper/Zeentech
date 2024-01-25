@@ -129,41 +129,11 @@
             </div>
             <div class="hora_inicio grids">
                 <label for="hora_inicio">Hora de Início:</label>
-                <select name="hora_inicio" id="hora_inicio" class="select_hora">
-                    <option value="">Selecione o Horário</option>
-                    <option value="07:00">07:00</option>
-                    <option value="08:00">08:00</option>
-                    <option value="09:00">09:00</option>
-                    <option value="10:00">10:00</option>
-                    <option value="11:00">11:00</option>
-                    <option value="12:00">12:00</option>
-                    <option value="13:00">13:00</option>
-                    <option value="14:00">14:00</option>
-                    <option value="15:00">15:00</option>
-                    <option value="16:00">16:00</option>
-                    <option value="17:00">17:00</option>
-                    <option value="18:00">18:00</option>
-                    <option value="19:00">19:00</option>
-                </select>
+                <input type="time" id="hora_inicio" name="hora_inicio" min="07:00" max="19:00">
             </div>
             <div class="hora_fim grids">
                 <label for="hora_fim">Hora do Fim:</label>
-                <select name="hora_fim" id="hora_fim" class="select_hora">
-                    <option value="">Selecione o Horário</option>
-                    <option value="07:00">07:00</option>
-                    <option value="08:00">08:00</option>
-                    <option value="09:00">09:00</option>
-                    <option value="10:00">10:00</option>
-                    <option value="11:00">11:00</option>
-                    <option value="12:00">12:00</option>
-                    <option value="13:00">13:00</option>
-                    <option value="14:00">14:00</option>
-                    <option value="15:00">15:00</option>
-                    <option value="16:00">16:00</option>
-                    <option value="17:00">17:00</option>
-                    <option value="18:00">18:00</option>
-                    <option value="19:00">19:00</option>
-                </select>
+                <input type="time" id="hora_fim" name="hora_fim" min="07:00" max="19:00">
             </div>
             <div class="area_solicitante grids">
                 <label for="area_solicitante">Área do Solicitante:</label>

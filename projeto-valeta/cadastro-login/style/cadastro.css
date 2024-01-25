@@ -28,6 +28,7 @@ body {
     background-image: url("../../imgs/background.jpg");
     background-repeat: no-repeat;
     background-size: cover;
+    background-attachment: fixed;
 
     display: flex;
     justify-content: center;
@@ -291,5 +292,45 @@ input:focus {
         border-bottom-right-radius: 0px;
         border-top-left-radius: 20px;
         border-top-right-radius: 20px;
+    }
+}
+
+@media (max-width: 400px) {
+    main {
+        width: 95%;
+    }
+    
+    main>div {
+        width: 100%;
+    }
+
+    main form {
+        width: 100%;
+    }
+
+    @media (max-height: 970px) {
+        body {
+            height: fit-content;
+
+            overflow-y: auto;
+        }
+    }
+}
+
+@media (max-width: 350px) {
+    form div {
+        width: 95%;
+    }
+
+    form input[type=number], input[type=password], input[type=text], input[type=email] {
+        width: 100%;
+    }
+
+    form span>h1 {
+        font-size: 40px;
+    }
+    
+    form input[type=submit] {
+        width: 90%;
     }
 }
