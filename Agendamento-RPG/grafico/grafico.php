@@ -475,7 +475,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                             echo '<div id="chart-title" class="all_tit"><h2 style="color: white;">Agendamentos por Área Solicitante ('.$dataFormatadaInicial.' -> '.$dataFormatadaFinal.')</h2></div>'
                             ?>
                         </div>
-                        <div class="out_grafico" style="height: fit-content;">
+                        <div class="out_grafico" style="height: 600px;">
                             <?php
                             echo '<div class="grafico grafico_ano" style="position: relative; width: 70rem;">';
                             ?>
