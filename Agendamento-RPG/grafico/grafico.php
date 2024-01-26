@@ -1,11 +1,12 @@
 <?php
+    include_once('../config/config.php');
+    session_start();
+?>
+<?php
 
 include 'functions.php';
 
 use PhpOffice\PhpSpreadsheet\Writer\Ods\Content;
-
-    include_once('../config/config.php');
-    session_start();
     if (!isset($_SESSION['chapa']) || empty($_SESSION['chapa'])) {
         session_unset();
         header('Location: ../index.php');
@@ -45,7 +46,6 @@ use PhpOffice\PhpSpreadsheet\Writer\Ods\Content;
         }
         $data = strtotime($dia);
         $data = getdate($data);
-        include_once('../config/config.php');
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

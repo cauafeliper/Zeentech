@@ -1,3 +1,7 @@
+<?php
+    include_once('../../config/config.php');
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,8 +41,8 @@ if (isset($_GET['id'])) {
             $mail->IsSMTP();
             $mail->SMTPDebug = 1;
             $mail->SMTPAuth = true;
-            $mail->SMTPSecure = 'ssl'; 
-            $mail->Host = "zeentech.com.br"; 
+            $mail->SMTPSecure = 'tsl'; 
+            $mail->Host = "equipzeentech.com"; 
             $mail->Port = 587;
             $mail->IsHTML(true); 
             $mail->Username = "admin@equipzeentech.com"; 

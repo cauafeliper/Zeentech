@@ -1,3 +1,7 @@
+<?php
+    include_once('../config/config.php');
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -60,9 +64,7 @@
                 <a href="../index.php"><button type="button">Login</button></a>
             </div>
         </form>
-        <?php 
-        include_once('../config/config.php');
-
+        <?php
         if (isset($_POST['submit'])) {
             if (empty($_POST['nome']) || empty($_POST['area']) || empty($_POST['chapa']) || empty($_POST['email']) || empty($_POST['senha'])) {
                 echo '<script>

@@ -1,3 +1,7 @@
+<?php
+    include_once('../config/config.php');
+    session_start();
+?>
 <?php 
 
 function PorcentagemMinuto($minuto) { // retorna a porcentagem do minuto em relação a 60 minutos

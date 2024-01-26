@@ -1,3 +1,7 @@
+<?php
+    include_once('../config/config.php');
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -12,8 +16,6 @@
 </head>
 <body>
     <?php 
-        include_once('../config/config.php');
-        session_start();
         if (!isset($_SESSION['chapa']) || empty($_SESSION['chapa'])) {
             header('Location: ../index.php');
             exit();
@@ -50,8 +52,6 @@
                 <select name="area_pista" id="area_pista" required>
                     <option value="">Área</option>
                     <?php 
-                        include_once('../config/config.php');
-
                         $query_area = "SELECT area FROM area_pista";
                         $result_area = mysqli_query($conexao, $query_area);
 
@@ -277,8 +277,8 @@
                             $mail->IsSMTP();
                             $mail->SMTPDebug = 1;
                             $mail->SMTPAuth = true;
-                            $mail->SMTPSecure = 'ssl'; 
-                            $mail->Host = "zeentech.com.br"; 
+                            $mail->SMTPSecure = 'tsl'; 
+                            $mail->Host = "equipzeentech.com"; 
                             $mail->Port = 587;
                             $mail->IsHTML(true); 
                             $mail->Username = "admin@equipzeentech.com"; 

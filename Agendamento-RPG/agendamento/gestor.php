@@ -1,3 +1,7 @@
+<?php
+    include_once('../config/config.php');
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -15,9 +19,7 @@
 
 </head>
 <body>
-    <?php 
-        session_start();
-        include_once('../config/config.php');
+    <?php
         if (!isset($_SESSION['chapa']) || empty($_SESSION['chapa'])) {
             session_unset();
             header('Location: ../index.php');
@@ -430,11 +432,8 @@
     </main>
     <?php
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addVeic'])) {
-            include_once('../config/config.php');
 
             if (!empty($_GET['novoVeic'])) {
-                include_once('../config/config.php');
-
                 $novoVeic = $_GET['novoVeic'];
                 $query_addVeic = "INSERT INTO veics(veic) VALUES ('$novoVeic')";
                 mysqli_query($conexao, $query_addVeic);
@@ -443,19 +442,13 @@
 
 
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['rmvVeic'])) {
-            include_once('../config/config.php');
-
             $removerVeiculo = $_GET['removerVeiculo'];
             $query_removerVeiculo = "DELETE FROM veics WHERE veic = '$removerVeiculo'";
             mysqli_query($conexao, $query_removerVeiculo);
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addArea'])) {
-            include_once('../config/config.php');
-
             if (!empty($_GET['novoArea'])) {
-                include_once('../config/config.php');
-
                 $novoArea = $_GET['novoArea'];
                 $query_addArea = "INSERT INTO area_pista(area) VALUES ('$novoArea')";
                 mysqli_query($conexao, $query_addArea);
@@ -464,8 +457,6 @@
 
 
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['rmvArea'])) {
-            include_once('../config/config.php');
-
             $removerArea = $_GET['removerArea'];
             $query_removerArea = "DELETE FROM area_pista WHERE area = '$removerArea'";
             mysqli_query($conexao, $query_removerArea);

@@ -1,3 +1,7 @@
+<?php
+    include_once('config/config.php');
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -38,7 +42,6 @@
         </form>
     </main>
     <?php
-        include_once('config/config.php');
         if (isset($_POST['submit'])) {
             if (empty($_POST['chapa']) || empty($_POST['senha']))
             {
@@ -76,12 +79,25 @@
                     $email = $row['email'];
                     $area_solicitante = $row['area'];
 
-                    session_start();
                     $_SESSION['chapa'] = $chapa;
                     $_SESSION['nome'] = $nome;
                     $_SESSION['email'] = $email;
                     $_SESSION['area_solicitante'] = $area_solicitante;
-                    header('Location: agendamento/tabela-agendamentos.php');
+                    echo '<script>
+                    Swal.fire({
+                        icon: "success",
+                        title: "SUCESSO!",
+                        text: "Login realizado com sucesso!",
+                        confirmButtonText: "OK",
+                        confirmButtonColor: "#23CE6B",
+                        allowOutsideClick: false,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Redireciona o usuário para a página desejada
+                            window.location.href = "agendamento/tabela-agendamentos.php";
+                        }
+                    });
+                </script>';
                 }
             }
         }
