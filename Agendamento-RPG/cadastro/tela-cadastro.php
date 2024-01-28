@@ -32,12 +32,12 @@
                     <input type="text" name="area" id="area" placeholder="Insira sua area de atuação. Exemplo: RH.">
                 </div>
             </div>
-            <div class="chapa">
-                <div class="label-chapa">
-                    <label for="chapa"><img src="https://icons.iconarchive.com/icons/iconsmind/outline/16/ID-Card-icon.png" width="16" height="16" style="position: relative; top: 2px; margin-right: 5px;">Chapa:</label>
+            <div class="numero">
+                <div class="label-numero">
+                    <label for="numero"><img src="https://icons.iconarchive.com/icons/iconsmind/outline/16/ID-Card-icon.png" width="16" height="16" style="position: relative; top: 2px; margin-right: 5px;">Telefone:</label>
                 </div>
-                <div class="input-chapa">
-                    <input type="number" name="chapa" id="chapa" placeholder="Insira sua chapa..." maxlength="8" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                <div class="input-numero">
+                    <input type="text" name="numero" id="numero" placeholder="Insira seu número de telefone..." maxlength="11" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                 </div>
             </div>
             <div class="email">
@@ -66,7 +66,7 @@
         </form>
         <?php
         if (isset($_POST['submit'])) {
-            if (empty($_POST['nome']) || empty($_POST['area']) || empty($_POST['chapa']) || empty($_POST['email']) || empty($_POST['senha'])) {
+            if (empty($_POST['nome']) || empty($_POST['area']) || empty($_POST['numero']) || empty($_POST['email']) || empty($_POST['senha'])) {
                 echo '<script>
                     Swal.fire({
                         icon: "warning",
@@ -78,11 +78,11 @@
             } else {
                 $nome = $_POST['nome'];
                 $area = $_POST['area'];
-                $chapa = $_POST['chapa'];
+                $numero = $_POST['numero'];
                 $email = $_POST['email'];
                 $senha = $_POST['senha'];
 
-                $query = "SELECT COUNT(*) as count FROM chapa_lista WHERE chapa = '$chapa'";
+                $query = "SELECT COUNT(*) as count FROM numero_lista WHERE numero = '$numero'";
                 $result = $conexao->query($query);
                 $row = mysqli_fetch_assoc($result);
 
@@ -91,26 +91,26 @@
                         Swal.fire({
                             icon: "warning",
                             title: "ATENÇÃO!",
-                            html: "Sua chapa não se encontra no nosso banco de dados!<br>Entre em contato com o nosso suporte para mais informações.<br>Contato: crpereira@zeentech.com.br"
+                            html: "Seu número não se encontra no nosso banco de dados!<br>Entre em contato com o nosso suporte para mais informações.<br>Contato: crpereira@zeentech.com.br"
                         });
                     </script>';
                     exit();
                 }
                 
-                $chapa_query = "SELECT COUNT(*) as count FROM logins WHERE chapa = '$chapa'";
-                $result_chapa = $conexao->query($chapa_query);
-                $row_chapa = mysqli_fetch_assoc($result_chapa);
+                $numero_query = "SELECT COUNT(*) as count FROM logins WHERE numero = '$numero'";
+                $result_numero = $conexao->query($numero_query);
+                $row_numero = mysqli_fetch_assoc($result_numero);
 
                 $email_query = "SELECT COUNT(*) as count FROM logins WHERE email = '$email'";
                 $result_email = $conexao->query($email_query);
                 $row_email = mysqli_fetch_assoc($result_email);
 
-                if ($row_chapa['count'] > 0) {
+                if ($row_numero['count'] > 0) {
                     echo '<script>
                         Swal.fire({
                             icon: "warning",
                             title: "ATENÇÃO!",
-                            html: "Sua chapa já está cadastrada!<br>Caso não esteja conseguindo logar no site mesmo com sua chapa e senha, entre em contato com nosso suporte.<br>Contato: crpereira@zeentech.com.br"
+                            html: "Seu número já está cadastrado!<br>Caso não esteja conseguindo logar no site mesmo com seu número e senha, entre em contato com nosso suporte.<br>Contato: crpereira@zeentech.com.br"
                         });
                     </script>';
                     exit();
@@ -119,12 +119,12 @@
                         Swal.fire({
                             icon: "warning",
                             title: "ATENÇÃO!",
-                            html: "Seu email já está cadastrado!<br>Tente logar com a sua chapa e senha."
+                            html: "Seu email já está cadastrado!<br>Tente logar com o seu número e senha."
                         });
                     </script>';
                     exit();
                 } else {
-                    $result = mysqli_query($conexao, "INSERT INTO logins(chapa, nome, area, email, senha) VALUES('$chapa','$nome','$area','$email', '$senha')");
+                    $result = mysqli_query($conexao, "INSERT INTO logins(numero, nome, area, email, senha) VALUES('$numero','$nome','$area','$email', '$senha')");
 
                     if ($result) {
                         $affected_rows = mysqli_affected_rows($conexao);

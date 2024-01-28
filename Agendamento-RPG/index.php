@@ -16,12 +16,12 @@
     <main>
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" class="login">
             <div class="titulo-login"><h1>Login</h1></div>
-            <div class="chapa-login">
-                <div class="chapa-login-label">
-                    <label for="chapa"><img src="https://icons.iconarchive.com/icons/iconsmind/outline/16/ID-Card-icon.png" width="16" height="16" style="position: relative; top: 2px; margin-right: 5px;">Chapa:</label>
+            <div class="numero-login">
+                <div class="numero-login-label">
+                    <label for="numero"><img src="https://icons.iconarchive.com/icons/iconsmind/outline/16/ID-Card-icon.png" width="16" height="16" style="position: relative; top: 2px; margin-right: 5px;">Telefone:</label>
                 </div>
-                <div class="chapa-login-input">
-                    <input type="number" name="chapa" id="chapa" placeholder="Insira a chapa cadastrada..." maxlength="8" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                <div class="numero-login-input">
+                    <input type="text" name="numero" id="numero" placeholder="Insira seu número de telefone cadastrado..." maxlength="11" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                 </div>
             </div>
             <div class="senha-login">
@@ -43,7 +43,7 @@
     </main>
     <?php
         if (isset($_POST['submit'])) {
-            if (empty($_POST['chapa']) || empty($_POST['senha']))
+            if (empty($_POST['numero']) || empty($_POST['senha']))
             {
                 echo '<script>
                 Swal.fire({
@@ -54,10 +54,10 @@
                 </script>';  
             }
             else {
-                $chapa = $_POST['chapa'];
+                $numero = $_POST['numero'];
                 $senha = $_POST['senha'];
 
-                $query = "SELECT * FROM logins WHERE chapa = '$chapa' and senha = '$senha'";
+                $query = "SELECT * FROM logins WHERE numero = '$numero' and senha = '$senha'";
 
                 $result = $conexao->query($query);
 
@@ -67,7 +67,7 @@
                     Swal.fire({
                         icon: "warning",
                         title: "ATENÇÃO!",
-                        html: "Sua chapa ou senha estão incorretos.<br>Verifique se você já realizou um cadastro ou se digitou algo incorretamente."
+                        html: "Seu numero ou senha estão incorretos.<br>Verifique se você já realizou um cadastro ou se digitou algo incorretamente."
                     });
                     </script>';
                 }
@@ -75,15 +75,17 @@
                 {
                     $row = mysqli_fetch_assoc($result);
                     $nome = $row['nome'];
-                    $chapa = $row['chapa'];
+                    $numero = $row['numero'];
                     $email = $row['email'];
                     $area_solicitante = $row['area'];
+                    $empresa = $row['empresa'];
 
-                    $_SESSION['chapa'] = $chapa;
+                    $_SESSION['numero'] = $numero;
                     $_SESSION['nome'] = $nome;
                     $_SESSION['email'] = $email;
                     $_SESSION['area_solicitante'] = $area_solicitante;
-                    echo '<script>
+                    $_SESSION['empresa'] = $empresa;
+                    /* echo '<script>
                     Swal.fire({
                         icon: "success",
                         title: "SUCESSO!",
@@ -97,7 +99,11 @@
                             window.location.href = "agendamento/tabela-agendamentos.php";
                         }
                     });
-                </script>';
+                </script>'; */
+
+                header("Location: agendamento/tabela-agendamentos.php");
+                exit();
+
                 }
             }
         }

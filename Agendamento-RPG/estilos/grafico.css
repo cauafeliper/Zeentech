@@ -388,10 +388,6 @@ padding-left: 2px;
 padding-right: 2px;
 }
 
-.bar_inv{
-  display: none;
-}
-
 .quad_filtro{
   background-color: #4c739741;
   border-radius: 15px;
@@ -537,6 +533,7 @@ label {
   align-items: center;
   align-items: end;
   height: 80%;
+  padding-top: 1.5rem;
 }
 
 .barras_titulo {
@@ -1118,4 +1115,8 @@ header ul {
   footer {
     position: relative;
   }
+}
+
+.bar_inv{
+  display: none;
 }

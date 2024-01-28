@@ -6,14 +6,16 @@
 
 include 'functions.php';
 
+date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
+
 use PhpOffice\PhpSpreadsheet\Writer\Ods\Content;
-    if (!isset($_SESSION['chapa']) || empty($_SESSION['chapa'])) {
+    if (!isset($_SESSION['numero']) || empty($_SESSION['numero'])) {
         session_unset();
         header('Location: ../index.php');
     }
     
-    $chapa = $_SESSION['chapa'];
-    $query = "SELECT * FROM chapa_adm WHERE chapa = '$chapa'";
+    $numero = $_SESSION['numero'];
+    $query = "SELECT * FROM numero_adm WHERE numero = '$numero'";
     $result = mysqli_query($conexao, $query);
     
     if (!$result || mysqli_num_rows($result) === 0) {
@@ -88,6 +90,8 @@ foreach ($mes as $diaMes){
 $WidthGraficoMes = count($mes) * 140 + 78 + 78;
 
 $listaMeses = CriarListaMeses($conexao, $dia, $listaPistas, $listaPistasClasse);
+
+$listaMesesH = CriarListaMesesH($conexao, $dia, $listaPistas, $listaPistasClasse);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
     // Aqui você processa os dados do formulário e gera as informações para o novo gráfico
@@ -346,7 +350,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                     </div>
 
                     <div id="graf_ano" class="div__grafico div__width">
-
                         <div class="tit">
                             <?php
                             $diastr = strtotime($dia);
@@ -354,8 +357,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                             ?>
                         </div>
                         <div class="out_grafico" style="height: 600px;">
+                            <form>
+                                <div style="display:flex; flex-direction:column; justify-content:space-around; align-items:center; gap:5px; width:100%; color: white; padding-bottom: 1rem" id="filtro_opcao">
+                                    <label style="font-size: 18px;">
+                                        <input style="font-size: 20px;" class="opcaoAno" type="radio" name="opcaoFiltro" value="Quantidade" checked>
+                                        Quantidade
+                                    </label>
+                                    <label style="font-size: 18px;">
+                                        <input class="opcaoAno" type="radio" name="opcaoFiltro" value="Horas">
+                                        Horas
+                                    </label>
+                                </div>
+                            </form>
                             <?php
-                            echo '<div class="grafico grafico_ano" style="position: relative;">';
+                            echo '<div name="ano_vezes" class="grafico grafico_ano" style="position: relative;">';
                             ?>
                                 <div class="dupla_meses">
                                     <div id="ano" class="graf_barras" style="width: 800px; height:400px">
@@ -381,7 +396,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                                                         $cor = "#001e50";
                                                     }
                                                     $porcentagemBarra = ($listaMeses[12][$listaPistasClasse[$i]] * 100) / $maior;
-                                                    echo '<div class="barra_ano_'.$listaPistasClasse[$i].'"> <p style="color: white"> '.$listaMeses[12][$listaPistasClasse[$i]].' </p> </div>';
+                                                    echo '<div><p></p></div><div class="barra_ano_'.$listaPistasClasse[$i].'"> <p style="color: white"> '.$listaMeses[12][$listaPistasClasse[$i]].' </p> </div>';
                                                     echo '<style>';
                                                     echo '.barra_ano_'.$listaPistasClasse[$i].' {background-color: '.$cor.'; width: 50px; display: flex; justify-content: center; align-items: end;}';
                                                     if ($listaMeses[12][$listaPistasClasse[$i]] > 0){
@@ -452,6 +467,115 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                                                         echo '<div class="legenda barra_legenda_'.$listaAno[$z].'_'.$listaPistasClasse[$l].'"> '.$listaPistasAno[$l].' </div>
                                                         <style>
                                                             .barra_legenda_'.$listaAno[$z].'_'.$listaPistasClasse[$l].' {color: black; transform: rotate(45deg); width: 80px; align-items: end; height: 100%; align-items:  start;  display: flex; justify-content: space-between; position: absolute; left: '.(-20 + ($l * 68)).'px; bottom: -20px;}
+                                                        </style>';
+                                                    }
+                                                echo '</div>
+                                            </div>';
+                                            $z++;
+                                        }
+                                    echo '</div>';
+                                }
+                                ?>
+                            </div>
+
+                            <?php
+                            echo '<div id="ano_horas" class="grafico grafico_ano bar_inv" style="position: relative;">';
+                            ?>
+                                <div class="dupla_meses">
+                                    <div name="ano" class="graf_barras" style="width: 800px; height:400px">
+                                        <div class="barras_titulo"><h3>
+                                            Ano Completo
+                                        </h3></div>
+                                        <?php
+                                            echo '<div style="justify-content: center; display: flex"><p>Total: '.intval($listaMesesH[12]['total']/60).'h'.intval($listaMesesH[12]['total']%60).'</p></div>';
+                                        ?>
+                                        <div class="barras">
+                                            <?php
+                                                $maiorH = 1;
+                                                for ($i = 0; $i < 8; $i++){
+                                                    if ($listaMesesH[12][$listaPistasClasse[$i]] > $maiorH){
+                                                        $maiorH = $listaMesesH[12][$listaPistasClasse[$i]];
+                                                    }
+                                                }
+                                                for ($i = 0; $i < 8; $i++){
+                                                    if ($i % 2 == 0){
+                                                        $cor = "#4C7397";
+                                                    }
+                                                    else{
+                                                        $cor = "#001e50";
+                                                    }
+                                                    $porcentagemBarra = ($listaMesesH[12][$listaPistasClasse[$i]] * 100) / $maiorH;
+                                                    echo '<div><p></p></div><div class="barraH_ano_'.$listaPistasClasse[$i].'"> <p style="color: white"> '.intval($listaMesesH[12][$listaPistasClasse[$i]]/60).'h'.intval($listaMesesH[12][$listaPistasClasse[$i]]%60).'</p> </div>';
+                                                    echo '<style>';
+                                                    echo '.barraH_ano_'.$listaPistasClasse[$i].' {background-color: '.$cor.'; width: 50px; display: flex; justify-content: center; align-items: end;}';
+                                                    if ($listaMesesH[12][$listaPistasClasse[$i]] > 0){
+                                                        echo '.barraH_ano_'.$listaPistasClasse[$i].' {height: '.$porcentagemBarra.'%;}';
+                                                    }
+                                                    else{
+                                                        echo '.barraH_ano_'.$listaPistasClasse[$i].' {height: 1%;}';
+                                                    }
+                                                    echo '</style>';
+                                                }
+                                            ?>
+                                        </div>
+                                        <div class="barras_legenda">
+                                            <?php 
+                                                for ($i = 0; $i < 8; $i++){
+                                                    echo '<div class="legenda barraH_legenda_tudo_'.$listaPistasClasse[$i].'"> '.$listaPistasAno[$i].' </div>';
+                                                    echo '<style>';
+                                                    echo '.barraH_legenda_tudo_'.$listaPistasClasse[$i].' {color: black; transform: rotate(45deg); width: 80px; align-items: end; height: 100%; align-items:  start;  display: flex; justify-content: space-between; position: absolute; left: '.(-30 + ($i * 103)).'px; bottom: -20px;}';
+                                                    echo '</style>';
+                                                }
+                                            ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php
+                                $maiorMesesH = 1;
+                                $z = 0;
+                                for ($l = 0; $l < 12; $l++){
+                                    for ($k = 0; $k < 8; $k++){
+                                        if ($listaMesesH[$l][$listaPistasClasse[$k]] > $maiorMesesH){
+                                            $maiorMesesH = $listaMesesH[$l][$listaPistasClasse[$k]];
+                                        }
+                                    }
+                                }
+                                for ($i = 0; $i < 6; $i++){                                    
+                                    echo '<div id="'.$i.'_meses" class="dupla_meses">';
+                                        for ($j = 0; $j < 2; $j++){
+                                            echo '<div id="'.ucfirst($listaAno[$z]).'" class="graf_barras">
+                                                <div class="barras_titulo"><form action="'.$_SERVER['PHP_SELF'].'" method="POST" class="quad_graf_ano"><div class="quad_graf_ano" style="border: none"><div class="title_ano" style="z-index: 2;"><input type="submit" value="'.ucfirst($listaAno[$z]).'"><input style="background-color: unset; color:#001e50; text-align: center; cursor: unset; padding-left: 10%;" type="hidden" readonly name="dia" id="dia" value="'.date('Y-m-d', strtotime($primeirosDiasDosMeses[$z])).'"></div></div></form></div>
+                                                <div style="justify-content: center; display: flex"><p>Total: '.intval($listaMesesH[$z]['total']/60).'h'.intval($listaMesesH[$z]['total']%60).'</p></div>
+                                                <div class="barras">';
+                                                    for ($l = 0; $l < 8; $l++){
+                                                        if ($l % 2 == 0){
+                                                            $cor = "#4C7397";
+                                                        }
+                                                        else{
+                                                            $cor = "#001e50";
+                                                        }
+                                                        $porcentagemBarra = ($listaMesesH[$z][$listaPistasClasse[$l]] * 100) / $maiorMesesH;
+                                                        echo '<div class="barraH_'.$listaAno[$z].'_'.$listaPistasClasse[$l].'">';
+                                                        if ($listaMesesH[$z][$listaPistasClasse[$l]] > 0){
+                                                        echo '<p style="color: white"> '.intval($listaMesesH[$z][$listaPistasClasse[$l]]/60).'h'.intval($listaMesesH[$z][$listaPistasClasse[$l]]%60).' </p>';
+                                                        }
+                                                        echo '</div>
+                                                        <style>
+                                                            .barraH_'.$listaAno[$z].'_'.$listaPistasClasse[$l].' {background-color: '.$cor.'; width: 50px; display: flex; justify-content: center; align-items: end;}';
+                                                            if ($listaMesesH[$z][$listaPistasClasse[$l]] > 0){
+                                                                echo '.barraH_'.$listaAno[$z].'_'.$listaPistasClasse[$l].' {height: '.$porcentagemBarra.'%;}';
+                                                            }
+                                                            else{
+                                                                echo '.barraH_'.$listaAno[$z].'_'.$listaPistasClasse[$l].' {height: 1%;}';
+                                                            }
+                                                        echo'</style>';
+                                                    }
+                                                echo '</div>
+                                                <div class="barras_legenda">';
+                                                    for ($l = 0; $l < 8; $l++){
+                                                        echo '<div class="legenda barraH_legenda_'.$listaAno[$z].'_'.$listaPistasClasse[$l].'"> '.$listaPistasAno[$l].' </div>
+                                                        <style>
+                                                            .barraH_legenda_'.$listaAno[$z].'_'.$listaPistasClasse[$l].' {color: black; transform: rotate(45deg); width: 80px; align-items: end; height: 100%; align-items:  start;  display: flex; justify-content: space-between; position: absolute; left: '.(-20 + ($l * 68)).'px; bottom: -20px;}
                                                         </style>';
                                                     }
                                                 echo '</div>
@@ -762,7 +886,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
         document.addEventListener('DOMContentLoaded', function () {
             const checkboxes = document.querySelectorAll('.filter-checkbox');
             const checkboxesPista = document.querySelectorAll('.filter-pista');
-            const options =document.querySelectorAll('.opcao');
+            const options = document.querySelectorAll('.opcao');
+            const optionsAno = document.querySelectorAll('.opcaoAno');
 
             function updateChart() {
                 checkboxes.forEach((checkbox, index) => {
@@ -816,6 +941,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                 });
             }
 
+            function updateOptionAno() {
+                const grafsAno = document.querySelectorAll('.grafico_ano');
+
+                grafsAno.forEach((grafAno) => {
+                    if (grafAno.getAttribute('name') == 'ano_vezes'){
+                        if (optionsAno[0].checked){
+                            grafAno.style.display = 'flex';
+                        }
+                        else{
+                            grafAno.style.display = 'none';
+                        }
+                    }
+                    else{
+                        if (optionsAno[1].checked){
+                            grafAno.style.display = 'flex';
+                        }
+                        else{
+                            grafAno.style.display = 'none';
+                        }
+                    }
+                });
+            }
+
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', updateChart);
             });
@@ -826,6 +974,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
 
             options.forEach(option => {
                 option.addEventListener('change', updateOption)
+            });
+
+            optionsAno.forEach(option => {
+                option.addEventListener('change', updateOptionAno)
             });
 
         });

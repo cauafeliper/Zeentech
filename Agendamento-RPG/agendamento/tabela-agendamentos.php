@@ -2,6 +2,13 @@
     include_once('../config/config.php');
     session_start();
 ?>
+
+<?php
+include '../grafico/functions.php'; 
+
+date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -16,7 +23,7 @@
 </head>
 <body>
     <?php 
-        if (!isset($_SESSION['chapa']) || empty($_SESSION['chapa'])) {
+        if (!isset($_SESSION['numero']) || empty($_SESSION['numero'])) {
             header('Location: ../index.php');
             exit();
         }
@@ -26,9 +33,9 @@
         <ul>
             <?php 
 
-                $chapa = $_SESSION['chapa'];
+                $numero = $_SESSION['numero'];
 
-                $query = "SELECT COUNT(*) as count FROM chapa_adm WHERE chapa = '$chapa'";
+                $query = "SELECT COUNT(*) as count FROM numero_adm WHERE numero = '$numero'";
                 $resultado = mysqli_query($conexao, $query);
                 $linha = mysqli_fetch_assoc($resultado);
                 $admTrue = ($linha['count'] > 0);
@@ -45,8 +52,8 @@
         </ul>
     </header>
     
-    <main>
-        <div class="tabela">
+    <main style="height:100%; justify-content:center;">
+        <div id="tabelaAgendamentos" class="tabela" style="height:auto">
             <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" onsubmit="return validateForm()">
                 <input type="date" id="data" name="data" placeholder="Indique a data" class="filtro__data">
                 <select name="area_pista" id="area_pista" required>
@@ -80,7 +87,7 @@
 
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
-                                echo "<tr><td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["veic"] . "</td><td>" . $row["objtv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $row["area_pista"] . "</td></tr>";
+                                echo "<tr><td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["objtv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $row["area_pista"] . "</td></tr>";
                             }
                         } else {
                             echo "<tr><td colspan='6'>Ainda não existem agendamentos para esta data e área.</td></tr>";
@@ -96,7 +103,7 @@
 
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
-                                echo "<tr><td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["veic"] . "</td><td>" . $row["objtv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $row["area_pista"] . "</td></tr>";
+                                echo "<tr><td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["objtv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $row["area_pista"] . "</td></tr>";
                             }
                         } else {
                             echo "<tr><td colspan='6'>Ainda não existem agendamentos para esta data e área.</td></tr>";
@@ -108,18 +115,22 @@
                 ?>
             </table>
         </div>
-
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" id="formularioAgendamento" class="form__agendamento novo__agendamento">
+        <div style="display: flex; flex-direction:row; width:90%; padding: 0; height: fit-content; justify-content: center; background: none;">
+            <iframe class="iframeGrafico" id="iframeGrafico" src="../grafico/grafico_dia.php" width="100%" height="100%" frameborder="0"></iframe>
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" id="formularioAgendamento" class="form__agendamento novo__agendamento">
             <div class="titulo">
                 <h2>Novo Agendamento</h2>
             </div>
             <div class="solicitante">
                 <label for="solicitante">Solicitante:</label>
-                <input type="text" name="solicitante" id="solicitante" value="<?= $_SESSION['nome'] ?>" readonly>
+                <input type="text" name="solicitante" id="solicitante" value="<?= $_SESSION['nome'] ?>" readonly style="display:none">
+                <h2 style="color: white;"><?= $_SESSION['nome'] ?></h2>
+                <label for="solicitante">Empresa: <?= $_SESSION['empresa'] ?></label>
+                <label for="solicitante">Área: <?= $_SESSION['area_solicitante'] ?></label>
             </div>
             <div class="dia grids">
                 <label for="dia">Dia:</label>
-                <input type="date" name="dia" id="dia" placeholder="Indique a data">
+                <input type="date" name="dia" id="dia" placeholder="Indique a data" oninput="diaGrafico()" required>
                 <script>
                     flatpickr("#dia", {
                         dateFormat: "Y-m-d",
@@ -129,13 +140,13 @@
             </div>
             <div class="hora_inicio grids">
                 <label for="hora_inicio">Hora de Início:</label>
-                <input type="time" id="hora_inicio" name="hora_inicio" min="07:00" max="19:00">
+                <input type="time" id="hora_inicio" name="hora_inicio" min="07:00" max="19:00" required>
             </div>
             <div class="hora_fim grids">
                 <label for="hora_fim">Hora do Fim:</label>
-                <input type="time" id="hora_fim" name="hora_fim" min="07:00" max="19:00">
+                <input type="time" id="hora_fim" name="hora_fim" min="07:00" max="19:00" required>
             </div>
-            <div class="area_solicitante grids">
+            <div class="area_solicitante grids" style="display:none">
                 <label for="area_solicitante">Área do Solicitante:</label>
                 <input type="text" name="area_solicitante" value="<?= $_SESSION['area_solicitante'] ?>" readonly>
             </div>
@@ -166,23 +177,6 @@
                     ?>
                 </select>
             </div>
-            <div class="veic grids">
-                <label for="veiculo">Veículo:</label>
-                <select name="veic" id="veic" required>
-                    <option value="">Selecione o Veículo</option>
-                    <?php
-                        $query_veics = "SELECT veic FROM veics";
-                        $result_veics = mysqli_query($conexao, $query_veics);
-                        while ($row_veic = mysqli_fetch_assoc($result_veics)) {
-                            echo '<option value="' . $row_veic['veic'] . '">' . $row_veic['veic'] . '</option>';
-                        }
-                    ?>
-                </select>
-            </div>
-            <div class="resp_veic grids">
-                <label for="responsavel_veiculo">Resp. pelo Veículo:</label>
-                <input type="text" name="resp_veic" id="resp_veic" placeholder="Indique o Responsável">
-            </div>
             <div class="exclsv grids">
                 <label for="exclsv" style="margin-right: 50px; display: block;">Uso Exclusivo?</label>
                 <label for="sim" style="font-size: smaller; width: 30%; margin-top: 5px; background-color: #001e50;">Sim:</label>
@@ -203,9 +197,10 @@
                 <input type="submit" name="submit" value="Agendar">
             </div>
         </form>
+        </div>
         <?php
         if (isset($_POST['submit'])) {
-            if (empty($_POST['solicitante']) OR empty($_POST['dia']) OR empty($_POST['hora_inicio']) OR empty($_POST['hora_fim']) OR empty($_POST['area_solicitante']) OR empty($_POST['area']) OR empty($_POST['objetivo']) OR empty($_POST['veic']) OR empty($_POST['resp_veic']) OR empty($_POST['resposta']) OR empty($_POST['obs'])) {
+            if (empty($_POST['solicitante']) OR empty($_POST['dia']) OR empty($_POST['hora_inicio']) OR empty($_POST['hora_fim']) OR empty($_POST['area_solicitante']) OR empty($_POST['area']) OR empty($_POST['objetivo']) OR empty($_POST['resposta']) OR empty($_POST['obs'])) {
                 echo "<script>
                     Swal.fire({
                         icon: 'warning',
@@ -215,14 +210,14 @@
                 </script>";
             } else {
                 $solicitante = $_POST['solicitante'];
+                $numero_solicitante = $_SESSION['numero'];
+                $empresa_solicitante = $_SESSION['empresa'];
                 $area_solicitante = $_POST['area_solicitante'];
                 $data = $_POST['dia'];
                 $hora_inicio = $_POST['hora_inicio'];
                 $hora_fim = $_POST['hora_fim'];
                 $area = $_POST['area'];
                 $objetivo = $_POST['objetivo'];
-                $veiculo = $_POST['veic'];
-                $resp_veic = $_POST['resp_veic'];
                 $exclsv = $_POST['resposta'];
                 $status = $_POST['status'];
                 $obs = $_POST['obs'];
@@ -246,7 +241,7 @@
                         });
                     </script>";
                 } else {
-                    $query = "INSERT INTO agendamentos (area_pista, dia, hora_inicio, hora_fim, objtv, solicitante, area_solicitante, veic, resp_veic, exclsv, obs, status) VALUES ('$area', '$data', '$hora_inicio', '$hora_fim', '$objetivo', '$solicitante', '$area_solicitante', '$veiculo', '$resp_veic', '$exclsv', '$obs', '$status')";
+                    $query = "INSERT INTO agendamentos (area_pista, dia, hora_inicio, hora_fim, objtv, solicitante, numero_solicitante, empresa_solicitante, area_solicitante, exclsv, obs, status) VALUES ('$area', '$data', '$hora_inicio', '$hora_fim', '$objetivo', '$solicitante', '$numero_solicitante', '$empresa_solicitante', '$area_solicitante', '$exclsv', '$obs', '$status')";
                     $result = mysqli_query($conexao, $query);
 
                     if ($result) {
@@ -266,7 +261,7 @@
                                     }
                                 });
                             </script>';
-                            $query_email = "SELECT email FROM logins WHERE chapa = '$chapa'";
+                            $query_email = "SELECT email FROM logins WHERE numero = '$numero'";
                             $result_email = mysqli_query($conexao, $query_email);
                             $row_email = mysqli_fetch_assoc($result_email);
                             $email = $row_email['email'];
@@ -293,7 +288,7 @@
 
                             $mail->addAddress('crpereira@zeentech.com.br');
                             $mail->Subject = 'Nova solicitação de agendamento para pista a Pista de Teste!';
-                            $mail->Body = utf8_decode('Uma nova solicitação para o agendamento da Pista de Teste foi criada pelo colaborador(a) ' . $solicitante .' no dia ' . $data . ' e horário de ' . $hora_inicio . ' até ' . $hora_fim . ' com objetivo de ' . $objetivo . ' para o veículo ' . $veiculo . '. Essa nova solicitação aguarda sua resposta!<br>Atenciosamente,<br>Equipe Zeentech.');
+                            $mail->Body = utf8_decode('Uma nova solicitação para o agendamento da Pista de Teste foi criada pelo colaborador(a) ' . $solicitante .' no dia ' . $data . ' e horário de ' . $hora_inicio . ' até ' . $hora_fim . ' com objetivo de ' . $objetivo .'. Essa nova solicitação aguarda sua resposta!<br>Atenciosamente,<br>Equipe Zeentech.');
                             $mail->send();
                         } 
                         else {
@@ -355,5 +350,53 @@
             minDate: "today"
         });
     </script>
+
+    <script>
+        function diaGrafico() {
+        var valorData = document.getElementById('dia').value;
+
+        // Use AJAX para enviar a nova data ao servidor PHP
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('POST', '../grafico/atualizarDia.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // A resposta do servidor é recebida aqui
+                console.log(xhr.responseText);
+
+                // Recarregue o iframe para refletir a nova data
+                document.getElementById('iframeGrafico').contentWindow.location.reload();
+            }
+        };
+
+        xhr.send('novaData=' + valorData);
+        };
+
+        window.onload = function() {
+            console.log('A página foi carregada!');
+            var valorData = 'atual';
+
+            // Use AJAX para enviar a nova data ao servidor PHP
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('POST', '../grafico/atualizarDia.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // A resposta do servidor é recebida aqui
+                    console.log(xhr.responseText);
+
+                    // Recarregue o iframe para refletir a nova data
+                    document.getElementById('iframeGrafico').contentWindow.location.reload();
+                }
+            };
+
+            xhr.send('novaData=' + valorData);
+        };
+    </script>
+
 </body>
 </html>

@@ -1,8 +1,10 @@
 <?php
-    include_once('../config/config.php');
-    session_start();
+    /* include_once('../config/config.php');
+    session_start(); */
 ?>
 <?php 
+
+date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
 
 function PorcentagemMinuto($minuto) { // retorna a porcentagem do minuto em relação a 60 minutos
     $minuto = intval($minuto);
@@ -159,7 +161,7 @@ function CriarCSSdia($conexao, $dia, $area_pista, $letra, $pistaClasse, $y){ // 
 }
 
 function CriarHTMLdia($conexao, $dia, $area_pista, $letra){ // cria as divs com as classes para cada pista
-    $sql = "SELECT hora_inicio, hora_fim, solicitante, area_solicitante, veic FROM agendamentos WHERE area_pista = '$area_pista' AND dia='$dia' AND status='Aprovado'";
+    $sql = "SELECT hora_inicio, hora_fim, solicitante, area_solicitante, numero_solicitante, empresa_solicitante FROM agendamentos WHERE area_pista = '$area_pista' AND dia='$dia' AND status='Aprovado'";
     $result = $conexao->query($sql);
     $j = 2;
     while ($row = $result->fetch_assoc()) {
@@ -168,12 +170,15 @@ function CriarHTMLdia($conexao, $dia, $area_pista, $letra){ // cria as divs com 
         $horario = "$horarioInicio - $horarioFim";
         $solicitante = $row["solicitante"];
         $areaSolicitante = $row["area_solicitante"];
-        $veic = $row["veic"];
+        $numero = $row["numero_solicitante"];
+        $empresa = $row["empresa_solicitante"];
         $classe = "$letra".$j;
         echo '<div class="'.$classe.'"></div>';
         echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
             '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
+            '<p><span style="color: #4C7397;">Empresa: </span>'."$empresa".'</p>'.
             '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
+            '<p><span style="color: #4C7397;">Telefone: </span>'."$numero".'</p>'.
         '</div>';
         $j++;
     }
@@ -181,7 +186,7 @@ function CriarHTMLdia($conexao, $dia, $area_pista, $letra){ // cria as divs com 
 
 function CriarHTMLsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClasse){ // cria as divs com as classes para cada pista
     for ($i = 0; $i < 8; $i++){
-        $sql = "SELECT hora_inicio, hora_fim, solicitante, area_solicitante, veic FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND status='Aprovado'";
+        $sql = "SELECT hora_inicio, hora_fim, solicitante, area_solicitante, numero_solicitante, empresa_solicitante, id FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND status='Aprovado'";
         $result = $conexao->query($sql);
         $j = 2;
         echo '<div class="'.$listaPistaClasse[$i].'" style="width: 140px">';
@@ -191,12 +196,17 @@ function CriarHTMLsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPista
             $horario = "$horarioInicio - $horarioFim";
             $solicitante = $row["solicitante"];
             $areaSolicitante = $row["area_solicitante"];
-            $veic = $row["veic"];
-            $classe = "$listaLetras[$i]".$j.'_semana';
+            $numero = $row["numero_solicitante"];
+            $empresa = $row["empresa_solicitante"];
+            $id = $row["id"];
+
+            $classe = "$listaLetras[$i]".$j.'_semana_'.$id;
             echo '<div class="'.$classe.'"></div>';
             echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
                 '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
+                '<p><span style="color: #4C7397;">Empresa: </span>'."$empresa".'</p>'.
                 '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
+                '<p><span style="color: #4C7397;">Telefone: </span>'."$numero".'</p>'.
             '</div>';
             $j++;
         }
@@ -207,7 +217,7 @@ function CriarHTMLsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPista
 
 function CriarCSSsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClasse, $listaY){ // cria as classes com os horários agendados
     for ($i = 0; $i < 8; $i++){
-        $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND status='Aprovado'";
+        $sql = "SELECT hora_inicio, hora_fim, exclsv, id FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND status='Aprovado'";
         $result = $conexao->query($sql);
         $horariosMarcados = array();
         if ($result->num_rows > 0) {
@@ -216,6 +226,7 @@ function CriarCSSsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaC
                 $exclsv = $row["exclsv"];
                 $horarioInicio = $row["hora_inicio"];
                 $horarioFim = $row["hora_fim"];
+                $id = $row["id"];
                 
                 $horaInicio = $horarioInicio[0] . $horarioInicio[1];
                 $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
@@ -225,7 +236,7 @@ function CriarCSSsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaC
 
                 $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
 
-                $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
+                $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim), 'id' => $id);
             }
             $j = 2;
             foreach ($horariosMarcados as $tarefa) {
@@ -234,6 +245,7 @@ function CriarCSSsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaC
                 $horaFim = $tarefa['horaFim'];
                 $minutoInicio = $tarefa['minutoInicio'];
                 $minutoFim = $tarefa['minutoFim'];
+                $id = $tarefa['id'];
                 
                 if ($horaInicio != $horaFim){
                     if($minutoInicio != '00'){
@@ -284,9 +296,8 @@ function CriarCSSsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaC
                 $leftTotal = ($leftTotal / 936) * 140;
                 
 
-                $classe = $listaLetras[$i].$j.'_semana';
+                $classe = $listaLetras[$i].$j.'_semana_'.$id;
                 $classeTip = 'tip_'.$classe;
-                $horario = "$horaInicio - $horaFim";
                 $leftTip = $leftTotal + ($tamanho/2) - 100;
                 if ($leftTip < 0){
                     $leftTip = 0;
@@ -313,7 +324,7 @@ function CriarCSSsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaC
 
 function CriarHTMLmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClasse){ // cria as divs com as classes para cada pista
     for ($i = 0; $i < 8; $i++){
-        $sql = "SELECT hora_inicio, hora_fim, solicitante, area_solicitante, veic FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND status='Aprovado'";
+        $sql = "SELECT hora_inicio, hora_fim, solicitante, area_solicitante, numero_solicitante, empresa_solicitante, id FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND status='Aprovado'";
         $result = $conexao->query($sql);
         $j = 2;
         echo '<div class="'.$listaPistaClasse[$i].'" style="width: 140px">';
@@ -323,12 +334,17 @@ function CriarHTMLmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaCla
             $horario = "$horarioInicio - $horarioFim";
             $solicitante = $row["solicitante"];
             $areaSolicitante = $row["area_solicitante"];
-            $veic = $row["veic"];
-            $classe = "$listaLetras[$i]".$j.'_semana';
+            $numero = $row["numero_solicitante"];
+            $empresa = $row["empresa_solicitante"];
+            $id = $row["id"];
+
+            $classe = "$listaLetras[$i]".$j.'_semana_'.$id;
             echo '<div class="'.$classe.'"></div>';
             echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
                 '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
+                '<p><span style="color: #4C7397;">Empresa: </span>'."$empresa".'</p>'.
                 '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
+                '<p><span style="color: #4C7397;">Telefone: </span>'."$numero".'</p>'.
             '</div>';
             $j++;
         }
@@ -339,7 +355,7 @@ function CriarHTMLmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaCla
 
 function CriarCSSmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClasse, $listaY){ // cria as classes com os horários agendados
     for ($i = 0; $i < 8; $i++){
-        $sql = "SELECT hora_inicio, hora_fim, exclsv FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND status='Aprovado'";
+        $sql = "SELECT hora_inicio, hora_fim, exclsv, id FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND status='Aprovado'";
         $result = $conexao->query($sql);
         $horariosMarcados = array();
         if ($result->num_rows > 0) {
@@ -348,6 +364,7 @@ function CriarCSSmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClas
                 $exclsv = $row["exclsv"];
                 $horarioInicio = $row["hora_inicio"];
                 $horarioFim = $row["hora_fim"];
+                $id = $row["id"];
                 
                 $horaInicio = $horarioInicio[0] . $horarioInicio[1];
                 $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
@@ -357,7 +374,7 @@ function CriarCSSmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClas
 
                 $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
 
-                $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
+                $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim), 'id' => $id);
             }
             $j = 2;
             foreach ($horariosMarcados as $tarefa) {
@@ -416,9 +433,8 @@ function CriarCSSmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClas
                 $leftTotal = ($leftTotal / 936) * 140;
                 
 
-                $classe = $listaLetras[$i].$j.'_semana';
+                $classe = $listaLetras[$i].$j.'_semana_'.$id;
                 $classeTip = 'tip_'.$classe;
-                $horario = "$horaInicio - $horaFim";
                 $leftTip = $leftTotal + ($tamanho/2) - 100;
                 if ($leftTip < 0){
                     $leftTip = 0;
@@ -450,11 +466,42 @@ function CriarListaMeses($conexao, $dia, $listaPistas, $listaPistasClasse){ // c
         $total = 0;
         $anoMes = substr($primeirosDias[$i], 0, 7); // Extrai os primeiros 7 caracteres ('Y-m') da data
         for ($j = 0; $j < 8; $j++){
-            $sql = "SELECT area_pista, dia FROM agendamentos WHERE area_pista = '$listaPistas[$j]' AND SUBSTRING(dia, 1, 7) = '$anoMes' AND status='Aprovado'";
+            $sql = "SELECT area_pista, dia, hora_inicio, hora_fim FROM agendamentos WHERE area_pista = '$listaPistas[$j]' AND SUBSTRING(dia, 1, 7) = '$anoMes' AND status='Aprovado'";
             $result = $conexao->query($sql);
             while ($row = $result->fetch_assoc()) {
                 $listaMeses[$i][$listaPistasClasse[$j]]++;
                 $total++;
+            }
+            $listaMeses[12][$listaPistasClasse[$j]] += $listaMeses[$i][$listaPistasClasse[$j]]; 
+        }
+        $listaMeses[$i]['total'] = $total;
+        $listaMeses[12]['total'] += $total;
+    }
+    return $listaMeses;
+}
+
+function CriarListaMesesH($conexao, $dia, $listaPistas, $listaPistasClasse){ // cria as divs com as classes para cada pista
+    $listaMeses = [$Janeiro = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Fevereiro = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Março = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Abril = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Maio = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Junho = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0], $Julho = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Agosto = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Setembro = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Outubro = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Novembro = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $Dezembro = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0], $totalAno = ['vda' => 0, 'nvh' => 0, 'obs' => 0, 'r_12_20' => 0, 'r_40' => 0, 'r_60' => 0, 'asf' => 0, 'pc' => 0, 'total' => 0]];
+    $primeirosDias = obterPrimeirosDiasDosMesesDoAno($dia);
+    for ($i = 0; $i < 12; $i++){
+        $total = 0;
+        $anoMes = substr($primeirosDias[$i], 0, 7); // Extrai os primeiros 7 caracteres ('Y-m') da data
+        for ($j = 0; $j < 8; $j++){
+            $sql = "SELECT area_pista, dia, hora_inicio, hora_fim FROM agendamentos WHERE area_pista = '$listaPistas[$j]' AND SUBSTRING(dia, 1, 7) = '$anoMes' AND status='Aprovado'";
+            $result = $conexao->query($sql);
+            while ($row = $result->fetch_assoc()) {
+                $horasInicio = $row["hora_inicio"][0].$row["hora_inicio"][1];
+                $minutosInicio = $row["hora_inicio"][3].$row["hora_inicio"][4];
+                $horasFim = $row["hora_fim"][0].$row["hora_fim"][1];
+                $minutosFim = $row["hora_fim"][3].$row["hora_fim"][4];
+
+                $horas = intval($horasFim) - intval($horasInicio);
+                $minutos = intval($minutosFim) - intval($minutosInicio);
+
+                $tempo = $horas * 60 + $minutos;
+
+                $listaMeses[$i][$listaPistasClasse[$j]] += $tempo;
+                $total += $tempo;
             }
             $listaMeses[12][$listaPistasClasse[$j]] += $listaMeses[$i][$listaPistasClasse[$j]]; 
         }

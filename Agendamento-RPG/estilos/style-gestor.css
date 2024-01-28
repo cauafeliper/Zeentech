@@ -47,9 +47,10 @@ body {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     overflow-y: auto;
+    height: 100vh;
 }
 
 /*============================================================================================================*/
@@ -197,36 +198,6 @@ main form {
   .label_area_pista { grid-area: label_area_pista; }
   
   .input_area_pista { grid-area: input_area_pista; }
-  
-  .veiculo {  display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 0.7fr 1.3fr;
-    gap: 5px 5px;
-    grid-auto-flow: row;
-    grid-template-areas:
-      "label_veiculo"
-      "input_veiculo";
-    grid-area: veiculo;
-  }
-  
-  .label_veiculo { grid-area: label_veiculo; }
-  
-  .input_veiculo { grid-area: input_veiculo; }
-  
-  .resp_veiculo {  display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 0.7fr 1.3fr;
-    gap: 5px 5px;
-    grid-auto-flow: row;
-    grid-template-areas:
-      "label_resp_veiculo"
-      "input_resp_veiculo";
-    grid-area: resp_veiculo;
-  }
-  
-  .label_resp_veiculo { grid-area: label_resp_veiculo; }
-  
-  .input_resp_veiculo { grid-area: input_resp_veiculo; }
   
   .exclsv {  display: grid;
     grid-template-columns: 1fr;
@@ -389,23 +360,23 @@ main form {
     gap: 0px 10px;
     grid-auto-flow: row;
     grid-template-areas:
-      "veic_addRmv area_addRmv objtv_addRmv";
+      "solic_addRmv area_addRmv objtv_addRmv";
     width: 100%;
     margin-top: 60px;
     justify-content: space-between;
     align-items: center;
   }
   
-  .veic_addRmv {  
+  .solic_addRmv {  
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     gap: 5px 5px;
     grid-auto-flow: row;
     grid-template-areas:
-      "veic_addRmv_label veic_addRmv_label"
-      "veic_add veic_rmv";
-    grid-area: veic_addRmv;
+      "solic_addRmv_label solic_addRmv_label"
+      "solic_add solic_rmv";
+    grid-area: solic_addRmv;
     width: 90%;
     background-color: white;
     text-align: center;
@@ -413,37 +384,37 @@ main form {
     border-radius: 10px;
   }
 
-  .veic_addRmv input {
+  .solic_addRmv input {
     width: 100%;
     border-radius: 5px;
     border: 1px solid lightgray;
   }
 
-  .veic_addRmv input[type="submit"] {
+  .solic_addRmv input[type="submit"] {
     background-color: var(--escuro);
     color: white;
   }
 
-  .veic_addRmv select {
+  .solic_addRmv select {
     width: 100%;
     border-radius: 5px;
     border: 1px solid lightgray;
   }
   
-  .veic_addRmv_label { 
-    grid-area: veic_addRmv_label;
+  .solic_addRmv_label { 
+    grid-area: solic_addRmv_label;
     display: flex;
     justify-content: center; 
     align-items: center;
   }
 
   
-  .veic_add { 
-    grid-area: veic_add; 
+  .solic_add { 
+    grid-area: solic_add; 
   }
   
-  .veic_rmv { 
-    grid-area: veic_rmv; 
+  .solic_rmv { 
+    grid-area: solic_rmv; 
   }
   
   .area_addRmv {  display: grid;
@@ -594,7 +565,7 @@ header ul {
     grid-template-areas:
       "titulo titulo titulo titulo"
       "dia objetivo solicitante ."
-      "veiculo resp_veiculo exclsv ."
+      "exclsv exclsv exclsv ."
       "area_pista status . ."
       "submit submit submit submit";
   }
@@ -612,7 +583,6 @@ header ul {
       "titulo titulo"
       "dia objetivo"
       "area_pista status"
-      "veiculo resp_veiculo"
       "solicitante exclsv"
       "submit submit";
   }
@@ -624,7 +594,7 @@ header ul {
     gap: 10px 10px;
     grid-auto-flow: row;
     grid-template-areas:
-      "veic_addRmv area_addRmv"
+      "solic_addRmv area_addRmv"
       "objtv_addRmv .";
     width: 100%;
     margin-top: 60px;
@@ -673,8 +643,6 @@ header ul {
         "objetivo"
         "area_pista"
         "status"
-        "veiculo"
-        "resp_veiculo"
         "solicitante"
         "exclsv"
         "submit";
@@ -695,14 +663,6 @@ header ul {
     .area_pista select {
       width: 100%;  
     }
-    
-    .veiculo select {
-      width: 100%;  
-    }
-    
-    .resp_veiculo select {
-      width: 100%;  
-    }
 
     .exclsv select {  
       width: 100%;
@@ -719,7 +679,7 @@ header ul {
       gap: 10px 10px;
       grid-auto-flow: row;
       grid-template-areas:
-        "veic_addRmv"
+        "solic_addRmv"
         "area_addRmv"
         "objtv_addRmv";
       width: 100%;
@@ -729,7 +689,7 @@ header ul {
     }
 
     
-    .veic_addRmv {
+    .solic_addRmv {
       margin: auto;
     }
 

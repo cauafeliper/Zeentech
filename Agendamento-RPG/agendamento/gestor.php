@@ -1,6 +1,7 @@
 <?php
     include_once('../config/config.php');
     session_start();
+    date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -20,13 +21,13 @@
 </head>
 <body>
     <?php
-        if (!isset($_SESSION['chapa']) || empty($_SESSION['chapa'])) {
+        if (!isset($_SESSION['numero']) || empty($_SESSION['numero'])) {
             session_unset();
             header('Location: ../index.php');
         }
         
-        $chapa = $_SESSION['chapa'];
-        $query = "SELECT * FROM chapa_adm WHERE chapa = '$chapa'";
+        $numero = $_SESSION['numero'];
+        $query = "SELECT * FROM numero_adm WHERE numero = '$numero'";
         $result = mysqli_query($conexao, $query);
         
         if (!$result || mysqli_num_rows($result) === 0) {
@@ -135,52 +136,6 @@
                 </script>
                 </div>
             </div>
-            <div class="veiculo">
-                <div class="label_veiculo">
-                    <label for="veiculo">Veículo:</label>
-                </div>
-                <div class="input_veiculo">
-                    <select name="veiculo" id="select_veiculo">
-                        <option value="">Selecione o Veículo</option>
-                        <?php
-                        $query_veic = "SELECT DISTINCT veic FROM veics";
-                        $result_veic = mysqli_query($conexao, $query_veic);
-                        while ($row_veic = mysqli_fetch_assoc($result_veic)) {
-                            $selected = ($veiculo == $row_veic['veic']) ? 'selected' : '';
-                            echo '<option value="' . htmlspecialchars($row_veic['veic']) . '" ' . $selected . '>' . htmlspecialchars($row_veic['veic']) . '</option>';
-                        }
-                        ?>
-                    </select>
-                    <script>
-                        $(document).ready(function () {
-                        $('#select_veiculo').select2();
-                        });
-                    </script>
-                </div>
-            </div>
-            <div class="resp_veiculo">
-                <div class="label_resp_veiculo">
-                    <label for="resp_veiculo">Resp. do Veículo:</label>
-                </div>
-                <div class="input_resp_veiculo">
-                    <select name="resp_veic" id="select_resp_veic">
-                        <option value="">Selecione o Responsável</option>
-                        <?php
-                        $query_resp = "SELECT DISTINCT resp_veic FROM agendamentos";
-                        $result_resp = mysqli_query($conexao, $query_resp);
-                        while ($row_resp = mysqli_fetch_assoc($result_resp)) {
-                            $selected = ($resp_veic == $row_resp['resp_veic']) ? 'selected' : '';
-                            echo '<option value="' . htmlspecialchars($row_resp['resp_veic']) . '" ' . $selected . '>' . htmlspecialchars($row_resp['resp_veic']) . '</option>';
-                        }
-                        ?>
-                    </select>
-                    <script>
-                        $(document).ready(function () {
-                        $('#select_resp_veic').select2();
-                        });
-                    </script>
-                </div>
-            </div>
             <div class="exclsv">
                 <div class="label_exclsv">
                     <label for="exclsv">Uso Exclusivo?</label>
@@ -226,9 +181,9 @@
                     <th>Área da Pista</th>
                     <th>Objetivo</th>
                     <th>Solicitante</th>
+                    <th>Telefone</th>
+                    <th>Empresa Solic.</th>
                     <th>Área do Solic.</th>
-                    <th>Veículo</th>
-                    <th>Resp. pelo Veículo</th>
                     <th>Uso Exclusivo?</th>
                     <th>Obs</th>
                     <th>Status</th>
@@ -242,8 +197,6 @@
                     $objetivo = isset($_GET['objetivo']) ? $_GET['objetivo'] : '';
                     $solicitante = isset($_GET['solicitante']) ? $_GET['solicitante'] : '';
                     $area_pista = isset($_GET['area_pista']) ? $_GET['area_pista'] : '';
-                    $veiculo = isset($_GET['veiculo']) ? $_GET['veiculo'] : '';
-                    $resp_veic = isset($_GET['resp_veic']) ? $_GET['resp_veic'] : '';
                     $exclsv = isset($_GET['exclsv']) ? $_GET['exclsv'] : '';
                     $status = isset($_GET['status']) ? $_GET['status'] : '';
                     
@@ -252,8 +205,6 @@
                                     AND (objtv LIKE '%$objetivo%')
                                     AND (solicitante LIKE '%$solicitante%')
                                     AND (area_pista LIKE '%$area_pista%')
-                                    AND (veic LIKE '%$veiculo%')
-                                    AND (resp_veic LIKE '%$resp_veic%')
                                     AND (exclsv LIKE '%$exclsv%')
                                     AND (status LIKE '%$status%')";
                     $result_count = mysqli_query($conexao, $query_count);
@@ -268,8 +219,6 @@
                                         AND (objtv LIKE '%$objetivo%')
                                         AND (solicitante LIKE '%$solicitante%')
                                         AND (area_pista LIKE '%$area_pista%')
-                                        AND (veic LIKE '%$veiculo%')
-                                        AND (resp_veic LIKE '%$resp_veic%')
                                         AND (exclsv LIKE '%$exclsv%')
                                         AND (status LIKE '%$status%')
                                         ORDER BY 
@@ -292,9 +241,9 @@
                             <td><?php echo $row['area_pista']; ?></td>
                             <td><?php echo $row['objtv']; ?></td>
                             <td><?php echo $row['solicitante']; ?></td>
+                            <td><?php echo $row['numero_solicitante']; ?></td>
+                            <td><?php echo $row['empresa_solicitante']; ?></td>
                             <td><?php echo $row['area_solicitante']; ?></td>
-                            <td><?php echo $row['veic']; ?></td>
-                            <td><?php echo $row['resp_veic']; ?></td>
                             <td><?php echo $row['exclsv']; ?></td>
                             <td><?php echo $row['obs']; ?></td>
                             <td <?php if($row['status'] === 'Aprovado'){echo 'style="background-color: #A6C48A;"';} elseif($row['status'] === 'Pendente'){echo 'style="background-color: #FFD275;"';} else { echo 'style="background-color: #E5625E;"';}?>><?php echo $row['status']; ?></td>
@@ -311,7 +260,7 @@
                                     <input type="hidden" name="solicitante" value="<?php echo $row['solicitante']; ?>">
                                 <?php } ?>
                             </td>
-                            </tr>
+                        </tr>
                     <?php } } 
                         else {
                             echo
@@ -331,8 +280,6 @@
                 if ($objetivo !== '') echo '&objetivo=' . $objetivo;
                 if ($solicitante !== '') echo '&solicitante=' . $solicitante;
                 if ($area_pista !== '') echo '&area_pista=' . $area_pista;
-                if ($veiculo !== '') echo '&veiculo=' . $veiculo;
-                if ($resp_veic !== '') echo '&resp_veic=' . $resp_veic;
                 if ($exclsv !== '') echo '&exclsv=' . $exclsv;
                 if ($status !== '') echo '&status=' . $status;
                 echo '"';
@@ -346,33 +293,6 @@
         </div>
 
         <div class="addRmv">
-            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" class="form_addRmv">
-                <div class="veic_addRmv">
-                    <div class="veic_addRmv_label">
-                        <h3>Veículos</h3>
-                    </div>
-                    <div class="veic_add">
-                        <h4>Adicionar</h4>
-                        <input type="text" name="novoVeic" placeholder="Novo Veículo">
-                        <input type="submit" name="addVeic" value="Adicionar">
-                    </div>
-                    <div class="veic_rmv">
-                        <h4>Remover</h4>
-                        <select name="removerVeiculo">
-                            <option value="">Remover Veículo</option>
-                            <?php
-                            $query_veic = "SELECT DISTINCT veic FROM veics";
-                            $result_veic = mysqli_query($conexao, $query_veic);
-                            while ($row_veic = mysqli_fetch_assoc($result_veic)) {
-                                $selected = ($veiculo == $row_veic['veic']) ? 'selected' : '';
-                                echo '<option value="' . htmlspecialchars($row_veic['veic']) . '" ' . $selected . '>' . htmlspecialchars($row_veic['veic']) . '</option>';
-                            }
-                            ?>
-                        </select>
-                        <input type="submit" name="rmvVeic" value="Remover">
-                    </div>
-                </div>
-            </form>
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" class="form_addRmv">
                 <div class="area_addRmv">
                     <div class="area_addRmv_label">
@@ -428,24 +348,37 @@
                     </div>
                 </div>
             </form>
+
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" class="form_addRmv">
+                <div class="solic_addRmv">
+                    <div class="solic_addRmv_label">
+                        <h3>Áreas Solicitantes</h3>
+                    </div>
+                    <div class="solic_add">
+                        <h4>Adicionar</h4>
+                        <input type="text" name="novoSolic" placeholder="Nova Área Solicitante">
+                        <input type="submit" name="addSolic" value="Adicionar">
+                    </div>
+                    <div class="solic_rmv">
+                        <h4>Remover</h4>
+                        <select name="removerSolic">
+                            <option value="">Remover Área Solicitante</option>
+                            <?php
+                            $query_solic = "SELECT DISTINCT nome FROM area_solicitante";
+                            $result_solic = mysqli_query($conexao, $query_solic);
+                            while ($row_solic = mysqli_fetch_assoc($result_solic)) {
+                                $selected = ($solic == $row_solic['solic']) ? 'selected' : '';
+                                echo '<option value="' . htmlspecialchars($row_solic['solic']) . '" ' . $selected . '>' . htmlspecialchars($row_solic['solic']) . '</option>';
+                            }
+                            ?>
+                        </select>
+                        <input type="submit" name="rmvSolic" value="Remover">
+                    </div>
+                </div>
+            </form>
         </div>
     </main>
     <?php
-        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addVeic'])) {
-
-            if (!empty($_GET['novoVeic'])) {
-                $novoVeic = $_GET['novoVeic'];
-                $query_addVeic = "INSERT INTO veics(veic) VALUES ('$novoVeic')";
-                mysqli_query($conexao, $query_addVeic);
-            }
-        }
-
-
-        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['rmvVeic'])) {
-            $removerVeiculo = $_GET['removerVeiculo'];
-            $query_removerVeiculo = "DELETE FROM veics WHERE veic = '$removerVeiculo'";
-            mysqli_query($conexao, $query_removerVeiculo);
-        }
 
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addArea'])) {
             if (!empty($_GET['novoArea'])) {
@@ -478,6 +411,7 @@
                 var horaFim = linha.cells[3].innerText;
                 var objetivo = linha.cells[5].innerText;
                 var solicitante = linha.cells[6].innerText;
+                var AreaSolicitante = linha.cells[7].innerText;
 
                 Swal.fire({
                     title: "Confirmação",
@@ -487,7 +421,8 @@
                         Hora de Início: ${horaInicio}<br>
                         Hora do Fim: ${horaFim}<br>
                         Objetivo: ${objetivo}<br>
-                        Solicitante: ${solicitante}
+                        Solicitante: ${solicitante}<br>
+                        Área do Solicitante: ${AreaSolicitante}
                     `,
                     icon: "warning",
                     showCancelButton: true,
@@ -512,20 +447,22 @@
                 var horaFim = linha.cells[3].innerText;
                 var objetivo = linha.cells[5].innerText;
                 var solicitante = linha.cells[6].innerText;
+                var AreaSolicitante = linha.cells[7].innerText;
 
                 Swal.fire({
                     title: "Confirmação",
                     html: `
-                        Você tem certeza de que deseja CANCELAR o seguinte agendamento?<br>
+                        Você tem certeza de que deseja REPROVAR o seguinte agendamento?<br>
                         Dia: ${data}<br>
                         Hora de Início: ${horaInicio}<br>
                         Hora do Fim: ${horaFim}<br>
                         Objetivo: ${objetivo}<br>
-                        Solicitante: ${solicitante}
+                        Solicitante: ${solicitante}<br>
+                        Área do Solicitante: ${AreaSolicitante}
                     `,
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonText: "Sim, cancelar",
+                    confirmButtonText: "Sim, reprovar",
                     cancelButtonText: "Cancelar",
                 }).then((result) => {
                     if (result.isConfirmed) {
