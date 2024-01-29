@@ -42,6 +42,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
 
                 if ($admTrue) {
                     echo '<li><a href="gestor.php">Gestão</a></li>';
+                    echo '<li><a href="../grafico/grafico.php">Gráfico</a></li>';
                 }
 
                 else {
@@ -82,7 +83,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
 
                         echo '<caption>Todas Áreas</caption>';
                         echo '<tr>';
-                        echo '<th>Início</th><th>Fim</th><th>Veículo</th><th>Objetivo</th><th>Uso exclusivo?</th><th>Área</th>';
+                        echo '<th>Início</th><th>Fim</th><th>Objetivo</th><th>Uso exclusivo?</th><th>Área</th>';
                         echo '</tr>';
 
                         if ($result->num_rows > 0) {
@@ -115,7 +116,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                 ?>
             </table>
         </div>
-        <div style="display: flex; flex-direction:row; width:90%; padding: 0; height: fit-content; justify-content: center; background: none;">
+        <div class="div_agendar">
             <iframe class="iframeGrafico" id="iframeGrafico" src="../grafico/grafico_dia.php" width="100%" height="100%" frameborder="0"></iframe>
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" id="formularioAgendamento" class="form__agendamento novo__agendamento">
             <div class="titulo">
@@ -200,7 +201,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
         </div>
         <?php
         if (isset($_POST['submit'])) {
-            if (empty($_POST['solicitante']) OR empty($_POST['dia']) OR empty($_POST['hora_inicio']) OR empty($_POST['hora_fim']) OR empty($_POST['area_solicitante']) OR empty($_POST['area']) OR empty($_POST['objetivo']) OR empty($_POST['resposta']) OR empty($_POST['obs'])) {
+            if (empty($_POST['solicitante']) OR empty($_POST['dia']) OR empty($_POST['hora_inicio']) OR empty($_POST['hora_fim']) OR empty($_POST['area_solicitante']) OR empty($_POST['area']) OR empty($_POST['objetivo']) OR empty($_POST['resposta'])) {
                 echo "<script>
                     Swal.fire({
                         icon: 'warning',
@@ -241,8 +242,14 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                         });
                     </script>";
                 } else {
-                    $query = "INSERT INTO agendamentos (area_pista, dia, hora_inicio, hora_fim, objtv, solicitante, numero_solicitante, empresa_solicitante, area_solicitante, exclsv, obs, status) VALUES ('$area', '$data', '$hora_inicio', '$hora_fim', '$objetivo', '$solicitante', '$numero_solicitante', '$empresa_solicitante', '$area_solicitante', '$exclsv', '$obs', '$status')";
-                    $result = mysqli_query($conexao, $query);
+                    // Preparar a declaração SQL
+                    $stmt = $conexao->prepare("INSERT INTO agendamentos (area_pista, dia, hora_inicio, hora_fim, objtv, solicitante, numero_solicitante, empresa_solicitante, area_solicitante, exclsv, obs, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+                    // Vincular os parâmetros
+                    $stmt->bind_param("ssssssssssss", $area, $data, $hora_inicio, $hora_fim, $objetivo, $solicitante, $numero_solicitante, $empresa_solicitante, $area_solicitante, $exclsv, $obs, $status);
+
+                    $result = $stmt->execute();
+                    $stmt->close();
 
                     if ($result) {
                         $affected_rows = mysqli_affected_rows($conexao);

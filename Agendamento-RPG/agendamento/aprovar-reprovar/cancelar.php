@@ -22,8 +22,10 @@ if (isset($_GET['id'])) {
         // Obtém o motivo da reprovação do formulário
         $motivoReprovacao = $_POST['motivoReprovacao'];
 
-        $query_cancelar = "UPDATE agendamentos SET status = 'Reprovado', motivo_reprovacao = '$motivoReprovacao' WHERE id = $id";
-
+        $query_cancelar = "UPDATE agendamentos SET status = 'Reprovado', motivo_reprovacao = ? WHERE id = ?";
+        $stmt = $conexao->prepare($query_cancelar);
+        $stmt->bind_param("ss", $motivoReprovacao, $id);
+        
         $query = "SELECT * FROM agendamentos WHERE id = $id";
         $result = mysqli_query($conexao, $query);
         $row = mysqli_fetch_assoc($result);
@@ -32,16 +34,16 @@ if (isset($_GET['id'])) {
         $hora_inicio = $row['hora_inicio'];
         $hora_fim = $row['hora_fim'];
 
-        /* $query_email = "SELECT email FROM logins WHERE nome = '$solicitante'";
+        $query_email = "SELECT email FROM logins WHERE nome = '$solicitante'";
         $result_email = mysqli_query($conexao, $query_email);
         $row_email = mysqli_fetch_assoc($result_email);
-        $email = $row_email['email']; */
+        $email = $row_email['email'];
         
-        if (mysqli_query($conexao, $query_cancelar)) {
+        if ($stmt->execute()) {
             $affected_rows = mysqli_affected_rows($conexao);
             if ($affected_rows > 0) {
                 // Envie o email com o motivo de reprovação
-                /*  require("../../PHPMailer-master/src/PHPMailer.php"); 
+                require("../../PHPMailer-master/src/PHPMailer.php"); 
                 require("../../PHPMailer-master/src/SMTP.php"); 
                 $mail = new PHPMailer\PHPMailer\PHPMailer(); 
                 $mail->IsSMTP();
@@ -56,12 +58,12 @@ if (isset($_GET['id'])) {
                 $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
                 $mail->AddAddress($email); 
 
-                $mail->AddCC('cc1@example.com', 'Cópia Carbono 1');    // Cópia Carbono 2
-                $mail->AddBCC('bcc1@example.com', 'Cópia Carbono Oculta 1');  // Cópia Carbono Oculta 1
+                /* $mail->AddCC('cc1@example.com', 'Cópia Carbono 1');    // Cópia Carbono 2
+                $mail->AddBCC('bcc1@example.com', 'Cópia Carbono Oculta 1');  // Cópia Carbono Oculta 1 */
                 
                 $mail->Subject = "Solicitação Reprovada!"; 
                 $mail->Body = utf8_decode('Sua solicitação de agendamento para o dia ' . $dia . ' de ' . $hora_inicio . ' até ' . $hora_fim . ' foi reprovada!<br>Motivo: ' . $motivoReprovacao . '.<br>Atenciosamente,<br>Equipe Zeentech.'); 
-                $mail->send(); */
+                $mail->send();
 
                 echo '<script>
                     Swal.fire({

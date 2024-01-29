@@ -82,8 +82,16 @@
                 $email = $_POST['email'];
                 $senha = $_POST['senha'];
 
-                $query = "SELECT COUNT(*) as count FROM numero_lista WHERE numero = '$numero'";
-                $result = $conexao->query($query);
+                $query = "SELECT COUNT(*) as count FROM numero_lista WHERE numero = ?";
+                $stmt = $conexao->prepare($query);
+                // Vincula os parâmetros
+                $stmt->bind_param("s", $numero);
+                // Executa a consulta
+                $stmt->execute();
+                // Obtém os resultados, se necessário
+                $result = $stmt->get_result();
+                // Fechar a declaração
+                $stmt->close();
                 $row = mysqli_fetch_assoc($result);
 
                 if ($row['count'] == 0) {
@@ -101,9 +109,21 @@
                 $result_numero = $conexao->query($numero_query);
                 $row_numero = mysqli_fetch_assoc($result_numero);
 
-                $email_query = "SELECT COUNT(*) as count FROM logins WHERE email = '$email'";
-                $result_email = $conexao->query($email_query);
-                $row_email = mysqli_fetch_assoc($result_email);
+                // Verificar se o número já existe
+                $stmt_numero = $conexao->prepare("SELECT COUNT(*) as count FROM logins WHERE numero = ?");
+                $stmt_numero->bind_param("s", $numero);
+                $stmt_numero->execute();
+                $result_numero = $stmt_numero->get_result();
+                $row_numero = $result_numero->fetch_assoc();
+                $stmt_numero->close();
+
+                // Verificar se o e-mail já existe
+                $stmt_email = $conexao->prepare("SELECT COUNT(*) as count FROM logins WHERE email = ?");
+                $stmt_email->bind_param("s", $email);
+                $stmt_email->execute();
+                $result_email = $stmt_email->get_result();
+                $row_email = $result_email->fetch_assoc();
+                $stmt_email->close();
 
                 if ($row_numero['count'] > 0) {
                     echo '<script>

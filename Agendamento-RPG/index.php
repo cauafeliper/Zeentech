@@ -57,9 +57,20 @@
                 $numero = $_POST['numero'];
                 $senha = $_POST['senha'];
 
-                $query = "SELECT * FROM logins WHERE numero = '$numero' and senha = '$senha'";
+                $query = "SELECT * FROM logins WHERE numero = ? AND senha = ?";
+                $stmt = $conexao->prepare($query);
 
-                $result = $conexao->query($query);
+                // Vincula os parâmetros
+                $stmt->bind_param("ss", $numero, $senha);
+
+                // Executa a consulta
+                $stmt->execute();
+
+                // Obtém os resultados, se necessário
+                $result = $stmt->get_result();
+                
+                // Fechar a declaração
+                $stmt->close();
 
                 if(mysqli_num_rows($result) < 1)
                 {
@@ -85,21 +96,6 @@
                     $_SESSION['email'] = $email;
                     $_SESSION['area_solicitante'] = $area_solicitante;
                     $_SESSION['empresa'] = $empresa;
-                    /* echo '<script>
-                    Swal.fire({
-                        icon: "success",
-                        title: "SUCESSO!",
-                        text: "Login realizado com sucesso!",
-                        confirmButtonText: "OK",
-                        confirmButtonColor: "#23CE6B",
-                        allowOutsideClick: false,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Redireciona o usuário para a página desejada
-                            window.location.href = "agendamento/tabela-agendamentos.php";
-                        }
-                    });
-                </script>'; */
 
                 header("Location: agendamento/tabela-agendamentos.php");
                 exit();

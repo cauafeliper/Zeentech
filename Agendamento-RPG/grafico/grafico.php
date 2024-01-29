@@ -15,8 +15,21 @@ use PhpOffice\PhpSpreadsheet\Writer\Ods\Content;
     }
     
     $numero = $_SESSION['numero'];
-    $query = "SELECT * FROM numero_adm WHERE numero = '$numero'";
-    $result = mysqli_query($conexao, $query);
+
+    $query = "SELECT * FROM numero_adm WHERE numero = ?";
+    $stmt = $conexao->prepare($query);
+
+    // Vincula os parâmetros
+    $stmt->bind_param("s", $numero);
+
+    // Executa a consulta
+    $stmt->execute();
+
+    // Obtém os resultados, se necessário
+    $result = $stmt->get_result();
+    
+    // Fechar a declaração
+    $stmt->close();
     
     if (!$result || mysqli_num_rows($result) === 0) {
         session_unset();
@@ -144,7 +157,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
         </ul>
     </header>
         <main>
-            <button type="button" onclick="captureAndGeneratePDF()">pdf</button>
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" class="container filtro__dia">
                 <div class="titulo"><h3>Selecione o Dia Desejado</h3></div>
                 <div class="label"><label for="dia">Dia:</label></div>
@@ -990,7 +1002,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
             Swal.fire({
                 icon: 'info',
                 title: "Informações do agendamento",
-                html:"<div style='text-align: start; padding:3rem; line-height: 1rem'>"+
+                html:"<div style='text-align: start; padding: 0 2rem; line-height: 1.5rem'>"+
                 "Id: "+id+"<br>"+
                 "Área da Pista: "+area_pista+"<br>"+
                 "Dia: "+dia+"<br>"+
@@ -1007,16 +1019,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                 showConfirmButton: false,
                 showCloseButton: true,
                 allowOutsideClick: false,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    
-                    
-                }
-                if (result.isDismissed) {
-                    
-                    
-                }
-            });
+            })
         }
 
         function filtrarAgendamentos() {
@@ -1083,30 +1086,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                     }
                 });
             }
-        }
-
-        // Função para tirar a captura de tela e gerar PDF
-        function captureAndGeneratePDF() {
-            // Seleciona o elemento que você deseja capturar (por exemplo, o gráfico)
-            const elementToCapture = document.getElementById('graf_dia');
-
-            // Tira a captura de tela usando html2canvas
-            html2canvas(elementToCapture).then((canvas) => {
-                // Converte o canvas em uma imagem de dados URL
-                const dataURL = canvas.toDataURL();
-
-                // Cria uma instância do jsPDF
-                const { jsPDF } = window.jspdf;
-
-                const pdf = new jsPDF();
-
-                // Adiciona a imagem ao PDF
-                pdf.addImage(dataURL, 'PNG', 10, 10, 190, 100); // Ajuste as coordenadas e o tamanho conforme necessário
-
-                // Salva ou exibe o PDF
-                pdf.save('screenshot.pdf'); // Salva o PDF automaticamente
-                pdf.output('dataurlnewwindow'); // Abre o PDF em uma nova janela/tab do navegador
-            });
         }
 
     </script>

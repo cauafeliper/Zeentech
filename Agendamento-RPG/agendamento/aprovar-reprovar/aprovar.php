@@ -18,8 +18,6 @@ if (isset($_GET['id'])) {
 
     $query_cancelar = "UPDATE agendamentos SET status = 'Aprovado', motivo_reprovacao = '' WHERE id = $id";
 
-
-
     $query = "SELECT * FROM agendamentos WHERE id = $id";
     $result = mysqli_query($conexao, $query);
     $row = mysqli_fetch_assoc($result);
@@ -36,7 +34,7 @@ if (isset($_GET['id'])) {
     if (mysqli_query($conexao, $query_cancelar)) {
         $affected_rows = mysqli_affected_rows($conexao);
         if ($affected_rows > 0) {
-            /* require("../../PHPMailer-master/src/PHPMailer.php"); 
+            require("../../PHPMailer-master/src/PHPMailer.php"); 
             require("../../PHPMailer-master/src/SMTP.php"); 
             $mail = new PHPMailer\PHPMailer\PHPMailer(); 
             $mail->IsSMTP();
@@ -51,12 +49,12 @@ if (isset($_GET['id'])) {
             $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
             $mail->AddAddress($email); 
 
-            $mail->AddCC('cc1@example.com', 'Cópia Carbono 1');    // Cópia Carbono 2
-            $mail->AddBCC('bcc1@example.com', 'Cópia Carbono Oculta 1');  // Cópia Carbono Oculta 1
+            /* $mail->AddCC('cc1@example.com', 'Cópia Carbono 1');    // Cópia Carbono 2
+            $mail->AddBCC('bcc1@example.com', 'Cópia Carbono Oculta 1');  // Cópia Carbono Oculta 1 */
 
             $mail->Subject = "Solicitação Aprovada!"; 
-            $mail->Body = utf8_decode('Sua solicitação de agendamento para o dia ' . $dia . ' de ' . $hora_inicio . ' até ' . $hora_fim . ' foi aprovada!.<br>Atenciosamente,<br>Equipe Zeentech.'); 
-            $mail->send(); */
+            $mail->Body = 'Sua solicitação de agendamento para o dia ' . $dia . ' de ' . $hora_inicio . ' até ' . $hora_fim . ' foi aprovada!.<br>Atenciosamente,<br>Equipe Zeentech.'; 
+            $mail->send();
 
             echo '<script>
                 Swal.fire({
