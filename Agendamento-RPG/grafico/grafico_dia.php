@@ -32,7 +32,7 @@ include 'functions.php'; // Substitua pelo caminho correto
         <div class="tit">
         <?php
 
-            $dia = '2024-01-28';
+            $dia = '2024-01-29';
 
             $listaPistas = array('VDA', 'NVH', 'Obstáculos', 'Rampa 12% e 20%', 'Rampa 40%', 'Rampa 60%', 'Asfalto', 'Pista Completa');
             $listaPistasClasse = array('vda', 'nvh', 'obs', 'r_12_20', 'r_40', 'r_60', 'asf', 'pc');

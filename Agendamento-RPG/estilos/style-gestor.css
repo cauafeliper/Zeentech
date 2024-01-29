@@ -285,10 +285,23 @@ main form {
     text-align: center;
   }
 
-  td:hover {
+  /* td:hover {
     overflow: auto;
     white-space: nowrap;
+  } */
+
+  /* CSS para o tema personalizado */
+  .tippy-box[data-theme~='custom-theme'] {
+    background-color: #ffffff;
+    color: black;
+    border: 2px solid var(--escuro);
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    word-wrap: break-word;
+    white-space: normal;
+    width: fit-content;
   }
+
 
   .paginacao {
     float: left;

@@ -34,6 +34,21 @@ use PhpOffice\PhpSpreadsheet\Writer\Ods\Content;
     <link rel="stylesheet" href="../estilos/grafico.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-bundle.min.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- Include Tippy.js CSS (you can customize the theme) -->
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js/dist/tippy.css" />
+    <!-- Include Tippy.js script -->
+    <script src="https://unpkg.com/tippy.js@6.3.1/dist/tippy-bundle.umd.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
     <?php
         if (isset($_POST['dia'])) {
@@ -129,6 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
         </ul>
     </header>
         <main>
+            <button type="button" onclick="captureAndGeneratePDF()">pdf</button>
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" class="container filtro__dia">
                 <div class="titulo"><h3>Selecione o Dia Desejado</h3></div>
                 <div class="label"><label for="dia">Dia:</label></div>
@@ -759,22 +775,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
             <span>Copyright © 2023 de Zeentech os direitos reservados</span>
         </div>
     </footer>
-
-    <!-- ///////////////////////////////////////////////////////// -->
-
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-bundle.min.js"></script>
-    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <!-- Include Tippy.js CSS (you can customize the theme) -->
-    <link rel="stylesheet" href="https://unpkg.com/tippy.js/dist/tippy.css" />
-    <!-- Include Tippy.js script -->
-    <script src="https://unpkg.com/tippy.js@6.3.1/dist/tippy-bundle.umd.js"></script>
-
+    
     <!-- ///////////////////////////////////////////////////////// -->
 
     <script>
@@ -973,14 +974,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
             });
 
             options.forEach(option => {
-                option.addEventListener('change', updateOption)
+                option.addEventListener('change', updateOption);
             });
 
             optionsAno.forEach(option => {
-                option.addEventListener('change', updateOptionAno)
+                option.addEventListener('change', updateOptionAno);
             });
 
         });
+
+        function PopupAgendamento(id, area_pista, dia, horario, objetivo, solicitante, numero_solicitante, empresa_solicitante, area_solicitante, exclsv, obs){
+            var classeAgendamento = document.getElementById(id);
+            console.log('clicou na '+id);
+
+            Swal.fire({
+                icon: 'info',
+                title: "Informações do agendamento",
+                html:"<div style='text-align: start; padding:3rem; line-height: 1rem'>"+
+                "Id: "+id+"<br>"+
+                "Área da Pista: "+area_pista+"<br>"+
+                "Dia: "+dia+"<br>"+
+                "Horário: "+horario+"<br>"+
+                "Ojetivo: "+objetivo+"<br>"+
+                "Solicitante: "+solicitante+"<br>"+
+                "Numero do solicitante: "+numero_solicitante+"<br>"+
+                "Empresa do solicitante: "+empresa_solicitante+"<br>"+
+                "Área Solicitante: "+area_solicitante+"<br>"+
+                "É exclusivo? "+exclsv+"<br>"+
+                "Observação: "+obs+"<br>"+
+                "</div>"
+                ,
+                showConfirmButton: false,
+                showCloseButton: true,
+                allowOutsideClick: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    
+                    
+                }
+                if (result.isDismissed) {
+                    
+                    
+                }
+            });
+        }
 
         function filtrarAgendamentos() {
             // Obtém os valores dos campos do formulário
@@ -1048,9 +1085,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
             }
         }
 
+        // Função para tirar a captura de tela e gerar PDF
+        function captureAndGeneratePDF() {
+            // Seleciona o elemento que você deseja capturar (por exemplo, o gráfico)
+            const elementToCapture = document.getElementById('graf_dia');
+
+            // Tira a captura de tela usando html2canvas
+            html2canvas(elementToCapture).then((canvas) => {
+                // Converte o canvas em uma imagem de dados URL
+                const dataURL = canvas.toDataURL();
+
+                // Cria uma instância do jsPDF
+                const { jsPDF } = window.jspdf;
+
+                const pdf = new jsPDF();
+
+                // Adiciona a imagem ao PDF
+                pdf.addImage(dataURL, 'PNG', 10, 10, 190, 100); // Ajuste as coordenadas e o tamanho conforme necessário
+
+                // Salva ou exibe o PDF
+                pdf.save('screenshot.pdf'); // Salva o PDF automaticamente
+                pdf.output('dataurlnewwindow'); // Abre o PDF em uma nova janela/tab do navegador
+            });
+        }
 
     </script>
-
 
     <!-- ///////////////////////////////////////////////////////// -->
 </body>

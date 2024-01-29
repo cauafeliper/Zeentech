@@ -43,13 +43,13 @@ body {
     background-position: center center;
     background-size: cover;
     background-attachment: fixed;
-
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    align-items: center;
-    height: 100vh;
     justify-content: space-between;
+    align-items: center;
+    overflow-y: auto;
+    height: 100vh;
 }
 
 /*============================================================================================================*/

@@ -50,6 +50,10 @@ if (isset($_GET['id'])) {
             $mail->Password = "Z3en7ech"; 
             $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
             $mail->AddAddress($email); 
+
+            $mail->AddCC('cc1@example.com', 'Cópia Carbono 1');    // Cópia Carbono 2
+            $mail->AddBCC('bcc1@example.com', 'Cópia Carbono Oculta 1');  // Cópia Carbono Oculta 1
+
             $mail->Subject = "Solicitação Aprovada!"; 
             $mail->Body = utf8_decode('Sua solicitação de agendamento para o dia ' . $dia . ' de ' . $hora_inicio . ' até ' . $hora_fim . ' foi aprovada!.<br>Atenciosamente,<br>Equipe Zeentech.'); 
             $mail->send(); */

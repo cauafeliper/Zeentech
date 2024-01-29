@@ -52,7 +52,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
         </ul>
     </header>
     
-    <main style="height:100%; justify-content:center;">
+    <main style="height:fit-content; justify-content:center;">
         <div id="tabelaAgendamentos" class="tabela" style="height:auto">
             <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" onsubmit="return validateForm()">
                 <input type="date" id="data" name="data" placeholder="Indique a data" class="filtro__data">
@@ -191,7 +191,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
             </div>
             <div class="obs">
                 <label for="obs" class="obs__label">Observações:</label>
-                <textarea name="obs" id="obs" cols="48" rows="5" class="obs"></textarea>
+                <textarea name="obs" id="obs" cols="48" rows="5" class="obs" maxlength="500"></textarea>
             </div>
             <div class="enviar">
                 <input type="submit" name="submit" value="Agendar">

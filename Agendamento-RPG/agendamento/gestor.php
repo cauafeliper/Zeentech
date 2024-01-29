@@ -185,9 +185,9 @@
                     <th>Empresa Solic.</th>
                     <th>Área do Solic.</th>
                     <th>Uso Exclusivo?</th>
-                    <th>Obs</th>
+                    <th>Observação</th>
                     <th>Status</th>
-                    <th>Aprovar/Reprovar</th>
+                    <th>Aprovar/<br>Reprovar</th>
                 </tr>
                 <?php 
                     $registros_por_pagina = 10;
@@ -238,14 +238,14 @@
                             <td><?php echo date('d/m/Y', strtotime($row['dia'])); ?></td>
                             <td><?php echo $row['hora_inicio']; ?></td>
                             <td><?php echo $row['hora_fim']; ?></td>
-                            <td><?php echo $row['area_pista']; ?></td>
-                            <td><?php echo $row['objtv']; ?></td>
-                            <td><?php echo $row['solicitante']; ?></td>
-                            <td><?php echo $row['numero_solicitante']; ?></td>
-                            <td><?php echo $row['empresa_solicitante']; ?></td>
-                            <td><?php echo $row['area_solicitante']; ?></td>
-                            <td><?php echo $row['exclsv']; ?></td>
-                            <td><?php echo $row['obs']; ?></td>
+                            <td id="td_tippy" value="<?php echo $row['area_pista']; ?>"><?php echo $row['area_pista']; ?></td>
+                            <td id="td_tippy" value="<?php echo $row['objtv']; ?>"><?php echo $row['objtv']; ?></td>
+                            <td id="td_tippy" value="<?php echo $row['solicitante']; ?>"><?php echo $row['solicitante']; ?></td>
+                            <td id="td_tippy" value="<?php echo $row['numero_solicitante'];?>"><?php echo $row['numero_solicitante'];?></td>
+                            <td id="td_tippy" value="<?php echo $row['empresa_solicitante'];?>"><?php echo $row['empresa_solicitante'];?></td>
+                            <td id="td_tippy" value="<?php echo $row['area_solicitante'];?>"><?php echo $row['area_solicitante']; ?></td>
+                            <td><?php echo $row['exclsv'];?></td>
+                            <td id="td_tippy" value="<?php echo $row['obs'];?>"><?php echo $row['obs'];?></td>
                             <td <?php if($row['status'] === 'Aprovado'){echo 'style="background-color: #A6C48A;"';} elseif($row['status'] === 'Pendente'){echo 'style="background-color: #FFD275;"';} else { echo 'style="background-color: #E5625E;"';}?>><?php echo $row['status']; ?></td>
                             <td>
                                 <?php if ($row['status'] === 'Pendente') { ?>
@@ -395,84 +395,6 @@
             mysqli_query($conexao, $query_removerArea);
         }
     ?>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-        var botoesAprovar = document.querySelectorAll(".aprovar");
-        var botoesCancelar = document.querySelectorAll(".cancelar");
-
-        botoesAprovar.forEach(function (botao) {
-            botao.addEventListener("click", function (event) {
-                event.preventDefault();
-                var linha = this.closest("tr");
-                
-                var id = linha.cells[0].innerText;
-                var data = linha.cells[1].innerText;
-                var horaInicio = linha.cells[2].innerText;
-                var horaFim = linha.cells[3].innerText;
-                var objetivo = linha.cells[5].innerText;
-                var solicitante = linha.cells[6].innerText;
-                var AreaSolicitante = linha.cells[7].innerText;
-
-                Swal.fire({
-                    title: "Confirmação",
-                    html: `
-                        Você tem certeza de que deseja APROVAR o seguinte agendamento?<br>
-                        Dia: ${data}<br>
-                        Hora de Início: ${horaInicio}<br>
-                        Hora do Fim: ${horaFim}<br>
-                        Objetivo: ${objetivo}<br>
-                        Solicitante: ${solicitante}<br>
-                        Área do Solicitante: ${AreaSolicitante}
-                    `,
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Sim, aprovar",
-                    cancelButtonText: "Cancelar",
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "aprovar-reprovar/aprovar.php?id=" + id;
-                    }
-                });
-            });
-        });
-
-        botoesCancelar.forEach(function (botao) {
-            botao.addEventListener("click", function (event) {
-                event.preventDefault();
-                var linha = this.closest("tr");
-
-                var id = linha.cells[0].innerText;
-                var data = linha.cells[1].innerText;
-                var horaInicio = linha.cells[2].innerText;
-                var horaFim = linha.cells[3].innerText;
-                var objetivo = linha.cells[5].innerText;
-                var solicitante = linha.cells[6].innerText;
-                var AreaSolicitante = linha.cells[7].innerText;
-
-                Swal.fire({
-                    title: "Confirmação",
-                    html: `
-                        Você tem certeza de que deseja REPROVAR o seguinte agendamento?<br>
-                        Dia: ${data}<br>
-                        Hora de Início: ${horaInicio}<br>
-                        Hora do Fim: ${horaFim}<br>
-                        Objetivo: ${objetivo}<br>
-                        Solicitante: ${solicitante}<br>
-                        Área do Solicitante: ${AreaSolicitante}
-                    `,
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Sim, reprovar",
-                    cancelButtonText: "Cancelar",
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "aprovar-reprovar/cancelar.php?id=" + id;
-                    }
-                });
-            });
-        });
-    });
-    </script>
     <footer>
         <div>
             <span>Desenvolvido por:  <img src="../imgs/lg-zeentech(titulo).png" alt="logo-zeentech"></span>
@@ -481,5 +403,113 @@
             <span>Copyright © 2023 de Zeentech os direitos reservados</span>
         </div>
     </footer>
+
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <!-- Include Tippy.js CSS (you can customize the theme) -->
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js/dist/tippy.css" />
+    <!-- Include Tippy.js script -->
+    <script src="https://unpkg.com/tippy.js@6.3.1/dist/tippy-bundle.umd.js"></script>
+
+    <script>
+
+        // Seleciona todas as <td> com o atributo 'value'
+        const tds = document.querySelectorAll('#td_tippy');
+
+        // Itera sobre as <td> encontradas
+        tds.forEach(function(td_tippy) {
+            // Obtém o valor do atributo 'value'
+            const value = td_tippy.getAttribute('value');
+
+            // Cria a instância do Tippy.js
+            tippy(td_tippy, {
+                content: value,
+                arrow: true,
+                placement: 'top',
+                theme: 'custom-theme',
+                // Adiciona a propriedade CSS para quebrar palavras
+                appendTo: () => document.body,
+                allowHTML: true,
+                content: `<div style="word-wrap: break-word;">${value}</div>`,
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var botoesAprovar = document.querySelectorAll(".aprovar");
+            var botoesCancelar = document.querySelectorAll(".cancelar");
+
+            botoesAprovar.forEach(function (botao) {
+                botao.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    var linha = this.closest("tr");
+                    
+                    var id = linha.cells[0].innerText;
+                    var data = linha.cells[1].innerText;
+                    var horaInicio = linha.cells[2].innerText;
+                    var horaFim = linha.cells[3].innerText;
+                    var objetivo = linha.cells[5].innerText;
+                    var solicitante = linha.cells[6].innerText;
+                    var AreaSolicitante = linha.cells[7].innerText;
+
+                    Swal.fire({
+                        title: "Confirmação",
+                        html: `
+                            Você tem certeza de que deseja APROVAR o seguinte agendamento?<br>
+                            Dia: ${data}<br>
+                            Hora de Início: ${horaInicio}<br>
+                            Hora do Fim: ${horaFim}<br>
+                            Objetivo: ${objetivo}<br>
+                            Solicitante: ${solicitante}<br>
+                            Área do Solicitante: ${AreaSolicitante}
+                        `,
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Sim, aprovar",
+                        cancelButtonText: "Cancelar",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "aprovar-reprovar/aprovar.php?id=" + id;
+                        }
+                    });
+                });
+            });
+
+            botoesCancelar.forEach(function (botao) {
+                botao.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    var linha = this.closest("tr");
+
+                    var id = linha.cells[0].innerText;
+                    var data = linha.cells[1].innerText;
+                    var horaInicio = linha.cells[2].innerText;
+                    var horaFim = linha.cells[3].innerText;
+                    var objetivo = linha.cells[5].innerText;
+                    var solicitante = linha.cells[6].innerText;
+                    var AreaSolicitante = linha.cells[7].innerText;
+
+                    Swal.fire({
+                        title: "Confirmação",
+                        html: `
+                            Você tem certeza de que deseja REPROVAR o seguinte agendamento?<br>
+                            Dia: ${data}<br>
+                            Hora de Início: ${horaInicio}<br>
+                            Hora do Fim: ${horaFim}<br>
+                            Objetivo: ${objetivo}<br>
+                            Solicitante: ${solicitante}<br>
+                            Área do Solicitante: ${AreaSolicitante}
+                        `,
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Sim, reprovar",
+                        cancelButtonText: "Cancelar",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "aprovar-reprovar/cancelar.php?id=" + id;
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
 </body>
 </html>

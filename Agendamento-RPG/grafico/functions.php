@@ -161,7 +161,7 @@ function CriarCSSdia($conexao, $dia, $area_pista, $letra, $pistaClasse, $y){ // 
 }
 
 function CriarHTMLdia($conexao, $dia, $area_pista, $letra){ // cria as divs com as classes para cada pista
-    $sql = "SELECT hora_inicio, hora_fim, solicitante, area_solicitante, numero_solicitante, empresa_solicitante FROM agendamentos WHERE area_pista = '$area_pista' AND dia='$dia' AND status='Aprovado'";
+    $sql = "SELECT * FROM agendamentos WHERE area_pista = '$area_pista' AND dia='$dia' AND status='Aprovado'";
     $result = $conexao->query($sql);
     $j = 2;
     while ($row = $result->fetch_assoc()) {
@@ -172,9 +172,10 @@ function CriarHTMLdia($conexao, $dia, $area_pista, $letra){ // cria as divs com 
         $areaSolicitante = $row["area_solicitante"];
         $numero = $row["numero_solicitante"];
         $empresa = $row["empresa_solicitante"];
+
         $classe = "$letra".$j;
-        echo '<div class="'.$classe.'"></div>';
-        echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
+        echo '<div class="'.$classe.'" onclick="PopupAgendamento(\''.$row['id'].'\',\''.$row['area_pista'].'\',\''.$row['dia'].'\',\''.$horario.'\',\''.$row['objtv'].'\',\''.$row['solicitante'].'\',\''.$row['numero_solicitante'].'\',\''.$row['empresa_solicitante'].'\',\''.$row['area_solicitante'].'\',\''.$row['exclsv'].'\',\''.$row['obs'].'\')"></div>';
+        echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
             '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
             '<p><span style="color: #4C7397;">Empresa: </span>'."$empresa".'</p>'.
             '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
