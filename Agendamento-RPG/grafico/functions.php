@@ -61,6 +61,24 @@ function calcularDiasDoMes($dataSelecionada) {
     return $datasDoMes;
 }
 
+function obterDiasEntreDatas($dataInicial, $dataFinal) {
+    $dias = array();
+
+    $dataAtual = new DateTime($dataInicial);
+    $dataFinalObj = new DateTime($dataFinal);
+
+    // Adiciona a data inicial ao array
+    $dias[] = $dataAtual->format('Y-m-d');
+
+    // Loop para adicionar os dias intermediários
+    while ($dataAtual < $dataFinalObj) {
+        $dataAtual->add(new DateInterval('P1D'));
+        $dias[] = $dataAtual->format('Y-m-d');
+    }
+
+    return $dias;
+}
+
 function CriarCSSdia($conexao, $dia, $area_pista, $letra, $pistaClasse, $y){ // cria as classes com os horários agendados
     $sql = "SELECT hora_inicio, hora_fim, exclsv, status FROM agendamentos WHERE area_pista = '$area_pista' AND dia='$dia' AND (status='Aprovado' OR status='Pendente')";
     $result = $conexao->query($sql);
@@ -83,7 +101,7 @@ function CriarCSSdia($conexao, $dia, $area_pista, $letra, $pistaClasse, $y){ // 
                 $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
             }
             else{
-                $cor = '#bcb8b8';
+                $cor = ($exclsv === 'Sim') ? '#808080' : '#bcb8b8';
             }
 
             $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
@@ -181,7 +199,7 @@ function CriarHTMLdia($conexao, $dia, $area_pista, $letra){ // cria as divs com 
         $status = $row["status"];
 
         $classe = "$letra".$j;
-        echo '<div class="'.$classe.'" onclick="PopupAgendamento(\''.$row['id'].'\',\''.$row['area_pista'].'\',\''.$row['dia'].'\',\''.$horario.'\',\''.$row['objtv'].'\',\''.$row['solicitante'].'\',\''.$row['numero_solicitante'].'\',\''.$row['empresa_solicitante'].'\',\''.$row['area_solicitante'].'\',\''.$row['exclsv'].'\',\''.$row['obs'].'\')"></div>';
+        echo '<div class="'.$classe.'" style="cursor:pointer" onclick="PopupAgendamento(\''.$row['id'].'\',\''.$row['area_pista'].'\',\''.$row['dia'].'\',\''.$horario.'\',\''.$row['objtv'].'\',\''.$row['solicitante'].'\',\''.$row['numero_solicitante'].'\',\''.$row['empresa_solicitante'].'\',\''.$row['area_solicitante'].'\',\''.$row['exclsv'].'\',\''.$row['obs'].'\',\''.$row['status'].'\')"></div>';
         echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
             '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
             '<p><span style="color: #4C7397;">Empresa: </span>'."$empresa".'</p>'.
@@ -195,7 +213,7 @@ function CriarHTMLdia($conexao, $dia, $area_pista, $letra){ // cria as divs com 
 
 function CriarHTMLsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClasse){ // cria as divs com as classes para cada pista
     for ($i = 0; $i < 8; $i++){
-        $sql = "SELECT * FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND status='Aprovado'";
+        $sql = "SELECT * FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND (status='Aprovado' OR status='Pendente')";
         $result = $conexao->query($sql);
         $j = 2;
         echo '<div class="'.$listaPistaClasse[$i].'" style="width: 140px">';
@@ -208,14 +226,16 @@ function CriarHTMLsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPista
             $numero = $row["numero_solicitante"];
             $empresa = $row["empresa_solicitante"];
             $id = $row["id"];
+            $status = $row["status"];
 
             $classe = "$listaLetras[$i]".$j.'_semana_'.$id;
-            echo '<div class="'.$classe.'" onclick="PopupAgendamento(\''.$row['id'].'\',\''.$row['area_pista'].'\',\''.$row['dia'].'\',\''.$horario.'\',\''.$row['objtv'].'\',\''.$row['solicitante'].'\',\''.$row['numero_solicitante'].'\',\''.$row['empresa_solicitante'].'\',\''.$row['area_solicitante'].'\',\''.$row['exclsv'].'\',\''.$row['obs'].'\')"></div>';
-            echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
+            echo '<div class="'.$classe.'" style="cursor:pointer" onclick="PopupAgendamento(\''.$row['id'].'\',\''.$row['area_pista'].'\',\''.$row['dia'].'\',\''.$horario.'\',\''.$row['objtv'].'\',\''.$row['solicitante'].'\',\''.$row['numero_solicitante'].'\',\''.$row['empresa_solicitante'].'\',\''.$row['area_solicitante'].'\',\''.$row['exclsv'].'\',\''.$row['obs'].'\',\''.$row['status'].'\')"></div>';
+            echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
                 '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
                 '<p><span style="color: #4C7397;">Empresa: </span>'."$empresa".'</p>'.
                 '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
                 '<p><span style="color: #4C7397;">Telefone: </span>'."$numero".'</p>'.
+                '<p><span style="color: #4C7397;">Status: </span>'."$status".'</p>'.
             '</div>';
             $j++;
         }
@@ -226,7 +246,7 @@ function CriarHTMLsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPista
 
 function CriarCSSsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClasse, $listaY){ // cria as classes com os horários agendados
     for ($i = 0; $i < 8; $i++){
-        $sql = "SELECT hora_inicio, hora_fim, exclsv, id FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND status='Aprovado'";
+        $sql = "SELECT * FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND (status='Aprovado' OR status='Pendente')";
         $result = $conexao->query($sql);
         $horariosMarcados = array();
         if ($result->num_rows > 0) {
@@ -236,6 +256,7 @@ function CriarCSSsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaC
                 $horarioInicio = $row["hora_inicio"];
                 $horarioFim = $row["hora_fim"];
                 $id = $row["id"];
+                $status = $row["status"];
                 
                 $horaInicio = $horarioInicio[0] . $horarioInicio[1];
                 $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
@@ -243,7 +264,12 @@ function CriarCSSsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaC
                 $horaFim = $horarioFim[0] . $horarioFim[1];
                 $minutoFim = $horarioFim[3] . $horarioFim[4];
 
-                $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
+                if ($status === 'Aprovado'){
+                    $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
+                }
+                else{
+                    $cor = ($exclsv === 'Sim') ? '#808080' : '#bcb8b8';
+                }
 
                 $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim), 'id' => $id);
             }
@@ -333,7 +359,7 @@ function CriarCSSsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaC
 
 function CriarHTMLmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClasse){ // cria as divs com as classes para cada pista
     for ($i = 0; $i < 8; $i++){
-        $sql = "SELECT * FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND status='Aprovado'";
+        $sql = "SELECT * FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND (status='Aprovado' OR status='Pendente')";
         $result = $conexao->query($sql);
         $j = 2;
         echo '<div class="'.$listaPistaClasse[$i].'" style="width: 140px">';
@@ -346,14 +372,16 @@ function CriarHTMLmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaCla
             $numero = $row["numero_solicitante"];
             $empresa = $row["empresa_solicitante"];
             $id = $row["id"];
+            $status = $row["status"];
 
             $classe = "$listaLetras[$i]".$j.'_semana_'.$id;
-            echo '<div class="'.$classe.'" onclick="PopupAgendamento(\''.$row['id'].'\',\''.$row['area_pista'].'\',\''.$row['dia'].'\',\''.$horario.'\',\''.$row['objtv'].'\',\''.$row['solicitante'].'\',\''.$row['numero_solicitante'].'\',\''.$row['empresa_solicitante'].'\',\''.$row['area_solicitante'].'\',\''.$row['exclsv'].'\',\''.$row['obs'].'\')"></div>';
-            echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50;"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
+            echo '<div class="'.$classe.'" style="cursor:pointer" onclick="PopupAgendamento(\''.$row['id'].'\',\''.$row['area_pista'].'\',\''.$row['dia'].'\',\''.$horario.'\',\''.$row['objtv'].'\',\''.$row['solicitante'].'\',\''.$row['numero_solicitante'].'\',\''.$row['empresa_solicitante'].'\',\''.$row['area_solicitante'].'\',\''.$row['exclsv'].'\',\''.$row['obs'].'\',\''.$row['status'].'\')"></div>';
+            echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
                 '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
                 '<p><span style="color: #4C7397;">Empresa: </span>'."$empresa".'</p>'.
                 '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
                 '<p><span style="color: #4C7397;">Telefone: </span>'."$numero".'</p>'.
+                '<p><span style="color: #4C7397;">Status: </span>'."$status".'</p>'.
             '</div>';
             $j++;
         }
@@ -364,7 +392,7 @@ function CriarHTMLmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaCla
 
 function CriarCSSmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClasse, $listaY){ // cria as classes com os horários agendados
     for ($i = 0; $i < 8; $i++){
-        $sql = "SELECT hora_inicio, hora_fim, exclsv, id FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND status='Aprovado'";
+        $sql = "SELECT * FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND (status='Aprovado' OR status='Pendente')";
         $result = $conexao->query($sql);
         $horariosMarcados = array();
         if ($result->num_rows > 0) {
@@ -374,6 +402,7 @@ function CriarCSSmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClas
                 $horarioInicio = $row["hora_inicio"];
                 $horarioFim = $row["hora_fim"];
                 $id = $row["id"];
+                $status = $row["status"];
                 
                 $horaInicio = $horarioInicio[0] . $horarioInicio[1];
                 $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
@@ -381,7 +410,12 @@ function CriarCSSmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClas
                 $horaFim = $horarioFim[0] . $horarioFim[1];
                 $minutoFim = $horarioFim[3] . $horarioFim[4];
 
-                $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
+                if ($status === 'Aprovado'){
+                    $cor = ($exclsv === 'Sim') ? '#001e50' : '#4C7397';
+                }
+                else{
+                    $cor = ($exclsv === 'Sim') ? '#808080' : '#bcb8b8';
+                }
 
                 $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim), 'id' => $id);
             }

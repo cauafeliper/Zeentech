@@ -1,6 +1,8 @@
 <?php
     include_once('../../config/config.php');
     session_start();
+
+    date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +14,6 @@
 </head>
 <body>
 <?php
-include_once('../../config/config.php');
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
@@ -33,6 +34,7 @@ if (isset($_GET['id'])) {
         $dia = $row['dia'];
         $hora_inicio = $row['hora_inicio'];
         $hora_fim = $row['hora_fim'];
+        $area_pista = $row['area_pista'];
 
         $query_email = "SELECT email FROM logins WHERE nome = '$solicitante'";
         $result_email = mysqli_query($conexao, $query_email);
@@ -58,11 +60,18 @@ if (isset($_GET['id'])) {
                 $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
                 $mail->AddAddress($email); 
 
-                /* $mail->AddCC('cc1@example.com', 'Cópia Carbono 1');    // Cópia Carbono 2
-                $mail->AddBCC('bcc1@example.com', 'Cópia Carbono Oculta 1');  // Cópia Carbono Oculta 1 */
-                
-                $mail->Subject = "Solicitação Reprovada!"; 
-                $mail->Body = utf8_decode('Sua solicitação de agendamento para o dia ' . $dia . ' de ' . $hora_inicio . ' até ' . $hora_fim . ' foi reprovada!<br>Motivo: ' . $motivoReprovacao . '.<br>Atenciosamente,<br>Equipe Zeentech.'); 
+                $mail->Subject = mb_convert_encoding("Solicitação Reprovada!","Windows-1252","UTF-8"); 
+                $mail->Body = mb_convert_encoding("Sua solicitação de agendamento da área da pista $area_pista para o dia $dia de $hora_inicio até $hora_fim foi reprovada!<br>Motivo: $motivoReprovacao.<br><br>Atenciosamente,<br>Equipe Zeentech.","Windows-1252","UTF-8"); 
+
+                $query_copias = "SELECT email FROM copias_email";
+                $result_copias = mysqli_query($conexao, $query_copias);
+                if ($result_copias->num_rows > 0) {
+                    while ($row_copias = mysqli_fetch_assoc($result_copias)) {
+                        $email_copia = $row_copias['email'];
+                        $mail->AddCC($email_copia);
+                    }
+                }
+
                 $mail->send();
 
                 echo '<script>

@@ -367,8 +367,8 @@
                             $query_solic = "SELECT DISTINCT nome FROM area_solicitante";
                             $result_solic = mysqli_query($conexao, $query_solic);
                             while ($row_solic = mysqli_fetch_assoc($result_solic)) {
-                                $selected = ($solic == $row_solic['solic']) ? 'selected' : '';
-                                echo '<option value="' . htmlspecialchars($row_solic['solic']) . '" ' . $selected . '>' . htmlspecialchars($row_solic['solic']) . '</option>';
+                                $selected = ($solic == $row_solic['nome']) ? 'selected' : '';
+                                echo '<option value="' . htmlspecialchars($row_solic['nome']) . '" ' . $selected . '>' . htmlspecialchars($row_solic['nome']) . '</option>';
                             }
                             ?>
                         </select>
@@ -383,17 +383,124 @@
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addArea'])) {
             if (!empty($_GET['novoArea'])) {
                 $novoArea = $_GET['novoArea'];
-                $query_addArea = "INSERT INTO area_pista(area) VALUES ('$novoArea')";
-                mysqli_query($conexao, $query_addArea);
+                $query_addArea = "INSERT INTO area_pista(area) VALUES (?)";
+
+                // Preparar a declaração SQL
+                $stmt = $conexao->prepare($query_addArea);
+
+                // Vincular os parâmetros
+                $stmt->bind_param("s", $novoArea);
+
+                // Executar a consulta
+                $stmt->execute();
+
+                // Fechar a declaração
+                $stmt->close();
+
+                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
             }
         }
 
-
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['rmvArea'])) {
             $removerArea = $_GET['removerArea'];
-            $query_removerArea = "DELETE FROM area_pista WHERE area = '$removerArea'";
-            mysqli_query($conexao, $query_removerArea);
+            $query_removerArea = "DELETE FROM area_pista WHERE area = ?";
+
+            // Preparar a declaração SQL
+            $stmt = $conexao->prepare($query_removerArea);
+
+            // Vincular os parâmetros
+            $stmt->bind_param("s", $removerArea);
+
+            // Executar a consulta
+            $stmt->execute();
+
+            // Fechar a declaração
+            $stmt->close();
+
+            echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
         }
+
+
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addObjtv'])) {
+            if (!empty($_GET['novoObjtv'])) {
+                $novoObjtv = $_GET['novoObjtv'];
+                $query_addObjtv = "INSERT INTO objtv_teste(objtv) VALUES (?)";
+        
+                // Preparar a declaração SQL
+                $stmt = $conexao->prepare($query_addObjtv);
+        
+                // Vincular os parâmetros
+                $stmt->bind_param("s", $novoObjtv);
+        
+                // Executar a consulta
+                $stmt->execute();
+        
+                // Fechar a declaração
+                $stmt->close();
+
+                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+            }
+        }
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['rmvObjtv'])) {
+            $removerObjtv = $_GET['removerObjtv'];
+            $query_removerObjtv = "DELETE FROM objtv_teste WHERE objtv = ?";
+        
+            // Preparar a declaração SQL
+            $stmt = $conexao->prepare($query_removerObjtv);
+        
+            // Vincular os parâmetros
+            $stmt->bind_param("s", $removerObjtv);
+        
+            // Executar a consulta
+            $stmt->execute();
+        
+            // Fechar a declaração
+            $stmt->close();
+
+            echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+        }
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addSolic'])) {
+            if (!empty($_GET['novoSolic'])) {
+                $novoSolic = $_GET['novoSolic'];
+                $query_addSolic = "INSERT INTO area_solicitante(nome) VALUES (?)";
+        
+                // Preparar a declaração SQL
+                $stmt = $conexao->prepare($query_addSolic);
+        
+                // Vincular os parâmetros
+                $stmt->bind_param("s", $novoSolic);
+        
+                // Executar a consulta
+                $stmt->execute();
+        
+                // Fechar a declaração
+                $stmt->close();
+
+                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+            }
+        }
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['rmvSolic'])) {
+            $removerSolic = $_GET['removerSolic'];
+            $query_removerSolic = "DELETE FROM area_solicitante WHERE nome = ?";
+        
+            // Preparar a declaração SQL
+            $stmt = $conexao->prepare($query_removerSolic);
+        
+            // Vincular os parâmetros
+            $stmt->bind_param("s", $removerSolic);
+        
+            // Executar a consulta
+            $stmt->execute();
+        
+            // Fechar a declaração
+            $stmt->close();
+
+            echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+        }
+        
     ?>
     <footer>
         <div>
@@ -448,19 +555,19 @@
                     var horaFim = linha.cells[3].innerText;
                     var objetivo = linha.cells[5].innerText;
                     var solicitante = linha.cells[6].innerText;
-                    var AreaSolicitante = linha.cells[7].innerText;
+                    var AreaSolicitante = linha.cells[9].innerText;
 
                     Swal.fire({
                         title: "Confirmação",
-                        html: `
-                            Você tem certeza de que deseja APROVAR o seguinte agendamento?<br>
+                        html: `<div style='text-align: start; padding: 0 2rem; line-height: 1.5rem'>
+                        <h3 style="text-align: center;">Você tem certeza de que deseja APROVAR o seguinte agendamento?</h3><br>
                             Dia: ${data}<br>
                             Hora de Início: ${horaInicio}<br>
                             Hora do Fim: ${horaFim}<br>
                             Objetivo: ${objetivo}<br>
                             Solicitante: ${solicitante}<br>
                             Área do Solicitante: ${AreaSolicitante}
-                        `,
+                        </div>`,
                         icon: "warning",
                         showCancelButton: true,
                         confirmButtonText: "Sim, aprovar",
@@ -484,19 +591,19 @@
                     var horaFim = linha.cells[3].innerText;
                     var objetivo = linha.cells[5].innerText;
                     var solicitante = linha.cells[6].innerText;
-                    var AreaSolicitante = linha.cells[7].innerText;
+                    var AreaSolicitante = linha.cells[9].innerText;
 
                     Swal.fire({
                         title: "Confirmação",
-                        html: `
-                            Você tem certeza de que deseja REPROVAR o seguinte agendamento?<br>
+                        html: `<div style='text-align: start; padding: 0 2rem; line-height: 1.5rem'>
+                            <h3 style="text-align: center;">Você tem certeza de que deseja REPROVAR o seguinte agendamento?</h3><br>
                             Dia: ${data}<br>
                             Hora de Início: ${horaInicio}<br>
                             Hora do Fim: ${horaFim}<br>
                             Objetivo: ${objetivo}<br>
                             Solicitante: ${solicitante}<br>
                             Área do Solicitante: ${AreaSolicitante}
-                        `,
+                        </div>`,
                         icon: "warning",
                         showCancelButton: true,
                         confirmButtonText: "Sim, reprovar",

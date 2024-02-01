@@ -78,33 +78,33 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                     $area_pista = $_POST['area_pista'];
 
                     if ($area_pista === 'todas_areas') {
-                        $query = "SELECT * FROM agendamentos WHERE dia = '$data' AND status = 'Aprovado'";
+                        $query = "SELECT * FROM agendamentos WHERE dia = '$data' AND (status = 'Aprovado' OR status = 'Pendente')";
                         $result = mysqli_query($conexao, $query);
 
                         echo '<caption>Todas Áreas</caption>';
                         echo '<tr>';
-                        echo '<th>Início</th><th>Fim</th><th>Objetivo</th><th>Uso exclusivo?</th><th>Área</th>';
+                        echo '<th>Início</th><th>Fim</th><th>Objetivo</th><th>Uso exclusivo?</th><th>Área</th><th>Status</th>';
                         echo '</tr>';
 
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
-                                echo "<tr><td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["objtv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $row["area_pista"] . "</td></tr>";
+                                echo "<tr><td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["objtv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $row["area_pista"] . "</td><td>" . $row["status"] . "</td></tr>";
                             }
                         } else {
                             echo "<tr><td colspan='6'>Ainda não existem agendamentos para esta data e área.</td></tr>";
                         }
                     } else {
-                        $query = "SELECT * FROM agendamentos WHERE dia = '$data' AND status = 'Aprovado' AND area_pista = '$area_pista' UNION SELECT * FROM agendamentos WHERE dia = '$data' AND status = 'Aprovado' AND area_pista = 'Pista Completa'";
+                        $query = "SELECT * FROM agendamentos WHERE dia = '$data' AND (status = 'Aprovado' OR status = 'Pendente') AND area_pista = '$area_pista' UNION SELECT * FROM agendamentos WHERE dia = '$data' AND status = 'Aprovado' AND area_pista = 'Pista Completa'";
                         $result = mysqli_query($conexao, $query);
 
                         echo '<caption>' . "$area_pista" . '</caption>';
                         echo '<tr>';
-                        echo '<th>Início</th><th>Fim</th><th>Veículo</th><th>Objetivo</th><th>Uso exclusivo?</th><th>Área</th>';
+                        echo '<th>Início</th><th>Fim</th><th>Objetivo</th><th>Uso exclusivo?</th><th>Área</th><th>Status</th>';
                         echo '</tr>';
 
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
-                                echo "<tr><td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["objtv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $row["area_pista"] . "</td></tr>";
+                                echo "<tr><td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["objtv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $row["area_pista"] . "</td><td>" . $row["status"] . "</td></tr>";
                             }
                         } else {
                             echo "<tr><td colspan='6'>Ainda não existem agendamentos para esta data e área.</td></tr>";
@@ -223,89 +223,129 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                 $status = $_POST['status'];
                 $obs = $_POST['obs'];
 
-                $query = "SELECT * FROM agendamentos 
-                    WHERE (area_pista = '$area' OR area_pista = 'Pista Completa')
-                    AND dia = '$data' 
-                    AND ((hora_inicio <= '$hora_inicio' AND hora_fim >= '$hora_inicio') 
-                    OR (hora_inicio <= '$hora_fim' AND hora_fim >= '$hora_fim'))
-                    AND (status = 'Aprovado' OR status = 'Pendente')";
-
-
-                $result = mysqli_query($conexao, $query);
-
-                if ($result && mysqli_num_rows($result) > 0) {
+                if (($hora_fim <= $hora_inicio)) {
                     echo "<script>
                         Swal.fire({
                             icon: 'warning',
                             title: 'ATENÇÃO!',
-                            html: 'O horário que você selecionou está ocupado! Verifique a tabela ao lado e selecione um horário disponível.',
+                            html: 'O horário de início não pode ser maior ou igual que o horário de fim!',
                         });
                     </script>";
-                } else {
-                    // Preparar a declaração SQL
-                    $stmt = $conexao->prepare("INSERT INTO agendamentos (area_pista, dia, hora_inicio, hora_fim, objtv, solicitante, numero_solicitante, empresa_solicitante, area_solicitante, exclsv, obs, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                }
+                else {
 
-                    // Vincular os parâmetros
-                    $stmt->bind_param("ssssssssssss", $area, $data, $hora_inicio, $hora_fim, $objetivo, $solicitante, $numero_solicitante, $empresa_solicitante, $area_solicitante, $exclsv, $obs, $status);
-
-                    $result = $stmt->execute();
-                    $stmt->close();
-
-                    if ($result) {
-                        $affected_rows = mysqli_affected_rows($conexao);
-                        if ($affected_rows > 0) {
-                            echo '<script>
+                    if ($exclsv == 'Sim'){
+                        $query = "SELECT * FROM agendamentos 
+                            WHERE dia = '$data' 
+                            AND ((hora_inicio <= '$hora_inicio' AND hora_fim >= '$hora_inicio') 
+                            OR (hora_inicio <= '$hora_fim' AND hora_fim >= '$hora_fim'))
+                            AND (status = 'Aprovado' OR status = 'Pendente')";
+                    }
+                    else {
+                        $query = "SELECT * FROM agendamentos 
+                            WHERE (area_pista = '$area' OR area_pista = 'Pista Completa')
+                            AND dia = '$data' 
+                            AND ((hora_inicio <= '$hora_inicio' AND hora_fim >= '$hora_inicio') 
+                            OR (hora_inicio <= '$hora_fim' AND hora_fim >= '$hora_fim'))
+                            AND (status = 'Aprovado' OR status = 'Pendente')";
+                    }
+    
+                    $queryExc = "SELECT * FROM agendamentos 
+                        WHERE exclsv = 'Sim'
+                        AND dia = '$data' 
+                        AND ((hora_inicio <= '$hora_inicio' AND hora_fim >= '$hora_inicio') 
+                        OR (hora_inicio <= '$hora_fim' AND hora_fim >= '$hora_fim')) 
+                        AND (status = 'Aprovado' OR status = 'Pendente')";
+    
+                    $result = mysqli_query($conexao, $query);
+                    $resultExc = mysqli_query($conexao, $queryExc);
+    
+                    if ($result && mysqli_num_rows($result) > 0) {
+                        echo "<script>
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'ATENÇÃO!',
+                                html: 'O horário que você selecionou está ocupado! Verifique a tabela ao lado e selecione um horário disponível.',
+                            });
+                        </script>";
+                    } else {
+                        if ($resultExc && mysqli_num_rows($resultExc) > 0) {
+                            echo "<script>
                                 Swal.fire({
-                                    icon: "success",
-                                    title: "SUCESSO!",
-                                    text: "Seu agendamento foi criado com sucesso!",
-                                    confirmButtonText: "OK",
-                                    confirmButtonColor: "#001e50",
-                                    allowOutsideClick: false,
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        window.location.href = "tabela-agendamentos.php";
-                                    }
+                                    icon: 'warning',
+                                    title: 'ATENÇÃO!',
+                                    html: 'O horário que você selecionou está ocupado! Verifique a tabela ao lado e selecione um horário disponível.',
                                 });
-                            </script>';
-                            $query_email = "SELECT email FROM logins WHERE numero = '$numero'";
-                            $result_email = mysqli_query($conexao, $query_email);
-                            $row_email = mysqli_fetch_assoc($result_email);
-                            $email = $row_email['email'];
-                            
-                            require("../PHPMailer-master/src/PHPMailer.php"); 
-                            require("../PHPMailer-master/src/SMTP.php"); 
-                            $mail = new PHPMailer\PHPMailer\PHPMailer(); 
-                            $mail->IsSMTP();
-                            $mail->SMTPDebug = 1;
-                            $mail->SMTPAuth = true;
-                            $mail->SMTPSecure = 'tsl'; 
-                            $mail->Host = "equipzeentech.com"; 
-                            $mail->Port = 587;
-                            $mail->IsHTML(true); 
-                            $mail->Username = "admin@equipzeentech.com"; 
-                            $mail->Password = "Z3en7ech"; 
-                            $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
-                            $mail->AddAddress($email); 
-                            $mail->Subject = "Solicitação criada com sucesso!"; 
-                            $mail->Body = utf8_decode('Sua soicitação foi criada com sucesso!<br>Assim que houver uma resposta do Gestor encarregado, você receberá um email dizendo se sua solicitação foi aprovada ou não.<br>Atenciosamente,<br>Equipe Zeentech.'); 
-                            $mail->send();
-
-                            $mail->ClearAddresses();
-
-                            $mail->addAddress('crpereira@zeentech.com.br');
-                            $mail->Subject = 'Nova solicitação de agendamento para pista a Pista de Teste!';
-                            $mail->Body = utf8_decode('Uma nova solicitação para o agendamento da Pista de Teste foi criada pelo colaborador(a) ' . $solicitante .' no dia ' . $data . ' e horário de ' . $hora_inicio . ' até ' . $hora_fim . ' com objetivo de ' . $objetivo .'. Essa nova solicitação aguarda sua resposta!<br>Atenciosamente,<br>Equipe Zeentech.');
-                            $mail->send();
-                        } 
+                            </script>";
+                        }
                         else {
-                            echo '<script>
-                                Swal.fire({
-                                    icon: "warning",
-                                    title: "ATENÇÃO!",
-                                    html: "Ocorreu um erro no seu agendamento! Tente novamente.",
-                                });
-                            </script>';
+                            // Preparar a declaração SQL
+                            $stmt = $conexao->prepare("INSERT INTO agendamentos (area_pista, dia, hora_inicio, hora_fim, objtv, solicitante, numero_solicitante, empresa_solicitante, area_solicitante, exclsv, obs, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    
+                            // Vincular os parâmetros
+                            $stmt->bind_param("ssssssssssss", $area, $data, $hora_inicio, $hora_fim, $objetivo, $solicitante, $numero_solicitante, $empresa_solicitante, $area_solicitante, $exclsv, $obs, $status);
+    
+                            $result = $stmt->execute();
+    
+                            if ($result) {
+                                $affected_rows = $stmt->affected_rows;
+                                if ($affected_rows > 0) {
+                                    echo '<script>
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: "SUCESSO!",
+                                            text: "Seu agendamento foi criado com sucesso!",
+                                            confirmButtonText: "OK",
+                                            confirmButtonColor: "#001e50",
+                                            allowOutsideClick: false,
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                window.location.href = "tabela-agendamentos.php";
+                                            }
+                                        });
+                                    </script>';
+                                    $query_email = "SELECT email FROM logins WHERE numero = '$numero'";
+                                    $result_email = mysqli_query($conexao, $query_email);
+                                    $row_email = mysqli_fetch_assoc($result_email);
+                                    $email = $row_email['email'];
+                                    
+                                    require("../PHPMailer-master/src/PHPMailer.php"); 
+                                    require("../PHPMailer-master/src/SMTP.php");
+                                    $mail = new PHPMailer\PHPMailer\PHPMailer();
+                                    $mail->IsSMTP();
+                                    $mail->SMTPDebug = 1;
+                                    $mail->SMTPAuth = true;
+                                    $mail->SMTPSecure = 'tsl'; 
+                                    $mail->Host = "equipzeentech.com"; 
+                                    $mail->Port = 587;
+                                    $mail->IsHTML(true); 
+                                    $mail->Username = "admin@equipzeentech.com"; 
+                                    $mail->Password = "Z3en7ech"; 
+                                    $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
+                                    $mail->AddAddress($email); 
+                                    $mail->Subject = mb_convert_encoding("Solicitação criada com sucesso!","Windows-1252","UTF-8"); 
+                                    $mail->Body = mb_convert_encoding("Sua solicitação de agendamento da área da pista $area para o dia $data de $hora_inicio até $hora_fim foi criada com sucesso!<br>Assim que houver uma resposta do Gestor encarregado, você receberá um email dizendo se sua solicitação foi aprovada ou não.<br><br>Atenciosamente,<br>Equipe Zeentech.","Windows-1252","UTF-8"); 
+                                    $mail->send();
+    
+                                    $mail->ClearAddresses();
+    
+                                    $mail->addAddress('lucasmleckar123@gmail.com'); //!!Adicionar email certo!!
+                                    $mail->Subject = mb_convert_encoding('Nova solicitação de agendamento para pista a Pista de Teste!',"Windows-1252","UTF-8");
+                                    $mail->Body = mb_convert_encoding("Uma nova solicitação para o agendamento da Pista de Teste foi criada pelo colaborador(a) $solicitante na área da pista $area para o dia $data e horário de $hora_inicio até $hora_fim com objetivo $objetivo. Essa nova solicitação aguarda sua resposta!<br><br>Atenciosamente,<br>Equipe Zeentech.","Windows-1252","UTF-8");
+                                    $mail->send();
+                                } 
+                                else {
+                                    echo '<script>
+                                        Swal.fire({
+                                            icon: "warning",
+                                            title: "ATENÇÃO!",
+                                            html: "Ocorreu um erro no seu agendamento! Tente novamente.
+                                            <br>"Erro: "'.$stmt->error.'",
+                                        });
+                                    </script>';
+                                }
+                            }
+                            $stmt->close();
                         }
                     }
                 }

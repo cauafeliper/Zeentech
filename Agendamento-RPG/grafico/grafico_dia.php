@@ -6,9 +6,8 @@
 <?php
 // Conteúdo da página com o gráfico
 date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
+include 'functions.php';
 
-// Certifique-se de incluir qualquer lógica ou bibliotecas necessárias para gerar o gráfico
-include 'functions.php'; // Substitua pelo caminho correto
 ?>
 
 <!DOCTYPE html>
@@ -16,23 +15,31 @@ include 'functions.php'; // Substitua pelo caminho correto
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Se houver estilos específicos para a página com o gráfico, você pode incluí-los aqui -->
     <link rel="stylesheet" href="../estilos/grafico.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-bundle.min.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- Include Tippy.js CSS (you can customize the theme) -->
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js/dist/tippy.css" />
+    <!-- Include Tippy.js script -->
+    <script src="https://unpkg.com/tippy.js@6.3.1/dist/tippy-bundle.umd.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-    <?php 
-    
-    
-    ?>
 
-    <!-- Adicione o código do gráfico aqui -->
     <div id="graf_dia" class="div__grafico div__width ativo">
         <style> .div__grafico{height: max-content; width: 100%;} .leg_mes{width: 100%;} </style>
         <div class="tit">
         <?php
 
-            $dia = '2024-01-29';
+            $dia = '2024-02-01';
 
             $listaPistas = array('VDA', 'NVH', 'Obstáculos', 'Rampa 12% e 20%', 'Rampa 40%', 'Rampa 60%', 'Asfalto', 'Pista Completa');
             $listaPistasClasse = array('vda', 'nvh', 'obs', 'r_12_20', 'r_40', 'r_60', 'asf', 'pc');
@@ -109,13 +116,35 @@ include 'functions.php'; // Substitua pelo caminho correto
         </div>
     </div>
 
+    <script>
+        function PopupAgendamento(id, area_pista, dia, horario, objetivo, solicitante, numero_solicitante, empresa_solicitante, area_solicitante, exclsv, obs, status){
+            var classeAgendamento = document.getElementById(id);
+            console.log('clicou na '+id);
+
+            Swal.fire({
+                icon: 'info',
+                title: "Informações do agendamento",
+                html:"<div style='text-align: start; padding: 0 2rem; line-height: 1.5rem'>"+
+                "Id: "+id+"<br>"+
+                "Área da Pista: "+area_pista+"<br>"+
+                "Dia: "+dia+"<br>"+
+                "Horário: "+horario+"<br>"+
+                "Objetivo: "+objetivo+"<br>"+
+                "Solicitante: "+solicitante+"<br>"+
+                "Numero do solicitante: "+numero_solicitante+"<br>"+
+                "Empresa do solicitante: "+empresa_solicitante+"<br>"+
+                "Área Solicitante: "+area_solicitante+"<br>"+
+                "É exclusivo? "+exclsv+"<br>"+
+                "Observação: "+obs+"<br>"+
+                "Status: "+status+"<br>"+
+                "</div>"
+                ,
+                showConfirmButton: false,
+                showCloseButton: true,
+                allowOutsideClick: false,
+            })
+        }
+    </script>
+
 </body>
 </html>
-
-</html>
-
-</html>
-
-
-
-

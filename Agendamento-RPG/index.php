@@ -18,7 +18,7 @@
             <div class="titulo-login"><h1>Login</h1></div>
             <div class="numero-login">
                 <div class="numero-login-label">
-                    <label for="numero"><img src="https://icons.iconarchive.com/icons/iconsmind/outline/16/ID-Card-icon.png" width="16" height="16" style="position: relative; top: 2px; margin-right: 5px;">Telefone:</label>
+                    <label for="numero"><img src="assets/phone-call.png" width="16" height="16" style="position: relative; top: 2px; margin-right: 5px;">Telefone:</label>
                 </div>
                 <div class="numero-login-input">
                     <input type="text" name="numero" id="numero" placeholder="Insira seu número de telefone cadastrado..." maxlength="11" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
@@ -26,7 +26,7 @@
             </div>
             <div class="senha-login">
                 <div class="senha-login-label">
-                    <label for="senha"><img src="https://icons.iconarchive.com/icons/icons8/ios7/16/User-Interface-Password-icon.png" width="16" height="16" style="margin-right: 5px;">Senha:</label>
+                    <label for="senha"><img src="assets/lock.png" width="16" height="16" style="margin-right: 5px;">Senha:</label>
                 </div>
                 <div class="senha-login-input">
                     <input type="password" name="senha" id="senha" placeholder="Insira sua senha...">

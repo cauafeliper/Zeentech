@@ -18,15 +18,23 @@
             <div class="titulo"><h1>Cadastre-se</h1></div>
             <div class="nome">
                 <div class="label-nome">
-                    <label for="nome"><img src="https://icons.iconarchive.com/icons/iconsmind/outline/16/Boy-icon.png" width="16" height="16" style="margin-right: 5px;">Nome:</label>
+                    <label for="nome"><img src="../assets/id-card-clip-alt.png" width="16" height="16" style="margin-right: 5px;">Nome:</label>
                 </div>
                 <div class="input-nome">
                     <input type="text" name="nome" id="nome" placeholder="Insira seu nome completo...">
                 </div>
             </div>
+            <div class="empresa">
+                <div class="label-empresa">
+                    <label for="empresa"><img src="../assets/building.png" width="16" height="16" style="margin-right: 5px;">Empresa:</label>
+                </div>
+                <div class="input-empresa">
+                    <input type="text" name="empresa" id="empresa" placeholder="Insira sua empresa...">
+                </div>
+            </div>
             <div class="area">
                 <div class="label-area">
-                    <label for="area"><img src="https://icons.iconarchive.com/icons/iconsmind/outline/16/Office-icon.png" width="16" height="16" style="margin-right: 5px;">Área:</label>
+                    <label for="area"><img src="../assets/briefcase.png" width="16" height="16" style="margin-right: 5px;">Área:</label>
                 </div>
                 <div class="input-area">
                     <input type="text" name="area" id="area" placeholder="Insira sua area de atuação. Exemplo: RH.">
@@ -34,7 +42,7 @@
             </div>
             <div class="numero">
                 <div class="label-numero">
-                    <label for="numero"><img src="https://icons.iconarchive.com/icons/iconsmind/outline/16/ID-Card-icon.png" width="16" height="16" style="position: relative; top: 2px; margin-right: 5px;">Telefone:</label>
+                    <label for="numero"><img src="../assets/phone-call.png" width="16" height="16" style="position: relative; top: 2px; margin-right: 5px;">Telefone:</label>
                 </div>
                 <div class="input-numero">
                     <input type="text" name="numero" id="numero" placeholder="Insira seu número de telefone..." maxlength="11" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
@@ -42,7 +50,7 @@
             </div>
             <div class="email">
                 <div class="label-email">
-                    <label for="email"><img src="https://icons.iconarchive.com/icons/iconsmind/outline/16/Email-icon.png" width="16" height="16" style="position: relative; top: 2px; margin-right: 5px;">Email:</label>
+                    <label for="email"><img src="../assets/at.png" width="16" height="16" style="position: relative; top: 2px; margin-right: 5px;">Email:</label>
                 </div>
                 <div class="input-email">
                     <input type="email" name="email" id="email" placeholder="Insira seu email...">
@@ -50,7 +58,7 @@
             </div>
             <div class="senha">
                 <div class="label-senha">
-                    <label for="senha"><img src="https://icons.iconarchive.com/icons/icons8/ios7/16/User-Interface-Password-icon.png" width="16" height="16" style="margin-right: 5px;">Senha</label>
+                    <label for="senha"><img src="../assets/lock.png" width="16" height="16" style="margin-right: 5px;">Senha</label>
                 </div>
                 <div class="input-senha">
                     <input type="password" name="senha" id="senha" placeholder="Define, atentamente, sua senha...">
@@ -66,7 +74,7 @@
         </form>
         <?php
         if (isset($_POST['submit'])) {
-            if (empty($_POST['nome']) || empty($_POST['area']) || empty($_POST['numero']) || empty($_POST['email']) || empty($_POST['senha'])) {
+            if (empty($_POST['nome']) || empty($_POST['empresa']) || empty($_POST['area']) || empty($_POST['numero']) || empty($_POST['email']) || empty($_POST['senha'])) {
                 echo '<script>
                     Swal.fire({
                         icon: "warning",
@@ -77,6 +85,7 @@
                 exit();
             } else {
                 $nome = $_POST['nome'];
+                $empresa = $_POST['empresa'];
                 $area = $_POST['area'];
                 $numero = $_POST['numero'];
                 $email = $_POST['email'];
@@ -144,7 +153,7 @@
                     </script>';
                     exit();
                 } else {
-                    $result = mysqli_query($conexao, "INSERT INTO logins(numero, nome, area, email, senha) VALUES('$numero','$nome','$area','$email', '$senha')");
+                    $result = mysqli_query($conexao, "INSERT INTO logins(numero, nome, empresa, area, email, senha) VALUES('$numero','$nome','$empresa','$area','$email', '$senha')");
 
                     if ($result) {
                         $affected_rows = mysqli_affected_rows($conexao);

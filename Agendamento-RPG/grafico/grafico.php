@@ -93,7 +93,6 @@ $semana = calcularDiasDaSemana($dia);
 $mes = calcularDiasDoMes($dia);
 $primeirosDiasDosMeses = obterPrimeirosDiasDosMesesDoAno($dia);
 $listaAreasSolicitantes = criarListaAreas($conexao);
-$listaAreasPista = array('VDA', 'NVH', 'Obstáculos', 'Rampa 12% e 20%', 'Rampa 40%', 'Rampa 60%', 'Asfalto', 'Pista Completa');
 
 $ano = date('Y', strtotime($dia));
 $dataInicial = date("$ano-01-01");
@@ -139,6 +138,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
     exit();
 }
 
+$hoje = new DateTime(date('Y-m-d'));
+// Adicionar 30 dias
+$hoje->add(new DateInterval('P30D'));
+// Obter a nova data formatada
+$data30 = $hoje->format('Y-m-d');
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,6 +154,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
     <header>
         <a href="https://www.vwco.com.br/" target="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus" style="height: 95%;"></a>
         <ul>
+            <li><a href="grafico31dias.php?diaInicio=<?php echo urlencode(date('Y-m-d')); ?>&diaFinal=<?php echo urlencode($data30); ?>&botao=<?php echo urlencode(true); ?>" target="_blank">Gerar gráfico<br>de 31 dias</a></li>
+
             <li><a href="../agendamento/gestor.php">Gestão</a></li>
 
             <li><a href="../agendamento/tabela-agendamentos.php">Início</a></li>
@@ -377,38 +384,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                         </div>
                     </div>
 
-                    <div id="graf_ano" class="div__grafico div__width">
+                    <div id="graf_ano" class="div__grafico div__width div__width__ano">
                         <div class="tit">
                             <?php
                             $diastr = strtotime($dia);
                             echo '<div class="all_tit"><h2 style="color: white;">Agendamentos por Ano ('.date('Y', $diastr).')</h2></div>'
                             ?>
                         </div>
+                        <form>
+                            <div style="display:flex; flex-direction:column; justify-content:space-around; align-items:center; gap:5px; width:100%; color: white; padding-bottom: 1rem" id="filtro_opcao">
+                                <label style="font-size: 18px;">
+                                    <input style="font-size: 20px;" class="opcaoAno" type="radio" name="opcaoFiltro" value="Quantidade" checked>
+                                    Quantidade
+                                </label>
+                                <label style="font-size: 18px;">
+                                    <input class="opcaoAno" type="radio" name="opcaoFiltro" value="Horas">
+                                    Horas
+                                </label>
+                            </div>
+                        </form>
                         <div class="out_grafico" style="height: 600px;">
-                            <form>
-                                <div style="display:flex; flex-direction:column; justify-content:space-around; align-items:center; gap:5px; width:100%; color: white; padding-bottom: 1rem" id="filtro_opcao">
-                                    <label style="font-size: 18px;">
-                                        <input style="font-size: 20px;" class="opcaoAno" type="radio" name="opcaoFiltro" value="Quantidade" checked>
-                                        Quantidade
-                                    </label>
-                                    <label style="font-size: 18px;">
-                                        <input class="opcaoAno" type="radio" name="opcaoFiltro" value="Horas">
-                                        Horas
-                                    </label>
-                                </div>
-                            </form>
                             <?php
                             echo '<div name="ano_vezes" class="grafico grafico_ano" style="position: relative;">';
                             ?>
                                 <div class="dupla_meses">
-                                    <div id="ano" class="graf_barras" style="width: 800px; height:400px">
+                                    <div id="ano" class="graf_barras" style="width: 800px; height:400px;">
                                         <div class="barras_titulo"><h3>
                                             Ano Completo
                                         </h3></div>
                                         <?php
                                             echo '<div style="justify-content: center; display: flex"><p>Total: '.$listaMeses[12]['total'].'</p></div>';
                                         ?>
-                                        <div class="barras">
+                                        <div class="barras" style="gap: 0">
                                             <?php
                                                 $maior = 1;
                                                 for ($i = 0; $i < 8; $i++){
@@ -442,7 +449,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                                                 for ($i = 0; $i < 8; $i++){
                                                     echo '<div class="legenda barra_legenda_tudo_'.$listaPistasClasse[$i].'"> '.$listaPistasAno[$i].' </div>';
                                                     echo '<style>';
-                                                    echo '.barra_legenda_tudo_'.$listaPistasClasse[$i].' {color: black; transform: rotate(45deg); width: 80px; align-items: end; height: 100%; align-items:  start;  display: flex; justify-content: space-between; position: absolute; left: '.(-30 + ($i * 103)).'px; bottom: -20px;}';
+                                                    echo '.barra_legenda_tudo_'.$listaPistasClasse[$i].' {color: black; transform: rotate(45deg); width: 80px; align-items: end; height: fit-content; align-items:  start;  display: flex; justify-content: space-between; padding-left: 2rem}';
                                                     echo '</style>';
                                                 }
                                             ?>
@@ -494,7 +501,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                                                     for ($l = 0; $l < 8; $l++){
                                                         echo '<div class="legenda barra_legenda_'.$listaAno[$z].'_'.$listaPistasClasse[$l].'"> '.$listaPistasAno[$l].' </div>
                                                         <style>
-                                                            .barra_legenda_'.$listaAno[$z].'_'.$listaPistasClasse[$l].' {color: black; transform: rotate(45deg); width: 80px; align-items: end; height: 100%; align-items:  start;  display: flex; justify-content: space-between; position: absolute; left: '.(-20 + ($l * 68)).'px; bottom: -20px;}
+                                                            .barra_legenda_'.$listaAno[$z].'_'.$listaPistasClasse[$l].' {color: black; transform: rotate(45deg); width: 50px; align-items: end; height: fit-content; align-items:  start;  display: flex; justify-content: space-between; padding-left: 0.75rem; padding-top: 0.75rem}
                                                         </style>';
                                                     }
                                                 echo '</div>
@@ -510,14 +517,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                             echo '<div id="ano_horas" class="grafico grafico_ano bar_inv" style="position: relative;">';
                             ?>
                                 <div class="dupla_meses">
-                                    <div name="ano" class="graf_barras" style="width: 800px; height:400px">
+                                    <div name="ano" class="graf_barras" style="width: 50rem; height:25rem;">
                                         <div class="barras_titulo"><h3>
                                             Ano Completo
                                         </h3></div>
                                         <?php
                                             echo '<div style="justify-content: center; display: flex"><p>Total: '.intval($listaMesesH[12]['total']/60).'h'.intval($listaMesesH[12]['total']%60).'</p></div>';
                                         ?>
-                                        <div class="barras">
+                                        <div class="barras" style="gap:0">
                                             <?php
                                                 $maiorH = 1;
                                                 for ($i = 0; $i < 8; $i++){
@@ -551,7 +558,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                                                 for ($i = 0; $i < 8; $i++){
                                                     echo '<div class="legenda barraH_legenda_tudo_'.$listaPistasClasse[$i].'"> '.$listaPistasAno[$i].' </div>';
                                                     echo '<style>';
-                                                    echo '.barraH_legenda_tudo_'.$listaPistasClasse[$i].' {color: black; transform: rotate(45deg); width: 80px; align-items: end; height: 100%; align-items:  start;  display: flex; justify-content: space-between; position: absolute; left: '.(-30 + ($i * 103)).'px; bottom: -20px;}';
+                                                    echo '.barraH_legenda_tudo_'.$listaPistasClasse[$i].' {color: black; transform: rotate(45deg); width: 80px; align-items: end; height: fit-content; align-items:  start;  display: flex; justify-content: space-between; padding-left: 2rem}';
                                                     echo '</style>';
                                                 }
                                             ?>
@@ -603,7 +610,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                                                     for ($l = 0; $l < 8; $l++){
                                                         echo '<div class="legenda barraH_legenda_'.$listaAno[$z].'_'.$listaPistasClasse[$l].'"> '.$listaPistasAno[$l].' </div>
                                                         <style>
-                                                            .barraH_legenda_'.$listaAno[$z].'_'.$listaPistasClasse[$l].' {color: black; transform: rotate(45deg); width: 80px; align-items: end; height: 100%; align-items:  start;  display: flex; justify-content: space-between; position: absolute; left: '.(-20 + ($l * 68)).'px; bottom: -20px;}
+                                                            .barraH_legenda_'.$listaAno[$z].'_'.$listaPistasClasse[$l].' {color: black; transform: rotate(45deg); width: 50px; align-items: end; height: fit-content; align-items:  start;  display: flex; justify-content: space-between; padding-left: 0.75rem; padding-top: 0.75rem}
                                                         </style>';
                                                     }
                                                 echo '</div>
@@ -629,7 +636,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                         </div>
                         <div class="out_grafico" style="height: 600px;">
                             <?php
-                            echo '<div class="grafico grafico_ano" style="position: relative; width: 70rem;">';
+                            echo '<div class="grafico grafico_area" style="position: relative; width: 100%;">';
                             ?>
                                 <div id="filter-form">
                                     <form id="checkbox-form" class="form_filtro quad_filtro">
@@ -995,7 +1002,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
 
         });
 
-        function PopupAgendamento(id, area_pista, dia, horario, objetivo, solicitante, numero_solicitante, empresa_solicitante, area_solicitante, exclsv, obs){
+        function PopupAgendamento(id, area_pista, dia, horario, objetivo, solicitante, numero_solicitante, empresa_solicitante, area_solicitante, exclsv, obs, status){
             var classeAgendamento = document.getElementById(id);
             console.log('clicou na '+id);
 
@@ -1007,13 +1014,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filtroData'])) {
                 "Área da Pista: "+area_pista+"<br>"+
                 "Dia: "+dia+"<br>"+
                 "Horário: "+horario+"<br>"+
-                "Ojetivo: "+objetivo+"<br>"+
+                "Objetivo: "+objetivo+"<br>"+
                 "Solicitante: "+solicitante+"<br>"+
                 "Numero do solicitante: "+numero_solicitante+"<br>"+
                 "Empresa do solicitante: "+empresa_solicitante+"<br>"+
                 "Área Solicitante: "+area_solicitante+"<br>"+
                 "É exclusivo? "+exclsv+"<br>"+
                 "Observação: "+obs+"<br>"+
+                "Status: "+status+"<br>"+
                 "</div>"
                 ,
                 showConfirmButton: false,

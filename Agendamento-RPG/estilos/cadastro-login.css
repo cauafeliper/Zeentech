@@ -89,12 +89,13 @@ input {
 .cadastro {  
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1.0fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.5fr;
+    grid-template-rows: 1.0fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.5fr;
     gap: 10px 10px;
     grid-auto-flow: row;
     grid-template-areas:
       "titulo"
       "nome"
+      "empresa"
       "area"
       "chapa"
       "email"
