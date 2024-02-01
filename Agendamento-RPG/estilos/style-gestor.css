@@ -373,7 +373,7 @@ main form {
     gap: 0px 10px;
     grid-auto-flow: row;
     grid-template-areas:
-      "solic_addRmv area_addRmv objtv_addRmv";
+      "objtv_addRmv solic_addRmv empresa_addRmv";
     width: 100%;
     margin-top: 60px;
     justify-content: space-between;
@@ -421,7 +421,6 @@ main form {
     align-items: center;
   }
 
-  
   .solic_add { 
     grid-area: solic_add; 
   }
@@ -430,49 +429,55 @@ main form {
     grid-area: solic_rmv; 
   }
   
-  .area_addRmv {  display: grid;
+  
+  .empresa_addRmv {  
+    display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     gap: 5px 5px;
     grid-auto-flow: row;
     grid-template-areas:
-      "area_addRmv_label area_addRmv_label"
-      "area_add area_rmv";
-    grid-area: area_addRmv;
+      "empresa_addRmv_label empresa_addRmv_label"
+      "empresa_add empresa_rmv";
+    grid-area: solic_addRmv;
     width: 90%;
     background-color: white;
     text-align: center;
     padding: 10px;
     border-radius: 10px;
   }
-  
-  .area_addRmv_label { 
-    grid-area: area_addRmv_label;
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-  }
 
-  .area_addRmv input {
+  .empresa_addRmv input {
     width: 100%;
     border-radius: 5px;
     border: 1px solid lightgray;
   }
 
-  .area_addRmv input[type="submit"] {
+  .empresa_addRmv input[type="submit"] {
     background-color: var(--escuro);
     color: white;
   }
 
-  .area_addRmv select {
+  .empresa_addRmv select {
     width: 100%;
     border-radius: 5px;
     border: 1px solid lightgray;
   }
   
-  .area_add { grid-area: area_add; }
+  .empresa_addRmv_label { 
+    grid-area: empresa_addRmv_label;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+  }
+
+  .empresa_add { 
+    grid-area: empresa_add; 
+  }
   
-  .area_rmv { grid-area: area_rmv; }
+  .empresa_rmv { 
+    grid-area: empresa_rmv; 
+  }
   
   .objtv_addRmv {  display: grid;
     grid-template-columns: 1fr 1fr;

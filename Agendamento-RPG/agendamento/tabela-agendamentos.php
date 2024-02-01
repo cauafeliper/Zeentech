@@ -222,6 +222,9 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                 $exclsv = $_POST['resposta'];
                 $status = $_POST['status'];
                 $obs = $_POST['obs'];
+                if ($area == 'Pista Completa') {
+                    $exclsv = 'Sim';
+                }
 
                 if (($hora_fim <= $hora_inicio)) {
                     echo "<script>
@@ -328,8 +331,12 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                                     $mail->send();
     
                                     $mail->ClearAddresses();
-    
-                                    $mail->addAddress('lucasmleckar123@gmail.com'); //!!Adicionar email certo!!
+                                    
+                                    $query_gestor = "SELECT email FROM logins WHERE numero IN (SELECT numero FROM gestor)";
+                                    $result_gestor = mysqli_query($conexao, $query_gestor);
+                                    while ($row_gestor = mysqli_fetch_assoc($result_gestor)) {
+                                        $mail->addAddress($row_gestor['email']); //email pros gestores
+                                    }
                                     $mail->Subject = mb_convert_encoding('Nova solicitação de agendamento para pista a Pista de Teste!',"Windows-1252","UTF-8");
                                     $mail->Body = mb_convert_encoding("Uma nova solicitação para o agendamento da Pista de Teste foi criada pelo colaborador(a) $solicitante na área da pista $area para o dia $data e horário de $hora_inicio até $hora_fim com objetivo $objetivo. Essa nova solicitação aguarda sua resposta!<br><br>Atenciosamente,<br>Equipe Zeentech.","Windows-1252","UTF-8");
                                     $mail->send();

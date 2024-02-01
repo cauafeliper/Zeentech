@@ -49,7 +49,7 @@
     <main>
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" class="filtros">
             <div class="titulo">
-                <h2><img src="https://icons.iconarchive.com/icons/pictogrammers/material/32/form-dropdown-icon.png" width="24" height="24" style="position: relative; top: 2px;">Filtros de Buscas</h2>
+                <h2><img src="../assets/filter.png" width="24" height="24" style="position: relative; top: 2px;">Filtros de Buscas</h2>
             </div>
             <div class="dia">
                 <div class="label_dia">
@@ -171,7 +171,7 @@
             </div>
         </form>
         <div class="tabela">
-        <div class="caption"><img src="https://icons.iconarchive.com/icons/iconsmind/outline/24/Calendar-4-icon.png" width="22" height="22" style="position: relative; top: 3px; margin-right: 5px;">Tabela de Agendamentos</div>
+        <div class="caption"><img src="../assets/table-list.png" width="22" height="22" style="position: relative; top: 3px; margin-right: 5px;">Tabela de Agendamentos</div>
             <table>
                 <tr>
                     <th style="display: none;">ID</th>
@@ -293,33 +293,6 @@
         </div>
 
         <div class="addRmv">
-            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" class="form_addRmv">
-                <div class="area_addRmv">
-                    <div class="area_addRmv_label">
-                        <h3>Áreas da Pista</h3>
-                    </div>
-                    <div class="area_add">
-                        <h4>Adicionar</h4>
-                        <input type="text" name="novoArea" placeholder="Nova Área">
-                        <input type="submit" name="addArea" value="Adicionar">
-                    </div>
-                    <div class="area_rmv">
-                        <h4>Remover</h4>
-                        <select name="removerArea">
-                            <option value="">Remover Área</option>
-                            <?php
-                            $query_area = "SELECT DISTINCT area FROM area_pista";
-                            $result_area = mysqli_query($conexao, $query_area);
-                            while ($row_area = mysqli_fetch_assoc($result_area)) {
-                                $selected = ($area == $row_area['area']) ? 'selected' : '';
-                                echo '<option value="' . htmlspecialchars($row_area['area']) . '" ' . $selected . '>' . htmlspecialchars($row_area['area']) . '</option>';
-                            }
-                            ?>
-                        </select>
-                        <input type="submit" name="rmvArea" value="Remover">
-                    </div>
-                </div>
-            </form>
 
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" class="form_addRmv">
                 <div class="objtv_addRmv">
@@ -376,50 +349,39 @@
                     </div>
                 </div>
             </form>
+
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" class="form_addRmv">
+                <div class="empresa_addRmv">
+                    <div class="empresa_addRmv_label">
+                        <h3>Empresas</h3>
+                    </div>
+                    <div class="empresa_add">
+                        <h4>Adicionar</h4>
+                        <input type="text" name="novoEmpresa" placeholder="Nova Empresa">
+                        <input type="submit" name="addEmpresa" value="Adicionar">
+                    </div>
+                    <div class="empresa_rmv">
+                        <h4>Remover</h4>
+                        <select name="removerEmpresa">
+                            <option value="">Remover Empresa</option>
+                            <?php
+                            $query_empresa = "SELECT DISTINCT nome FROM empresas";
+                            $result_empresa = mysqli_query($conexao, $query_empresa);
+                            if ($result_empresa && mysqli_num_rows($result_empresa) > 0){
+                                while ($row_empresa = mysqli_fetch_assoc($result_empresa)) {
+                                    $selected = ($empresa == $row_empresa['nome']) ? 'selected' : '';
+                                    echo '<option value="' . htmlspecialchars($row_empresa['nome']) . '" ' . $selected . '>' . htmlspecialchars($row_empresa['nome']) . '</option>';
+                                }
+                            }
+                            ?>
+                        </select>
+                        <input type="submit" name="rmvEmpresa" value="Remover">
+                    </div>
+                </div>
+            </form>
         </div>
     </main>
     <?php
-
-        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addArea'])) {
-            if (!empty($_GET['novoArea'])) {
-                $novoArea = $_GET['novoArea'];
-                $query_addArea = "INSERT INTO area_pista(area) VALUES (?)";
-
-                // Preparar a declaração SQL
-                $stmt = $conexao->prepare($query_addArea);
-
-                // Vincular os parâmetros
-                $stmt->bind_param("s", $novoArea);
-
-                // Executar a consulta
-                $stmt->execute();
-
-                // Fechar a declaração
-                $stmt->close();
-
-                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
-            }
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['rmvArea'])) {
-            $removerArea = $_GET['removerArea'];
-            $query_removerArea = "DELETE FROM area_pista WHERE area = ?";
-
-            // Preparar a declaração SQL
-            $stmt = $conexao->prepare($query_removerArea);
-
-            // Vincular os parâmetros
-            $stmt->bind_param("s", $removerArea);
-
-            // Executar a consulta
-            $stmt->execute();
-
-            // Fechar a declaração
-            $stmt->close();
-
-            echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
-        }
-
 
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addObjtv'])) {
             if (!empty($_GET['novoObjtv'])) {
@@ -491,6 +453,46 @@
         
             // Vincular os parâmetros
             $stmt->bind_param("s", $removerSolic);
+        
+            // Executar a consulta
+            $stmt->execute();
+        
+            // Fechar a declaração
+            $stmt->close();
+
+            echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addEmpresa'])) {
+            if (!empty($_GET['novoEmpresa'])) {
+                $novoEmpresa = $_GET['novoEmpresa'];
+                $query_addEmpresa = "INSERT INTO empresas(nome) VALUES (?)";
+        
+                // Preparar a declaração SQL
+                $stmt = $conexao->prepare($query_addEmpresa);
+        
+                // Vincular os parâmetros
+                $stmt->bind_param("s", $novoEmpresa);
+        
+                // Executar a consulta
+                $stmt->execute();
+        
+                // Fechar a declaração
+                $stmt->close();
+
+                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+            }
+        }
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['rmvEmpresa'])) {
+            $removerEmpresa = $_GET['removerEmpresa'];
+            $query_removerEmpresa = "DELETE FROM empresas WHERE nome = ?";
+        
+            // Preparar a declaração SQL
+            $stmt = $conexao->prepare($query_removerEmpresa);
+        
+            // Vincular os parâmetros
+            $stmt->bind_param("s", $removerEmpresa);
         
             // Executar a consulta
             $stmt->execute();

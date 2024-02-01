@@ -74,7 +74,7 @@ foreach ($mes as $diaMes){
         <div>
             <?php 
             if ($botao){
-              echo '<button onclick="Email30Dias()" class="botao_email">Enviar por email<br>aos gestores</button>';      
+              echo '<button onclick="Email30Dias()" class="botao_email"><p class="texto_botao">Enviar por email<br>aos gestores</p><img class="gif_botao" src="../assets/message.gif" width="100px" height="100px"></button>';      
             }
             ?>
         </div>

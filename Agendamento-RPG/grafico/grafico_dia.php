@@ -108,11 +108,15 @@ include 'functions.php';
                 </div>
             </div>
         </div>
-        <div class="leg_mes">
+        <div class="leg_mes" style="display: flex; justify-content: center; flex-direction:row;">
             <div class="k6 quad_graf"><p>Exclusivo</p></div>
             <div class="k7 quad_graf"></div>
             <div class="k8 quad_graf"><p>Não<br>Exlusivo</p></div>
             <div class="k9 quad_graf"></div>
+            <div class="k10 quad_graf"><p>Exclusivo Pendente</p></div>
+            <div class="k11 quad_graf"></div>
+            <div class="k12 quad_graf"><p>Não Excl Pendente</p></div>
+            <div class="k13 quad_graf"></div>
         </div>
     </div>
 
