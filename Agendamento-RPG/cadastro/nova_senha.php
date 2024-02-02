@@ -26,9 +26,12 @@
 
 <?php
 // Verificar se o token está definido na URL
-if (isset($_GET['token']) && isset($_GET['email'])) {
+if (isset($_GET['token'])) {
     // Acessar o valor do token
     $token = $_GET['token'];
+}
+if (isset($_GET['email'])) {
+    // Acessar o valor do email
     $email = $_GET['email'];
 }
 $dataHoraAtual = new DateTime();

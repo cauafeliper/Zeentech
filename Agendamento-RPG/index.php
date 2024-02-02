@@ -46,7 +46,7 @@
     </main>
     <?php
         if (isset($_POST['submit'])) {
-            if (empty($_POST['numero']) || empty($_POST['senha']))
+            if (empty($_POST['email']) || empty($_POST['senha']))
             {
                 echo '<script>
                 Swal.fire({
@@ -57,14 +57,14 @@
                 </script>';  
             }
             else {
-                $numero = $_POST['numero'];
+                $email = $_POST['email'];
                 $senha = $_POST['senha'];
 
-                $query = "SELECT * FROM logins WHERE numero = ? AND senha = ?";
+                $query = "SELECT * FROM logins WHERE email = ? AND senha = ?";
                 $stmt = $conexao->prepare($query);
 
                 // Vincula os parâmetros
-                $stmt->bind_param("ss", $numero, $senha);
+                $stmt->bind_param("ss", $email, $senha);
 
                 // Executa a consulta
                 $stmt->execute();
