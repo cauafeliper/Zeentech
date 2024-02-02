@@ -9,18 +9,18 @@ include 'functions.php';
 date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
 
 use PhpOffice\PhpSpreadsheet\Writer\Ods\Content;
-    if (!isset($_SESSION['numero']) || empty($_SESSION['numero'])) {
+    if (!isset($_SESSION['email']) || empty($_SESSION['email'])) {
         session_unset();
         header('Location: ../index.php');
     }
     
-    $numero = $_SESSION['numero'];
+    $email = $_SESSION['email'];
 
-    $query = "SELECT * FROM numero_adm WHERE numero = ?";
+    $query = "SELECT * FROM lista_adm WHERE email = ?";
     $stmt = $conexao->prepare($query);
 
     // Vincula os parâmetros
-    $stmt->bind_param("s", $numero);
+    $stmt->bind_param("s", $email);
 
     // Executa a consulta
     $stmt->execute();

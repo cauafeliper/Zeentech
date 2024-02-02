@@ -97,9 +97,10 @@ input {
       "nome"
       "empresa"
       "area"
-      "chapa"
+      "numero"
       "email"
       "senha"
+      "senha_confirma"
       "submit"
       "login-tela";
 }
@@ -154,24 +155,24 @@ input {
     grid-area: input-area; 
 }
   
-.chapa {  
+.numero {  
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 0.7fr 1fr;
     gap: 8px 8px;
     grid-auto-flow: row;
     grid-template-areas:
-      "label-chapa"
-      "input-chapa";
-    grid-area: chapa;
+      "label-numero"
+      "input-numero";
+    grid-area: numero;
 }
   
-.label-chapa { 
-    grid-area: label-chapa; 
+.label-numero { 
+    grid-area: label-numero; 
 }
   
-.input-chapa { 
-    grid-area: input-chapa; 
+.input-numero { 
+    grid-area: input-numero; 
 }
   
 .email {  
@@ -212,6 +213,26 @@ input {
   
 .input-senha { 
     grid-area: input-senha; 
+}
+
+.senha_confirma {  
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.7fr 1fr;
+    gap: 8px 8px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "label-senha_confirma"
+      "input-senha_confirma";
+    grid-area: senha_confirma;
+}
+  
+.label-senha_confirma { 
+    grid-area: label-senha_confirma; 
+}
+  
+.input-senha_confirma { 
+    grid-area: input-senha_confirma; 
 }
 
 .login-tela {
@@ -266,10 +287,11 @@ input {
     grid-auto-flow: row;
     grid-template-areas:
         "titulo-login"
-        "chapa-login"
+        "email-login"
         "senha-login"
         "submit-login"
-        "cadastrar";
+        "cadastrar"
+        "esqueceu";
 }
   
 .titulo-login { 
@@ -282,24 +304,42 @@ input {
     border-top-left-radius: 10px;  
 }
 
-.chapa-login {  
+.email-login {  
+    padding: 5px 0;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 0.7fr 1fr;
     gap: 5px 5px;
     grid-auto-flow: row;
     grid-template-areas:
-        "chapa-login-label"
-        "chapa-login-input";
-    grid-area: chapa-login;
+        "email-login-label"
+        "email-login-input";
+    grid-area: email-login;
 }
 
-.chapa-login-label { 
-    grid-area: chapa-login-label; 
+.email-login-label { 
+    grid-area: email-login-label; 
 }
 
-.chapa-login-input { 
-    grid-area: chapa-login-input; 
+.email-login-input { 
+    grid-area: email-login-input; 
+}
+
+.nova_senha {  
+    display: flex;
+    flex-direction: column;
+    gap: 5px 5px; 
+    justify-content: center;
+    align-items: center;
+}
+
+.div_senha {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    width: 100%;
+    padding: 5px;
 }
 
 .senha-login {  
@@ -341,6 +381,28 @@ input {
 }
 
 .cadastrar button:not(:hover) {
+    transition-duration: 0.3s;
+}
+
+.esqueceu {
+    grid-area: esqueceu;
+}
+
+.esqueceu button {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    background-color: dimgray;
+    color: white;
+    border: none;
+}
+
+.esqueceu button:hover {
+    transition-duration: 0.3s;
+    background-color: #0b3986;
+}
+
+.esqueceu button:not(:hover) {
     transition-duration: 0.3s;
 }
 

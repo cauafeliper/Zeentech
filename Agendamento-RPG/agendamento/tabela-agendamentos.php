@@ -23,7 +23,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
 </head>
 <body>
     <?php 
-        if (!isset($_SESSION['numero']) || empty($_SESSION['numero'])) {
+        if (!isset($_SESSION['email']) || empty($_SESSION['email'])) {
             header('Location: ../index.php');
             exit();
         }
@@ -33,9 +33,9 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
         <ul>
             <?php 
 
-                $numero = $_SESSION['numero'];
+                $email = $_SESSION['email'];
 
-                $query = "SELECT COUNT(*) as count FROM numero_adm WHERE numero = '$numero'";
+                $query = "SELECT COUNT(*) as count FROM lista_adm WHERE email = '$email'";
                 $resultado = mysqli_query($conexao, $query);
                 $linha = mysqli_fetch_assoc($resultado);
                 $admTrue = ($linha['count'] > 0);
@@ -126,8 +126,8 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                 <label for="solicitante">Solicitante:</label>
                 <input type="text" name="solicitante" id="solicitante" value="<?= $_SESSION['nome'] ?>" readonly style="display:none">
                 <h2 style="color: white;"><?= $_SESSION['nome'] ?></h2>
-                <label for="solicitante">Empresa: <?= $_SESSION['empresa'] ?></label>
-                <label for="solicitante">Área: <?= $_SESSION['area_solicitante'] ?></label>
+                <label for="solicitante"><p style="font-size: smaller;">Empresa: <?= $_SESSION['empresa'] ?></p></label>
+                <label for="solicitante"><p style="font-size: smaller;">Área: <?= $_SESSION['area_solicitante'] ?></p></label>
             </div>
             <div class="dia grids">
                 <label for="dia">Dia:</label>
@@ -307,10 +307,6 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                                             }
                                         });
                                     </script>';
-                                    $query_email = "SELECT email FROM logins WHERE numero = '$numero'";
-                                    $result_email = mysqli_query($conexao, $query_email);
-                                    $row_email = mysqli_fetch_assoc($result_email);
-                                    $email = $row_email['email'];
                                     
                                     require("../PHPMailer-master/src/PHPMailer.php"); 
                                     require("../PHPMailer-master/src/SMTP.php");
@@ -332,7 +328,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
     
                                     $mail->ClearAddresses();
                                     
-                                    $query_gestor = "SELECT email FROM logins WHERE numero IN (SELECT numero FROM gestor)";
+                                    $query_gestor = "SELECT email FROM logins WHERE email IN (SELECT email FROM gestor)";
                                     $result_gestor = mysqli_query($conexao, $query_gestor);
                                     while ($row_gestor = mysqli_fetch_assoc($result_gestor)) {
                                         $mail->addAddress($row_gestor['email']); //email pros gestores

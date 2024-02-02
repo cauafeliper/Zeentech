@@ -16,12 +16,12 @@
     <main>
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" class="login">
             <div class="titulo-login"><h1>Login</h1></div>
-            <div class="numero-login">
-                <div class="numero-login-label">
-                    <label for="numero"><img src="assets/phone-call.png" width="16" height="16" style="position: relative; top: 2px; margin-right: 5px;">Telefone:</label>
+            <div class="email-login">
+                <div class="email-login-label">
+                    <label for="email"><img src="assets/at.png" width="16" height="16" style="position: relative; top: 2px; margin-right: 5px;">Email:</label>
                 </div>
-                <div class="numero-login-input">
-                    <input type="text" name="numero" id="numero" placeholder="Insira seu número de telefone cadastrado..." maxlength="11" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                <div class="email-login-input">
+                    <input type="text" name="email" id="email" placeholder="Insira seu email cadastrado..." maxlength="30" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                 </div>
             </div>
             <div class="senha-login">
@@ -38,6 +38,9 @@
             </div>
             <div class="cadastrar">
                 <a href="cadastro/tela-cadastro.php"><button type="button">Cadastrar-se</button></a>
+            </div>
+            <div class="esqueceu">
+                <a href="cadastro/recuperar_senha.php"><button type="button">Esqueci minha senha</button></a>
             </div>
         </form>
     </main>

@@ -21,13 +21,13 @@
 </head>
 <body>
     <?php
-        if (!isset($_SESSION['numero']) || empty($_SESSION['numero'])) {
+        if (!isset($_SESSION['email']) || empty($_SESSION['email'])) {
             session_unset();
             header('Location: ../index.php');
         }
         
-        $numero = $_SESSION['numero'];
-        $query = "SELECT * FROM numero_adm WHERE numero = '$numero'";
+        $email = $_SESSION['email'];
+        $query = "SELECT * FROM lista_adm WHERE email = '$email'";
         $result = mysqli_query($conexao, $query);
         
         if (!$result || mysqli_num_rows($result) === 0) {

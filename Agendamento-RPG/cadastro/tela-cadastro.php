@@ -63,6 +63,14 @@
                 <div class="input-senha">
                     <input type="password" name="senha" id="senha" placeholder="Define, atentamente, sua senha...">
                 </div>
+            </div>
+            <div class="senha_confirma">
+                <div class="label-senha_confirma">
+                    <label for="senha_confirma"><img src="../assets/lock.png" width="16" height="16" style="margin-right: 5px;">Confirmar senha</label>
+                </div>
+                <div class="input-senha_confirma">
+                    <input type="password" name="senha_confirma" id="senha_confirma" placeholder="Confirme sua senha...">
+                </div>
                 <hr>
             </div>
             <div class="submit">
@@ -74,7 +82,7 @@
         </form>
         <?php
         if (isset($_POST['submit'])) {
-            if (empty($_POST['nome']) || empty($_POST['empresa']) || empty($_POST['area']) || empty($_POST['numero']) || empty($_POST['email']) || empty($_POST['senha'])) {
+            if (empty($_POST['nome']) || empty($_POST['empresa']) || empty($_POST['area']) || empty($_POST['numero']) || empty($_POST['email']) || empty($_POST['senha']) || empty($_POST['senha_confirma'])) {
                 echo '<script>
                     Swal.fire({
                         icon: "warning",
@@ -83,7 +91,18 @@
                     });
                 </script>';
                 exit();
-            } else {
+            }
+            elseif ($_POST['senha'] != $_POST['senha_confirma']) {
+                echo '<script>
+                    Swal.fire({
+                        icon: "warning",
+                        title: "ATENÇÃO!",
+                        html: "As senhas não coincidem!<br>Por favor, digite a mesma senha nos dois campos."
+                    });
+                </script>';
+                exit();
+            } 
+            else {
                 $nome = $_POST['nome'];
                 $empresa = $_POST['empresa'];
                 $area = $_POST['area'];
@@ -91,10 +110,10 @@
                 $email = $_POST['email'];
                 $senha = $_POST['senha'];
 
-                $query = "SELECT COUNT(*) as count FROM numero_lista WHERE numero = ?";
+                $query = "SELECT COUNT(*) as count FROM cadastros WHERE email = ?";
                 $stmt = $conexao->prepare($query);
                 // Vincula os parâmetros
-                $stmt->bind_param("s", $numero);
+                $stmt->bind_param("s", $email);
                 // Executa a consulta
                 $stmt->execute();
                 // Obtém os resultados, se necessário
@@ -108,23 +127,11 @@
                         Swal.fire({
                             icon: "warning",
                             title: "ATENÇÃO!",
-                            html: "Seu número não se encontra no nosso banco de dados!<br>Entre em contato com o nosso suporte para mais informações.<br>Contato: crpereira@zeentech.com.br"
+                            html: "Seu email não se encontra no nosso banco de dados!<br>Entre em contato com o nosso suporte para mais informações.<br>Contato: crpereira@zeentech.com.br"
                         });
                     </script>';
                     exit();
                 }
-                
-                $numero_query = "SELECT COUNT(*) as count FROM logins WHERE numero = '$numero'";
-                $result_numero = $conexao->query($numero_query);
-                $row_numero = mysqli_fetch_assoc($result_numero);
-
-                // Verificar se o número já existe
-                $stmt_numero = $conexao->prepare("SELECT COUNT(*) as count FROM logins WHERE numero = ?");
-                $stmt_numero->bind_param("s", $numero);
-                $stmt_numero->execute();
-                $result_numero = $stmt_numero->get_result();
-                $row_numero = $result_numero->fetch_assoc();
-                $stmt_numero->close();
 
                 // Verificar se o e-mail já existe
                 $stmt_email = $conexao->prepare("SELECT COUNT(*) as count FROM logins WHERE email = ?");
@@ -134,21 +141,12 @@
                 $row_email = $result_email->fetch_assoc();
                 $stmt_email->close();
 
-                if ($row_numero['count'] > 0) {
+                if ($row_email['count'] > 0) {
                     echo '<script>
                         Swal.fire({
                             icon: "warning",
                             title: "ATENÇÃO!",
-                            html: "Seu número já está cadastrado!<br>Caso não esteja conseguindo logar no site mesmo com seu número e senha, entre em contato com nosso suporte.<br>Contato: crpereira@zeentech.com.br"
-                        });
-                    </script>';
-                    exit();
-                } elseif ($row_email['count'] > 0) {
-                    echo '<script>
-                        Swal.fire({
-                            icon: "warning",
-                            title: "ATENÇÃO!",
-                            html: "Seu email já está cadastrado!<br>Tente logar com o seu número e senha."
+                            html: "Seu email já está cadastrado!<br>Tente logar com o seu email e senha."
                         });
                     </script>';
                     exit();
