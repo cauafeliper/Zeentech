@@ -37,7 +37,7 @@ body {
 header {
     background-color: #00102c;
     width: 100%;
-    height: 160px;
+    height: 80px;
     justify-content: space-between;
     display: flex;
     align-items: center;
@@ -47,38 +47,91 @@ header {
 }
 
 header img {
-    height: 60px;
+    height: 40px;
 }
 
 .header__img {
-    width: 340px;
+    width: 300px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.toca {
-    position: absolute; 
-    right: 45px; 
-    top: 25px;
-}
-
 main {
     margin-top: 120px;
-    width: 450px;
-    height: 450px;
+    width: 300px;
+    height: 300px;
+}
+
+main img {
+    height: 60px;
 }
 
 .botoes {  
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
-    gap: 20px 20px;
+    gap: 10px 10px;
     height: 100%;
-    grid-auto-flow: row;
     grid-template-areas:
-      "rod scha"
-      "oleo oleo";
+      "veic moto"
+      "mapa situ";
+  }
+
+  .veiculo {
+    grid-area: veic;
+
+    border-top-left-radius: 500px;
+
+    padding-top: 30px;
+    padding-left: 25px;
+  }
+
+  .moto {
+    grid-area: moto;
+
+    border-top-right-radius: 500px;
+
+    padding-top: 20px;
+    padding-right: 20px;
+  }
+
+  .mapa {
+    grid-area: mapa;
+
+    border-bottom-left-radius: 500px;
+
+    padding-bottom: 30px;
+    padding-left: 30px;
+  }
+
+  .situ {
+    grid-area: situ;
+
+    border-bottom-right-radius: 500px;
+
+    padding-bottom: 30px;
+    padding-right: 20px;
+  }
+
+  .botoes div {
+    background-color: #00102c;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .botoes div:hover {
+    box-shadow: 2px 5px 15px white;
+
+    cursor: pointer;
+
+    transition-duration: 0.5s;
+  }
+
+  .botoes div:not(:hover) {
+    transition-duration: 0.5s;
   }
 
 .botoes__animacao {
@@ -97,68 +150,31 @@ main {
 .botoes__animacao img {
     height: 55%;
 }
-  
-.rod { 
-    grid-area: rod; 
-    border-top-left-radius: 500px;
-    border-bottom-right-radius: 10px;
-}
-
-.rod img {
-    position: relative;
-    top: 40%;
-    left: 27%;
-}
-
-.scha { 
-    grid-area: scha; 
-    border-top-right-radius: 500px;
-}
-
-.scha img {
-    position: relative;
-    left: 15%;
-    top: 32%;
-}
-
-.oleo { 
-    grid-area: oleo; 
-    border-bottom-left-radius: 1000px;
-    border-bottom-right-radius: 1000px;
-}
-
-.oleo img {
-    position: relative;
-    top: 20%;
-    left: 37%;
-}
 
 .caminhao__1 {
     opacity: 30%;
     position: absolute;
-    right: -10%;
+    right: -7%;
     bottom: 20%;
-    width: 569px;
-    height: 379px;
+    height: 250px;
 }
 
 .caminhao__2 {
     transform: scaleX(-1);
     opacity: 30%;
     position: absolute;
-    left: -10%;
+    left: -7%;
     bottom: 20%;
-    width: 569px;
-    height: 379px;
+    height: 250px;
 }
 
 .modal {
     display: none;
     position: fixed;
-    top: 58%;
+    top: 55%;
     left: 50%;
-    width: 72%;
-    height: 84%;
+    width: 83%;
+    height: 88%;
     transform: translate(-50%, -50%);
     background-color: white;
     border-radius: 10px;
@@ -215,74 +231,13 @@ main {
     right: -40px;
 }
 
-.exp__rod {
-    position: absolute;
-    right: 500px;
-    width: 300px;
-    background-color: rgb(81, 84, 87);
-    border: 2px solid #00102c;
-    color: white;
-    padding: 5px;
-    border-radius: 10px;
-    text-align: justify;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-}
-
-.img__rod:hover + .exp__rod {
-    opacity: 1;
-}
-
-.exp__scha {
-    position: absolute;
-    right: 800px;
-    bottom: 100px;
-    width: 300px;
-    background-color: rgb(81, 84, 87);
-    border: 2px solid #00102c;
-    color: white;
-    padding: 5px;
-    border-radius: 10px;
-    text-align: justify;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-}
-
-.img__scha:hover + .exp__scha {
-    opacity: 1;
-}
-
-.exp__oleo {
-    position: absolute;
-    left: 500px;
-    width: 300px;
-    background-color: rgb(81, 84, 87);
-    border: 2px solid #00102c;
-    color: white;
-    padding: 5px;
-    border-radius: 10px;
-    text-align: justify;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-}
-
-.img__oleo:hover + .exp__oleo {
-    opacity: 1;
-}
-
 .idt {
     font-family: "ztc";
     font-weight: bold;
     color: white;
     position: relative;
     bottom: 10px;
-    right: -177px;
-}
-
-@media (max-width: 1336px) {
-    .caminhao__sumir {
-        display: none;
-    }
+    right: -125px;
 }
 
 @media (max-width: 905px) {
@@ -320,21 +275,9 @@ main {
         .img__margin {
             margin-right: 20px;
         }
-
-        .toca {
-            display: none;
-        }
 }
 
 @media(min-height: 967px) {
-    .caminhao__1 {
-        right: -10%;
-    }
-    
-    .caminhao__2 {
-        left: -10%;
-    }
-    
     .modal {
         top: 57%;
         left: 50%;
