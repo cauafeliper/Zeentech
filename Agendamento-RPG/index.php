@@ -1,6 +1,8 @@
 <?php
     include_once('config/config.php');
     session_start();
+
+    date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -75,7 +77,32 @@
                 // Fechar a declaração
                 $stmt->close();
 
-                if(mysqli_num_rows($result) < 1)
+                $query = "SELECT * FROM logins_pendentes WHERE email = ? AND senha = ?";
+                $stmt = $conexao->prepare($query);
+
+                // Vincula os parâmetros
+                $stmt->bind_param("ss", $email, $senha);
+
+                // Executa a consulta
+                $stmt->execute();
+
+                // Obtém os resultados, se necessário
+                $result_pendente = $stmt->get_result();
+                
+                // Fechar a declaração
+                $stmt->close();
+
+                if(mysqli_num_rows($result_pendente) > 0)
+                {
+                    echo '<script>
+                    Swal.fire({
+                        icon: "warning",
+                        title: "ATENÇÃO!",
+                        html: "Seu email ainda não foi verificado.<br>Por favor, verifique seu email e clique no link de verificação."
+                    });
+                    </script>';
+                }
+                else if(mysqli_num_rows($result) < 1)
                 {
                     echo '<script>
                     Swal.fire({

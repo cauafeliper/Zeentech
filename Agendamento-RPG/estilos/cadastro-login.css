@@ -56,7 +56,7 @@ body {
 main {
     background-color: var(--escuro);
     height: fit-content;
-    width: 320px;
+    width: 24rem;
     padding: 15px;
     border-top-left-radius: 15px;
     border-bottom-right-radius: 15px;
@@ -88,21 +88,18 @@ input {
 
 .cadastro {  
     display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1.0fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.5fr;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 0.6fr 0.8fr 0.8fr 0.8fr 0.6fr 0.6fr;
     gap: 10px 10px;
     grid-auto-flow: row;
     grid-template-areas:
-      "titulo"
-      "nome"
-      "empresa"
-      "area"
-      "numero"
-      "email"
-      "senha"
-      "senha_confirma"
-      "submit"
-      "login-tela";
+      "titulo titulo"
+      "nome nome"
+      "empresa area"
+      "numero email"
+      "senha senha_confirma"
+      "submit submit"
+      "login-tela login-tela";
 }
   
 .titulo { 
@@ -134,6 +131,30 @@ input {
 .input-nome { 
     grid-area: input-nome; 
 }
+
+.empresa {  
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.7fr 1fr;
+    gap: 8px 8px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "label-empresa"
+      "input-empresa";
+    grid-area: empresa;
+}
+  
+.label-empresa { 
+    grid-area: label-empresa; 
+}
+  
+.input-empresa { 
+    grid-area: input-empresa; 
+}
+
+#empresa{
+    width: 100%;
+}
   
 .area {  
     display: grid;
@@ -153,6 +174,10 @@ input {
   
 .input-area { 
     grid-area: input-area; 
+}
+
+#area{
+    width: 100%;
 }
   
 .numero {  

@@ -1,6 +1,8 @@
 <?php
     include_once('../config/config.php');
     session_start();
+
+    date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -11,9 +13,33 @@
     <link rel="shortcut icon" href="../imgs/logo-volks.png" type="image/x-icon">
     <link rel="stylesheet" href="../estilos/cadastro-login.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 </head>
 <body>
     <main>
+        <?php 
+            function buscarOpcoes($tabela) {
+                global $conexao;
+                $opcoes = array();
+        
+                $query = "SELECT nome FROM $tabela";
+                $result = mysqli_query($conexao, $query);
+        
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $opcoes[] = $row['nome'];
+                }
+        
+                return $opcoes;
+            }
+
+            $opcoesEmpresas = buscarOpcoes('empresas');
+            $opcoesAreas = buscarOpcoes('area_solicitante');
+        ?>
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="cadastro">
             <div class="titulo"><h1>Cadastre-se</h1></div>
             <div class="nome">
@@ -29,7 +55,22 @@
                     <label for="empresa"><img src="../assets/building.png" width="16" height="16" style="margin-right: 5px;">Empresa:</label>
                 </div>
                 <div class="input-empresa">
-                    <input type="text" name="empresa" id="empresa" placeholder="Insira sua empresa...">
+                    <select name="empresa" id="empresa">
+                        <option value="">Selecione a empresa</option>
+                        <?php
+                            $query_empresa = "SELECT DISTINCT nome FROM empresas";
+                            $result_empresa = mysqli_query($conexao, $query_empresa);
+                            while ($row_empresa = mysqli_fetch_assoc($result_empresa)) {
+                                $selected = ($empresa == $row_empresa['nome']) ? 'selected' : '';
+                                echo '<option value="' . htmlspecialchars($row_empresa['nome']) . '" ' . $selected . '>' . htmlspecialchars($row_empresa['nome']) . '</option>';
+                            }
+                        ?>
+                    </select>
+                    <script>
+                        $(document).ready(function () {
+                        $('#empresa').select2();
+                        });
+                    </script>
                 </div>
             </div>
             <div class="area">
@@ -37,7 +78,22 @@
                     <label for="area"><img src="../assets/briefcase.png" width="16" height="16" style="margin-right: 5px;">Área:</label>
                 </div>
                 <div class="input-area">
-                    <input type="text" name="area" id="area" placeholder="Insira sua area de atuação. Exemplo: RH.">
+                    <select name="area" id="area">
+                        <option value="">Selecione a área</option>
+                        <?php
+                            $query_area = "SELECT DISTINCT nome FROM area_solicitante WHERE empresa = '$empresaSelecionada'";
+                            $result_area = mysqli_query($conexao, $query_area);
+                            while ($row_area = mysqli_fetch_assoc($result_area)) {
+                                $selected = ($area == $row_area['nome']) ? 'selected' : '';
+                                echo '<option value="' . htmlspecialchars($row_area['nome']) . '" ' . $selected . '>' . htmlspecialchars($row_area['nome']) . '</option>';
+                            }
+                        ?>
+                    </select>
+                    <script>
+                        $(document).ready(function () {
+                        $('#area').select2();
+                        });
+                    </script>
                 </div>
             </div>
             <div class="numero">
@@ -63,6 +119,7 @@
                 <div class="input-senha">
                     <input type="password" name="senha" id="senha" placeholder="Define, atentamente, sua senha...">
                 </div>
+                <hr>
             </div>
             <div class="senha_confirma">
                 <div class="label-senha_confirma">
@@ -132,53 +189,104 @@
                     </script>';
                     exit();
                 }
+                else {
+                    // Verificar se o e-mail já existe
+                    $stmt_email = $conexao->prepare("SELECT COUNT(*) as count FROM logins WHERE email = ?");
+                    $stmt_email->bind_param("s", $email);
+                    $stmt_email->execute();
+                    $result_email = $stmt_email->get_result();
+                    $row_email = $result_email->fetch_assoc();
+                    $stmt_email->close();
 
-                // Verificar se o e-mail já existe
-                $stmt_email = $conexao->prepare("SELECT COUNT(*) as count FROM logins WHERE email = ?");
-                $stmt_email->bind_param("s", $email);
-                $stmt_email->execute();
-                $result_email = $stmt_email->get_result();
-                $row_email = $result_email->fetch_assoc();
-                $stmt_email->close();
+                    $stmt_email = $conexao->prepare("DELETE FROM logins_pendentes WHERE email = ?");
+                    $stmt_email->bind_param("s", $email);
+                    $stmt_email->execute();
+                    $stmt_email->close();
 
-                if ($row_email['count'] > 0) {
-                    echo '<script>
-                        Swal.fire({
-                            icon: "warning",
-                            title: "ATENÇÃO!",
-                            html: "Seu email já está cadastrado!<br>Tente logar com o seu email e senha."
-                        });
-                    </script>';
-                    exit();
-                } else {
-                    $result = mysqli_query($conexao, "INSERT INTO logins(numero, nome, empresa, area, email, senha) VALUES('$numero','$nome','$empresa','$area','$email', '$senha')");
+                    if ($row_email['count'] > 0) {
+                        echo '<script>
+                            Swal.fire({
+                                icon: "warning",
+                                title: "ATENÇÃO!",
+                                html: "Seu email já está cadastrado!<br>Tente logar com o seu email e senha."
+                            });
+                        </script>';
+                        exit();
+                    } else {
+                        $token = bin2hex(random_bytes(16)); // 16 bytes, 32 caracteres hexadecimais
+                        $tempoExpiracaoMinutos = 30;
+                        $tempoExpiracaoSegundos = $tempoExpiracaoMinutos * 60;
+                        $expiracao = date('Y-m-d H:i:s', strtotime("+$tempoExpiracaoSegundos seconds"));
+                        
+                        $query = "INSERT INTO logins_pendentes (numero, nome, empresa, area, email, senha, token, expiracao) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                        $stmt = $conexao->prepare($query);
 
-                    if ($result) {
-                        $affected_rows = mysqli_affected_rows($conexao);
-                        if ($affected_rows > 0) {
-                            echo '<script>
-                                Swal.fire({
-                                    icon: "success",
-                                    title: "SUCESSO!",
-                                    text: "Seu cadastro foi efetuado com sucesso!",
-                                    confirmButtonText: "Login",
-                                    confirmButtonColor: "#001e50",
-                                    allowOutsideClick: false,
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        // Redireciona o usuário para a página desejada
-                                        window.location.href = "../index.php";
-                                    }
-                                });
-                            </script>';
-                        } else {
-                            echo '<script>
-                                Swal.fire({
-                                    icon: "warning",
-                                    title: "ATENÇÃO!",
-                                    html: "Ocorreu um erro no seu cadastro!<br>Tente novamente."
-                                });
-                            </script>';
+                        // Vinculando os parâmetros
+                        $stmt->bind_param("ssssssss", $numero, $nome, $empresa, $area, $email, $senha, $token, $expiracao);
+
+                        // Executando a consulta preparada
+                        $result = $stmt->execute();
+
+                        if ($result) {
+                            $affected_rows = $stmt->affected_rows;
+                            if ($affected_rows > 0) {
+                                $linkLocal = 'http://localhost/Zeentech/Agendamento-RPG/cadastro/verificar_login.php?token='.$token;
+                                $link = 'https://www.zeentech.com.br/volkswagen/Agendamento-RPG/cadastro/verificar_login.php?token='.$token;
+
+                                require("../PHPMailer-master/src/PHPMailer.php"); 
+                                require("../PHPMailer-master/src/SMTP.php"); 
+                                $mail = new PHPMailer\PHPMailer\PHPMailer(); 
+                                $mail->IsSMTP();
+                                $mail->SMTPDebug = 1;
+                                $mail->SMTPAuth = true;
+                                $mail->SMTPSecure = 'tsl'; 
+                                $mail->Host = "equipzeentech.com"; 
+                                $mail->Port = 587;
+                                $mail->IsHTML(true); 
+                                $mail->Username = "admin@equipzeentech.com"; 
+                                $mail->Password = "Z3en7ech"; 
+                                $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
+                                $mail->AddAddress($email);
+                                
+                                $mail->Subject = mb_convert_encoding("Verificação de email","Windows-1252","UTF-8"); 
+                                $mail->Body = mb_convert_encoding('Voce fez cadastro com esse email no site do RPG. Para verificar seu email e confirmar seu cadastro, clique <a href="'.$linkLocal.'">aqui</a>. Esse link vai expirar em 30 minutos!<br>Caso a solicitação não tenha sido feita por você, apenas ignore este email.<br><br>Atenciosamente,<br>Equipe Zeentech.',"Windows-1252","UTF-8"); 
+
+                                try{
+                                    $mail->send();
+                                    echo '<script>
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: "SUCESSO!",
+                                            text: "Seu cadastro foi efetuado e aguarda para ser confirmado! Confira seu email para confirmar o cadastro.",
+                                            confirmButtonText: "Login",
+                                            confirmButtonColor: "#001e50",
+                                            allowOutsideClick: false,
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                // Redireciona o usuário para a página desejada
+                                                window.location.href = "../index.php";
+                                            }
+                                        });
+                                    </script>';
+                                }
+                                catch(Exception $e){
+                                    echo '<script>
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Erro!",
+                                        html: "O email não pôde ser enviado!<br>Por favor, tente novamente."
+                                    });
+                                    </script>';
+                                }
+                            } else {
+                                echo '<script>
+                                    Swal.fire({
+                                        icon: "warning",
+                                        title: "ATENÇÃO!",
+                                        html: "Ocorreu um erro no seu cadastro!<br>Tente novamente."
+                                    });
+                                </script>';
+                            }
                         }
                     }
                 }
@@ -186,5 +294,33 @@
         }
         ?>
     </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#empresa').select2();
+
+            // Adiciona um ouvinte de evento de alteração ao seletor de empresas
+            $('#empresa').change(function () {
+                // Obtém o valor da empresa selecionada
+                var empresaSelecionada = $(this).val();
+
+                // Faz uma chamada AJAX para buscar as áreas correspondentes
+                $.ajax({
+                    url: 'buscar_areas.php', // O script PHP que buscará as áreas
+                    method: 'POST',
+                    data: { empresa: empresaSelecionada },
+                    dataType: 'html',
+                    success: function (response) {
+                        // Atualiza as opções do seletor de área com as opções recebidas
+                        $('#area').html(response);
+                        $('#area').select2(); // Inicializa o select2 para o novo conteúdo
+                    },
+                    error: function () {
+                        console.error('Erro ao buscar áreas.');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

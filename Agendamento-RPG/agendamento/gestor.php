@@ -306,7 +306,7 @@
                     </div>
                     <div class="objtv_rmv">
                         <h4>Remover</h4>
-                        <select name="removerObjtv">
+                        <select name="removerObjtv" id="selec_objtv">
                             <option value="">Remover Objetivo</option>
                             <?php
                             $query_objtv = "SELECT DISTINCT objtv FROM objtv_teste";
@@ -317,6 +317,11 @@
                             }
                             ?>
                         </select>
+                        <script>
+                            $(document).ready(function () {
+                            $('#selec_objtv').select2();
+                            });
+                        </script>
                         <input type="submit" name="rmvObjtv" value="Remover">
                     </div>
                 </div>
@@ -330,11 +335,28 @@
                     <div class="solic_add">
                         <h4>Adicionar</h4>
                         <input type="text" name="novoSolic" placeholder="Nova Área Solicitante">
+                        <h5>Empresa</h5>
+                        <select name="empresa" id="empresa">
+                            <option value="">Selecione a empresa</option>
+                            <?php
+                                $query_empresa = "SELECT DISTINCT nome FROM empresas";
+                                $result_empresa = mysqli_query($conexao, $query_empresa);
+                                while ($row_empresa = mysqli_fetch_assoc($result_empresa)) {
+                                    $selected = ($empresa == $row_empresa['nome']) ? 'selected' : '';
+                                    echo '<option value="' . htmlspecialchars($row_empresa['nome']) . '" ' . $selected . '>' . htmlspecialchars($row_empresa['nome']) . '</option>';
+                                }
+                            ?>
+                        </select>
+                        <script>
+                            $(document).ready(function () {
+                            $('#empresa').select2();
+                            });
+                        </script>
                         <input type="submit" name="addSolic" value="Adicionar">
                     </div>
                     <div class="solic_rmv">
                         <h4>Remover</h4>
-                        <select name="removerSolic">
+                        <select name="removerSolic" id="selec_solic">
                             <option value="">Remover Área Solicitante</option>
                             <?php
                             $query_solic = "SELECT DISTINCT nome FROM area_solicitante";
@@ -345,6 +367,11 @@
                             }
                             ?>
                         </select>
+                        <script>
+                            $(document).ready(function () {
+                            $('#selec_solic').select2();
+                            });
+                        </script>
                         <input type="submit" name="rmvSolic" value="Remover">
                     </div>
                 </div>
@@ -362,7 +389,7 @@
                     </div>
                     <div class="empresa_rmv">
                         <h4>Remover</h4>
-                        <select name="removerEmpresa">
+                        <select name="removerEmpresa" id="selec_empresa">
                             <option value="">Remover Empresa</option>
                             <?php
                             $query_empresa = "SELECT DISTINCT nome FROM empresas";
@@ -375,6 +402,11 @@
                             }
                             ?>
                         </select>
+                        <script>
+                            $(document).ready(function () {
+                            $('#selec_empresa').select2();
+                            });
+                        </script>
                         <input type="submit" name="rmvEmpresa" value="Remover">
                     </div>
                 </div>
@@ -424,15 +456,16 @@
         }
         
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addSolic'])) {
-            if (!empty($_GET['novoSolic'])) {
+            if (!empty($_GET['novoSolic']) && !empty($_GET['empresa'])) {
                 $novoSolic = $_GET['novoSolic'];
-                $query_addSolic = "INSERT INTO area_solicitante(nome) VALUES (?)";
+                $empresaSelec = $_GET['empresa'];
+                $query_addSolic = "INSERT INTO area_solicitante(nome, empresa) VALUES (?,?)";
         
                 // Preparar a declaração SQL
                 $stmt = $conexao->prepare($query_addSolic);
         
                 // Vincular os parâmetros
-                $stmt->bind_param("s", $novoSolic);
+                $stmt->bind_param("ss", $novoSolic, $empresaSelec);
         
                 // Executar a consulta
                 $stmt->execute();

@@ -928,6 +928,7 @@ $data30 = $hoje->format('Y-m-d');
             const optionsAno = document.querySelectorAll('.opcaoAno');
 
             function updateChart() {
+                const checkboxes = document.querySelectorAll('.filter-checkbox');
                 checkboxes.forEach((checkbox, index) => {
                     const bar = document.querySelector(`#bar-chart-vezes #bar:nth-child(${index + 1})`);
                     bar.style.display = checkbox.checked ? 'flex' : 'none';
@@ -941,6 +942,7 @@ $data30 = $hoje->format('Y-m-d');
             }
 
             function updateChartPista() {
+                const checkboxesPista = document.querySelectorAll('.filter-pista');
                 checkboxesPista.forEach((checkboxPista) => {
                     const pista = checkboxPista.getAttribute('data-pista');
                     const bars = document.querySelectorAll(`#bar-chart-vezes #bar_pista[name="${pista}"]`);
@@ -1095,7 +1097,7 @@ $data30 = $hoje->format('Y-m-d');
                         const chartTitle = document.getElementById('chart-title');
 
 
-                       var parts = dataInicial.split('-');
+                        var parts = dataInicial.split('-');
 
                         // Formatar a data como 'dd/mm/yyyy'
                         var dataFormatadaInicial = parts[2] + '/' + parts[1] + '/' + parts[0];
@@ -1106,6 +1108,95 @@ $data30 = $hoje->format('Y-m-d');
                         var dataFormatadaFinal = parts[2] + '/' + parts[1] + '/' + parts[0];
 
                         chartTitle.innerHTML = `<h2 style="color: white;">Agendamentos por Área Solicitante (${dataFormatadaInicial} -> ${dataFormatadaFinal})</h2>`;
+
+                        tippy('#bar_pista[name="VDA"]', {
+                            content: 'VDA',
+                            arrow: true,
+                            placement: 'top', // Tooltip placement
+                            theme: 'light', // Tooltip theme
+                            duration: 300, // Tooltip animation duration in milliseconds
+                        });
+
+                        tippy('#bar_pista[name="NVH"]', {
+                            content: 'NVH',
+                            arrow: true,
+                            placement: 'top', // Tooltip placement
+                            theme: 'light', // Tooltip theme
+                            duration: 300, // Tooltip animation duration in milliseconds
+                        });
+
+                        tippy('#bar_pista[name="Obstáculos"]', {
+                            content: 'Obstáculos',
+                            arrow: true,
+                            placement: 'top', // Tooltip placement
+                            theme: 'light', // Tooltip theme
+                            duration: 300, // Tooltip animation duration in milliseconds
+                        });
+
+                        tippy('#bar_pista[name="Rampa 12% e 20%"]', {
+                            content: 'Rampa 12% e 20%',
+                            arrow: true,
+                            placement: 'top', // Tooltip placement
+                            theme: 'light', // Tooltip theme
+                            duration: 300, // Tooltip animation duration in milliseconds
+                        });
+
+                        tippy('#bar_pista[name="Rampa 40%"]', {
+                            content: 'Rampa 40%',
+                            arrow: true,
+                            placement: 'top', // Tooltip placement
+                            theme: 'light', // Tooltip theme
+                            duration: 300, // Tooltip animation duration in milliseconds
+                        });
+
+                        tippy('#bar_pista[name="Rampa 60%"]', {
+                            content: 'Rampa 60%',
+                            arrow: true,
+                            placement: 'top', // Tooltip placement
+                            theme: 'light', // Tooltip theme
+                            duration: 300, // Tooltip animation duration in milliseconds
+                        });
+
+                        tippy('#bar_pista[name="Asfalto"]', {
+                            content: 'Asfalto',
+                            arrow: true,
+                            placement: 'top', // Tooltip placement
+                            theme: 'light', // Tooltip theme
+                            duration: 300, // Tooltip animation duration in milliseconds
+                        });
+
+                        tippy('#bar_pista[name="Pista Completa"]', {
+                            content: 'Pista Completa',
+                            arrow: true,
+                            placement: 'top', // Tooltip placement
+                            theme: 'light', // Tooltip theme
+                            duration: 300, // Tooltip animation duration in milliseconds
+                        });
+                        const checkboxes = document.querySelectorAll('.filter-checkbox');
+                        checkboxes.forEach((checkbox, index) => {
+                            const bar = document.querySelector(`#bar-chart-vezes #bar:nth-child(${index + 1})`);
+                            bar.style.display = checkbox.checked ? 'flex' : 'none';
+
+                            const barH = document.querySelector(`#bar-chart-horas #bar:nth-child(${index + 1})`);
+                            barH.style.display = checkbox.checked ? 'flex' : 'none';
+
+                            const nomes = document.querySelector(`#bar_names #bar_name:nth-child(${index + 1})`);
+                            nomes.style.display = checkbox.checked ? 'flex' : 'none';
+                        });
+                        const checkboxesPista = document.querySelectorAll('.filter-pista');
+                        checkboxesPista.forEach((checkboxPista) => {
+                            const pista = checkboxPista.getAttribute('data-pista');
+                            const bars = document.querySelectorAll(`#bar-chart-vezes #bar_pista[name="${pista}"]`);
+                            const barsH = document.querySelectorAll(`#bar-chart-horas #bar_pista[name="${pista}"]`);
+
+                            bars.forEach((bar) => {
+                                bar.style.display = checkboxPista.checked ? 'flex' : 'none';
+                            });
+
+                            barsH.forEach((bar) => {
+                                bar.style.display = checkboxPista.checked ? 'flex' : 'none';
+                            });
+                        });
                     },
                     error: function (error) {
                         console.error('Erro na requisição AJAX:', error);

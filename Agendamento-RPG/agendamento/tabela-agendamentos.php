@@ -54,68 +54,6 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
     </header>
     
     <main style="height:fit-content; justify-content:center;">
-        <div id="tabelaAgendamentos" class="tabela" style="height:auto">
-            <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" onsubmit="return validateForm()">
-                <input type="date" id="data" name="data" placeholder="Indique a data" class="filtro__data">
-                <select name="area_pista" id="area_pista" required>
-                    <option value="">Área</option>
-                    <?php 
-                        $query_area = "SELECT area FROM area_pista";
-                        $result_area = mysqli_query($conexao, $query_area);
-
-                        while ($row = mysqli_fetch_assoc($result_area)) {
-                            echo '<option value="' . $row['area'] . '">' . $row['area'] . '</option>';
-                        }
-                    ?>
-                    <option value="todas_areas">Todas Áreas</option>
-                </select>
-                <input type="submit" value="Filtrar" class="submit">
-            </form>
-            <table>
-            <?php 
-                if (isset($_POST['data']) && isset($_POST['area_pista'])) {
-                    $data = $_POST['data'];
-                    $area_pista = $_POST['area_pista'];
-
-                    if ($area_pista === 'todas_areas') {
-                        $query = "SELECT * FROM agendamentos WHERE dia = '$data' AND (status = 'Aprovado' OR status = 'Pendente')";
-                        $result = mysqli_query($conexao, $query);
-
-                        echo '<caption>Todas Áreas</caption>';
-                        echo '<tr>';
-                        echo '<th>Início</th><th>Fim</th><th>Objetivo</th><th>Uso exclusivo?</th><th>Área</th><th>Status</th>';
-                        echo '</tr>';
-
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<tr><td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["objtv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $row["area_pista"] . "</td><td>" . $row["status"] . "</td></tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='6'>Ainda não existem agendamentos para esta data e área.</td></tr>";
-                        }
-                    } else {
-                        $query = "SELECT * FROM agendamentos WHERE dia = '$data' AND (status = 'Aprovado' OR status = 'Pendente') AND area_pista = '$area_pista' UNION SELECT * FROM agendamentos WHERE dia = '$data' AND status = 'Aprovado' AND area_pista = 'Pista Completa'";
-                        $result = mysqli_query($conexao, $query);
-
-                        echo '<caption>' . "$area_pista" . '</caption>';
-                        echo '<tr>';
-                        echo '<th>Início</th><th>Fim</th><th>Objetivo</th><th>Uso exclusivo?</th><th>Área</th><th>Status</th>';
-                        echo '</tr>';
-
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<tr><td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["objtv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $row["area_pista"] . "</td><td>" . $row["status"] . "</td></tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='6'>Ainda não existem agendamentos para esta data e área.</td></tr>";
-                        }
-                    }
-                } else {
-                    echo "<caption>Selecione os termos para consulta.</caption>";
-                } 
-                ?>
-            </table>
-        </div>
         <div class="div_agendar">
             <iframe class="iframeGrafico" id="iframeGrafico" src="../grafico/grafico_dia.php" width="100%" height="100%" frameborder="0"></iframe>
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" id="formularioAgendamento" class="form__agendamento novo__agendamento">

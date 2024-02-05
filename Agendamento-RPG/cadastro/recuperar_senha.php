@@ -102,6 +102,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
     }
 }
 
+$query = "DELETE FROM tokens WHERE expiracao < NOW()";
+$stmt = $conexao->prepare($query);
+$stmt->execute();
+
 ?>
 
 </head>
@@ -120,6 +124,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
             <div class="submit-login">
                 <input type="submit" name="submit" value="enviar">
             </div>
+            <div class="login-tela">
+                <a href="../index.php"><button type="button">Login</button></a>
+            </div>
         </form>
     </main>
     <script>
@@ -131,11 +138,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
                     title: "ATENÇÃO!",
                     html: "O email inserido é inválido!<br>Por favor, insira um email válido."
                 });
-                return false;
             }
             else {
-                 // Faz a requisição AJAX para chamar a função PHP
-                 $.ajax({
+                // Faz a requisição AJAX para chamar a função PHP
+                $.ajax({
                     url: '<?php echo $_SERVER['PHP_SELF']; ?>',
                     type: 'POST',
                     data: { email},
