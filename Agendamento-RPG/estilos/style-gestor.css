@@ -47,9 +47,10 @@ body {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     overflow-y: auto;
+    height: 100vh;
 }
 
 /*============================================================================================================*/
@@ -64,12 +65,13 @@ header {
 
 header ul {
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
+    gap: 0.5rem;
     align-items: center;
     float: right;
-    width: 15%;
+    width: 80%;
     height: 100%;
-    margin-right: 40px;
+    margin-right: 1rem;
 }
 
 header li a {
@@ -118,17 +120,17 @@ main form {
 }
 
 .filtros {  display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 0.8fr 1.2fr 1.2fr 0.8fr;
-    column-gap: 5px;
-    row-gap: 10px;
-    grid-auto-flow: row;
-    grid-template-areas:
-      "titulo titulo titulo titulo"
-      "dia objetivo solicitante area_pista"
-      "veiculo resp_veiculo exclsv status"
-      "submit submit submit submit";
-  }
+  grid-template-columns: 0.5fr 1fr 1fr 1fr 0.5fr;
+  grid-template-rows: 0.8fr 1.2fr 1.2fr 0.8fr;
+  column-gap: 5px;
+  row-gap: 10px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "titulo titulo titulo titulo titulo"
+    ". dia objetivo solicitante ."
+    ". area_pista exclsv status ."
+    "submit submit submit submit submit";
+}
   
   .titulo { grid-area: titulo; }
   
@@ -197,36 +199,6 @@ main form {
   .label_area_pista { grid-area: label_area_pista; }
   
   .input_area_pista { grid-area: input_area_pista; }
-  
-  .veiculo {  display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 0.7fr 1.3fr;
-    gap: 5px 5px;
-    grid-auto-flow: row;
-    grid-template-areas:
-      "label_veiculo"
-      "input_veiculo";
-    grid-area: veiculo;
-  }
-  
-  .label_veiculo { grid-area: label_veiculo; }
-  
-  .input_veiculo { grid-area: input_veiculo; }
-  
-  .resp_veiculo {  display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 0.7fr 1.3fr;
-    gap: 5px 5px;
-    grid-auto-flow: row;
-    grid-template-areas:
-      "label_resp_veiculo"
-      "input_resp_veiculo";
-    grid-area: resp_veiculo;
-  }
-  
-  .label_resp_veiculo { grid-area: label_resp_veiculo; }
-  
-  .input_resp_veiculo { grid-area: input_resp_veiculo; }
   
   .exclsv {  display: grid;
     grid-template-columns: 1fr;
@@ -314,10 +286,23 @@ main form {
     text-align: center;
   }
 
-  td:hover {
+  /* td:hover {
     overflow: auto;
     white-space: nowrap;
+  } */
+
+  /* CSS para o tema personalizado */
+  .tippy-box[data-theme~='custom-theme'] {
+    background-color: #ffffff;
+    color: black;
+    border: 2px solid var(--escuro);
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    word-wrap: break-word;
+    white-space: normal;
+    width: fit-content;
   }
+
 
   .paginacao {
     float: left;
@@ -389,23 +374,23 @@ main form {
     gap: 0px 10px;
     grid-auto-flow: row;
     grid-template-areas:
-      "veic_addRmv area_addRmv objtv_addRmv";
+      "objtv_addRmv solic_addRmv empresa_addRmv";
     width: 100%;
     margin-top: 60px;
     justify-content: space-between;
     align-items: center;
   }
   
-  .veic_addRmv {  
+  .solic_addRmv {  
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 0.6fr 1fr;
     gap: 5px 5px;
     grid-auto-flow: row;
     grid-template-areas:
-      "veic_addRmv_label veic_addRmv_label"
-      "veic_add veic_rmv";
-    grid-area: veic_addRmv;
+      "solic_addRmv_label solic_addRmv_label"
+      "solic_add solic_rmv";
+    grid-area: solic_addRmv;
     width: 90%;
     background-color: white;
     text-align: center;
@@ -413,86 +398,91 @@ main form {
     border-radius: 10px;
   }
 
-  .veic_addRmv input {
+  .solic_addRmv input {
     width: 100%;
     border-radius: 5px;
     border: 1px solid lightgray;
   }
 
-  .veic_addRmv input[type="submit"] {
+  .solic_addRmv input[type="submit"] {
     background-color: var(--escuro);
     color: white;
   }
 
-  .veic_addRmv select {
+  .solic_addRmv select {
     width: 100%;
     border-radius: 5px;
     border: 1px solid lightgray;
   }
   
-  .veic_addRmv_label { 
-    grid-area: veic_addRmv_label;
+  .solic_addRmv_label { 
+    grid-area: solic_addRmv_label;
     display: flex;
     justify-content: center; 
     align-items: center;
   }
 
-  
-  .veic_add { 
-    grid-area: veic_add; 
+  .solic_add { 
+    grid-area: solic_add; 
   }
   
-  .veic_rmv { 
-    grid-area: veic_rmv; 
+  .solic_rmv { 
+    grid-area: solic_rmv; 
   }
   
-  .area_addRmv {  display: grid;
+  
+  .empresa_addRmv {  
+    display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 0.6fr 1fr;
     gap: 5px 5px;
     grid-auto-flow: row;
     grid-template-areas:
-      "area_addRmv_label area_addRmv_label"
-      "area_add area_rmv";
-    grid-area: area_addRmv;
+      "empresa_addRmv_label empresa_addRmv_label"
+      "empresa_add empresa_rmv";
+    grid-area: solic_addRmv;
     width: 90%;
     background-color: white;
     text-align: center;
     padding: 10px;
     border-radius: 10px;
   }
-  
-  .area_addRmv_label { 
-    grid-area: area_addRmv_label;
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-  }
 
-  .area_addRmv input {
+  .empresa_addRmv input {
     width: 100%;
     border-radius: 5px;
     border: 1px solid lightgray;
   }
 
-  .area_addRmv input[type="submit"] {
+  .empresa_addRmv input[type="submit"] {
     background-color: var(--escuro);
     color: white;
   }
 
-  .area_addRmv select {
+  .empresa_addRmv select {
     width: 100%;
     border-radius: 5px;
     border: 1px solid lightgray;
   }
   
-  .area_add { grid-area: area_add; }
+  .empresa_addRmv_label { 
+    grid-area: empresa_addRmv_label;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+  }
+
+  .empresa_add { 
+    grid-area: empresa_add; 
+  }
   
-  .area_rmv { grid-area: area_rmv; }
+  .empresa_rmv { 
+    grid-area: empresa_rmv; 
+  }
   
   .objtv_addRmv {  display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 0.6fr 1fr;
     gap: 5px 5px;
     grid-auto-flow: row;
     grid-template-areas:
@@ -594,7 +584,7 @@ header ul {
     grid-template-areas:
       "titulo titulo titulo titulo"
       "dia objetivo solicitante ."
-      "veiculo resp_veiculo exclsv ."
+      "exclsv exclsv exclsv ."
       "area_pista status . ."
       "submit submit submit submit";
   }
@@ -612,7 +602,6 @@ header ul {
       "titulo titulo"
       "dia objetivo"
       "area_pista status"
-      "veiculo resp_veiculo"
       "solicitante exclsv"
       "submit submit";
   }
@@ -624,7 +613,7 @@ header ul {
     gap: 10px 10px;
     grid-auto-flow: row;
     grid-template-areas:
-      "veic_addRmv area_addRmv"
+      "solic_addRmv area_addRmv"
       "objtv_addRmv .";
     width: 100%;
     margin-top: 60px;
@@ -673,8 +662,6 @@ header ul {
         "objetivo"
         "area_pista"
         "status"
-        "veiculo"
-        "resp_veiculo"
         "solicitante"
         "exclsv"
         "submit";
@@ -695,14 +682,6 @@ header ul {
     .area_pista select {
       width: 100%;  
     }
-    
-    .veiculo select {
-      width: 100%;  
-    }
-    
-    .resp_veiculo select {
-      width: 100%;  
-    }
 
     .exclsv select {  
       width: 100%;
@@ -719,7 +698,7 @@ header ul {
       gap: 10px 10px;
       grid-auto-flow: row;
       grid-template-areas:
-        "veic_addRmv"
+        "solic_addRmv"
         "area_addRmv"
         "objtv_addRmv";
       width: 100%;
@@ -729,7 +708,7 @@ header ul {
     }
 
     
-    .veic_addRmv {
+    .solic_addRmv {
       margin: auto;
     }
 

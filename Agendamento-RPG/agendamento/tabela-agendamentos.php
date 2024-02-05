@@ -2,6 +2,13 @@
     include_once('../config/config.php');
     session_start();
 ?>
+
+<?php
+include '../grafico/functions.php'; 
+
+date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -16,7 +23,7 @@
 </head>
 <body>
     <?php 
-        if (!isset($_SESSION['chapa']) || empty($_SESSION['chapa'])) {
+        if (!isset($_SESSION['email']) || empty($_SESSION['email'])) {
             header('Location: ../index.php');
             exit();
         }
@@ -26,100 +33,50 @@
         <ul>
             <?php 
 
-                $chapa = $_SESSION['chapa'];
+                $email = $_SESSION['email'];
 
-                $query = "SELECT COUNT(*) as count FROM chapa_adm WHERE chapa = '$chapa'";
-                $resultado = mysqli_query($conexao, $query);
+                $query = "SELECT COUNT(*) as count FROM lista_adm WHERE email = ?";
+                $stmt = mysqli_prepare($conexao, $query);
+                mysqli_stmt_bind_param($stmt, "s", $email);
+                mysqli_stmt_execute($stmt);
+                $resultado = mysqli_stmt_get_result($stmt);
                 $linha = mysqli_fetch_assoc($resultado);
                 $admTrue = ($linha['count'] > 0);
 
-                if ($admTrue) {
-                    echo '<li><a href="gestor.php">Gestão</a></li>';
-                }
+                $query = "SELECT COUNT(*) as count FROM gestor WHERE email = ?";
+                $stmt = mysqli_prepare($conexao, $query);
+                mysqli_stmt_bind_param($stmt, "s", $email);
+                mysqli_stmt_execute($stmt);
+                $resultado = mysqli_stmt_get_result($stmt);
+                $linha = mysqli_fetch_assoc($resultado);
+                $gestorTrue = ($linha['count'] > 0);
 
-                else {
-                    
+                if ($admTrue || $gestorTrue) {
+                    echo '<li><a href="gestor.php">Gestão</a></li>';
+                    echo '<li><a href="../grafico/grafico.php">Gráfico</a></li>';
                 }
             ?>
             <li><a href="sair.php">Sair</a></li>
         </ul>
     </header>
     
-    <main>
-        <div class="tabela">
-            <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" onsubmit="return validateForm()">
-                <input type="date" id="data" name="data" placeholder="Indique a data" class="filtro__data">
-                <select name="area_pista" id="area_pista" required>
-                    <option value="">Área</option>
-                    <?php 
-                        $query_area = "SELECT area FROM area_pista";
-                        $result_area = mysqli_query($conexao, $query_area);
-
-                        while ($row = mysqli_fetch_assoc($result_area)) {
-                            echo '<option value="' . $row['area'] . '">' . $row['area'] . '</option>';
-                        }
-                    ?>
-                    <option value="todas_areas">Todas Áreas</option>
-                </select>
-                <input type="submit" value="Filtrar" class="submit">
-            </form>
-            <table>
-            <?php 
-                if (isset($_POST['data']) && isset($_POST['area_pista'])) {
-                    $data = $_POST['data'];
-                    $area_pista = $_POST['area_pista'];
-
-                    if ($area_pista === 'todas_areas') {
-                        $query = "SELECT * FROM agendamentos WHERE dia = '$data' AND status = 'Aprovado'";
-                        $result = mysqli_query($conexao, $query);
-
-                        echo '<caption>Todas Áreas</caption>';
-                        echo '<tr>';
-                        echo '<th>Início</th><th>Fim</th><th>Veículo</th><th>Objetivo</th><th>Uso exclusivo?</th><th>Área</th>';
-                        echo '</tr>';
-
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<tr><td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["veic"] . "</td><td>" . $row["objtv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $row["area_pista"] . "</td></tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='6'>Ainda não existem agendamentos para esta data e área.</td></tr>";
-                        }
-                    } else {
-                        $query = "SELECT * FROM agendamentos WHERE dia = '$data' AND status = 'Aprovado' AND area_pista = '$area_pista' UNION SELECT * FROM agendamentos WHERE dia = '$data' AND status = 'Aprovado' AND area_pista = 'Pista Completa'";
-                        $result = mysqli_query($conexao, $query);
-
-                        echo '<caption>' . "$area_pista" . '</caption>';
-                        echo '<tr>';
-                        echo '<th>Início</th><th>Fim</th><th>Veículo</th><th>Objetivo</th><th>Uso exclusivo?</th><th>Área</th>';
-                        echo '</tr>';
-
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<tr><td>" . $row["hora_inicio"] . "</td><td>" . $row["hora_fim"] . "</td><td>" . $row["veic"] . "</td><td>" . $row["objtv"] . "</td><td>" . $row["exclsv"] . "</td><td>" . $row["area_pista"] . "</td></tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='6'>Ainda não existem agendamentos para esta data e área.</td></tr>";
-                        }
-                    }
-                } else {
-                    echo "<caption>Selecione os termos para consulta.</caption>";
-                } 
-                ?>
-            </table>
-        </div>
-
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" id="formularioAgendamento" class="form__agendamento novo__agendamento">
+    <main style="height:fit-content; justify-content:center;">
+        <div class="div_agendar">
+            <iframe class="iframeGrafico" id="iframeGrafico" src="../grafico/grafico_dia.php" width="100%" height="100%" frameborder="0"></iframe>
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" id="formularioAgendamento" class="form__agendamento novo__agendamento">
             <div class="titulo">
                 <h2>Novo Agendamento</h2>
             </div>
             <div class="solicitante">
                 <label for="solicitante">Solicitante:</label>
-                <input type="text" name="solicitante" id="solicitante" value="<?= $_SESSION['nome'] ?>" readonly>
+                <input type="text" name="solicitante" id="solicitante" value="<?= $_SESSION['nome'] ?>" readonly style="display:none">
+                <h2 style="color: white;"><?= $_SESSION['nome'] ?></h2>
+                <label for="solicitante"><p style="font-size: smaller;">Empresa: <?= $_SESSION['empresa'] ?></p></label>
+                <label for="solicitante"><p style="font-size: smaller;">Área: <?= $_SESSION['area_solicitante'] ?></p></label>
             </div>
             <div class="dia grids">
                 <label for="dia">Dia:</label>
-                <input type="date" name="dia" id="dia" placeholder="Indique a data">
+                <input type="date" name="dia" id="dia" placeholder="Indique a data" oninput="diaGrafico()" required>
                 <script>
                     flatpickr("#dia", {
                         dateFormat: "Y-m-d",
@@ -129,13 +86,13 @@
             </div>
             <div class="hora_inicio grids">
                 <label for="hora_inicio">Hora de Início:</label>
-                <input type="time" id="hora_inicio" name="hora_inicio" min="07:00" max="19:00">
+                <input type="time" id="hora_inicio" name="hora_inicio" min="07:00" max="19:00" required>
             </div>
             <div class="hora_fim grids">
                 <label for="hora_fim">Hora do Fim:</label>
-                <input type="time" id="hora_fim" name="hora_fim" min="07:00" max="19:00">
+                <input type="time" id="hora_fim" name="hora_fim" min="07:00" max="19:00" required>
             </div>
-            <div class="area_solicitante grids">
+            <div class="area_solicitante grids" style="display:none">
                 <label for="area_solicitante">Área do Solicitante:</label>
                 <input type="text" name="area_solicitante" value="<?= $_SESSION['area_solicitante'] ?>" readonly>
             </div>
@@ -166,23 +123,6 @@
                     ?>
                 </select>
             </div>
-            <div class="veic grids">
-                <label for="veiculo">Veículo:</label>
-                <select name="veic" id="veic" required>
-                    <option value="">Selecione o Veículo</option>
-                    <?php
-                        $query_veics = "SELECT veic FROM veics";
-                        $result_veics = mysqli_query($conexao, $query_veics);
-                        while ($row_veic = mysqli_fetch_assoc($result_veics)) {
-                            echo '<option value="' . $row_veic['veic'] . '">' . $row_veic['veic'] . '</option>';
-                        }
-                    ?>
-                </select>
-            </div>
-            <div class="resp_veic grids">
-                <label for="responsavel_veiculo">Resp. pelo Veículo:</label>
-                <input type="text" name="resp_veic" id="resp_veic" placeholder="Indique o Responsável">
-            </div>
             <div class="exclsv grids">
                 <label for="exclsv" style="margin-right: 50px; display: block;">Uso Exclusivo?</label>
                 <label for="sim" style="font-size: smaller; width: 30%; margin-top: 5px; background-color: #001e50;">Sim:</label>
@@ -197,15 +137,16 @@
             </div>
             <div class="obs">
                 <label for="obs" class="obs__label">Observações:</label>
-                <textarea name="obs" id="obs" cols="48" rows="5" class="obs"></textarea>
+                <textarea name="obs" id="obs" cols="48" rows="5" class="obs" maxlength="500"></textarea>
             </div>
             <div class="enviar">
                 <input type="submit" name="submit" value="Agendar">
             </div>
         </form>
+        </div>
         <?php
         if (isset($_POST['submit'])) {
-            if (empty($_POST['solicitante']) OR empty($_POST['dia']) OR empty($_POST['hora_inicio']) OR empty($_POST['hora_fim']) OR empty($_POST['area_solicitante']) OR empty($_POST['area']) OR empty($_POST['objetivo']) OR empty($_POST['veic']) OR empty($_POST['resp_veic']) OR empty($_POST['resposta']) OR empty($_POST['obs'])) {
+            if (empty($_POST['solicitante']) OR empty($_POST['dia']) OR empty($_POST['hora_inicio']) OR empty($_POST['hora_fim']) OR empty($_POST['area_solicitante']) OR empty($_POST['area']) OR empty($_POST['objetivo']) OR empty($_POST['resposta'])) {
                 echo "<script>
                     Swal.fire({
                         icon: 'warning',
@@ -215,95 +156,144 @@
                 </script>";
             } else {
                 $solicitante = $_POST['solicitante'];
+                $numero_solicitante = $_SESSION['numero'];
+                $empresa_solicitante = $_SESSION['empresa'];
                 $area_solicitante = $_POST['area_solicitante'];
                 $data = $_POST['dia'];
                 $hora_inicio = $_POST['hora_inicio'];
                 $hora_fim = $_POST['hora_fim'];
                 $area = $_POST['area'];
                 $objetivo = $_POST['objetivo'];
-                $veiculo = $_POST['veic'];
-                $resp_veic = $_POST['resp_veic'];
                 $exclsv = $_POST['resposta'];
                 $status = $_POST['status'];
                 $obs = $_POST['obs'];
+                if ($area == 'Pista Completa') {
+                    $exclsv = 'Sim';
+                }
 
-                $query = "SELECT * FROM agendamentos 
-                    WHERE (area_pista = '$area' OR area_pista = 'Pista Completa')
-                    AND dia = '$data' 
-                    AND ((hora_inicio <= '$hora_inicio' AND hora_fim >= '$hora_inicio') 
-                    OR (hora_inicio <= '$hora_fim' AND hora_fim >= '$hora_fim'))
-                    AND (status = 'Aprovado' OR status = 'Pendente')";
-
-
-                $result = mysqli_query($conexao, $query);
-
-                if ($result && mysqli_num_rows($result) > 0) {
+                if (($hora_fim <= $hora_inicio)) {
                     echo "<script>
                         Swal.fire({
                             icon: 'warning',
                             title: 'ATENÇÃO!',
-                            html: 'O horário que você selecionou está ocupado! Verifique a tabela ao lado e selecione um horário disponível.',
+                            html: 'O horário de início não pode ser maior ou igual que o horário de fim!',
                         });
                     </script>";
-                } else {
-                    $query = "INSERT INTO agendamentos (area_pista, dia, hora_inicio, hora_fim, objtv, solicitante, area_solicitante, veic, resp_veic, exclsv, obs, status) VALUES ('$area', '$data', '$hora_inicio', '$hora_fim', '$objetivo', '$solicitante', '$area_solicitante', '$veiculo', '$resp_veic', '$exclsv', '$obs', '$status')";
+                }
+                else {
+
+                    if ($exclsv == 'Sim'){
+                        $query = "SELECT * FROM agendamentos 
+                            WHERE dia = '$data' 
+                            AND ((hora_inicio <= '$hora_inicio' AND hora_fim >= '$hora_inicio') 
+                            OR (hora_inicio <= '$hora_fim' AND hora_fim >= '$hora_fim'))
+                            AND (status = 'Aprovado' OR status = 'Pendente')";
+                    }
+                    else {
+                        $query = "SELECT * FROM agendamentos 
+                            WHERE (area_pista = '$area' OR area_pista = 'Pista Completa')
+                            AND dia = '$data' 
+                            AND ((hora_inicio <= '$hora_inicio' AND hora_fim >= '$hora_inicio') 
+                            OR (hora_inicio <= '$hora_fim' AND hora_fim >= '$hora_fim'))
+                            AND (status = 'Aprovado' OR status = 'Pendente')";
+                    }
+    
+                    $queryExc = "SELECT * FROM agendamentos 
+                        WHERE exclsv = 'Sim'
+                        AND dia = '$data' 
+                        AND ((hora_inicio <= '$hora_inicio' AND hora_fim >= '$hora_inicio') 
+                        OR (hora_inicio <= '$hora_fim' AND hora_fim >= '$hora_fim')) 
+                        AND (status = 'Aprovado' OR status = 'Pendente')";
+    
                     $result = mysqli_query($conexao, $query);
-
-                    if ($result) {
-                        $affected_rows = mysqli_affected_rows($conexao);
-                        if ($affected_rows > 0) {
-                            echo '<script>
+                    $resultExc = mysqli_query($conexao, $queryExc);
+    
+                    if ($result && mysqli_num_rows($result) > 0) {
+                        echo "<script>
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'ATENÇÃO!',
+                                html: 'O horário que você selecionou está ocupado! Verifique a tabela ao lado e selecione um horário disponível.',
+                            });
+                        </script>";
+                    } else {
+                        if ($resultExc && mysqli_num_rows($resultExc) > 0) {
+                            echo "<script>
                                 Swal.fire({
-                                    icon: "success",
-                                    title: "SUCESSO!",
-                                    text: "Seu agendamento foi criado com sucesso!",
-                                    confirmButtonText: "OK",
-                                    confirmButtonColor: "#001e50",
-                                    allowOutsideClick: false,
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        window.location.href = "tabela-agendamentos.php";
-                                    }
+                                    icon: 'warning',
+                                    title: 'ATENÇÃO!',
+                                    html: 'O horário que você selecionou está ocupado! Verifique a tabela ao lado e selecione um horário disponível.',
                                 });
-                            </script>';
-                            $query_email = "SELECT email FROM logins WHERE chapa = '$chapa'";
-                            $result_email = mysqli_query($conexao, $query_email);
-                            $row_email = mysqli_fetch_assoc($result_email);
-                            $email = $row_email['email'];
-                            
-                            require("../PHPMailer-master/src/PHPMailer.php"); 
-                            require("../PHPMailer-master/src/SMTP.php"); 
-                            $mail = new PHPMailer\PHPMailer\PHPMailer(); 
-                            $mail->IsSMTP();
-                            $mail->SMTPDebug = 1;
-                            $mail->SMTPAuth = true;
-                            $mail->SMTPSecure = 'tsl'; 
-                            $mail->Host = "equipzeentech.com"; 
-                            $mail->Port = 587;
-                            $mail->IsHTML(true); 
-                            $mail->Username = "admin@equipzeentech.com"; 
-                            $mail->Password = "Z3en7ech"; 
-                            $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
-                            $mail->AddAddress($email); 
-                            $mail->Subject = "Solicitação criada com sucesso!"; 
-                            $mail->Body = utf8_decode('Sua soicitação foi criada com sucesso!<br>Assim que houver uma resposta do Gestor encarregado, você receberá um email dizendo se sua solicitação foi aprovada ou não.<br>Atenciosamente,<br>Equipe Zeentech.'); 
-                            $mail->send();
-
-                            $mail->ClearAddresses();
-
-                            $mail->addAddress('crpereira@zeentech.com.br');
-                            $mail->Subject = 'Nova solicitação de agendamento para pista a Pista de Teste!';
-                            $mail->Body = utf8_decode('Uma nova solicitação para o agendamento da Pista de Teste foi criada pelo colaborador(a) ' . $solicitante .' no dia ' . $data . ' e horário de ' . $hora_inicio . ' até ' . $hora_fim . ' com objetivo de ' . $objetivo . ' para o veículo ' . $veiculo . '. Essa nova solicitação aguarda sua resposta!<br>Atenciosamente,<br>Equipe Zeentech.');
-                            $mail->send();
-                        } 
+                            </script>";
+                        }
                         else {
-                            echo '<script>
-                                Swal.fire({
-                                    icon: "warning",
-                                    title: "ATENÇÃO!",
-                                    html: "Ocorreu um erro no seu agendamento! Tente novamente.",
-                                });
-                            </script>';
+                            // Preparar a declaração SQL
+                            $stmt = $conexao->prepare("INSERT INTO agendamentos (area_pista, dia, hora_inicio, hora_fim, objtv, solicitante, numero_solicitante, empresa_solicitante, area_solicitante, exclsv, obs, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    
+                            // Vincular os parâmetros
+                            $stmt->bind_param("ssssssssssss", $area, $data, $hora_inicio, $hora_fim, $objetivo, $solicitante, $numero_solicitante, $empresa_solicitante, $area_solicitante, $exclsv, $obs, $status);
+    
+                            $result = $stmt->execute();
+    
+                            if ($result) {
+                                $affected_rows = $stmt->affected_rows;
+                                if ($affected_rows > 0) {
+                                    echo '<script>
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: "SUCESSO!",
+                                            text: "Seu agendamento foi criado com sucesso!",
+                                            confirmButtonText: "OK",
+                                            confirmButtonColor: "#001e50",
+                                            allowOutsideClick: false,
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                window.location.href = "tabela-agendamentos.php";
+                                            }
+                                        });
+                                    </script>';
+                                    
+                                    require("../PHPMailer-master/src/PHPMailer.php"); 
+                                    require("../PHPMailer-master/src/SMTP.php");
+                                    $mail = new PHPMailer\PHPMailer\PHPMailer();
+                                    $mail->IsSMTP();
+                                    $mail->SMTPDebug = 1;
+                                    $mail->SMTPAuth = true;
+                                    $mail->SMTPSecure = 'tsl'; 
+                                    $mail->Host = "equipzeentech.com"; 
+                                    $mail->Port = 587;
+                                    $mail->IsHTML(true); 
+                                    $mail->Username = "admin@equipzeentech.com"; 
+                                    $mail->Password = "Z3en7ech"; 
+                                    $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
+                                    $mail->AddAddress($email); 
+                                    $mail->Subject = mb_convert_encoding("Solicitação criada com sucesso!","Windows-1252","UTF-8"); 
+                                    $mail->Body = mb_convert_encoding("Sua solicitação de agendamento da área da pista $area para o dia $data de $hora_inicio até $hora_fim foi criada com sucesso!<br>Assim que houver uma resposta do Gestor encarregado, você receberá um email dizendo se sua solicitação foi aprovada ou não.<br><br>Atenciosamente,<br>Equipe Zeentech.","Windows-1252","UTF-8"); 
+                                    $mail->send();
+    
+                                    $mail->ClearAddresses();
+                                    
+                                    $query_gestor = "SELECT email FROM logins WHERE email IN (SELECT email FROM gestor)";
+                                    $result_gestor = mysqli_query($conexao, $query_gestor);
+                                    while ($row_gestor = mysqli_fetch_assoc($result_gestor)) {
+                                        $mail->addAddress($row_gestor['email']); //email pros gestores
+                                    }
+                                    $mail->Subject = mb_convert_encoding('Nova solicitação de agendamento para pista a Pista de Teste!',"Windows-1252","UTF-8");
+                                    $mail->Body = mb_convert_encoding("Uma nova solicitação para o agendamento da Pista de Teste foi criada pelo colaborador(a) $solicitante na área da pista $area para o dia $data e horário de $hora_inicio até $hora_fim com objetivo $objetivo. Essa nova solicitação aguarda sua resposta!<br><br>Atenciosamente,<br>Equipe Zeentech.","Windows-1252","UTF-8");
+                                    $mail->send();
+                                } 
+                                else {
+                                    echo '<script>
+                                        Swal.fire({
+                                            icon: "warning",
+                                            title: "ATENÇÃO!",
+                                            html: "Ocorreu um erro no seu agendamento! Tente novamente.
+                                            <br>"Erro: "'.$stmt->error.'",
+                                        });
+                                    </script>';
+                                }
+                            }
+                            $stmt->close();
                         }
                     }
                 }
@@ -355,5 +345,53 @@
             minDate: "today"
         });
     </script>
+
+    <script>
+        function diaGrafico() {
+        var valorData = document.getElementById('dia').value;
+
+        // Use AJAX para enviar a nova data ao servidor PHP
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('POST', '../grafico/atualizarDia.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // A resposta do servidor é recebida aqui
+                console.log(xhr.responseText);
+
+                // Recarregue o iframe para refletir a nova data
+                document.getElementById('iframeGrafico').contentWindow.location.reload();
+            }
+        };
+
+        xhr.send('novaData=' + valorData);
+        };
+
+        window.onload = function() {
+            console.log('A página foi carregada!');
+            var valorData = 'atual';
+
+            // Use AJAX para enviar a nova data ao servidor PHP
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('POST', '../grafico/atualizarDia.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // A resposta do servidor é recebida aqui
+                    console.log(xhr.responseText);
+
+                    // Recarregue o iframe para refletir a nova data
+                    document.getElementById('iframeGrafico').contentWindow.location.reload();
+                }
+            };
+
+            xhr.send('novaData=' + valorData);
+        };
+    </script>
+
 </body>
 </html>

@@ -1,6 +1,8 @@
 <?php
     include_once('config/config.php');
     session_start();
+
+    date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -16,17 +18,17 @@
     <main>
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" class="login">
             <div class="titulo-login"><h1>Login</h1></div>
-            <div class="chapa-login">
-                <div class="chapa-login-label">
-                    <label for="chapa"><img src="https://icons.iconarchive.com/icons/iconsmind/outline/16/ID-Card-icon.png" width="16" height="16" style="position: relative; top: 2px; margin-right: 5px;">Chapa:</label>
+            <div class="email-login">
+                <div class="email-login-label">
+                    <label for="email"><img src="assets/at.png" width="16" height="16" style="position: relative; top: 2px; margin-right: 5px;">Email:</label>
                 </div>
-                <div class="chapa-login-input">
-                    <input type="number" name="chapa" id="chapa" placeholder="Insira a chapa cadastrada..." maxlength="8" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                <div class="email-login-input">
+                    <input type="text" name="email" id="email" placeholder="Insira seu email cadastrado..." maxlength="30" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                 </div>
             </div>
             <div class="senha-login">
                 <div class="senha-login-label">
-                    <label for="senha"><img src="https://icons.iconarchive.com/icons/icons8/ios7/16/User-Interface-Password-icon.png" width="16" height="16" style="margin-right: 5px;">Senha:</label>
+                    <label for="senha"><img src="assets/lock.png" width="16" height="16" style="margin-right: 5px;">Senha:</label>
                 </div>
                 <div class="senha-login-input">
                     <input type="password" name="senha" id="senha" placeholder="Insira sua senha...">
@@ -39,11 +41,14 @@
             <div class="cadastrar">
                 <a href="cadastro/tela-cadastro.php"><button type="button">Cadastrar-se</button></a>
             </div>
+            <div class="esqueceu">
+                <a href="cadastro/recuperar_senha.php"><button type="button">Esqueci minha senha</button></a>
+            </div>
         </form>
     </main>
     <?php
         if (isset($_POST['submit'])) {
-            if (empty($_POST['chapa']) || empty($_POST['senha']))
+            if (empty($_POST['email']) || empty($_POST['senha']))
             {
                 echo '<script>
                 Swal.fire({
@@ -54,20 +59,56 @@
                 </script>';  
             }
             else {
-                $chapa = $_POST['chapa'];
+                $email = $_POST['email'];
                 $senha = $_POST['senha'];
 
-                $query = "SELECT * FROM logins WHERE chapa = '$chapa' and senha = '$senha'";
+                $query = "SELECT * FROM logins WHERE email = ? AND senha = ?";
+                $stmt = $conexao->prepare($query);
 
-                $result = $conexao->query($query);
+                // Vincula os parâmetros
+                $stmt->bind_param("ss", $email, $senha);
 
-                if(mysqli_num_rows($result) < 1)
+                // Executa a consulta
+                $stmt->execute();
+
+                // Obtém os resultados, se necessário
+                $result = $stmt->get_result();
+                
+                // Fechar a declaração
+                $stmt->close();
+
+                $query = "SELECT * FROM logins_pendentes WHERE email = ? AND senha = ?";
+                $stmt = $conexao->prepare($query);
+
+                // Vincula os parâmetros
+                $stmt->bind_param("ss", $email, $senha);
+
+                // Executa a consulta
+                $stmt->execute();
+
+                // Obtém os resultados, se necessário
+                $result_pendente = $stmt->get_result();
+                
+                // Fechar a declaração
+                $stmt->close();
+
+                if(mysqli_num_rows($result_pendente) > 0)
                 {
                     echo '<script>
                     Swal.fire({
                         icon: "warning",
                         title: "ATENÇÃO!",
-                        html: "Sua chapa ou senha estão incorretos.<br>Verifique se você já realizou um cadastro ou se digitou algo incorretamente."
+                        html: "Seu email ainda não foi verificado.<br>Por favor, verifique seu email e clique no link de verificação."
+                    });
+                    </script>';
+                }
+                else if(mysqli_num_rows($result) < 1)
+                {
+                    echo '<script>
+                    Swal.fire({
+                        icon: "warning",
+                        title: "ATENÇÃO!",
+                        html: "Seu numero ou senha estão incorretos.<br>Verifique se você já realizou um cadastro ou se digitou algo incorretamente."
                     });
                     </script>';
                 }
@@ -75,29 +116,20 @@
                 {
                     $row = mysqli_fetch_assoc($result);
                     $nome = $row['nome'];
-                    $chapa = $row['chapa'];
+                    $numero = $row['numero'];
                     $email = $row['email'];
                     $area_solicitante = $row['area'];
+                    $empresa = $row['empresa'];
 
-                    $_SESSION['chapa'] = $chapa;
+                    $_SESSION['numero'] = $numero;
                     $_SESSION['nome'] = $nome;
                     $_SESSION['email'] = $email;
                     $_SESSION['area_solicitante'] = $area_solicitante;
-                    echo '<script>
-                    Swal.fire({
-                        icon: "success",
-                        title: "SUCESSO!",
-                        text: "Login realizado com sucesso!",
-                        confirmButtonText: "OK",
-                        confirmButtonColor: "#23CE6B",
-                        allowOutsideClick: false,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Redireciona o usuário para a página desejada
-                            window.location.href = "agendamento/tabela-agendamentos.php";
-                        }
-                    });
-                </script>';
+                    $_SESSION['empresa'] = $empresa;
+
+                header("Location: agendamento/tabela-agendamentos.php");
+                exit();
+
                 }
             }
         }
