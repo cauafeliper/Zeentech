@@ -27,10 +27,30 @@
         }
         
         $email = $_SESSION['email'];
-        $query = "SELECT * FROM lista_adm WHERE email = '$email'";
-        $result = mysqli_query($conexao, $query);
+        $query = "SELECT * FROM lista_adm WHERE email = ?";
+        $stmt = $conexao->prepare($query);
+        // Vincula os parâmetros
+        $stmt->bind_param("s", $email);
+        // Executa a consulta
+        $stmt->execute();
+        // Obtém os resultados, se necessário
+        $result = $stmt->get_result();
+        // Fechar a declaração
+        $stmt->close();
+
+        $email = $_SESSION['email'];
+        $query = "SELECT * FROM gestor WHERE email = ?";
+        $stmt = $conexao->prepare($query);
+        // Vincula os parâmetros
+        $stmt->bind_param("s", $email);
+        // Executa a consulta
+        $stmt->execute();
+        // Obtém os resultados, se necessário
+        $resultGestor = $stmt->get_result();
+        // Fechar a declaração
+        $stmt->close();
         
-        if (!$result || mysqli_num_rows($result) === 0) {
+        if ((!$result || mysqli_num_rows($result) === 0) && (!$resultGestor || mysqli_num_rows($resultGestor) === 0)) {
             session_unset();
             header('Location: ../index.php');
         }
@@ -38,11 +58,18 @@
     <header>
         <a href="https://www.vwco.com.br/" tarGET="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus" style="height: 95%;"></a>
         <ul>
+            <?php 
+                if ($result && mysqli_num_rows($result) > 0) {
+                    echo '<li><a href="gerenciamento.php">Gerenciamento</a></li>';
+                }
+            ?>
+
             <li><a href="../grafico/grafico.php">Gráfico</a></li>
 
             <li><a href="tabela-agendamentos.php">Início</a></li>
 
             <li><a href="sair.php">Sair</a></li>
+            
         </ul>
     </header>
     
@@ -291,252 +318,8 @@
             }
             ?>
         </div>
-
-        <div class="addRmv">
-
-            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" class="form_addRmv">
-                <div class="objtv_addRmv">
-                    <div class="objtv_addRmv_label">
-                        <h3>Objetivos</h3>
-                    </div>
-                    <div class="objtv_add">
-                        <h4>Adicionar</h4>
-                        <input type="text" name="novoObjtv" placeholder="Novo Objetivo">
-                        <input type="submit" name="addObjtv" value="Adicionar">
-                    </div>
-                    <div class="objtv_rmv">
-                        <h4>Remover</h4>
-                        <select name="removerObjtv" id="selec_objtv">
-                            <option value="">Remover Objetivo</option>
-                            <?php
-                            $query_objtv = "SELECT DISTINCT objtv FROM objtv_teste";
-                            $result_objtv = mysqli_query($conexao, $query_objtv);
-                            while ($row_objtv = mysqli_fetch_assoc($result_objtv)) {
-                                $selected = ($objtv == $row_objtv['objtv']) ? 'selected' : '';
-                                echo '<option value="' . htmlspecialchars($row_objtv['objtv']) . '" ' . $selected . '>' . htmlspecialchars($row_objtv['objtv']) . '</option>';
-                            }
-                            ?>
-                        </select>
-                        <script>
-                            $(document).ready(function () {
-                            $('#selec_objtv').select2();
-                            });
-                        </script>
-                        <input type="submit" name="rmvObjtv" value="Remover">
-                    </div>
-                </div>
-            </form>
-
-            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" class="form_addRmv">
-                <div class="solic_addRmv">
-                    <div class="solic_addRmv_label">
-                        <h3>Áreas Solicitantes</h3>
-                    </div>
-                    <div class="solic_add">
-                        <h4>Adicionar</h4>
-                        <input type="text" name="novoSolic" placeholder="Nova Área Solicitante">
-                        <h5>Empresa</h5>
-                        <select name="empresa" id="empresa">
-                            <option value="">Selecione a empresa</option>
-                            <?php
-                                $query_empresa = "SELECT DISTINCT nome FROM empresas";
-                                $result_empresa = mysqli_query($conexao, $query_empresa);
-                                while ($row_empresa = mysqli_fetch_assoc($result_empresa)) {
-                                    $selected = ($empresa == $row_empresa['nome']) ? 'selected' : '';
-                                    echo '<option value="' . htmlspecialchars($row_empresa['nome']) . '" ' . $selected . '>' . htmlspecialchars($row_empresa['nome']) . '</option>';
-                                }
-                            ?>
-                        </select>
-                        <script>
-                            $(document).ready(function () {
-                            $('#empresa').select2();
-                            });
-                        </script>
-                        <input type="submit" name="addSolic" value="Adicionar">
-                    </div>
-                    <div class="solic_rmv">
-                        <h4>Remover</h4>
-                        <select name="removerSolic" id="selec_solic">
-                            <option value="">Remover Área Solicitante</option>
-                            <?php
-                            $query_solic = "SELECT DISTINCT nome FROM area_solicitante";
-                            $result_solic = mysqli_query($conexao, $query_solic);
-                            while ($row_solic = mysqli_fetch_assoc($result_solic)) {
-                                $selected = ($solic == $row_solic['nome']) ? 'selected' : '';
-                                echo '<option value="' . htmlspecialchars($row_solic['nome']) . '" ' . $selected . '>' . htmlspecialchars($row_solic['nome']) . '</option>';
-                            }
-                            ?>
-                        </select>
-                        <script>
-                            $(document).ready(function () {
-                            $('#selec_solic').select2();
-                            });
-                        </script>
-                        <input type="submit" name="rmvSolic" value="Remover">
-                    </div>
-                </div>
-            </form>
-
-            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" class="form_addRmv">
-                <div class="empresa_addRmv">
-                    <div class="empresa_addRmv_label">
-                        <h3>Empresas</h3>
-                    </div>
-                    <div class="empresa_add">
-                        <h4>Adicionar</h4>
-                        <input type="text" name="novoEmpresa" placeholder="Nova Empresa">
-                        <input type="submit" name="addEmpresa" value="Adicionar">
-                    </div>
-                    <div class="empresa_rmv">
-                        <h4>Remover</h4>
-                        <select name="removerEmpresa" id="selec_empresa">
-                            <option value="">Remover Empresa</option>
-                            <?php
-                            $query_empresa = "SELECT DISTINCT nome FROM empresas";
-                            $result_empresa = mysqli_query($conexao, $query_empresa);
-                            if ($result_empresa && mysqli_num_rows($result_empresa) > 0){
-                                while ($row_empresa = mysqli_fetch_assoc($result_empresa)) {
-                                    $selected = ($empresa == $row_empresa['nome']) ? 'selected' : '';
-                                    echo '<option value="' . htmlspecialchars($row_empresa['nome']) . '" ' . $selected . '>' . htmlspecialchars($row_empresa['nome']) . '</option>';
-                                }
-                            }
-                            ?>
-                        </select>
-                        <script>
-                            $(document).ready(function () {
-                            $('#selec_empresa').select2();
-                            });
-                        </script>
-                        <input type="submit" name="rmvEmpresa" value="Remover">
-                    </div>
-                </div>
-            </form>
-        </div>
     </main>
-    <?php
-
-        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addObjtv'])) {
-            if (!empty($_GET['novoObjtv'])) {
-                $novoObjtv = $_GET['novoObjtv'];
-                $query_addObjtv = "INSERT INTO objtv_teste(objtv) VALUES (?)";
-        
-                // Preparar a declaração SQL
-                $stmt = $conexao->prepare($query_addObjtv);
-        
-                // Vincular os parâmetros
-                $stmt->bind_param("s", $novoObjtv);
-        
-                // Executar a consulta
-                $stmt->execute();
-        
-                // Fechar a declaração
-                $stmt->close();
-
-                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
-            }
-        }
-        
-        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['rmvObjtv'])) {
-            $removerObjtv = $_GET['removerObjtv'];
-            $query_removerObjtv = "DELETE FROM objtv_teste WHERE objtv = ?";
-        
-            // Preparar a declaração SQL
-            $stmt = $conexao->prepare($query_removerObjtv);
-        
-            // Vincular os parâmetros
-            $stmt->bind_param("s", $removerObjtv);
-        
-            // Executar a consulta
-            $stmt->execute();
-        
-            // Fechar a declaração
-            $stmt->close();
-
-            echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
-        }
-        
-        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addSolic'])) {
-            if (!empty($_GET['novoSolic']) && !empty($_GET['empresa'])) {
-                $novoSolic = $_GET['novoSolic'];
-                $empresaSelec = $_GET['empresa'];
-                $query_addSolic = "INSERT INTO area_solicitante(nome, empresa) VALUES (?,?)";
-        
-                // Preparar a declaração SQL
-                $stmt = $conexao->prepare($query_addSolic);
-        
-                // Vincular os parâmetros
-                $stmt->bind_param("ss", $novoSolic, $empresaSelec);
-        
-                // Executar a consulta
-                $stmt->execute();
-        
-                // Fechar a declaração
-                $stmt->close();
-
-                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
-            }
-        }
-        
-        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['rmvSolic'])) {
-            $removerSolic = $_GET['removerSolic'];
-            $query_removerSolic = "DELETE FROM area_solicitante WHERE nome = ?";
-        
-            // Preparar a declaração SQL
-            $stmt = $conexao->prepare($query_removerSolic);
-        
-            // Vincular os parâmetros
-            $stmt->bind_param("s", $removerSolic);
-        
-            // Executar a consulta
-            $stmt->execute();
-        
-            // Fechar a declaração
-            $stmt->close();
-
-            echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addEmpresa'])) {
-            if (!empty($_GET['novoEmpresa'])) {
-                $novoEmpresa = $_GET['novoEmpresa'];
-                $query_addEmpresa = "INSERT INTO empresas(nome) VALUES (?)";
-        
-                // Preparar a declaração SQL
-                $stmt = $conexao->prepare($query_addEmpresa);
-        
-                // Vincular os parâmetros
-                $stmt->bind_param("s", $novoEmpresa);
-        
-                // Executar a consulta
-                $stmt->execute();
-        
-                // Fechar a declaração
-                $stmt->close();
-
-                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
-            }
-        }
-        
-        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['rmvEmpresa'])) {
-            $removerEmpresa = $_GET['removerEmpresa'];
-            $query_removerEmpresa = "DELETE FROM empresas WHERE nome = ?";
-        
-            // Preparar a declaração SQL
-            $stmt = $conexao->prepare($query_removerEmpresa);
-        
-            // Vincular os parâmetros
-            $stmt->bind_param("s", $removerEmpresa);
-        
-            // Executar a consulta
-            $stmt->execute();
-        
-            // Fechar a declaração
-            $stmt->close();
-
-            echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
-        }
-        
-    ?>
+    
     <footer>
         <div>
             <span>Desenvolvido por:  <img src="../imgs/lg-zeentech(titulo).png" alt="logo-zeentech"></span>

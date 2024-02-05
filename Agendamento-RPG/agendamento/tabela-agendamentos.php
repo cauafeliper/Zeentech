@@ -35,18 +35,25 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
 
                 $email = $_SESSION['email'];
 
-                $query = "SELECT COUNT(*) as count FROM lista_adm WHERE email = '$email'";
-                $resultado = mysqli_query($conexao, $query);
+                $query = "SELECT COUNT(*) as count FROM lista_adm WHERE email = ?";
+                $stmt = mysqli_prepare($conexao, $query);
+                mysqli_stmt_bind_param($stmt, "s", $email);
+                mysqli_stmt_execute($stmt);
+                $resultado = mysqli_stmt_get_result($stmt);
                 $linha = mysqli_fetch_assoc($resultado);
                 $admTrue = ($linha['count'] > 0);
 
-                if ($admTrue) {
+                $query = "SELECT COUNT(*) as count FROM gestor WHERE email = ?";
+                $stmt = mysqli_prepare($conexao, $query);
+                mysqli_stmt_bind_param($stmt, "s", $email);
+                mysqli_stmt_execute($stmt);
+                $resultado = mysqli_stmt_get_result($stmt);
+                $linha = mysqli_fetch_assoc($resultado);
+                $gestorTrue = ($linha['count'] > 0);
+
+                if ($admTrue || $gestorTrue) {
                     echo '<li><a href="gestor.php">Gestão</a></li>';
                     echo '<li><a href="../grafico/grafico.php">Gráfico</a></li>';
-                }
-
-                else {
-                    
                 }
             ?>
             <li><a href="sair.php">Sair</a></li>

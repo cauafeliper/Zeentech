@@ -31,7 +31,19 @@ use PhpOffice\PhpSpreadsheet\Writer\Ods\Content;
     // Fechar a declaração
     $stmt->close();
     
-    if (!$result || mysqli_num_rows($result) === 0) {
+    $email = $_SESSION['email'];
+    $query = "SELECT * FROM gestor WHERE email = ?";
+    $stmt = $conexao->prepare($query);
+    // Vincula os parâmetros
+    $stmt->bind_param("s", $email);
+    // Executa a consulta
+    $stmt->execute();
+    // Obtém os resultados, se necessário
+    $resultGestor = $stmt->get_result();
+    // Fechar a declaração
+    $stmt->close();
+    
+    if ((!$result || mysqli_num_rows($result) === 0) && (!$resultGestor || mysqli_num_rows($resultGestor) === 0)) {
         session_unset();
         header('Location: ../index.php');
     }
