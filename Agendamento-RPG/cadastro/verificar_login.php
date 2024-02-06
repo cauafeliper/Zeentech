@@ -102,8 +102,6 @@
             <input type="submit" name="submit" value="verificar">
         </form>
 
-
-
     </main>
 </body>
 </html>

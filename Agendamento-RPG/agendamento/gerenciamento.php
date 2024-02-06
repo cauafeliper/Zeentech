@@ -62,21 +62,42 @@
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addObjtv'])) {
         if (!empty($_GET['novoObjtv'])) {
             $novoObjtv = $_GET['novoObjtv'];
-            $query_addObjtv = "INSERT INTO objtv_teste(objtv) VALUES (?)";
 
+            $query_verifica = "select * from objtv_teste where objtv = ?";
             // Preparar a declaração SQL
-            $stmt = $conexao->prepare($query_addObjtv);
-
+            $stmt = $conexao->prepare($query_verifica);
             // Vincular os parâmetros
             $stmt->bind_param("s", $novoObjtv);
-
             // Executar a consulta
             $stmt->execute();
-
+            // Armazenar o resultado
+            $stmt->store_result();
+            // Obter o número de linhas
+            $num_linhas = $stmt->num_rows;
             // Fechar a declaração
             $stmt->close();
 
-            echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+            if ($num_linhas > 0) {
+                echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "Valor repetido!",
+                        text: "Já existe um Objetivo com esse nome no nosso banco de dados! Insira um valor que ainda não exista!"
+                    });
+                </script>';
+            } else {
+                $query_addObjtv = "INSERT INTO objtv_teste(objtv) VALUES (?)";
+                // Preparar a declaração SQL
+                $stmt = $conexao->prepare($query_addObjtv);
+                // Vincular os parâmetros
+                $stmt->bind_param("s", $novoObjtv);
+                // Executar a consulta
+                $stmt->execute();
+                // Fechar a declaração
+                $stmt->close();
+
+                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+            }
         }
     }
 
@@ -103,21 +124,47 @@
         if (!empty($_GET['novoSolic']) && !empty($_GET['empresa'])) {
             $novoSolic = $_GET['novoSolic'];
             $empresaSelec = $_GET['empresa'];
-            $query_addSolic = "INSERT INTO area_solicitante(nome, empresa) VALUES (?,?)";
 
+            $query_verifica = "select * from area_solicitante where nome = ?";
             // Preparar a declaração SQL
-            $stmt = $conexao->prepare($query_addSolic);
-
+            $stmt = $conexao->prepare($query_verifica);
             // Vincular os parâmetros
-            $stmt->bind_param("ss", $novoSolic, $empresaSelec);
-
+            $stmt->bind_param("s", $novoSolic);
             // Executar a consulta
             $stmt->execute();
-
+            // Armazenar o resultado
+            $stmt->store_result();
+            // Obter o número de linhas
+            $num_linhas = $stmt->num_rows;
             // Fechar a declaração
             $stmt->close();
 
-            echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+            if ($num_linhas > 0) {
+                echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "Valor repetido!",
+                        text: "Já existe uma Área Solicitante com esse nome no nosso banco de dados! Insira um valor que ainda não exista!"
+                    });
+                </script>';
+            } else {
+
+                $query_addSolic = "INSERT INTO area_solicitante(nome, empresa) VALUES (?,?)";
+
+                // Preparar a declaração SQL
+                $stmt = $conexao->prepare($query_addSolic);
+
+                // Vincular os parâmetros
+                $stmt->bind_param("ss", $novoSolic, $empresaSelec);
+
+                // Executar a consulta
+                $stmt->execute();
+
+                // Fechar a declaração
+                $stmt->close();
+
+                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+            }
         }
     }
 
@@ -143,21 +190,47 @@
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addEmpresa'])) {
         if (!empty($_GET['novoEmpresa'])) {
             $novoEmpresa = $_GET['novoEmpresa'];
-            $query_addEmpresa = "INSERT INTO empresas(nome) VALUES (?)";
 
+            $query_verifica = "select * from empresas where nome = ?";
             // Preparar a declaração SQL
-            $stmt = $conexao->prepare($query_addEmpresa);
-
+            $stmt = $conexao->prepare($query_verifica);
             // Vincular os parâmetros
             $stmt->bind_param("s", $novoEmpresa);
-
             // Executar a consulta
             $stmt->execute();
-
+            // Armazenar o resultado
+            $stmt->store_result();
+            // Obter o número de linhas
+            $num_linhas = $stmt->num_rows;
             // Fechar a declaração
             $stmt->close();
 
-            echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+            if ($num_linhas > 0) {
+                echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "Valor repetido!",
+                        text: "Já existe uma Empresa com esse nome no nosso banco de dados! Insira um valor que ainda não exista!"
+                    });
+                </script>';
+            } else {
+
+                $query_addEmpresa = "INSERT INTO empresas(nome) VALUES (?)";
+
+                // Preparar a declaração SQL
+                $stmt = $conexao->prepare($query_addEmpresa);
+
+                // Vincular os parâmetros
+                $stmt->bind_param("s", $novoEmpresa);
+
+                // Executar a consulta
+                $stmt->execute();
+
+                // Fechar a declaração
+                $stmt->close();
+
+                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+            }
         }
     }
 
@@ -183,21 +256,47 @@
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addCadastro'])) {
         if (!empty($_GET['novoCadastro'])) {
             $novoCadastro = $_GET['novoCadastro'];
-            $query_addCadastro = "INSERT INTO cadastros(email) VALUES (?)";
 
+            $query_verifica = "select * from cadastros where email = ?";
             // Preparar a declaração SQL
-            $stmt = $conexao->prepare($query_addCadastro);
-
+            $stmt = $conexao->prepare($query_verifica);
             // Vincular os parâmetros
             $stmt->bind_param("s", $novoCadastro);
-
             // Executar a consulta
             $stmt->execute();
-
+            // Armazenar o resultado
+            $stmt->store_result();
+            // Obter o número de linhas
+            $num_linhas = $stmt->num_rows;
             // Fechar a declaração
             $stmt->close();
 
-            echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+            if ($num_linhas > 0) {
+                echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "Valor repetido!",
+                        text: "Já existe um Cadastro com esse email no nosso banco de dados! Insira um valor que ainda não exista!"
+                    });
+                </script>';
+            } else {
+
+                $query_addCadastro = "INSERT INTO cadastros(email) VALUES (?)";
+
+                // Preparar a declaração SQL
+                $stmt = $conexao->prepare($query_addCadastro);
+
+                // Vincular os parâmetros
+                $stmt->bind_param("s", $novoCadastro);
+
+                // Executar a consulta
+                $stmt->execute();
+
+                // Fechar a declaração
+                $stmt->close();
+
+                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+                }
         }
     }
 
@@ -214,6 +313,16 @@
         $stmt->close();
 
         $query_removerCadastro = "DELETE FROM logins WHERE email = ?";
+        // Preparar a declaração SQL
+        $stmt = $conexao->prepare($query_removerCadastro);
+        // Vincular os parâmetros
+        $stmt->bind_param("s", $removerCadastro);
+        // Executar a consulta
+        $stmt->execute();
+        // Fechar a declaração
+        $stmt->close();
+
+        $query_removerCadastro = "DELETE FROM logins_pendentes WHERE email = ?";
         // Preparar a declaração SQL
         $stmt = $conexao->prepare($query_removerCadastro);
         // Vincular os parâmetros
@@ -259,21 +368,47 @@
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addCopia'])) {
         if (!empty($_GET['novaCopia'])) {
             $novaCopia = $_GET['novaCopia'];
-            $query_addCopia = "INSERT INTO copias_email(email) VALUES (?)";
 
+            $query_verifica = "select * from copias_email where email = ?";
             // Preparar a declaração SQL
-            $stmt = $conexao->prepare($query_addCopia);
-
+            $stmt = $conexao->prepare($query_verifica);
             // Vincular os parâmetros
             $stmt->bind_param("s", $novaCopia);
-
             // Executar a consulta
             $stmt->execute();
-
+            // Armazenar o resultado
+            $stmt->store_result();
+            // Obter o número de linhas
+            $num_linhas = $stmt->num_rows;
             // Fechar a declaração
             $stmt->close();
 
-            echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+            if ($num_linhas > 0) {
+                echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "Valor repetido!",
+                        text: "Já existe uma Frota com esse email no nosso banco de dados! Insira um valor que ainda não exista!"
+                    });
+                </script>';
+            } else {
+
+                $query_addCopia = "INSERT INTO copias_email(email) VALUES (?)";
+
+                // Preparar a declaração SQL
+                $stmt = $conexao->prepare($query_addCopia);
+
+                // Vincular os parâmetros
+                $stmt->bind_param("s", $novaCopia);
+
+                // Executar a consulta
+                $stmt->execute();
+
+                // Fechar a declaração
+                $stmt->close();
+
+                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+                }
         }
     }
 
@@ -299,21 +434,47 @@
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addGestor'])) {
         if (!empty($_GET['novoGestor'])) {
             $novoGestor = $_GET['novoGestor'];
-            $query_addGestor = "INSERT INTO gestor(email) VALUES (?)";
 
+            $query_verifica = "select * from gestor where email = ?";
             // Preparar a declaração SQL
-            $stmt = $conexao->prepare($query_addGestor);
-
+            $stmt = $conexao->prepare($query_verifica);
             // Vincular os parâmetros
             $stmt->bind_param("s", $novoGestor);
-
             // Executar a consulta
             $stmt->execute();
-
+            // Armazenar o resultado
+            $stmt->store_result();
+            // Obter o número de linhas
+            $num_linhas = $stmt->num_rows;
             // Fechar a declaração
             $stmt->close();
 
-            echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+            if ($num_linhas > 0) {
+                echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "Valor repetido!",
+                        text: "Já existe um Gestor com esse email no nosso banco de dados! Insira um valor que ainda não exista!"
+                    });
+                </script>';
+            } else {
+
+                $query_addGestor = "INSERT INTO gestor(email) VALUES (?)";
+
+                // Preparar a declaração SQL
+                $stmt = $conexao->prepare($query_addGestor);
+
+                // Vincular os parâmetros
+                $stmt->bind_param("s", $novoGestor);
+
+                // Executar a consulta
+                $stmt->execute();
+
+                // Fechar a declaração
+                $stmt->close();
+
+                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+            }
         }
     }
 
@@ -339,21 +500,47 @@
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addAdm'])) {
         if (!empty($_GET['novoAdm'])) {
             $novoAdm = $_GET['novoAdm'];
-            $query_addAdm = "INSERT INTO lista_adm(email) VALUES (?)";
 
+            $query_verifica = "select * from lista_adm where email = ?";
             // Preparar a declaração SQL
-            $stmt = $conexao->prepare($query_addAdm);
-
+            $stmt = $conexao->prepare($query_verifica);
             // Vincular os parâmetros
             $stmt->bind_param("s", $novoAdm);
-
             // Executar a consulta
             $stmt->execute();
-
+            // Armazenar o resultado
+            $stmt->store_result();
+            // Obter o número de linhas
+            $num_linhas = $stmt->num_rows;
             // Fechar a declaração
             $stmt->close();
 
-            echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+            if ($num_linhas > 0) {
+                echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "Valor repetido!",
+                        text: "Já existe um Administrador com esse email no nosso banco de dados! Insira um valor que ainda não exista!"
+                    });
+                </script>';
+            } else {
+
+                $query_addAdm = "INSERT INTO lista_adm(email) VALUES (?)";
+
+                // Preparar a declaração SQL
+                $stmt = $conexao->prepare($query_addAdm);
+
+                // Vincular os parâmetros
+                $stmt->bind_param("s", $novoAdm);
+
+                // Executar a consulta
+                $stmt->execute();
+
+                // Fechar a declaração
+                $stmt->close();
+
+                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+            }
         }
     }
 
