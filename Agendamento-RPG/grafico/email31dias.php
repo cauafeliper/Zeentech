@@ -21,7 +21,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
 if (isset($_GET['link'])) {
     $link = $_GET['link'];
 
-    $query_email = "SELECT logins.email FROM logins WHERE EXISTS (SELECT 1 FROM gestor WHERE gestor.numero = logins.numero);";
+    $query_email = "SELECT email FROM gestor";
     $result_email = mysqli_query($conexao, $query_email);
     if ($result_email->num_rows > 0){
         // Envie o email com o motivo de reprovação
@@ -29,9 +29,9 @@ if (isset($_GET['link'])) {
         require("../PHPMailer-master/src/SMTP.php"); 
         $mail = new PHPMailer\PHPMailer\PHPMailer(); 
         $mail->IsSMTP();
-        $mail->SMTPDebug = 1;
+        $mail->SMTPDebug = 0;
         $mail->SMTPAuth = true;
-        $mail->SMTPSecure = 'tsl'; 
+        $mail->SMTPSecure = 'tls'; 
         $mail->Host = "equipzeentech.com"; 
         $mail->Port = 587;
         $mail->IsHTML(true); 

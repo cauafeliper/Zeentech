@@ -124,7 +124,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                 </select>
             </div>
             <div class="exclsv grids">
-                <label for="exclsv" style="margin-right: 50px; display: block;">Uso Exclusivo?</label>
+                <label for="exclsv" style="width: 100%; margin-right: 50px; display: block;">Uso Exclusivo?</label>
                 <label for="sim" style="font-size: smaller; width: 30%; margin-top: 5px; background-color: #001e50;">Sim:</label>
                 <input type="radio" id="sim" name="resposta" value="Sim" style="width: 10%; margin-top: 10px;" required>
     
@@ -273,7 +273,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
     
                                     $mail->ClearAddresses();
                                     
-                                    $query_gestor = "SELECT email FROM logins WHERE email IN (SELECT email FROM gestor)";
+                                    $query_gestor = "SELECT email FROM gestor";
                                     $result_gestor = mysqli_query($conexao, $query_gestor);
                                     while ($row_gestor = mysqli_fetch_assoc($result_gestor)) {
                                         $mail->addAddress($row_gestor['email']); //email pros gestores
