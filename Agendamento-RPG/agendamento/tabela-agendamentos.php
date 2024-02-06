@@ -14,7 +14,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendamentos</title>
+    <title>Agendar</title>
     <link rel="shortcut icon" href="../imgs/logo-volks.png" type="image/x-icon">
     <link rel="stylesheet" href="../estilos/style-principal.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
