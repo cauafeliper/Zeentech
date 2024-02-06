@@ -13,7 +13,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 30%;
+    width: 45%;
     height: 15rem;
 }
 
@@ -23,6 +23,8 @@
     align-items: center;
     justify-content: center;
     gap: 1rem;
+    width: 100%;
+    height: 80%;
 }
 
 .objtv_addRmv {  
@@ -42,7 +44,8 @@
 .add {
     display: flex;
     flex-direction: column;
-    height: 6rem;
+    height: 100%;
+    padding: 1.5rem 0;
     justify-content: space-between;
     width: 50%;
 }
@@ -50,7 +53,8 @@
 .rmv{
     display: flex;
     flex-direction: column;
-    height: 6rem;
+    height: 100%;
+    padding: 1.5rem 0;
     justify-content: space-between;
     width: 50%;
 }

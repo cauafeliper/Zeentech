@@ -11,6 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="shortcut icon" href="../imgs/logo-volks.png" type="image/x-icon">
 </head>
 <body>
 <?php
@@ -49,9 +50,9 @@ if (isset($_GET['id'])) {
                 require("../../PHPMailer-master/src/SMTP.php"); 
                 $mail = new PHPMailer\PHPMailer\PHPMailer(); 
                 $mail->IsSMTP();
-                $mail->SMTPDebug = 1;
+                $mail->SMTPDebug = 0;
                 $mail->SMTPAuth = true;
-                $mail->SMTPSecure = 'tsl'; 
+                $mail->SMTPSecure = 'tls'; 
                 $mail->Host = "equipzeentech.com"; 
                 $mail->Port = 587;
                 $mail->IsHTML(true); 
@@ -62,15 +63,6 @@ if (isset($_GET['id'])) {
 
                 $mail->Subject = mb_convert_encoding("Solicitação Reprovada!","Windows-1252","UTF-8"); 
                 $mail->Body = mb_convert_encoding("Sua solicitação de agendamento da área da pista $area_pista para o dia $dia de $hora_inicio até $hora_fim foi reprovada!<br>Motivo: $motivoReprovacao.<br><br>Atenciosamente,<br>Equipe Zeentech.","Windows-1252","UTF-8"); 
-
-                $query_copias = "SELECT email FROM copias_email";
-                $result_copias = mysqli_query($conexao, $query_copias);
-                if ($result_copias->num_rows > 0) {
-                    while ($row_copias = mysqli_fetch_assoc($result_copias)) {
-                        $email_copia = $row_copias['email'];
-                        $mail->AddCC($email_copia);
-                    }
-                }
 
                 $mail->send();
 

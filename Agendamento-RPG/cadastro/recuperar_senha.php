@@ -62,9 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
         require("../PHPMailer-master/src/SMTP.php"); 
         $mail = new PHPMailer\PHPMailer\PHPMailer(); 
         $mail->IsSMTP();
-        $mail->SMTPDebug = 1;
+        $mail->SMTPDebug = 0;
         $mail->SMTPAuth = true;
-        $mail->SMTPSecure = 'tsl'; 
+        $mail->SMTPSecure = 'tls'; 
         $mail->Host = "equipzeentech.com"; 
         $mail->Port = 587;
         $mail->IsHTML(true); 

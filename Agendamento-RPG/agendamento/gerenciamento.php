@@ -243,6 +243,16 @@
         // Fechar a declaração
         $stmt->close();
 
+        $query_removerCadastro = "DELETE FROM copias_email WHERE email = ?";
+        // Preparar a declaração SQL
+        $stmt = $conexao->prepare($query_removerCadastro);
+        // Vincular os parâmetros
+        $stmt->bind_param("s", $removerCadastro);
+        // Executar a consulta
+        $stmt->execute();
+        // Fechar a declaração
+        $stmt->close();
+
         echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
     }
 
@@ -392,8 +402,8 @@
                     <div class="valores">
                         <div class="add">
                             <h4>Adicionar</h4>
-                            <input type="text" name="novoObjtv" placeholder="Novo Objetivo">
-                            <input type="submit" name="addObjtv" value="Adicionar">
+                            <input style="height: 1.8rem;" type="text" name="novoObjtv" placeholder="Novo Objetivo">
+                            <input style="height: 1.5rem;" type="submit" name="addObjtv" value="Adicionar">
                         </div>
                         <div class="rmv">
                             <h4>Remover</h4>
@@ -410,10 +420,10 @@
                             </select>
                             <script>
                                 $(document).ready(function () {
-                                $('#selec_objtv').select2();
+                                $('#selec_objtv').select2({width: '100%'});
                                 });
                             </script>
-                            <input type="submit" name="rmvObjtv" value="Remover">
+                            <input style="height: 1.5rem;" type="submit" name="rmvObjtv" value="Remover">
                         </div>
                     </div>
                 </div>
@@ -427,7 +437,7 @@
                     <div class="valores">
                         <div class="add">
                             <h4>Adicionar</h4>
-                            <input type="text" name="novoSolic" placeholder="Nova Área Solicitante">
+                            <input style="height: 1.5rem;" style="height: 1.8rem;" type="text" name="novoSolic" placeholder="Nova Área Solicitante">
                             <select name="empresa" id="empresa">
                                 <option value="">Empresa</option>
                                 <?php
@@ -441,10 +451,10 @@
                             </select>
                             <script>
                                 $(document).ready(function () {
-                                $('#empresa').select2();
+                                $('#empresa').select2({width: '100%'});
                                 });
                             </script>
-                            <input type="submit" name="addSolic" value="Adicionar">
+                            <input style="height: 1.5rem;" type="submit" name="addSolic" value="Adicionar">
                         </div>
                         <div class="rmv">
                             <h4>Remover</h4>
@@ -461,10 +471,10 @@
                             </select>
                             <script>
                                 $(document).ready(function () {
-                                $('#selec_solic').select2();
+                                $('#selec_solic').select2({width: '100%'});
                                 });
                             </script>
-                            <input type="submit" name="rmvSolic" value="Remover">
+                            <input style="height: 1.5rem;" type="submit" name="rmvSolic" value="Remover">
                         </div>
                     </div>
                 </div>
@@ -478,8 +488,8 @@
                     <div class="valores">
                         <div class="add">
                             <h4>Adicionar</h4>
-                            <input type="text" name="novoEmpresa" placeholder="Nova Empresa">
-                            <input type="submit" name="addEmpresa" value="Adicionar">
+                            <input style="height: 1.8rem;" type="text" name="novoEmpresa" placeholder="Nova Empresa">
+                            <input style="height: 1.5rem;" type="submit" name="addEmpresa" value="Adicionar">
                         </div>
                         <div class="rmv">
                             <h4>Remover</h4>
@@ -498,10 +508,10 @@
                             </select>
                             <script>
                                 $(document).ready(function () {
-                                $('#selec_empresa').select2();
+                                $('#selec_empresa').select2({width: '100%'});
                                 });
                             </script>
-                            <input type="submit" name="rmvEmpresa" value="Remover">
+                            <input style="height: 1.5rem;" type="submit" name="rmvEmpresa" value="Remover">
                         </div>
                     </div>
                 </div>
@@ -515,8 +525,8 @@
                     <div class="valores">
                         <div class="add">
                             <h4>Adicionar</h4>
-                            <input type="text" name="novoCadastro" placeholder="Email novo">
-                            <input type="submit" name="addCadastro" value="Adicionar">
+                            <input style="height: 1.8rem;" type="text" name="novoCadastro" placeholder="Email novo">
+                            <input style="height: 1.5rem;" type="submit" name="addCadastro" value="Adicionar">
                         </div>
                         <div class="rmv">
                             <h4>Remover</h4>
@@ -535,10 +545,10 @@
                             </select>
                             <script>
                                 $(document).ready(function () {
-                                $('#selec_Cadastro').select2();
+                                $('#selec_Cadastro').select2({width: '100%'});
                                 });
                             </script>
-                            <input type="submit" name="rmvCadastro" value="Remover">
+                            <input style="height: 1.5rem;" type="submit" name="rmvCadastro" value="Remover">
                         </div>
                     </div>
                 </div>
@@ -547,18 +557,18 @@
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" class="form_addRmvG">
                 <div class="empresa_addRmv">
                     <div class="addRmv_label">
-                        <h2>Cópias de email</h2>
+                        <h2>Frota</h2>
                     </div>
                     <div class="valores">
                         <div class="add">
                             <h4>Adicionar</h4>
-                            <input type="text" name="novaCopia" placeholder="Email novo">
-                            <input type="submit" name="addCopia" value="Adicionar">
+                            <input style="height: 1.8rem;" type="text" name="novaCopia" placeholder="Email novo">
+                            <input style="height: 1.5rem;" type="submit" name="addCopia" value="Adicionar">
                         </div>
                         <div class="rmv">
                             <h4>Remover</h4>
                             <select name="removerCopia" id="selec_Copia">
-                                <option value="">Remover Cópia</option>
+                                <option value="">Remover email</option>
                                 <?php
                                 $query_copia = "SELECT DISTINCT email FROM copias_email";
                                 $result_copia = mysqli_query($conexao, $query_copia);
@@ -572,10 +582,10 @@
                             </select>
                             <script>
                                 $(document).ready(function () {
-                                $('#selec_Copia').select2();
+                                $('#selec_Copia').select2({width: '100%'});
                                 });
                             </script>
-                            <input type="submit" name="rmvCopia" value="Remover">
+                            <input style="height: 1.5rem;" type="submit" name="rmvCopia" value="Remover">
                         </div>
                     </div>
                 </div>
@@ -589,8 +599,8 @@
                     <div class="valores">
                         <div class="add">
                             <h4>Adicionar</h4>
-                            <input type="text" name="novoGestor" placeholder="Email novo">
-                            <input type="submit" name="addGestor" value="Adicionar">
+                            <input style="height: 1.8rem;" type="text" name="novoGestor" placeholder="Email novo">
+                            <input style="height: 1.5rem;" type="submit" name="addGestor" value="Adicionar">
                         </div>
                         <div class="rmv">
                             <h4>Remover</h4>
@@ -609,10 +619,10 @@
                             </select>
                             <script>
                                 $(document).ready(function () {
-                                $('#selec_Gestor').select2();
+                                $('#selec_Gestor').select2({width: '100%'});
                                 });
                             </script>
-                            <input type="submit" name="rmvGestor" value="Remover">
+                            <input style="height: 1.5rem;" type="submit" name="rmvGestor" value="Remover">
                         </div>
                     </div>
                 </div>
@@ -626,8 +636,8 @@
                     <div class="valores">
                         <div class="add">
                             <h4>Adicionar</h4>
-                            <input type="text" name="novoAdm" placeholder="Email novo">
-                            <input type="submit" name="addAdm" value="Adicionar">
+                            <input style="height: 1.8rem;" type="text" name="novoAdm" placeholder="Email novo">
+                            <input style="height: 1.5rem;" type="submit" name="addAdm" value="Adicionar">
                         </div>
                         <div class="rmv">
                             <h4>Remover</h4>
@@ -646,47 +656,16 @@
                             </select>
                             <script>
                                 $(document).ready(function () {
-                                $('#selec_Adm').select2();
+                                $('#selec_Adm').select2({width: '100%'});
                                 });
                             </script>
-                            <input type="submit" name="rmvAdm" value="Remover">
+                            <input style="height: 1.5rem;" type="submit" name="rmvAdm" value="Remover">
                         </div>
                     </div>
                 </div>
             </form>
 
         </div>
-        <script>
-
-            function popUp(){
-                Swal.fire({
-                    title: 'ATENÇÃO!',
-                    text: "você deseja mesmo remover esse objeto do banco de dados? Essa ação não poderá ser desfeita! Verifique se o objeto não está sendo utilizado em outro lugar antes de confirmar!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Atualizar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        atualizarGraficos();
-                    }
-                });
-                $.ajax({
-                    url: 'gerenciamento_db.php',
-                    type: 'POST',
-                    success: function (graficosNovos) {
-                        Swal.fire({
-                            title: 'Gráficos atualizados!',
-                            html: graficosNovos,
-                            icon: 'success',
-                            confirmButtonText: 'Fechar'
-                        });
-                    }
-                });
-            }
-
-        </script>
     </main>
     
     <footer>

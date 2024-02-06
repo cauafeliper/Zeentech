@@ -147,7 +147,7 @@
                         html: "Algum dos campos de cadastro está vazio!<br>Por favor, preencha todos os campos atentamente."
                     });
                 </script>';
-                exit();
+                /* exit(); */
             }
             elseif ($_POST['senha'] != $_POST['senha_confirma']) {
                 echo '<script>
@@ -157,7 +157,7 @@
                         html: "As senhas não coincidem!<br>Por favor, digite a mesma senha nos dois campos."
                     });
                 </script>';
-                exit();
+                /* exit(); */
             } 
             else {
                 $nome = $_POST['nome'];
@@ -187,7 +187,7 @@
                             html: "Seu email não se encontra no nosso banco de dados!<br>Entre em contato com o nosso suporte para mais informações.<br>Contato: crpereira@zeentech.com.br"
                         });
                     </script>';
-                    exit();
+                    /* exit(); */
                 }
                 else {
                     // Verificar se o e-mail já existe
@@ -211,7 +211,7 @@
                                 html: "Seu email já está cadastrado!<br>Tente logar com o seu email e senha."
                             });
                         </script>';
-                        exit();
+                        /* exit(); */
                     } else {
                         $token = bin2hex(random_bytes(16)); // 16 bytes, 32 caracteres hexadecimais
                         $tempoExpiracaoMinutos = 30;
@@ -237,9 +237,9 @@
                                 require("../PHPMailer-master/src/SMTP.php"); 
                                 $mail = new PHPMailer\PHPMailer\PHPMailer(); 
                                 $mail->IsSMTP();
-                                $mail->SMTPDebug = 1;
+                                $mail->SMTPDebug = 0;
                                 $mail->SMTPAuth = true;
-                                $mail->SMTPSecure = 'tsl'; 
+                                $mail->SMTPSecure = 'tls'; 
                                 $mail->Host = "equipzeentech.com"; 
                                 $mail->Port = 587;
                                 $mail->IsHTML(true); 
