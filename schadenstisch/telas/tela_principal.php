@@ -1,6 +1,7 @@
 <?php
     include_once('../config/config.php');
     session_start();
+    include_once('codigos/filtros.php');
 
     if (!isset($_SESSION['email'])) {
         echo '<script>window.location.href = "../index.php";</script>';
@@ -72,7 +73,6 @@
             <li><a href="sair.php">Sair</a></li>
         </ul>
     </header>
-
     <main>
         <div class="div__programas">
             <h2>Programas</h2>
@@ -188,31 +188,6 @@
                         mysqli_close($conexao);
                     ?>
                 </table>
-                <script>
-                    document.addEventListener("DOMContentLoaded", function() {
-                        // Seleciona todos os botões de programa
-                        var botoesPrograma = document.querySelectorAll('.div__botoes_programas button');
-
-                        // Adiciona um evento de clique a cada botão de programa
-                        botoesPrograma.forEach(function(botao) {
-                            botao.addEventListener('click', function() {
-                                // Recupera o valor do programa associado a este botão
-                                var programaSelecionado = botao.textContent.trim();
-
-                                // Envia uma solicitação AJAX ao PHP com o valor do programa selecionado
-                                var xhr = new XMLHttpRequest();
-                                xhr.open('GET', 'filtros.php?filtro_programa=' + encodeURIComponent(programaSelecionado));
-                                xhr.send();
-
-                                // Lida com a resposta da solicitação AJAX
-                                xhr.onload = function() {
-                                    // Atualiza a tabela com os dados retornados sem recarregar a página
-                                    document.getElementById('tabela-kpm').innerHTML = xhr.responseText;
-                                }
-                            });
-                        });
-                    });
-                </script>
             </div>
         </div>
     </main>
