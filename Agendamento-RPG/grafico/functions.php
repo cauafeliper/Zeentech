@@ -607,6 +607,8 @@ function valorAreas($conexao, $listaAreasSolicitantes, $dataInicial, $dataFinal,
         $listaValorAreas["$solicitante"] = array();
     }
     foreach ($listaAreasSolicitantes as $solicitante){
+        $somaVezes = 0;
+        $somaTempo = 0;
         foreach ($listaPistas as $pista){
             $vezes = 0;
             $tempoTotal = 0;
@@ -628,15 +630,17 @@ function valorAreas($conexao, $listaAreasSolicitantes, $dataInicial, $dataFinal,
                     $tempoTotal += $tempo;
                     
                     $vezes ++;
-                    if ($vezes > $maiorVezes){
-                        $maiorVezes = $vezes;
-                    }
-                    if ($tempoTotal > $maiorTempo){
-                        $maiorTempo = $tempoTotal;
-                    }
                 }
             }
             $listaValorAreas[$solicitante][$pista] = array('vezes' => $vezes, 'tempo' => $tempoTotal, 'solicitante' => $solicitante, 'pista' => $pista);
+            $somaVezes += $vezes;
+            $somaTempo += $tempoTotal;
+        }
+        if ($somaVezes > $maiorVezes){
+            $maiorVezes = $somaVezes;
+        }
+        if ($somaTempo > $maiorTempo){
+            $maiorTempo = $somaTempo;
         }
     }
     return [$listaValorAreas, [$maiorVezes, $maiorTempo]];
