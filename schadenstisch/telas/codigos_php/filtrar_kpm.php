@@ -2,18 +2,13 @@
 // Inclua o arquivo de configuração do banco de dados
 include_once('../../config/config.php');
 
-// Recupere o estado do filtro da URL
-$estado = isset($_GET['estado']) ? $_GET['estado'] : 'todos';
+// Recupere o programa selecionado da URL
+$programa = isset($_GET['programa']) ? $_GET['programa'] : '';
 
-// Construa a consulta SQL com base no estado do filtro
-if ($estado == 'todos') {
-    $query = "SELECT * FROM kpm";
-} elseif ($estado == 'abertos') {
-    $query = "SELECT * FROM kpm WHERE status_reuniao != 5";
-} elseif ($estado == 'fechados') {
-    $query = "SELECT * FROM kpm WHERE status_reuniao = 5";
-} else {
-    die('Estado de filtro inválido.');
+// Construa a consulta SQL com base no programa selecionado
+$query = "SELECT * FROM kpm";
+if (!empty($programa)) {
+    $query .= " WHERE programa = '" . mysqli_real_escape_string($conexao, $programa) . "'";
 }
 
 $result = $conexao->query($query);
@@ -56,9 +51,6 @@ if ($result->num_rows > 0) {
     $output .= '<tr><td colspan="10">Nenhum resultado encontrado.</td></tr>';
 }
 
-// Saída do HTML da tabela filtrada
 echo $output;
-
-// Feche a conexão com o banco de dados
 mysqli_close($conexao);
 ?>

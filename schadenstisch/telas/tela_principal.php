@@ -76,31 +76,39 @@
     <main>
         <div class="div__programas">
             <h2>Programas</h2>
-            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-            </form>
+            <button class="programa_btn programa_ativo" onclick="filtrarPrograma(this)">Todos</button>
+            <div class="div__botoes_programas">
+                <?php
+                    $query_programa = "SELECT programa FROM programas";
+                    $result_programa = $conexao->query($query_programa);
+                    while ($row = $result_programa->fetch_assoc()) {
+                        echo '<button class="programa_btn" onclick="filtrarPrograma(this)">' . $row['programa'] . '</button>';
+                    }
+                ?>
+            </div>
         </div>
 
         <div class="div__tabela">
             <h2>Tabela de KPM`s</h2>
             <div class="filtros">
-                <button class="filtro-btn ativo" onclick="filtrar('todos')">Todos</button>
-                <button class="filtro-btn" onclick="filtrar('abertos')">Abertos</button>
-                <button class="filtro-btn" onclick="filtrar('fechados')">Fechados</button>
+                <button class="filtro-btn ativo">Todos</button>
+                <button class="filtro-btn">Abertos</button>
+                <button class="filtro-btn">Fechados</button>
             </div>
             <div>
                 <table id="tabela-kpm">
                     <tr>
                         <th style="display: none;">Item</th>
-                        <th onclick="filtrarPorColuna(1)" data-coluna="1">Programa</th>
-                        <th onclick="filtrarPorColuna(2)" data-coluna="2">Nº do Problema</th>
-                        <th onclick="filtrarPorColuna(3)" data-coluna="3">Ranking</th>
-                        <th onclick="filtrarPorColuna(4)" data-coluna="4">Resumo</th>
-                        <th onclick="filtrarPorColuna(5)" data-coluna="5">Veículo</th>
-                        <th onclick="filtrarPorColuna(6)" data-coluna="6">Status KPM</th>
-                        <th onclick="filtrarPorColuna(7)" data-coluna="7">Status Reunião</th>
-                        <th onclick="filtrarPorColuna(8)" data-coluna="8">FG</th>
-                        <th onclick="filtrarPorColuna(9)" data-coluna="9">Dias em Aberto</th>
-                        <th onclick="filtrarPorColuna(10)" data-coluna="10">Due Date</th>
+                        <th>Programa</th>
+                        <th>Nº do Problema</th>
+                        <th>Ranking</th>
+                        <th>Resumo</th>
+                        <th>Veículo</th>
+                        <th>Status KPM</th>
+                        <th>Status Reunião</th>
+                        <th>FG</th>
+                        <th>Dias em Aberto</th>
+                        <th >Due Date</th>
                     </tr>
                     <?php
                     $query = "SELECT * FROM kpm";
@@ -141,78 +149,41 @@
         </div>
     </footer>
     <script>
-        // Função para realizar a filtragem por estado
-        function filtrar(estado) {
-            // Remove a classe 'ativo' de todos os botões
-            document.querySelectorAll('.filtro-btn').forEach(btn => {
-                btn.classList.remove('ativo');
-            });
+    function filtrarPrograma(btn) {
+    // Remove a classe 'programa_ativo' de todos os botões
+    document.querySelectorAll('.div__botoes_programas button').forEach(btn => {
+        btn.classList.remove('programa_ativo');
+    });
 
-            // Adiciona a classe 'ativo' ao botão clicado
-            event.currentTarget.classList.add('ativo');
+    // Adiciona a classe 'programa_ativo' ao botão clicado
+    btn.classList.add('programa_ativo');
 
-            // Obtém os valores do filtro de coluna, se existirem
-            let filtroColuna = document.querySelector('.ativo select');
-            let filtroColunaParametros = '';
-            if (filtroColuna) {
-                let coluna = filtroColuna.getAttribute('data-coluna');
-                let valor = filtroColuna.value;
-                filtroColunaParametros = `&filtroColuna=${coluna}&valorFiltro=${valor}`;
-            }
+    // Obtém o programa selecionado
+    let programa = btn.textContent.trim();
 
-            // Faz uma requisição Ajax para o arquivo que tratará a filtragem no servidor
-            fetch(`codigos_php/filtrar_kpm.php?estado=${estado}${filtroColunaParametros}`)
-                .then(response => response.text())
-                .then(data => {
-                    // Atualiza o conteúdo da tabela com os resultados filtrados
-                    document.querySelector('.div__tabela table').innerHTML = data;
-                })
-                .catch(error => console.error('Erro:', error));
-        }
+    // Faz uma requisição Ajax para o arquivo que tratará o filtro no servidor
+    if (programa === 'Todos') {
+        fetch('codigos_php/filtrar_kpm.php?estado=todos')
+            .then(response => response.text())
+            .then(data => {
+                // Atualiza o conteúdo da tabela com os resultados filtrados
+                document.querySelector('.div__tabela table').innerHTML = data;
+            })
+            .catch(error => console.error('Erro:', error));
+    } else {
+        // Faz uma requisição Ajax para o arquivo que tratará o filtro no servidor
+        fetch(`codigos_php/filtrar_kpm.php?programa=${programa}`)
+            .then(response => response.text())
+            .then(data => {
+                // Atualiza o conteúdo da tabela com os resultados filtrados
+                document.querySelector('.div__tabela table').innerHTML = data;
+            })
+            .catch(error => console.error('Erro:', error));
+    }
+}
 
-        // Função para realizar a filtragem por coluna
-        function filtrarPorColuna(coluna) {
-            // Remove a classe 'ativo' de todos os botões
-            document.querySelectorAll('.filtro-btn').forEach(btn => {
-                btn.classList.remove('ativo');
-            });
-
-            // Adiciona a classe 'ativo' ao botão clicado
-            event.currentTarget.classList.add('ativo');
-
-            // Obtém os valores únicos da coluna selecionada
-            let valoresUnicos = [...new Set(Array.from(document.querySelectorAll(`#tabela-kpm td:nth-child(${coluna})`)).map(td => td.textContent.trim()))];
-
-            // Cria um seletor de opções
-            let select = document.createElement('select');
-            select.innerHTML = '<option value="">Todos</option>';
-
-            valoresUnicos.forEach(valor => {
-                let option = document.createElement('option');
-                option.value = valor;
-                option.text = valor;
-                select.appendChild(option);
-            });
-
-            // Adiciona um ouvinte de evento para alterações no seletor
-            select.addEventListener('change', function () {
-                let estado = select.value ? `&filtroColuna=${coluna}&valorFiltro=${select.value}` : '';
-                // Faz uma requisição Ajax para o arquivo que tratará a filtragem no servidor
-                fetch(`codigos_php/filtrar_kpm.php?estado=todos${estado}`)
-                    .then(response => response.text())
-                    .then(data => {
-                        // Atualiza o conteúdo da tabela com os resultados filtrados
-                        document.querySelector('.div__tabela table').innerHTML = data;
-                    })
-                    .catch(error => console.error('Erro:', error));
-            });
-
-            // Substitui o conteúdo do th pelo seletor
-            let th = document.querySelector(`#tabela-kpm th:nth-child(${coluna})`);
-            th.innerHTML = '';
-            th.appendChild(select);
-        }
     </script>
+
     <?php 
         mysqli_close($conexao);
     ?>
