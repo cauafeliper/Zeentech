@@ -238,14 +238,6 @@ td {
 .div__programas button:not(:hover) {
     transition-duration: 0.5s;
 }
-
-.programa_ativo {
-    background-color: var(--escuro);
-
-    border: 2px solid var(--claro);
-
-    color: white;
-}
 /*============================================================================================================*/
 footer {
     padding: 15px;
