@@ -1,6 +1,21 @@
 <?php
     include_once('../config/config.php');
     session_start();
+
+    $expire_time = $_SESSION['expire_time'];
+
+    // Verifica se a sessão existe e se o tempo de expiração foi atingido
+    if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $expire_time)) {
+        // Sessão expirada, destrói a sessão e redireciona para a página de login
+        session_unset();
+        session_destroy();
+        header("Location: ../index.php");
+        exit();
+    }
+
+    // Atualiza o tempo da última atividade
+    $_SESSION['last_activity'] = time();
+
     date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
 ?>
 <!DOCTYPE html>

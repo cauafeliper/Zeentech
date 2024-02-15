@@ -2,6 +2,20 @@
     include_once('../config/config.php');
     session_start();
 
+    $expire_time = $_SESSION['expire_time'];
+
+    // Verifica se a sessão existe e se o tempo de expiração foi atingido
+    if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $expire_time)) {
+        // Sessão expirada, destrói a sessão e redireciona para a página de login
+        session_unset();
+        session_destroy();
+        header("Location: ../index.php");
+        exit();
+    }
+
+    // Atualiza o tempo da última atividade
+    $_SESSION['last_activity'] = time();
+
 include '../grafico/functions.php'; 
 
 date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
@@ -220,7 +234,6 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                                         CASE 
                                             WHEN status = 'Pendente' THEN 1
                                             WHEN status = 'Aprovado' THEN 2
-                                            ELSE 3
                                         END
                                         LIMIT $registros_por_pagina OFFSET $offset";
                     $result_paginacao = mysqli_query($conexao, $query_paginacao);
@@ -245,7 +258,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                             <td id="td_tippy" value="<?php echo $row['obs'];?>"><?php echo $row['obs'];?></td>
                             <td <?php if($row['status'] === 'Aprovado'){echo 'style="background-color: #A6C48A;"';} elseif($row['status'] === 'Pendente'){echo 'style="background-color: #FFD275;"';} else { echo 'style="background-color: #E5625E;"';}?>><?php echo $row['status']; ?></td>
                             <td>
-                                <?php if (($row['dia'] > "$hoje") OR ($row['dia'] == "$hoje" AND $row['hora_inicio'] < "$horaAtual")) { ?>
+                                <?php if (($row['dia'] > "$hoje") OR ($row['dia'] == "$hoje" AND $row['hora_inicio'] > "$horaAtual")) { ?>
                                     <input type="hidden" name="solicitante" value="<?php echo $row['solicitante']; ?>">
                                     <a href="javascript:void(0);" data-id="<?php echo $row['id']; ?>"><input type="button" value="✖︎" class="cancelar"></a>
                                 <?php } else { ?>
