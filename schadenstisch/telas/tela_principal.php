@@ -1,7 +1,6 @@
 <?php
     include_once('../config/config.php');
     session_start();
-    include_once('codigos/filtros.php');
 
     if (!isset($_SESSION['email'])) {
         echo '<script>window.location.href = "../index.php";</script>';
@@ -39,6 +38,7 @@
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/tippy.js/dist/tippy.css" />
     <script src="https://unpkg.com/tippy.js@6.3.1/dist/tippy-bundle.umd.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Schadenstisch | Home</title>
 </head>
 <body>
@@ -76,13 +76,13 @@
     <main>
         <div class="div__programas">
             <h2>Programas</h2>
-            <button class="botoes__programas programa__ativo">Todos</button>
+            <button class="botoes__programas">Todos</button>
             <div class="div__botoes_programas">
                 <?php
                     $query_programa = "SELECT programa FROM programas";
                     $result_programa = $conexao->query($query_programa);
                     while ($row = $result_programa->fetch_assoc()) {
-                        echo '<button>' . $row['programa'] . '</button>';
+                        echo '<button value="' . $row['programa'] . '">' . $row['programa'] . '</button>';
                     }
                 ?>
             </div>
@@ -91,102 +91,13 @@
         <div class="div__tabela">
             <h2>Tabela de KPM`s</h2>
             <div class="filtros">
-                <button class="filtro-btn ativo">Todos</button>
-                <button class="filtro-btn">Abertos</button>
-                <button class="filtro-btn">Fechados</button>
+                <button class="filtro-btn" value="Todos">Todos</button>
+                <button class="filtro-btn" value="Abertos">Abertos</button>
+                <button class="filtro-btn" value="Fechados">Fechados</button>
             </div>
             <div>
                 <table id="tabela-kpm">
-                    <tr>
-                        <th style="display: none;">Item</th>
-                        <th>Programa</th>
-                        <th>Nº do Problema</th>
-                        <th>Ranking</th>
-                        <th>Resumo</th>
-                        <th>Veículo</th>
-                        <th>Status KPM</th>
-                        <th>Status Reunião</th>
-                        <th>FG</th>
-                        <th>Dias em Aberto</th>
-                        <th >Due Date</th>
-                    </tr>
-                    <?php
-                        // Inicialize as variáveis de filtro
-                        $filtro_programa = isset($_GET['filtro_programa']) ? $_GET['filtro_programa'] : 'Todos';
-                        $filtro_n_problem = isset($_GET['filtro_n_problem']) ? $_GET['filtro_n_problem'] : 'Todos';
-                        $filtro_rank = isset($_GET['filtro_rank']) ? $_GET['filtro_rank'] : 'Todos';
-                        $filtro_resumo = isset($_GET['filtro_resumo']) ? $_GET['filtro_resumo'] : 'Todos';
-                        $filtro_veiculo = isset($_GET['filtro_veiculo']) ? $_GET['filtro_veiculo'] : 'Todos';
-                        $filtro_status_kpm = isset($_GET['filtro_status_kpm']) ? $_GET['filtro_status_kpm'] : 'Todos';
-                        $filtro_status_reuniao = isset($_GET['filtro_status_reuniao']) ? $_GET['filtro_status_reuniao'] : 'Todos';
-                        $filtro_fg = isset($_GET['filtro_fg']) ? $_GET['filtro_fg'] : 'Todos';
-                        // Adicione mais variáveis de filtro conforme necessário
-
-                        // Construa a consulta SQL com base nos filtros
-                        $query = "SELECT * FROM kpm WHERE 1=1";
-
-                        // Adicione condições de filtro para cada coluna conforme necessário
-                        if ($filtro_programa != 'Todos') {
-                            $query .= " AND programa = '$filtro_programa'";
-                        }
-
-                        if ($filtro_n_problem != 'Todos') {
-                            $query .= " AND n_problem = '$filtro_n_problem'";
-                        }
-
-                        if ($filtro_rank != 'Todos') {
-                            $query .= " AND rank = '$filtro_rank'";
-                        }
-
-                        if ($filtro_resumo != 'Todos') {
-                            $query .= " AND resumo = '$filtro_resumo'";
-                        }
-
-                        if ($filtro_veiculo != 'Todos') {
-                            $query .= " AND veiculo = '$filtro_veiculo'";
-                        }
-
-                        if ($filtro_status_kpm != 'Todos') {
-                            $query .= " AND status_kpm = '$filtro_status_kpm'";
-                        }
-
-                        if ($filtro_status_reuniao != 'Todos') {
-                            $query .= " AND status_reuniao = '$filtro_status_reuniao'";
-                        }
-
-                        if ($filtro_fg != 'Todos') {
-                            $query .= " AND fg = '$filtro_fg'";
-                        }
-                        // Adicione mais condições de filtro para outras colunas conforme necessário
-
-                        // Execute a consulta SQL
-                        $result = $conexao->query($query);
-
-                        // Exibir os resultados
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) { ?>
-                                <tr>
-                                    <td style="display: none;"><?php echo $row['item']; ?></td>
-                                    <td value="<?php echo $row['programa']; ?>" id="td_tippy"><?php echo $row['programa']; ?></td>
-                                    <td value="<?php echo $row['n_problem']; ?>" id="td_tippy"><?php echo $row['n_problem']; ?></td>
-                                    <td value="<?php echo $row['rank']; ?>" id="td_tippy"><?php echo $row['rank']; ?></td>
-                                    <td value="<?php echo $row['resumo']; ?>" id="td_tippy"><?php echo $row['resumo']; ?></td>
-                                    <td value="<?php echo $row['veiculo']; ?>" id="td_tippy"><?php echo $row['veiculo']; ?></td>
-                                    <td value="<?php echo $row['status_kpm']; ?>" id="td_tippy"><?php echo $row['status_kpm']; ?></td>
-                                    <td value="<?php echo $row['status_reuniao']; ?>" id="td_tippy"><?php echo $row['status_reuniao']; ?></td>
-                                    <td value="<?php echo $row['fg']; ?>" id="td_tippy"><?php echo $row['fg']; ?></td>
-                                    <td value="<?php echo $row['dias_aberto']; ?>" id="td_tippy"><?php echo $row['dias_aberto']; ?></td>
-                                    <td value="<?php echo date('d/m/Y', strtotime($row['due_date'])); ?>" id="td_tippy"><?php echo date('d/m/Y', strtotime($row['due_date'])); ?></td>
-                                </tr>
-                        <?php
-                            }
-                        } else {
-                            echo '<tr><td colspan="10">Ainda não existem KPM\'s registrados!</td></tr>';
-                        }
-
-                        // Feche a conexão com o banco de dados
-                        mysqli_close($conexao);
-                    ?>
+                    
                 </table>
             </div>
         </div>
@@ -199,6 +110,65 @@
         <div class="copyright">
             <span>Copyright © 2023 de Zeentech os direitos reservados</span>
         </div>
+        <script>
+            $(document).ready(function(){
+                function atualizarTabela() {
+                    $.ajax({
+                        url: 'codigos/tabela.php', // Substitua 'seu_script_php.php' pelo nome do seu script PHP que processa a consulta ao banco de dados e retorna os resultados
+                        type: 'GET',
+                        dataType: 'html',
+                        success: function(response) {
+                            $('#tabela-kpm').html(response); // Atualiza o conteúdo da tabela com os dados retornados do script PHP
+                        }
+                    });
+                }
+                // Chama a função de atualização da tabela quando a página é carregada
+                atualizarTabela();
+            });
+        </script>
+        <script>
+           $(document).ready(function() {
+                $('.botoes__programas').click(function() {
+                    var valorBotao = $(this).text();
+                    $.ajax({
+                        url: 'codigos/tabela.php',
+                        type: 'GET',
+                        data: {filtro_programa: valorBotao},
+                        success: function(response) {
+                            // Atualize a tabela com os dados recebidos do servidor
+                            $('#tabela-kpm').html(response);
+                        }
+                    });
+                });
+
+                $('.filtros').on('click', '.filtro-btn', function() {
+                    var valorBotao = $(this).text();
+                    $.ajax({
+                        url: 'codigos/tabela.php',
+                        type: 'GET',
+                        data: {filtro_status_reuniao: valorBotao},
+                        success: function(response) {
+                            // Atualize a tabela com os dados recebidos do servidor
+                            $('#tabela-kpm').html(response);
+                        }
+                    });
+                });
+            });
+                
+                // Use a delegação de eventos para os botões dentro de div__botoes_programas
+                $('.div__botoes_programas').on('click', 'button', function() {
+                    var valorBotao = $(this).val();
+                    $.ajax({
+                        url: 'codigos/tabela.php',
+                        type: 'GET',
+                        data: {filtro_programa: valorBotao},
+                        success: function(response) {
+                            // Atualize a tabela com os dados recebidos do servidor
+                            $('#tabela-kpm').html(response);
+                        }
+                    });
+                });
+        </script>
     </footer>
 </body>
 </html>

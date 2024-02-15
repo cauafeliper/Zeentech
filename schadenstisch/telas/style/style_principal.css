@@ -196,6 +196,18 @@ th {
     color: white;
 }
 
+select {
+    background-color: transparent;
+
+    border: none;
+
+    color: white;
+}
+
+option {
+    color: black;
+}
+
 td {
     border: 0.2px solid var(--escuro);
     border-radius: 5px;

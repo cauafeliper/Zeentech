@@ -92,7 +92,11 @@
             const button = document.getElementById('btnAutoChange');
 
             if (!isAutoChangeEnabled) {
-                autoChangeInterval = setInterval(clickNextButton, 40000);
+                if (currentIframeIndex === 3) {
+                    autoChangeInterval = setInterval(clickNextButton, 450000); // Define um intervalo maior para o terceiro iframe (índice 2)
+                } else {
+                    autoChangeInterval = setInterval(clickNextButton, 40000); // Intervalo padrão para os outros iframes
+                }
                 button.style.backgroundColor = '#158544'; // Define a cor de fundo para indicar que está ativado
             } else {
                 clearInterval(autoChangeInterval);
