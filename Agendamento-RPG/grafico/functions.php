@@ -374,7 +374,7 @@ function CriarHTMLmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaCla
             $id = $row["id"];
             $status = $row["status"];
 
-            $classe = "$listaLetras[$i]".$j.'_semana_'.$id;
+            $classe = "$listaLetras[$i]".$j.'_mes_'.$id;
             echo '<div class="'.$classe.'" style="cursor:pointer" onclick="PopupAgendamento(\''.$row['id'].'\',\''.$row['area_pista'].'\',\''.$row['dia'].'\',\''.$horario.'\',\''.$row['objtv'].'\',\''.$row['solicitante'].'\',\''.$row['numero_solicitante'].'\',\''.$row['empresa_solicitante'].'\',\''.$row['area_solicitante'].'\',\''.$row['exclsv'].'\',\''.$row['obs'].'\',\''.$row['status'].'\')"></div>';
             echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
                 '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
@@ -426,6 +426,7 @@ function CriarCSSmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClas
                 $horaFim = $tarefa['horaFim'];
                 $minutoInicio = $tarefa['minutoInicio'];
                 $minutoFim = $tarefa['minutoFim'];
+                $id = $tarefa['id'];
                 
                 if ($horaInicio != $horaFim){
                     if($minutoInicio != '00'){
@@ -476,7 +477,7 @@ function CriarCSSmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClas
                 $leftTotal = ($leftTotal / 936) * 140;
                 
 
-                $classe = $listaLetras[$i].$j.'_semana_'.$id;
+                $classe = $listaLetras[$i].$j.'_mes_'.$id;
                 $classeTip = 'tip_'.$classe;
                 $leftTip = $leftTotal + ($tamanho/2) - 100;
                 if ($leftTip < 0){
