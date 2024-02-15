@@ -1,9 +1,7 @@
 <?php
     include_once('../config/config.php');
     session_start();
-?>
 
-<?php
 include '../grafico/functions.php'; 
 
 date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
@@ -31,8 +29,8 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
     <header>
         <a href="https://www.vwco.com.br/" target="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus" style="height: 95%;"></a>
         <ul>
+            <li><a href="historico.php">Meus Agendamentos</a></li>
             <?php 
-
                 $email = $_SESSION['email'];
 
                 $query = "SELECT COUNT(*) as count FROM lista_adm WHERE email = ?";
@@ -76,7 +74,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
             </div>
             <div class="dia grids">
                 <label for="dia">Dia:</label>
-                <input type="date" name="dia" id="dia" placeholder="Indique a data" oninput="diaGrafico()" required>
+                <input type="date" name="dia" id="dia" placeholder="Indique a data" oninput="diaGrafico()" required <?php if(isset($_POST['dia'])) { echo 'value="' . $_POST['dia'] . '"'; } ?>>
                 <script>
                     flatpickr("#dia", {
                         dateFormat: "Y-m-d",
@@ -86,15 +84,15 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
             </div>
             <div class="hora_inicio grids">
                 <label for="hora_inicio">Hora de Início:</label>
-                <input type="time" id="hora_inicio" name="hora_inicio" min="07:00" max="19:00" required>
+                <input type="time" id="hora_inicio" name="hora_inicio" min="07:00" max="19:00" required <?php if(isset($_POST['hora_inicio'])) { echo 'value="' . $_POST['hora_inicio'] . '"'; } ?>>
             </div>
             <div class="hora_fim grids">
                 <label for="hora_fim">Hora do Fim:</label>
-                <input type="time" id="hora_fim" name="hora_fim" min="07:00" max="19:00" required>
+                <input type="time" id="hora_fim" name="hora_fim" min="07:00" max="19:00" required <?php if(isset($_POST['hora_fim'])) { echo 'value="' . $_POST['hora_fim'] . '"'; } ?>>
             </div>
             <div class="area_solicitante grids" style="display:none">
                 <label for="area_solicitante">Área do Solicitante:</label>
-                <input type="text" name="area_solicitante" value="<?= $_SESSION['area_solicitante'] ?>" readonly>
+                <input type="text" name="area_solicitante" value="<?= $_SESSION['area_solicitante'] ?>" readonly <?php if(isset($_POST['area_solicitante'])) { echo 'value="' . $_POST['area_solicitante'] . '"'; } ?>>
             </div>
             <div class="area_solicitada grids">
                 <label for="area_solicitada">Área Solicitada:</label>
@@ -104,7 +102,8 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                         $query_area = "SELECT DISTINCT area FROM area_pista";
                         $result_area = mysqli_query($conexao, $query_area);
                         while ($row_area = mysqli_fetch_assoc($result_area)) {
-                            echo '<option value="' . $row_area['area'] . '">' . $row_area['area'] . '</option>';
+                            $selected = (isset($_POST['area']) && $_POST['area'] == $row_area['area']) ? 'selected' : '';
+                            echo '<option value="' . htmlspecialchars($row_area['area']) . '" ' . $selected . '>' . htmlspecialchars($row_area['area']) . '</option>';
                         }
                     ?>
                 </select>
@@ -117,7 +116,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                         $query_objtv = "SELECT DISTINCT objtv FROM objtv_teste";
                         $result_objtv = mysqli_query($conexao, $query_objtv);
                         while ($row_objtv = mysqli_fetch_assoc($result_objtv)) {
-                            $selected = ($objtv == $row_objtv['objtv']) ? 'selected' : '';
+                            $selected = (isset($_POST['objetivo']) && $_POST['objetivo'] == $row_objtv['objtv']) ? 'selected' : '';
                             echo '<option value="' . htmlspecialchars($row_objtv['objtv']) . '" ' . $selected . '>' . htmlspecialchars($row_objtv['objtv']) . '</option>';
                         }
                     ?>
@@ -126,10 +125,10 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
             <div class="exclsv grids">
                 <label for="exclsv" style="width: 100%; margin-right: 50px; display: block;">Uso Exclusivo?</label>
                 <label for="sim" style="font-size: smaller; width: 30%; margin-top: 5px; background-color: #001e50;">Sim:</label>
-                <input type="radio" id="sim" name="resposta" value="Sim" style="width: 10%; margin-top: 10px;" required>
+                <input type="radio" id="sim" name="resposta" value="Sim" style="width: 10%; margin-top: 10px;" <?php if(isset($_POST['resposta']) && $_POST['resposta'] === 'Sim') echo 'checked'; ?>>
     
                 <label for="nao" style="font-size: smaller; width: 30%; margin-top: 5px; background-color: #001e50;">Não:</label>
-                <input type="radio" id="nao" name="resposta" value="Não" checked style="width: 10%; margin-top: 10px;">
+                <input type="radio" id="nao" name="resposta" value="Não" style="width: 10%; margin-top: 10px;" <?php if(isset($_POST['resposta']) && $_POST['resposta'] === 'Não') echo 'checked'; ?>>
             </div>
             <div style="display: none;">
                 <label for="status">Status:</label>
@@ -137,7 +136,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
             </div>
             <div class="obs">
                 <label for="obs" class="obs__label">Observações:</label>
-                <textarea name="obs" id="obs" cols="48" rows="5" class="obs" maxlength="500"></textarea>
+                <textarea name="obs" id="obs" cols="48" rows="5" class="obs" maxlength="500"><?php if(isset($_POST['obs'])) { echo htmlspecialchars($_POST['obs']); } ?></textarea>
             </div>
             <div class="enviar">
                 <input type="submit" name="submit" value="Agendar">
@@ -185,24 +184,24 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                     if ($exclsv == 'Sim'){
                         $query = "SELECT * FROM agendamentos 
                             WHERE dia = '$data' 
-                            AND ((hora_inicio <= '$hora_inicio' AND hora_fim >= '$hora_inicio') 
-                            OR (hora_inicio <= '$hora_fim' AND hora_fim >= '$hora_fim'))
+                            AND ((hora_inicio >= '$hora_inicio' AND hora_inicio <= '$hora_fim') 
+                            OR (hora_fim >= '$hora_inicio' AND hora_fim <= '$hora_fim') OR ('$hora_inicio' >= hora_inicio AND '$hora_inicio' <= hora_fim) OR ('$hora_fim' >= hora_inicio AND '$hora_fim' <= hora_fim))
                             AND (status = 'Aprovado' OR status = 'Pendente')";
                     }
                     else {
                         $query = "SELECT * FROM agendamentos 
                             WHERE (area_pista = '$area' OR area_pista = 'Pista Completa')
                             AND dia = '$data' 
-                            AND ((hora_inicio <= '$hora_inicio' AND hora_fim >= '$hora_inicio') 
-                            OR (hora_inicio <= '$hora_fim' AND hora_fim >= '$hora_fim'))
+                            AND ((hora_inicio >= '$hora_inicio' AND hora_inicio <= '$hora_fim') 
+                            OR (hora_fim >= '$hora_inicio' AND hora_fim <= '$hora_fim') OR ('$hora_inicio' >= hora_inicio AND '$hora_inicio' <= hora_fim) OR ('$hora_fim' >= hora_inicio AND '$hora_fim' <= hora_fim))
                             AND (status = 'Aprovado' OR status = 'Pendente')";
                     }
     
                     $queryExc = "SELECT * FROM agendamentos 
                         WHERE exclsv = 'Sim'
                         AND dia = '$data' 
-                        AND ((hora_inicio <= '$hora_inicio' AND hora_fim >= '$hora_inicio') 
-                        OR (hora_inicio <= '$hora_fim' AND hora_fim >= '$hora_fim')) 
+                        AND ((hora_inicio >= '$hora_inicio' AND hora_inicio <= '$hora_fim') 
+                            OR (hora_fim >= '$hora_inicio' AND hora_fim <= '$hora_fim') OR ('$hora_inicio' >= hora_inicio AND '$hora_inicio' <= hora_fim) OR ('$hora_fim' >= hora_inicio AND '$hora_fim' <= hora_fim)) 
                         AND (status = 'Aprovado' OR status = 'Pendente')";
     
                     $result = mysqli_query($conexao, $query);
@@ -371,7 +370,10 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
 
         window.onload = function() {
             console.log('A página foi carregada!');
-            var valorData = 'atual';
+            var valorData = document.getElementById('dia').value;
+            if (valorData === "") {
+                valorData = 'atual';
+            }
 
             // Use AJAX para enviar a nova data ao servidor PHP
             var xhr = new XMLHttpRequest();

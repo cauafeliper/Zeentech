@@ -67,9 +67,9 @@ header ul {
     justify-content: space-between;
     align-items: center;
     float: right;
-    width: 15%;
     height: 100%;
     margin-right: 40px;
+    gap: 1rem;
 }
 
 header li a {

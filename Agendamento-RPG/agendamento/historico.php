@@ -1,12 +1,16 @@
 <?php
     include_once('../config/config.php');
     session_start();
-    date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
+
+include '../grafico/functions.php'; 
+
+date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestão</title>
     <link rel="shortcut icon" href="../imgs/logo-volks.png" type="image/x-icon">
@@ -17,62 +21,47 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-
 </head>
 <body>
-    <?php
+    <?php 
         if (!isset($_SESSION['email']) || empty($_SESSION['email'])) {
-            session_unset();
             header('Location: ../index.php');
-        }
-        
-        $email = $_SESSION['email'];
-        $query = "SELECT * FROM lista_adm WHERE email = ?";
-        $stmt = $conexao->prepare($query);
-        // Vincula os parâmetros
-        $stmt->bind_param("s", $email);
-        // Executa a consulta
-        $stmt->execute();
-        // Obtém os resultados, se necessário
-        $result = $stmt->get_result();
-        // Fechar a declaração
-        $stmt->close();
-
-        $email = $_SESSION['email'];
-        $query = "SELECT * FROM gestor WHERE email = ?";
-        $stmt = $conexao->prepare($query);
-        // Vincula os parâmetros
-        $stmt->bind_param("s", $email);
-        // Executa a consulta
-        $stmt->execute();
-        // Obtém os resultados, se necessário
-        $resultGestor = $stmt->get_result();
-        // Fechar a declaração
-        $stmt->close();
-        
-        if ((!$result || mysqli_num_rows($result) === 0) && (!$resultGestor || mysqli_num_rows($resultGestor) === 0)) {
-            session_unset();
-            header('Location: ../index.php');
+            exit();
         }
     ?>
     <header>
-        <a href="https://www.vwco.com.br/" tarGET="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus" style="height: 95%;"></a>
+        <a href="https://www.vwco.com.br/" target="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus" style="height: 95%;"></a>
         <ul>
             <?php 
-                if ($result && mysqli_num_rows($result) > 0) {
-                    echo '<li><a href="gerenciamento.php">Gerenciamento</a></li>';
+
+                $email = $_SESSION['email'];
+
+                $query = "SELECT COUNT(*) as count FROM lista_adm WHERE email = ?";
+                $stmt = mysqli_prepare($conexao, $query);
+                mysqli_stmt_bind_param($stmt, "s", $email);
+                mysqli_stmt_execute($stmt);
+                $resultado = mysqli_stmt_get_result($stmt);
+                $linha = mysqli_fetch_assoc($resultado);
+                $admTrue = ($linha['count'] > 0);
+
+                $query = "SELECT COUNT(*) as count FROM gestor WHERE email = ?";
+                $stmt = mysqli_prepare($conexao, $query);
+                mysqli_stmt_bind_param($stmt, "s", $email);
+                mysqli_stmt_execute($stmt);
+                $resultado = mysqli_stmt_get_result($stmt);
+                $linha = mysqli_fetch_assoc($resultado);
+                $gestorTrue = ($linha['count'] > 0);
+
+                if ($admTrue || $gestorTrue) {
+                    echo '<li><a href="gestor.php">Gestão</a></li>';
+                    echo '<li><a href="../grafico/grafico.php">Gráfico</a></li>';
                 }
             ?>
-
-            <li><a href="../grafico/grafico.php">Gráfico</a></li>
-
             <li><a href="tabela-agendamentos.php">Início</a></li>
-
             <li><a href="sair.php">Sair</a></li>
-            
         </ul>
     </header>
-    
+
     <main>
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" class="filtros">
             <div class="titulo">
@@ -110,29 +99,6 @@
                     <script>
                         $(document).ready(function () {
                         $('#select_objetivo').select2();
-                        });
-                    </script>
-                </div>
-            </div>
-            <div class="solicitante">
-                <div class="label_solicitante">
-                    <label for="solicitante">Solicitante:</label>
-                </div>
-                <div class="input_solicitante">
-                    <select name="solicitante" id="select_solicitante">
-                        <option value="">Selecione o Solicitante</option>
-                        <?php
-                        $query_solicitante = "SELECT DISTINCT solicitante FROM agendamentos";
-                        $result_solicitante = mysqli_query($conexao, $query_solicitante);
-                        while ($row_solicitante = mysqli_fetch_assoc($result_solicitante)) {
-                            $selected = ($solicitante == $row_solicitante['solicitante']) ? 'selected' : '';
-                            echo '<option value="' . htmlspecialchars($row_solicitante['solicitante']) . '" ' . $selected . '>' . htmlspecialchars($row_solicitante['solicitante']) . '</option>';
-                        }
-                        ?>
-                    </select>
-                    <script>
-                        $(document).ready(function () {
-                        $('#select_solicitante').select2();
                         });
                     </script>
                 </div>
@@ -183,7 +149,6 @@
                         <option value="">-</option>
                         <option value="Pendente">Pendente</option>
                         <option value="Aprovado">Aprovado</option>
-                        <option value="Reprovado">Reprovado</option>
                     </select>
                     <script>
                         $(document).ready(function () {
@@ -198,7 +163,7 @@
             </div>
         </form>
         <div class="tabela">
-        <div class="caption"><img src="../assets/table-list.png" width="22" height="22" style="position: relative; top: 3px; margin-right: 5px;">Tabela de Agendamentos</div>
+        <div class="caption"><img src="../assets/table-list.png" width="22" height="22" style="position: relative; top: 3px; margin-right: 5px;">Seus Agendamentos</div>
             <table>
                 <tr>
                     <th style="display: none;">ID</th>
@@ -214,7 +179,7 @@
                     <th>Uso Exclusivo?</th>
                     <th>Observação</th>
                     <th>Status</th>
-                    <th>Aprovar/<br>Reprovar</th>
+                    <th>Editar/<br>Cancelar</th>
                 </tr>
                 <?php 
                     $registros_por_pagina = 10;
@@ -230,7 +195,7 @@
                     $query_count = "SELECT COUNT(*) as total FROM agendamentos WHERE
                                     (dia LIKE '%$dia%')
                                     AND (objtv LIKE '%$objetivo%')
-                                    AND (solicitante LIKE '%$solicitante%')
+                                    AND (solicitante = '$_SESSION[nome]')
                                     AND (area_pista LIKE '%$area_pista%')
                                     AND (exclsv LIKE '%$exclsv%')
                                     AND (status LIKE '%$status%')";
@@ -244,10 +209,11 @@
                     $query_paginacao = "SELECT * FROM agendamentos 
                                         WHERE (dia LIKE '%$dia%')
                                         AND (objtv LIKE '%$objetivo%')
-                                        AND (solicitante LIKE '%$solicitante%')
+                                        AND (solicitante = '$_SESSION[nome]')
                                         AND (area_pista LIKE '%$area_pista%')
                                         AND (exclsv LIKE '%$exclsv%')
                                         AND (status LIKE '%$status%')
+                                        AND (status != 'Reprovado')
                                         ORDER BY 
                                         CASE 
                                             WHEN status = 'Pendente' THEN 1
@@ -258,6 +224,9 @@
                                         hora_inicio DESC
                                         LIMIT $registros_por_pagina OFFSET $offset";
                     $result_paginacao = mysqli_query($conexao, $query_paginacao);
+
+                    $horaAtual = date('H:i');
+                    $hoje = date('Y-m-d');
 
                     if ($result_count->num_rows > 0) {
                     while ($row = mysqli_fetch_assoc($result_paginacao)) { ?>
@@ -276,16 +245,12 @@
                             <td id="td_tippy" value="<?php echo $row['obs'];?>"><?php echo $row['obs'];?></td>
                             <td <?php if($row['status'] === 'Aprovado'){echo 'style="background-color: #A6C48A;"';} elseif($row['status'] === 'Pendente'){echo 'style="background-color: #FFD275;"';} else { echo 'style="background-color: #E5625E;"';}?>><?php echo $row['status']; ?></td>
                             <td>
-                                <?php if ($row['status'] === 'Pendente') { ?>
-                                    <a href="javascript:void(0);" data-id="<?php echo $row['id']; ?>"><input type="button" value="✔" class="aprovar"></a>
+                                <?php if (($row['dia'] > "$hoje") OR ($row['dia'] == "$hoje" AND $row['hora_inicio'] < "$horaAtual")) { ?>
+                                    <a href="javascript:void(0);" data-id="<?php echo $row['id']; ?>"><input type="button" value="&#x270E;" class="editar"></a>
                                     <input type="hidden" name="solicitante" value="<?php echo $row['solicitante']; ?>">
                                     <a href="javascript:void(0);" data-id="<?php echo $row['id']; ?>"><input type="button" value="✖︎" class="cancelar"></a>
-                                <?php } elseif ($row['status'] === 'Aprovado') { ?>
-                                    <a href="javascript:void(0);" data-id="<?php echo $row['id']; ?>"><input type="button" value="✖︎" class="cancelar"></a>
-                                    <input type="hidden" name="solicitante" value="<?php echo $row['solicitante']; ?>">
                                 <?php } else { ?>
-                                    <a href="javascript:void(0);" data-id="<?php echo $row['id']; ?>"><input type="button" value="✔" class="aprovar"></a>
-                                    <input type="hidden" name="solicitante" value="<?php echo $row['solicitante']; ?>">
+                                    <p>Expirado</p>
                                 <?php } ?>
                             </td>
                         </tr>
@@ -320,7 +285,7 @@
             ?>
         </div>
     </main>
-    
+
     <footer>
         <div>
             <span>Desenvolvido por:  <img src="../imgs/lg-zeentech(titulo).png" alt="logo-zeentech"></span>
@@ -360,7 +325,7 @@
         });
 
         document.addEventListener("DOMContentLoaded", function () {
-            var botoesAprovar = document.querySelectorAll(".aprovar");
+            var botoesAprovar = document.querySelectorAll(".editar");
             var botoesCancelar = document.querySelectorAll(".cancelar");
 
             botoesAprovar.forEach(function (botao) {
@@ -387,7 +352,7 @@
                     Swal.fire({
                         title: "Confirmação",
                         html: `<div style='text-align: start; padding: 0 2rem; line-height: 1.5rem'>
-                        <h3 style="text-align: center;">Você tem certeza de que deseja APROVAR o seguinte agendamento?</h3><br>
+                        <h3 style="text-align: center;">Você tem certeza de que deseja EDITAR o seguinte agendamento? Note que ao editar um agendamento Aprovado, ele retorna a ser Pendente e deve ser aprovado novamente.</h3><br>
                         Id: `+id+`<br>
                         Área da Pista: `+area_pista+`<br>
                         Dia: `+data+`<br>
@@ -403,11 +368,11 @@
                         </div>`,
                         icon: "warning",
                         showCancelButton: true,
-                        confirmButtonText: "Sim, Aprovar",
+                        confirmButtonText: "Sim, Editar",
                         cancelButtonText: "Voltar",
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = "aprovar-reprovar/aprovar.php?id=" + id;
+                            window.location.href = "aprovar-reprovar/tela_editar.php?id=" + id;
                         }
                     });
                 });
@@ -437,7 +402,7 @@
                     Swal.fire({
                         title: "Confirmação",
                         html: `<div style='text-align: start; padding: 0 2rem; line-height: 1.5rem'>
-                            <h3 style="text-align: center;">Você tem certeza de que deseja REPROVAR o seguinte agendamento?</h3><br>
+                            <h3 style="text-align: center;">Você tem certeza de que deseja CANCELAR o seguinte agendamento?</h3><br>
                             Id: `+id+`<br>
                             Área da Pista: `+area_pista+`<br>
                             Dia: `+data+`<br>
@@ -453,17 +418,14 @@
                         </div>`,
                         icon: "warning",
                         showCancelButton: true,
-                        confirmButtonText: "Sim, Reprovar",
+                        confirmButtonText: "Sim, Cancelar",
                         cancelButtonText: "Voltar",
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = "aprovar-reprovar/reprovar.php?id=" + id;
+                            window.location.href = "aprovar-reprovar/cancelar.php?id=" + id;
                         }
                     });
                 });
             });
         });
     </script>
-
-</body>
-</html>

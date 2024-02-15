@@ -47,7 +47,7 @@
                     <label for="nome"><img src="../assets/id-card-clip-alt.png" width="16" height="16" style="margin-right: 5px;">Nome:</label>
                 </div>
                 <div class="input-nome">
-                    <input type="text" name="nome" id="nome" placeholder="Insira seu nome completo...">
+                    <input type="text" name="nome" id="nome" placeholder="Insira seu nome completo..." <?php if(isset($_POST['nome'])) { echo 'value="' . $_POST['nome'] . '"'; } ?>>
                 </div>
             </div>
             <div class="empresa">
@@ -61,7 +61,7 @@
                             $query_empresa = "SELECT DISTINCT nome FROM empresas";
                             $result_empresa = mysqli_query($conexao, $query_empresa);
                             while ($row_empresa = mysqli_fetch_assoc($result_empresa)) {
-                                $selected = ($empresa == $row_empresa['nome']) ? 'selected' : '';
+                                $selected = (isset($_POST['empresa']) && $_POST['empresa'] == $row_empresa['nome']) ? 'selected' : '';
                                 echo '<option value="' . htmlspecialchars($row_empresa['nome']) . '" ' . $selected . '>' . htmlspecialchars($row_empresa['nome']) . '</option>';
                             }
                         ?>
@@ -78,13 +78,13 @@
                     <label for="area"><img src="../assets/briefcase.png" width="16" height="16" style="margin-right: 5px;">Área:</label>
                 </div>
                 <div class="input-area">
-                    <select name="area" id="area">
+                    <select name="area" id="area" <?php if(isset($_POST['area'])) { echo 'value="' . $_POST['area'] . '"'; } ?>>
                         <option value="">Selecione a área</option>
                         <?php
                             $query_area = "SELECT DISTINCT nome FROM area_solicitante WHERE empresa = '$empresaSelecionada'";
                             $result_area = mysqli_query($conexao, $query_area);
                             while ($row_area = mysqli_fetch_assoc($result_area)) {
-                                $selected = ($area == $row_area['nome']) ? 'selected' : '';
+                                $selected = (isset($_POST['area']) && $_POST['area'] == $row_area['nome']) ? 'selected' : '';
                                 echo '<option value="' . htmlspecialchars($row_area['nome']) . '" ' . $selected . '>' . htmlspecialchars($row_area['nome']) . '</option>';
                             }
                         ?>
@@ -101,7 +101,7 @@
                     <label for="numero"><img src="../assets/phone-call.png" width="16" height="16" style="position: relative; top: 2px; margin-right: 5px;">Telefone:</label>
                 </div>
                 <div class="input-numero">
-                    <input type="text" name="numero" id="numero" placeholder="Insira seu número de telefone..." maxlength="11" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                    <input type="text" name="numero" id="numero" placeholder="Insira seu número de telefone..." maxlength="11" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" <?php if(isset($_POST['numero'])) { echo 'value="' . $_POST['numero'] . '"'; } ?>>
                 </div>
             </div>
             <div class="email">
@@ -109,7 +109,7 @@
                     <label for="email"><img src="../assets/at.png" width="16" height="16" style="position: relative; top: 2px; margin-right: 5px;">Email:</label>
                 </div>
                 <div class="input-email">
-                    <input type="email" name="email" id="email" placeholder="Insira seu email...">
+                    <input type="email" name="email" id="email" placeholder="Insira seu email..." <?php if(isset($_POST['email'])) { echo 'value="' . $_POST['email'] . '"'; } ?> maxlength="100" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" <?php if(isset($_POST['email'])) { echo 'value="' . $_POST['email'] . '"'; } ?>>
                 </div>
             </div>
             <div class="senha">
@@ -299,10 +299,30 @@
         $(document).ready(function () {
             $('#empresa').select2();
 
+            var empresaSelecionada = $('#empresa').val();
+
+            // Faz uma chamada AJAX para buscar as áreas correspondentes
+            $.ajax({
+                url: 'buscar_areas.php', // O script PHP que buscará as áreas
+                method: 'POST',
+                data: { empresa: empresaSelecionada },
+                dataType: 'html',
+                success: function (response) {
+                    // Atualiza as opções do seletor de área com as opções recebidas
+                    $('#area').html(response);
+                    $('#area').val(valorSelecionado); // Define o valor selecionado anteriormente
+                    $('#area').select2(); // Inicializa o select2 para o novo conteúdo
+                },
+                error: function () {
+                    console.error('Erro ao buscar áreas.');
+                }
+            });
+
             // Adiciona um ouvinte de evento de alteração ao seletor de empresas
             $('#empresa').change(function () {
                 // Obtém o valor da empresa selecionada
                 var empresaSelecionada = $(this).val();
+                valorSelecionado = $('#area').val();
 
                 // Faz uma chamada AJAX para buscar as áreas correspondentes
                 $.ajax({
@@ -313,6 +333,7 @@
                     success: function (response) {
                         // Atualiza as opções do seletor de área com as opções recebidas
                         $('#area').html(response);
+                        $('#area').val(valorSelecionado); // Define o valor selecionado anteriormente
                         $('#area').select2(); // Inicializa o select2 para o novo conteúdo
                     },
                     error: function () {

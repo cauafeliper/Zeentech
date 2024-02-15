@@ -81,6 +81,7 @@ if (isset($_GET['id'])) {
             // Obter a nova data formatada
             $data30 = $hoje->format('Y-m-d');
             $linkLocal = "http://localhost/Zeentech/Agendamento-RPG/grafico/grafico31dias.php?diaInicio=".urlencode(date('Y-m-d'))."&diaFinal=".urlencode($data30);
+            $link = 'https://www.zeentech.com.br/volkswagen/Agendamento-RPG/grafico/grafico31dias.php?diaInicio='.urlencode(date('Y-m-d')).'&diaFinal='.urlencode($data30);
             
             $mail->IsHTML(true); 
             $mail->Subject = mb_convert_encoding('Novo agendamento na Pista de Teste!',"Windows-1252","UTF-8");
