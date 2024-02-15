@@ -179,7 +179,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                     <th>Uso Exclusivo?</th>
                     <th>Observação</th>
                     <th>Status</th>
-                    <th>Editar/<br>Cancelar</th>
+                    <th>Cancelar</th>
                 </tr>
                 <?php 
                     $registros_por_pagina = 10;
@@ -215,13 +215,13 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                                         AND (status LIKE '%$status%')
                                         AND (status != 'Reprovado')
                                         ORDER BY 
+                                        dia DESC,
+                                        hora_inicio DESC,
                                         CASE 
                                             WHEN status = 'Pendente' THEN 1
                                             WHEN status = 'Aprovado' THEN 2
                                             ELSE 3
-                                        END,
-                                        dia DESC,
-                                        hora_inicio DESC
+                                        END
                                         LIMIT $registros_por_pagina OFFSET $offset";
                     $result_paginacao = mysqli_query($conexao, $query_paginacao);
 
@@ -246,7 +246,6 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                             <td <?php if($row['status'] === 'Aprovado'){echo 'style="background-color: #A6C48A;"';} elseif($row['status'] === 'Pendente'){echo 'style="background-color: #FFD275;"';} else { echo 'style="background-color: #E5625E;"';}?>><?php echo $row['status']; ?></td>
                             <td>
                                 <?php if (($row['dia'] > "$hoje") OR ($row['dia'] == "$hoje" AND $row['hora_inicio'] < "$horaAtual")) { ?>
-                                    <a href="javascript:void(0);" data-id="<?php echo $row['id']; ?>"><input type="button" value="&#x270E;" class="editar"></a>
                                     <input type="hidden" name="solicitante" value="<?php echo $row['solicitante']; ?>">
                                     <a href="javascript:void(0);" data-id="<?php echo $row['id']; ?>"><input type="button" value="✖︎" class="cancelar"></a>
                                 <?php } else { ?>
@@ -325,58 +324,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
         });
 
         document.addEventListener("DOMContentLoaded", function () {
-            var botoesAprovar = document.querySelectorAll(".editar");
             var botoesCancelar = document.querySelectorAll(".cancelar");
-
-            botoesAprovar.forEach(function (botao) {
-                botao.addEventListener("click", function (event) {
-                    event.preventDefault();
-                    var linha = this.closest("tr");
-                    
-                    var id = linha.cells[0].innerText;
-                    var data = linha.cells[1].innerText;
-                    var horaInicio = linha.cells[2].innerText;
-                    var horaFim = linha.cells[3].innerText;
-                    var area_pista = linha.cells[4].innerText;
-                    var objetivo = linha.cells[5].innerText;
-                    var solicitante = linha.cells[6].innerText;
-                    var numero_solicitante = linha.cells[7].innerText;
-                    var empresa_solicitante = linha.cells[8].innerText;
-                    var area_solicitante = linha.cells[9].innerText;
-                    var exclsv = linha.cells[10].innerText;
-                    var obs = linha.cells[11].innerText;
-                    var status = linha.cells[12].innerText;
-
-                    var horario = horaInicio + " - " + horaFim;
-
-                    Swal.fire({
-                        title: "Confirmação",
-                        html: `<div style='text-align: start; padding: 0 2rem; line-height: 1.5rem'>
-                        <h3 style="text-align: center;">Você tem certeza de que deseja EDITAR o seguinte agendamento? Note que ao editar um agendamento Aprovado, ele retorna a ser Pendente e deve ser aprovado novamente.</h3><br>
-                        Id: `+id+`<br>
-                        Área da Pista: `+area_pista+`<br>
-                        Dia: `+data+`<br>
-                        Horário: `+horario+`<br>
-                        Objetivo: `+objetivo+`<br>
-                        Solicitante: `+solicitante+`<br>
-                        Numero do solicitante: `+numero_solicitante+`<br>
-                        Empresa do solicitante: `+empresa_solicitante+`<br>
-                        Área Solicitante: `+area_solicitante+`<br>
-                        É exclusivo? `+exclsv+`<br>
-                        Observação: `+obs+`<br>
-                        Status: `+status+`<br>
-                        </div>`,
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: "Sim, Editar",
-                        cancelButtonText: "Voltar",
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = "aprovar-reprovar/tela_editar.php?id=" + id;
-                        }
-                    });
-                });
-            });
 
             botoesCancelar.forEach(function (botao) {
                 botao.addEventListener("click", function (event) {
@@ -422,10 +370,31 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                         cancelButtonText: "Voltar",
                     }).then((result) => {
                         if (result.isConfirmed) {
+                            disablePage();
                             window.location.href = "aprovar-reprovar/cancelar.php?id=" + id;
                         }
                     });
                 });
             });
         });
+
+        function disablePage() {
+            // Desativa todos os elementos de entrada da página
+            document.querySelectorAll('input, select, button').forEach(function(element) {
+                element.disabled = true;
+            });
+
+            // Adicione um overlay para indicar que a página está em estado de "loading"
+            var overlay = document.createElement('div');
+            overlay.classList.add('loading-overlay'); // Adiciona a classe para identificação posterior
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            overlay.style.zIndex = '9999';
+            overlay.innerHTML = '<div style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; text-align: center; color:white;"><h1>Carregando...</h1></div>';
+            document.body.appendChild(overlay);
+        }
     </script>

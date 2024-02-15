@@ -14,6 +14,20 @@
     <link rel="shortcut icon" href="../imgs/logo-volks.png" type="image/x-icon">
 </head>
 <body>
+    <script>
+        var overlay = document.createElement('div');
+        overlay.classList.add('loading-overlay'); // Adiciona a classe para identificação posterior
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.opacity = '1';
+        overlay.style.backgroundColor = '#c9c9c9';
+        overlay.style.zIndex = '1';
+        overlay.innerHTML = '<div style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; text-align: center; color:black;"><h1>Carregando...</h1></div>';
+        document.body.appendChild(overlay);
+    </script>
 <?php
 
 if (isset($_GET['id'])) {
@@ -69,6 +83,7 @@ if (isset($_GET['id'])) {
                 echo '<script>
                     Swal.fire({
                         icon: "success",
+                        zindex: 2,
                         title: "SUCESSO!",
                         text: "Agendamento reprovado com sucesso!",
                         confirmButtonText: "OK",

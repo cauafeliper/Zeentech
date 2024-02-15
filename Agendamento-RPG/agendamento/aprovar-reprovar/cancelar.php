@@ -60,7 +60,7 @@ if (isset($_GET['id'])) {
             $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
             $mail->AddAddress($email); 
 
-            $mail->Subject = mb_convert_encoding("Solicitação Cancelada!","Windows-1252","UTF-8"); 
+            $mail->Subject = mb_convert_encoding("Solicitação Cancelada com sucesso!","Windows-1252","UTF-8"); 
             $mail->Body = mb_convert_encoding("Você cancelou sua solicitação de agendamento da área da pista $area_pista para o dia $dia de $hora_inicio até $hora_fim!<br><br>Atenciosamente,<br>Equipe Zeentech.","Windows-1252","UTF-8"); 
 
             $mail->send();

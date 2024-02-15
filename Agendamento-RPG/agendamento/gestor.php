@@ -407,6 +407,7 @@
                         cancelButtonText: "Voltar",
                     }).then((result) => {
                         if (result.isConfirmed) {
+                            disablePage();
                             window.location.href = "aprovar-reprovar/aprovar.php?id=" + id;
                         }
                     });
@@ -463,6 +464,26 @@
                 });
             });
         });
+
+        function disablePage() {
+            // Desativa todos os elementos de entrada da página
+            document.querySelectorAll('input, select, button').forEach(function(element) {
+                element.disabled = true;
+            });
+
+            // Adicione um overlay para indicar que a página está em estado de "loading"
+            var overlay = document.createElement('div');
+            overlay.classList.add('loading-overlay'); // Adiciona a classe para identificação posterior
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            overlay.style.zIndex = '9999';
+            overlay.innerHTML = '<div style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; text-align: center; color:white;"><h1>Carregando...</h1></div>';
+            document.body.appendChild(overlay);
+        }
     </script>
 
 </body>
