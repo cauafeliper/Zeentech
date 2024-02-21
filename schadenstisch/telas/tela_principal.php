@@ -287,30 +287,29 @@
                 });
             }
 
-            $(document).ready(function() {
-                $(document).on('keyup', function(event) {
-                    if (event.keyCode === 13 && $('.editavel:focus').length > 0) { // Verifica se a tecla pressionada foi Enter e se há algum elemento com a classe .editavel focado
-                        var novoValor = $('.editavel:focus').val(); // Obtém o novo valor digitado
-                        var idItem = $('.editavel:focus').closest('tr').attr('item'); // Obtém o ID do item
-                        // Envia os dados atualizados para o servidor via AJAX
-                        $.ajax({
-                            url: 'codigos/tabela.php',
-                            type: 'POST',
-                            data: {
-                                item: idItem, // Alterado para 'item'
-                                coluna: 'rank', // Nome da coluna que está sendo editada
-                                valor: novoValor
-                            },
-                            success: function(response) {
-                                console.log(response); // Exibe a resposta do servidor no console
-                            },
-                            error: function(xhr, status, error) {
-                                console.error(xhr.responseText); // Exibe mensagens de erro no console
-                            }
-                        });
-                    }
-                });
-            });
+            $(document).on('keyup', function(event) {
+    if (event.keyCode === 13 && $('.editavel:focus').length > 0) {
+        var novoValor = $('.editavel:focus').val();
+        var idItem = $('.editavel:focus').closest('tr').find('td:first-child').text(); // Aqui você pode precisar ajustar para obter o valor correto do ID do item
+        $.ajax({
+            url: 'codigos/tabela.php',
+            type: 'POST', // Certifique-se de que está enviando via POST
+            data: {
+                item: idItem, // Enviar o ID do item
+                coluna: 'rank',
+                valor: novoValor
+            },
+            success: function(response) {
+                console.log(response); // Verificar a resposta do servidor no console do navegador
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText); // Exibir mensagens de erro no console do navegador
+            }
+        });
+    }
+});
+
+
         </script>
     </footer>
 </body>

@@ -158,42 +158,47 @@ if (isset($_SESSION['filtro_fg']) && $_SESSION['filtro_fg'] != 'Todos') {
 }
 // Adicione mais condições de filtro para outras colunas conforme necessário
 
-// Execute a consulta SQL
-$result = $conexao->query($query);
-
-// Verifica se o método da requisição é POST e se os dados necessários foram recebidos
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['item']) && isset($_POST['coluna']) && isset($_POST['valor'])) {
-    // Obtém os dados enviados via POST
-    $id = $_POST['item']; // Alterado para 'item'
+// Verificar se os dados foram enviados via POST
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Atribuir os valores do POST às variáveis adequadas
+    $item = $_POST['item'];
     $coluna = $_POST['coluna'];
-    $novoValor = $_POST['valor'];
-
-    $query = "UPDATE kpm SET $coluna = ? WHERE item = ?"; // Alterado para 'item'
-    // Prepara e executa a declaração
-    $stmt = mysqli_prepare($conexao, $query);
+    $valor = $_POST['valor'];
+    
+    // Montar a consulta SQL para atualizar a tabela
+    $query = "UPDATE kpm SET $coluna = ? WHERE item = ?";
+    
+    // Preparar a declaração SQL
+    $stmt = $conexao->prepare($query);
+    
+    // Verificar se a preparação da declaração foi bem-sucedida
     if ($stmt) {
-        mysqli_stmt_bind_param($stmt, "si", $novoValor, $id);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-
-        // Se a atualização foi bem-sucedida, você pode enviar uma resposta de sucesso de volta ao cliente
-        echo "Dados atualizados com sucesso!";
+        // Vincular os parâmetros e executar a declaração
+        $stmt->bind_param("ss", $valor, $item); // Supondo que o ID do item seja uma string; ajuste se necessário
+        $stmt->execute();
+        
+        // Verificar se a atualização foi bem-sucedida
+        if ($stmt->affected_rows > 0) {
+            // Se a atualização foi bem-sucedida, exibir uma mensagem de sucesso ou fazer qualquer outra coisa que seja apropriada para o seu caso
+            echo "Atualização bem-sucedida!";
+        } else {
+            // Se nenhum registro foi afetado, exibir uma mensagem de erro ou fazer qualquer outra coisa que seja apropriada para o seu caso
+            echo "Nenhum registro foi atualizado.";
+        }
+        
+        // Fechar a declaração
+        $stmt->close();
     } else {
-        // Se houver um erro na preparação da consulta, envie uma mensagem de erro de volta ao cliente
-        echo "Erro ao preparar a consulta: " . mysqli_error($conexao);
+        // Se a preparação da declaração falhou, exibir uma mensagem de erro ou fazer qualquer outra coisa que seja apropriada para o seu caso
+        echo "Erro ao preparar a declaração SQL: " . $conexao->error;
     }
-
-    // Fecha a conexão com o banco de dados
-    mysqli_close($conexao);
 } else {
-    // Se os dados necessários não foram recebidos, envie uma mensagem de erro de volta ao cliente
-    echo "Dados incompletos ou inválidos recebidos!";
+    // Se os dados não foram enviados via POST, exibir uma mensagem de erro ou fazer qualquer outra coisa que seja apropriada para o seu caso
+    echo "Erro: Os dados não foram enviados via POST.";
 }
 
-
-
-
-
+// Execute a consulta SQL
+$result = $conexao->query($query);
 // Exibir os resultados
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
