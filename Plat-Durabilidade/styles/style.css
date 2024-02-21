@@ -1,0 +1,388 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: "ztc";
+    src: url(../font/Circular-Std-Bold.ttf);
+}
+
+:root {
+    --claro: #ED392A;
+    --escuro: grey;
+    --branco: white;
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-family: "ztc";
+}
+
+a {
+    text-decoration: initial;
+    color: initial;
+}                                                                            
+                                                                                   /*Configurações Gerais*/      
+body {
+    background-color: var(--escuro);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.logo__fundo {
+    height: 800px;
+    position: absolute;
+    bottom: -220px;
+    right: -220px;
+    z-index: -3;
+    opacity: 0.3;
+}
+/************************************************************************************************************************************************************************/
+header {
+    background-color: var(--claro);
+    width: 558px;
+    height: 76px;
+    border-bottom-right-radius: 100px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: grid;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.5);
+}
+                                                                                    /*Organizando o Header*/
+header ul {
+    display: flex;
+}
+
+header li {
+    display: inline-block;
+    height: 60px;
+    width: 60px;
+    line-height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 500px;
+}
+
+header a {
+    margin-right: 30px;
+}
+
+header li:hover {
+    transition-duration: 0.3s;
+    background-color: var(--branco);
+}
+                                                                                    /*Organizando o Header*/
+header li:not(:hover) {
+    transition-duration: 0.3s;
+}
+
+header a:first-child {
+    margin-left: 10px;
+}
+
+header a:last-child {
+    margin: 0;
+}
+/************************************POP-UP explicação*******************************************************/
+.exp {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    background-color: white;
+    width: 350px;
+    height: 76px;
+    font-size: xx-large;
+    font-weight: bold;
+    box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.5);      /*Classe geral da div de explicação*/
+    padding-right: 40px;
+    border-bottom-right-radius: 100px;
+    z-index: -1;
+}
+/************************/
+.pri {
+    opacity: 0;
+    transition: opacity 0.5s ease, left 0.5s ease;
+    position: absolute;
+    left: 0px;
+    top: 0;    
+    width: 450px;                                          /*ENGENHARIA*/
+}
+
+.pri__botao:hover + .pri {
+    opacity: 1;
+    left: 460px;
+}
+/************************/
+.eng {
+    opacity: 0;
+    transition: opacity 0.5s ease, left 0.5s ease;
+    position: absolute;
+    left: 0px;
+    top: 0;                                              /*ENGENHARIA*/
+}
+
+.eng__botao:hover + .eng {
+    opacity: 1;
+    left: 480px;
+}
+/************************/
+.rod {
+    opacity: 0;
+    transition: opacity 0.5s ease, left 0.5s ease;
+    position: absolute;
+    left: 0px;
+    top: 0;
+}                                                       /*RODAGEM*/
+
+.rod__botao:hover + .rod {
+    opacity: 1;
+    left: 450px;
+}
+/************************/
+.fro {
+    opacity: 0;
+    transition: opacity 0.5s ease, left 0.5s ease;
+    position: absolute;
+    left: 0px;
+    top: 0;
+}                                                       /*FROTA*/
+
+.fro__botao:hover + .fro {
+    opacity: 1;
+    left: 380px;
+}
+/************************/
+.ctv {
+    opacity: 0;
+    transition: opacity 0.5s ease, left 0.5s ease;
+    position: absolute;
+    left: 0px;
+    top: 0;
+}                                                       /*CTV*/
+
+.ctv__botao:hover + .ctv {
+    opacity: 1;
+    left: 360px;
+}
+/**********************/
+.des {
+    opacity: 0;
+    transition: opacity 0.5s ease, left 0.5s ease;
+    position: absolute;
+    left: 0px;
+    top: 0;
+}                                                       /*DESENVOLVIMENTO*/
+
+.des__botao:hover + .des {
+    opacity: 1;
+    left: 490px;
+    width: 440px;
+}
+/**********************/
+.exp__baixo {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    background-color: white;
+    width: 350px;
+    height: 76px;
+    font-size: xx-large;
+    font-weight: bold;
+    box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.5);      /*Classe geral da div de explicação*/
+    padding-right: 40px;
+    border-bottom-right-radius: 100px;
+    z-index: -1;
+}
+
+.dur {
+    opacity: 0;
+    transition: opacity 0.3s ease, left 0.5s ease;
+    position: absolute;
+    left: -500px;
+    top: 0;
+}                                                       /*DASHBOARD DURABILIDADE*/
+
+.dur__botao:hover + .dur {
+    opacity: 1;
+    left: 78px;
+    width: 400px;
+}
+/**********************/
+.osi {
+    opacity: 0;
+    transition: opacity 0.5s ease, left 0.5s ease;
+    position: absolute;
+    left: -300px;
+    top: 0;
+    width: 140px;
+}                                                       /*PLATAFORMA DE OSI*/
+
+.osi__botao:hover + .osi {
+    opacity: 1;
+    left: 78px;
+}
+/**********************/
+.val {
+    opacity: 0;
+    transition: opacity 0.3s ease, left 0.5s ease;
+    position: absolute;
+    left: -600px;
+    top: 0px;
+}                                                       /*AGENDAMENTO DE VALETA*/
+
+.val__botao:hover + .val {
+    opacity: 1;
+    left: 78px;
+    width: 400px;
+}
+/*****************************************Fim POP-UP de explicação************************************************/
+.div__header {
+    background-color: var(--claro);
+    width: 78px;
+    height: 265px;
+    border-bottom-right-radius: 100px;
+    position: absolute;
+    left: 0;
+    top: 76px;
+    box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.5);
+}
+
+.div__header ul {
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+                                                                                    /*Organizando o Header*/
+.div__header li {
+    display: flex;
+    height: 60px;
+    width: 60px;
+    border-radius: 500px;
+    align-items: center;
+    justify-content: center;
+}
+
+.div__header a {
+    margin-top: 20px;
+}
+
+.div__header a:first-child {
+    margin-top: 0;
+}
+
+.div__header li:hover {
+    transition-duration: 0.3s;
+    background-color: var(--branco);
+}
+
+.div__header li:not(:hover) {
+    transition-duration: 0.3s;
+}
+/************************************************************************************************************************************************************************/
+main {
+    width: 1614px;
+    height: 801px;
+    position: absolute;
+    bottom: 25px; 
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 15px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "parte__cima"
+      "parte__baixo";
+      z-index: -2;
+  }
+  
+  .parte__cima {  display: grid;
+    grid-template-columns: 601px 545px 437px;
+    grid-template-rows: 1fr;
+    gap: 0px 15px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "bloco1 bloco2 bloco3";
+    grid-area: parte__cima;
+  }
+  
+  .bloco1 { 
+    grid-area: bloco1;
+}
+  
+  .bloco2 { 
+    grid-area: bloco2;
+}
+  
+  .bloco3 { 
+    grid-area: bloco3;
+}
+  
+  .parte__baixo {  display: grid;
+    grid-template-columns: 847px 301px 437px;
+    grid-template-rows: 1fr;
+    gap: 0px 14px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "bloco4 bloco5 bloco6";
+    grid-area: parte__baixo;
+  }
+  
+  .bloco4 { 
+    grid-area: bloco4;
+}
+  
+  .bloco5 { 
+    grid-area: bloco5;
+}
+  
+  .bloco6 { 
+    grid-area: bloco6;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 10px 10px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "bloco6_cima"
+      "bloco6_baixo";
+}
+
+.bloco6_cima {
+    grid-area: bloco6_cima;
+}
+
+.bloco6_baixo {
+    grid-area: bloco6_baixo;
+}
+
+.blocos {
+    background-color: white;
+    border-radius: 15px;
+}
+
+.blocos:hover {
+    background-color: lightgray;
+    transition-duration: 0.3s;
+}
+
+.blocos:not(:hover) {
+    transition-duration: 0.3s;
+}
