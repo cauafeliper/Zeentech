@@ -3,8 +3,9 @@
     <th style="display: none;">Item</th>
     <th>Programa</th>
     <th>
-        <select name="" id="">
+        <select name="select_n_problem" id="select_n_problem" onchange="armazenar_n_problem(this.value)">
             <option value="">Nº do Problema</option>
+            <option value="Todos">Todos</option>
             <?php 
                 $query = "SELECT DISTINCT n_problem FROM kpm";
                 $result = $conexao->query($query);
@@ -15,8 +16,9 @@
         </select>
     </th>
     <th>
-        <select name="" id="">
+        <select name="select_rank" id="select_rank" onchange="armazenar_rank(this.value)">
             <option value="">Ranking</option>
+            <option value="Todos">Todos</option>
             <?php 
                 $query = "SELECT DISTINCT rank FROM kpm";
                 $result = $conexao->query($query);
@@ -27,8 +29,9 @@
         </select>
     </th>
     <th>
-        <select name="" id="">
+        <select name="select_resumo" id="select_resumo" onchange="armazenar_resumo(this.value)">
             <option value="">Resumo</option>
+            <option value="Todos">Todos</option>
             <?php 
                 $query = "SELECT DISTINCT resumo FROM kpm";
                 $result = $conexao->query($query);
@@ -39,8 +42,9 @@
         </select>
     </th>
     <th>
-        <select name="" id="">
+        <select name="select_veiculo" id="select_veiculo" onchange="armazenar_veiculo(this.value)">
             <option value="">Veículo</option>
+            <option value="Todos">Todos</option>
             <?php 
                 $query = "SELECT DISTINCT veiculo FROM kpm";
                 $result = $conexao->query($query);
@@ -51,8 +55,9 @@
         </select>
     </th>
     <th>
-        <select name="" id="">
+        <select name="select_status_kpm" id="select_status_kpm" onchange="armazenar_status_kpm(this.value)">
             <option value="">Status KPM</option>
+            <option value="Todos">Todos</option>
             <?php 
                 $query = "SELECT DISTINCT status_kpm FROM kpm";
                 $result = $conexao->query($query);
@@ -64,8 +69,9 @@
     </th>
     <th>Status Reunião</th>
     <th>
-        <select name="" id="">
+        <select name="select_fg" id="select_fg" onchange="armazenar_fg(this.value)">
             <option value="">FG</option>
+            <option value="Todos">Todos</option>
             <?php 
                 $query = "SELECT DISTINCT fg FROM kpm";
                 $result = $conexao->query($query);
@@ -76,10 +82,11 @@
         </select>
     </th>
     <th>
-        <select name="" id="">
+        <select name="select_dias_aberto" id="select_dias_aberto" onchange="armazenar_dias_aberto(this.value)">
             <option value="">Dias em Aberto</option>
+            <option value="Todos">Todos</option>
             <?php 
-                $query = "SELECT DISTINCT dias_aberto FROM kpm";
+                $query = "SELECT DISTINCT dias_aberto FROM kpm ORDER BY dias_aberto ASC";
                 $result = $conexao->query($query);
                 while ($row = $result->fetch_assoc()) {
                     echo '<option value="' . $row['dias_aberto'] . '">' . $row['dias_aberto'] . '</option>';
@@ -87,7 +94,7 @@
             ?>
         </select>
     </th>
-    <th >Due Date</th>
+    <th>Due Date</th>
 </tr>
 <?php
 
@@ -154,15 +161,50 @@ if (isset($_SESSION['filtro_fg']) && $_SESSION['filtro_fg'] != 'Todos') {
 // Execute a consulta SQL
 $result = $conexao->query($query);
 
+// Verifica se o método da requisição é POST e se os dados necessários foram recebidos
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['item']) && isset($_POST['coluna']) && isset($_POST['valor'])) {
+    // Obtém os dados enviados via POST
+    $id = $_POST['item']; // Alterado para 'item'
+    $coluna = $_POST['coluna'];
+    $novoValor = $_POST['valor'];
+
+    // Prepara a consulta SQL para atualizar o valor na tabela
+    $query = "UPDATE kpm SET $coluna = ? WHERE item = ?"; // Alterado para 'item'
+
+    // Prepara e executa a declaração
+    $stmt = mysqli_prepare($conexao, $query);
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, "si", $novoValor, $id);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        // Se a atualização foi bem-sucedida, você pode enviar uma resposta de sucesso de volta ao cliente
+        echo "Dados atualizados com sucesso!";
+    } else {
+        // Se houver um erro na preparação da consulta, envie uma mensagem de erro de volta ao cliente
+        echo "Erro ao preparar a consulta: " . mysqli_error($conexao);
+    }
+
+    // Fecha a conexão com o banco de dados
+    mysqli_close($conexao);
+} else {
+    // Se os dados necessários não foram recebidos, envie uma mensagem de erro de volta ao cliente
+    echo "Dados incompletos ou inválidos recebidos!";
+}
+
+
+
+
+
 // Exibir os resultados
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         ?>
         <tr>
-            <td style="display: none;"><?php echo $row['item']; ?></td>
+            <td style="display: none;" value="<?php echo $row['item']; ?>"><?php echo $row['item']; ?></td>
             <td value="<?php echo $row['programa']; ?>" id="td_tippy"><?php echo $row['programa']; ?></td>
             <td value="<?php echo $row['n_problem']; ?>" id="td_tippy"><?php echo $row['n_problem']; ?></td>
-            <td value="<?php echo $row['rank']; ?>" id="td_tippy"><?php echo $row['rank']; ?></td>
+            <td value="<?php echo $row['rank']; ?>" class="td_tippy"><input type="number" name="input_rank" class="input__rank editavel" value="<?php echo $row['rank']; ?>"></td>
             <td value="<?php echo $row['resumo']; ?>" id="td_tippy"><?php echo $row['resumo']; ?></td>
             <td value="<?php echo $row['veiculo']; ?>" id="td_tippy"><?php echo $row['veiculo']; ?></td>
             <td value="<?php echo $row['status_kpm']; ?>" id="td_tippy"><?php echo $row['status_kpm']; ?></td>

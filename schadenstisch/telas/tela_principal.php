@@ -141,6 +141,32 @@
                     });
                 });
 
+                $('.div__botoes_programas').on('click', 'button', function() {
+                    var valorBotao = $(this).val();
+                    $.ajax({
+                        url: 'codigos/tabela.php',
+                        type: 'GET',
+                        data: {filtro_programa: valorBotao},
+                        success: function(response) {
+                            // Atualize a tabela com os dados recebidos do servidor
+                            $('#tabela-kpm').html(response);
+                        }
+                    });
+                });
+// ------------------------------------------------------------------------------------------------------------------------------------
+                $('.filtros').on('click', '.filtro-btn', function() {
+                    var valorBotao = $(this).text();
+                    $.ajax({
+                        url: 'codigos/tabela.php',
+                        type: 'GET',
+                        data: {filtro_status_reuniao: valorBotao},
+                        success: function(response) {
+                            // Atualize a tabela com os dados recebidos do servidor
+                            $('#tabela-kpm').html(response);
+                        }
+                    });
+                });
+
                 $('.filtros').on('click', '.filtro-btn', function() {
                     var valorBotao = $(this).text();
                     $.ajax({
@@ -154,20 +180,137 @@
                     });
                 });
             });
-                
-                // Use a delegação de eventos para os botões dentro de div__botoes_programas
-                $('.div__botoes_programas').on('click', 'button', function() {
-                    var valorBotao = $(this).val();
-                    $.ajax({
-                        url: 'codigos/tabela.php',
-                        type: 'GET',
-                        data: {filtro_programa: valorBotao},
-                        success: function(response) {
-                            // Atualize a tabela com os dados recebidos do servidor
-                            $('#tabela-kpm').html(response);
-                        }
-                    });
+//---------------------------------------------------------------------------------------------------------------------------------
+
+            function armazenar_n_problem(valor) {
+                $.ajax({
+                    url: 'codigos/tabela.php',
+                    type: 'GET',
+                    data: { filtro_n_problem: valor },
+                    success: function(response) {
+                        // Atualize a tabela com os dados recebidos do servidor
+                        $('#tabela-kpm').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
                 });
+            }
+
+            function armazenar_rank(valor) {
+                $.ajax({
+                    url: 'codigos/tabela.php',
+                    type: 'GET',
+                    data: { filtro_rank: valor },
+                    success: function(response) {
+                        // Atualize a tabela com os dados recebidos do servidor
+                        $('#tabela-kpm').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+
+            function armazenar_resumo(valor) {
+                $.ajax({
+                    url: 'codigos/tabela.php',
+                    type: 'GET',
+                    data: { filtro_resumo: valor },
+                    success: function(response) {
+                        // Atualize a tabela com os dados recebidos do servidor
+                        $('#tabela-kpm').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+
+            function armazenar_veiculo(valor) {
+                $.ajax({
+                    url: 'codigos/tabela.php',
+                    type: 'GET',
+                    data: { filtro_veiculo: valor },
+                    success: function(response) {
+                        // Atualize a tabela com os dados recebidos do servidor
+                        $('#tabela-kpm').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+
+            function armazenar_status_kpm(valor) {
+                $.ajax({
+                    url: 'codigos/tabela.php',
+                    type: 'GET',
+                    data: { filtro_status_kpm: valor },
+                    success: function(response) {
+                        // Atualize a tabela com os dados recebidos do servidor
+                        $('#tabela-kpm').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+
+            function armazenar_fg(valor) {
+                $.ajax({
+                    url: 'codigos/tabela.php',
+                    type: 'GET',
+                    data: { filtro_fg: valor },
+                    success: function(response) {
+                        // Atualize a tabela com os dados recebidos do servidor
+                        $('#tabela-kpm').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+
+            function armazenar_dias_aberto(valor) {
+                $.ajax({
+                    url: 'codigos/tabela.php',
+                    type: 'GET',
+                    data: { filtro_dias_aberto: valor },
+                    success: function(response) {
+                        // Atualize a tabela com os dados recebidos do servidor
+                        $('#tabela-kpm').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+
+            $(document).ready(function() {
+                $(document).on('keyup', function(event) {
+                    if (event.keyCode === 13 && $('.editavel:focus').length > 0) { // Verifica se a tecla pressionada foi Enter e se há algum elemento com a classe .editavel focado
+                        var novoValor = $('.editavel:focus').val(); // Obtém o novo valor digitado
+                        var idItem = $('.editavel:focus').closest('tr').attr('item'); // Obtém o ID do item
+                        // Envia os dados atualizados para o servidor via AJAX
+                        $.ajax({
+                            url: 'codigos/tabela.php',
+                            type: 'POST',
+                            data: {
+                                item: idItem, // Alterado para 'item'
+                                coluna: 'rank', // Nome da coluna que está sendo editada
+                                valor: novoValor
+                            },
+                            success: function(response) {
+                                console.log(response); // Exibe a resposta do servidor no console
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText); // Exibe mensagens de erro no console
+                            }
+                        });
+                    }
+                });
+            });
         </script>
     </footer>
 </body>
