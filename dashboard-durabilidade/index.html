@@ -18,27 +18,34 @@
             <img src="imgs/logo-dur-cla.png" alt="" style="margin-left: 30px;">
         </div>
         <div class="header__img logos__grid">
-            <div style="width: 203px; height: 35px;">
-                <img src="imgs/zeentech-logo.png" alt="logo-zeentech" class="img" style="width: 203px; height: 35px;">
+            <div style="width: 150px; height: 45px;">
+                <img src="imgs/zeentech-logo.png" alt="logo-zeentech" class="img" style="width: 240px; height: 40px;">
                 <span class="idt">IDT</span>
             </div>
-            <img src="imgs/truckBus.png" alt="logo-vw" style="float: right; height: 90px; margin-right: 30px;">
-            <img src="imgs/toca.png" alt="toca-papainoel" class="toca">
+            <img src="imgs/truckBus.png" alt="logo-vw" style="float: right; height: 110px; margin-right: 30px;">
         </div>
     </header>
     <main>
         <div class="botoes">
-            <canvas id="myChart" style="position: absolute;"></canvas>
-            <img src="imgs/rodagem.png" alt="rodagem" id="rod" style="position: relative; right: -260px; top: 110px;" class="img__rod" onclick="openPopup(0)">
-            <span class="exp__rod"><strong>Quadro de Rodagem</strong><br>Quadro de Rodagem mostra status de todos veículos durabilidade como: Km de teste, Motorista atual, turnos consecutivos parados, localização, eng. responsável, ordem prioridade etc.</span>
-            <img src="imgs/schadenstisch.png" alt="schadenstisch" id="scha" style="position: relative; right: 74px; top: 270px;" class="img__scha" onclick="openPopup(1)">
-            <span class="exp__scha"><strong>Schadenstisch</strong><br>Indicador Schadenstisch consiste em mostrar a evolução dos status dos KPM's, por diferentes FG's, total kpm fechados, e responsáveis semanalmente.</span>
-            <img src="imgs/oleo.png" alt="oleo" id="oleo" style="position: relative; bottom: 110px; left: 50px;" class="img__oleo" onclick="openPopup(2)">
-            <span class="exp__oleo"><strong>Vareta de Óleo</strong><br>Controle de Óleo na Vareta consiste em controlar e analisar o nível de óleo dos veículos e acompanhar o consumo atual com nº dos lacres dos mesmos.</span>
+            <div class="moto" onclick="openPopup(0)" id="moto">
+                <img src="imgs/motorista.png" alt="motorista">
+            </div>
+            
+            <div class="mapa" onclick="openPopup(1)"  id="mapa">
+                <img src="imgs/mapa.png" alt="mapa">
+            </div>
+
+            <div class="veiculo" onclick="openPopup(2)" id="veiculo">
+                <img src="imgs/rodagem.png" alt="veiculos">
+            </div>
+
+            <div class="situ" onclick="openPopup(3)" id="situ">
+                <img src="imgs/situ.png" alt="situ">
+            </div>
         </div>
     </main>
-    <img src="imgs/caminhao-2.png" alt="caminhao1" class="caminhao__1 caminhao__sumir">
-    <img src="imgs/caminhao.png" alt="caminhao2" class="caminhao__2 caminhao__sumir">
+    <img src="imgs/caminhao-2.png" alt="caminhao1" class="caminhao__1">
+    <img src="imgs/caminhao.png" alt="caminhao2" class="caminhao__2">
     <div class="modal" id="myModal" style="display: none;">
         <button onclick="toggleAutoChange()" id="btnAutoChange" class="botao__loop botoes__iframe">
             <img src="imgs/refresh-icon.png" width="24" height="24">
@@ -49,84 +56,12 @@
         <iframe id="popupIframe" src=""></iframe>
     </div>
     <script>
-        const ctx = document.getElementById('myChart').getContext('2d');
-    
-        const data = {
-            datasets: [{
-                data: [1, 1, 1],
-                backgroundColor: ['#010e24', '#010e24', '#010e24'],
-                borderColor: ['#001e50', '#001e50', '#001e50'],
-                borderWidth: 10
-            }]
-        };
-    
-        const chart = new Chart(ctx, {
-            type: 'pie',
-            data: data,
-            options: {
-                plugins: {
-                    tooltip: {
-                        enabled: false // Desativa os tooltips
-                    }
-                },
-                legend: {
-                    display: false
-                },
-                onClick: handleClick // Chama a função handleClick quando o gráfico é clicado
-            }
-        });
-    
-        // Evento mousemove para detectar quando o cursor está sobre uma fatia
-        chart.canvas.addEventListener('mousemove', function (evt) {
-            const activePoints = chart.getElementsAtEventForMode(evt, 'point', { intersect: true });
-    
-            if (activePoints.length > 0) {
-                const activeElement = activePoints[0];
-                const activeIndex = activeElement.index;
-    
-                chart.config.data.datasets[0].hoverBackgroundColor = chart.config.data.datasets[0].backgroundColor.map((color, index) => {
-                    return (index === activeIndex) ? '#565E6D' : color; // Define a cor da fatia que está sob o cursor como branco
-                });
-                chart.update();
-            } else {
-                chart.config.data.datasets[0].hoverBackgroundColor = '';
-                chart.update();
-            }
-        });
-    
-        function handleClick(event) {
-            const activeElements = chart.getElementsAtEventForMode(event, 'point', { intersect: true });
-    
-            if (activeElements.length > 0) {
-                const clickedElementIndex = activeElements[0].index;
-    
-                switch (clickedElementIndex) {
-                    case 0:
-                        openPopup(0);
-                        break;
-                    case 1:
-                        openPopup(1);
-                        break;
-                    case 2:
-                        openPopup(2);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-    
-        function openPopup(index) {
-            // Implemente o que deseja fazer ao clicar na seção correspondente aqui
-            console.log(`Seção ${index + 1} clicada!`);
-        }
-    </script>
-    <script>
         let currentIframeIndex = 0;
         const iframeSources = [
-            'https://app.powerbi.com/reportEmbed?reportId=0e667a6f-23c4-48ee-8a73-940ccb239b68&autoAuth=true&ctid=959ebf68-bcaf-4dec-b44a-6934403eb9f3',
-            'https://app.powerbi.com/reportEmbed?reportId=ab18bd18-e88d-4326-bdcc-e1525de6034c&autoAuth=true&ctid=959ebf68-bcaf-4dec-b44a-6934403eb9f3',
-            'https://app.powerbi.com/reportEmbed?reportId=13b403db-f2ef-49b0-ba12-71fc6273536f&autoAuth=true&ctid=959ebf68-bcaf-4dec-b44a-6934403eb9f3'
+            'https://app.powerbi.com/reportEmbed?reportId=ae1597ce-7dac-4d66-a3b0-88235fd0fe4a&autoAuth=true&ctid=959ebf68-bcaf-4dec-b44a-6934403eb9f3',
+            'https://app.powerbi.com/reportEmbed?reportId=3646d241-8f7b-4832-95e8-7e519db59d1e&autoAuth=true&ctid=959ebf68-bcaf-4dec-b44a-6934403eb9f3',
+            'https://app.powerbi.com/reportEmbed?reportId=985fad99-3a52-43d4-84d9-b4d6f8dabf27&autoAuth=true&ctid=959ebf68-bcaf-4dec-b44a-6934403eb9f3',
+            'https://app.powerbi.com/reportEmbed?reportId=d7b78371-d976-4f1d-9245-c0d8ec205ea0&autoAuth=true&ctid=959ebf68-bcaf-4dec-b44a-6934403eb9f3'
         ];
 
         function openPopup(index) {
@@ -134,8 +69,8 @@
             var popupIframe = document.getElementById('popupIframe');
             popupIframe.src = iframeSources[index];
             document.getElementById('myModal').style.display = 'block';
-            document.querySelector('.caminhao__1').style.right = '-380px';
-            document.querySelector('.caminhao__2').style.left = '-380px';
+            document.querySelector('.caminhao__1').style.right = '-350px';
+            document.querySelector('.caminhao__2').style.left = '-410px';
         }
 
         function closePopup() {
@@ -157,7 +92,11 @@
             const button = document.getElementById('btnAutoChange');
 
             if (!isAutoChangeEnabled) {
-                autoChangeInterval = setInterval(clickNextButton, 40000); // Clicar a cada 1 minuto (60000 milissegundos)
+                if (currentIframeIndex === 3) {
+                    autoChangeInterval = setInterval(clickNextButton, 450000); // Define um intervalo maior para o terceiro iframe (índice 2)
+                } else {
+                    autoChangeInterval = setInterval(clickNextButton, 40000); // Intervalo padrão para os outros iframes
+                }
                 button.style.backgroundColor = '#158544'; // Define a cor de fundo para indicar que está ativado
             } else {
                 clearInterval(autoChangeInterval);
@@ -170,6 +109,36 @@
         function clickNextButton() {
             document.getElementById('btnNext').click(); // Simula um clique no botão de próxima iframe
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Inicialize o tippy.js programaticamente referenciando por ID
+            tippy('#moto', {
+                content: '<strong>Drivers</strong><br>Consiste na visualização dos motoristas e suas situações, como quantidades de motoristas rodando, em outras atividades, esperando liberação de veículo, dentre outros status.',
+                allowHTML: true,
+                // Outras opções de posicionamento e configurações
+            });
+
+            tippy('#mapa', {
+                content: '<strong>Maps</strong><br>Possui o objetivo de ilustrar visualmente os veículos que estão posicionados nas dependências da Pista de teste, Fazenda VWCO e Base-Zeentech.',
+                allowHTML: true,
+                placement: 'bottom'
+                // Outras opções de posicionamento e configurações
+            });
+            tippy('#veiculo', {
+                content: '<strong>Vehicles</strong><br>Consiste em mostrar o status de rodagem de cada veículo em teste de durabilidade.',
+                allowHTML: true,
+                // Outras opções de posicionamento e configurações
+            });
+
+            tippy('#situ', {
+                content: '<strong>Situation</strong><br>Dashboard com o objetivo de informar o status de rodagem dos veículos, tal como sua posição, observações, Km/ciclo, dentre outras informações.',
+                allowHTML: true,
+                placement: 'bottom'
+                // Outras opções de posicionamento e configurações
+            });
+
+            // Faça o mesmo para outros elementos
+        });
     </script>
 </body>
 </html>

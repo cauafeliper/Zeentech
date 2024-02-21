@@ -1,0 +1,7 @@
+[25-Jan-2024 13:06:17 America/Fortaleza] PHP Fatal error:  Uncaught Error: Class "PHPMailer\PHPMailer\Exception" not found in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/PHPMailer-master/src/PHPMailer.php:2063
+Stack trace:
+#0 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/PHPMailer-master/src/PHPMailer.php(1689): PHPMailer\PHPMailer\PHPMailer->smtpSend('Date: Thu, 25 J...', 'Sua solicita\xE7\xE3o...')
+#1 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/PHPMailer-master/src/PHPMailer.php(1523): PHPMailer\PHPMailer\PHPMailer->postSend()
+#2 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/agendamento/aprovar-reprovar/aprovar.php(54): PHPMailer\PHPMailer\PHPMailer->send()
+#3 {main}
+  thrown in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/PHPMailer-master/src/PHPMailer.php on line 2063

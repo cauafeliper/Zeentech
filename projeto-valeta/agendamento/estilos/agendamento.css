@@ -1,0 +1,403 @@
+@charset "UTF-8";
+
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-family: 'Heebo', sans-serif;
+}
+
+a {
+    text-decoration: initial;
+    color: initial;
+}
+/*=================================================================================================================================================================*/
+body {
+    background-image: url("../../imgs/background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    height: 100vh;
+    width: 100%;
+
+    margin: 0;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+    height: 85px;
+
+    padding: 10px;
+
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+header a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 77px;
+    height: 77px;
+
+    padding: 5px;
+
+    background-color: white;
+
+    border-radius: 500px;
+}
+
+header a:hover {
+    background-color: rgb(87, 85, 85);
+
+    color: white;
+
+    transition-duration: 0.5s;
+}
+
+header a:not(:hover) {
+    transition-duration: 0.5s;
+}
+
+header a>img {
+    height: 57px;
+}
+
+.botoes__header {
+    display: flex;
+    flex-direction: row;
+    height: 75px;
+}
+
+.botoes__header a {
+    display: flex;
+    flex-direction: row;
+
+    background-color: white;
+    width: 220px;
+    height: 65px;
+    
+    margin: 5px;
+    padding: 8px;
+    
+    border-radius: 50px;
+}
+
+.botoes__header a:hover {
+    background-color: rgb(87, 85, 85);
+
+    color: white;
+
+    transition-duration: 0.5s;
+}
+
+.botoes__header a:not(:hover) {
+    transition-duration: 0.5s;
+}
+
+.botoes__header div {
+    margin: 5px;
+}
+
+.botoes__header span {
+    width: 150px;
+
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.botoes__header img {
+    height: 57px;
+}
+
+.alinhamento__header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.logo__header img {
+    height: 50px;
+}
+/*=================================================================================================================================================================*/
+
+main {
+    display: flex;
+    flex-direction: row;
+
+    width: 1200px;
+    height: 600px;
+
+    border-radius: 15px;
+    border: 5px solid black;
+
+    position: relative;
+    top: 9%;
+
+    margin-top: 20px;
+}
+
+ol {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    width: 450px;
+
+    color: white;
+
+    background-color: #ed3a2a;
+
+    padding: 10px;
+
+    font-size: 25px;
+
+    border-right: 2px solid black;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.pagina_atual {
+    background-color: #a3291e;
+
+    border: 3px solid rgba(255, 255, 255, 0.651);
+    border-radius: 10px;
+}
+
+li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+
+    height: 53px;
+    
+    padding: 10px;
+}
+
+@keyframes slideIn {
+    from {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+li div {
+    display: flex;
+    align-items: center;
+}
+
+li img {
+    height: 40px;
+
+    margin-right: 5px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    width: 750px;
+
+    background-color: white;
+
+    padding: 10px;
+
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+form select, input[type=text] {
+    border: 2px solid black;
+
+    color: black;
+    font-weight: bold;
+    text-align: center;
+    font-size: larger;
+
+    height: 70px;
+    width: 240px;
+
+    border-radius: 500px;
+}
+
+form input[type=submit] {
+    height: 50px;
+    width: 240px;
+
+    border-radius: 500px;
+    border: none;
+
+    margin-top: 20px;
+    
+    color: white;
+    font-size: large;
+
+
+    background-color: #ed3a2a;
+}
+
+form input[type=submit]:hover {
+    font-weight: bold;
+
+    background-color: #a3291e;
+
+    transition-duration: 0.5s;
+
+    cursor: pointer;
+}
+
+form input[type=submit]:not(:hover) {
+    transition-duration: 0.5s;
+}
+
+.botoes_horarios {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    margin-top: 10px;
+
+    width: 300px;
+}
+
+.botoes_horarios input[type=button] {
+    width: 120px;
+
+    border-radius: 500px;
+    border: 2px solid #ed3a2a;
+
+    background-color: transparent;
+}
+
+.botoes_horarios button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 20px;
+    height: 20px;
+
+    border-radius: 500px;
+    border: 2px solid #ed3a2a;
+
+    background-color: transparent;
+}
+
+.botoes_horarios button:hover {
+    cursor: pointer;
+}
+
+.botoes_horarios input[type=button]:hover {
+    background-color: rgb(87, 85, 85);
+
+    color: white;
+
+    transition-duration: 0.5s;
+
+    cursor: pointer;
+}
+
+.botoes_horarios input[type=button]:not(:hover) {
+    transition-duration: 0.5s;
+}
+
+@media (max-width: 1200px) {
+    main {
+        width: 95%;
+        height: 600px;
+    }
+    
+    ol {
+        width: 37.5%;
+    }
+
+    form {
+        width: 62.5%;
+    }
+}
+
+@media (max-width: 971px) {
+    .pagina_atual {
+        height: 65px;
+    }
+}
+
+@media (max-width: 678px) {
+    .sumir {
+        display: none;
+    }
+}
+
+@media (max-width: 559px) {
+    header {
+        flex-direction: column;
+        height: 230px;
+    }
+}
+
+@media (max-width: 520px) {
+    .botoes_horarios {
+        flex-direction: column;
+        align-items: center;
+    
+        width: 95%;
+    }
+
+    .botoes_horarios input[type=button] {
+        width: 90%;
+        height: 40px;
+    }
+}
+
+@media (max-width: 420px) {
+    form select, input[type=text] {
+        font-size: large;
+    
+        height: 50px;
+        width: 95%;
+    }
+    
+    form input[type=submit] {
+        height: 50px;
+        width: 95%;
+    }
+}
+
+@media (max-width: 337px) {
+    .sumir_img {
+        display: none;
+    }
+
+    ol {
+        width: 30%;
+    }
+
+    form {
+        width: 70%;
+    }
+}

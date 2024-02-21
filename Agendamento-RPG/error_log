@@ -1,0 +1,93 @@
+[25-Jan-2024 12:38:09 America/Fortaleza] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'equipz30_idt2023'@'localhost' to database 'equipz30_rpg' in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php:7
+Stack trace:
+#0 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php(7): mysqli->__construct('localhost', 'equipz30_idt202...', 'C@chorro69', 'equipz30_rpg')
+#1 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/index.php(2): include_once('/home2/equipz30...')
+#2 {main}
+  thrown in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php on line 7
+[25-Jan-2024 12:38:50 America/Fortaleza] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'equipz30_idt2023'@'localhost' to database 'equipz30_rpg' in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php:7
+Stack trace:
+#0 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php(7): mysqli->__construct('localhost', 'equipz30_idt202...', 'C@chorro69', 'equipz30_rpg')
+#1 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/index.php(2): include_once('/home2/equipz30...')
+#2 {main}
+  thrown in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php on line 7
+[25-Jan-2024 12:38:51 America/Fortaleza] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'equipz30_idt2023'@'localhost' to database 'equipz30_rpg' in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php:7
+Stack trace:
+#0 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php(7): mysqli->__construct('localhost', 'equipz30_idt202...', 'C@chorro69', 'equipz30_rpg')
+#1 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/index.php(2): include_once('/home2/equipz30...')
+#2 {main}
+  thrown in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php on line 7
+[25-Jan-2024 12:39:05 America/Fortaleza] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'equipz30_idt2023'@'localhost' to database 'equipz30_rpg' in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php:7
+Stack trace:
+#0 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php(7): mysqli->__construct('localhost', 'equipz30_idt202...', 'C@chorro69', 'equipz30_rpg')
+#1 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/index.php(2): include_once('/home2/equipz30...')
+#2 {main}
+  thrown in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php on line 7
+[25-Jan-2024 12:39:15 America/Fortaleza] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'equipz30_idt2023'@'localhost' to database 'equipz30_rpg' in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php:7
+Stack trace:
+#0 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php(7): mysqli->__construct('localhost', 'equipz30_idt202...', 'C@chorro69', 'equipz30_rpg')
+#1 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/index.php(2): include_once('/home2/equipz30...')
+#2 {main}
+  thrown in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php on line 7
+[25-Jan-2024 12:39:31 America/Fortaleza] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'equipz30_idt2023'@'localhost' to database 'equipz30_rpg' in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php:7
+Stack trace:
+#0 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php(7): mysqli->__construct('localhost', 'equipz30_idt202...', 'C@chorro69', 'equipz30_rpg')
+#1 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/index.php(2): include_once('/home2/equipz30...')
+#2 {main}
+  thrown in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php on line 7
+[25-Jan-2024 12:39:31 America/Fortaleza] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'equipz30_idt2023'@'localhost' to database 'equipz30_rpg' in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php:7
+Stack trace:
+#0 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php(7): mysqli->__construct('localhost', 'equipz30_idt202...', 'C@chorro69', 'equipz30_rpg')
+#1 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/index.php(2): include_once('/home2/equipz30...')
+#2 {main}
+  thrown in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php on line 7
+[25-Jan-2024 12:39:31 America/Fortaleza] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'equipz30_idt2023'@'localhost' to database 'equipz30_rpg' in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php:7
+Stack trace:
+#0 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php(7): mysqli->__construct('localhost', 'equipz30_idt202...', 'C@chorro69', 'equipz30_rpg')
+#1 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/index.php(2): include_once('/home2/equipz30...')
+#2 {main}
+  thrown in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php on line 7
+[25-Jan-2024 12:39:32 America/Fortaleza] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'equipz30_idt2023'@'localhost' to database 'equipz30_rpg' in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php:7
+Stack trace:
+#0 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php(7): mysqli->__construct('localhost', 'equipz30_idt202...', 'C@chorro69', 'equipz30_rpg')
+#1 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/index.php(2): include_once('/home2/equipz30...')
+#2 {main}
+  thrown in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php on line 7
+[25-Jan-2024 12:39:32 America/Fortaleza] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'equipz30_idt2023'@'localhost' to database 'equipz30_rpg' in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php:7
+Stack trace:
+#0 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php(7): mysqli->__construct('localhost', 'equipz30_idt202...', 'C@chorro69', 'equipz30_rpg')
+#1 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/index.php(2): include_once('/home2/equipz30...')
+#2 {main}
+  thrown in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php on line 7
+[25-Jan-2024 12:39:32 America/Fortaleza] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'equipz30_idt2023'@'localhost' to database 'equipz30_rpg' in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php:7
+Stack trace:
+#0 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php(7): mysqli->__construct('localhost', 'equipz30_idt202...', 'C@chorro69', 'equipz30_rpg')
+#1 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/index.php(2): include_once('/home2/equipz30...')
+#2 {main}
+  thrown in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php on line 7
+[25-Jan-2024 12:39:32 America/Fortaleza] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'equipz30_idt2023'@'localhost' to database 'equipz30_rpg' in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php:7
+Stack trace:
+#0 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php(7): mysqli->__construct('localhost', 'equipz30_idt202...', 'C@chorro69', 'equipz30_rpg')
+#1 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/index.php(2): include_once('/home2/equipz30...')
+#2 {main}
+  thrown in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php on line 7
+[25-Jan-2024 12:39:32 America/Fortaleza] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'equipz30_idt2023'@'localhost' to database 'equipz30_rpg' in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php:7
+Stack trace:
+#0 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php(7): mysqli->__construct('localhost', 'equipz30_idt202...', 'C@chorro69', 'equipz30_rpg')
+#1 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/index.php(2): include_once('/home2/equipz30...')
+#2 {main}
+  thrown in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php on line 7
+[25-Jan-2024 12:39:33 America/Fortaleza] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'equipz30_idt2023'@'localhost' to database 'equipz30_rpg' in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php:7
+Stack trace:
+#0 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php(7): mysqli->__construct('localhost', 'equipz30_idt202...', 'C@chorro69', 'equipz30_rpg')
+#1 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/index.php(2): include_once('/home2/equipz30...')
+#2 {main}
+  thrown in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php on line 7
+[25-Jan-2024 12:39:47 America/Fortaleza] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'equipz30_idt2023'@'localhost' to database 'equipz30_rpg' in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php:7
+Stack trace:
+#0 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php(7): mysqli->__construct('localhost', 'equipz30_idt202...', 'C@chorro69', 'equipz30_rpg')
+#1 /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/index.php(2): include_once('/home2/equipz30...')
+#2 {main}
+  thrown in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/config/config.php on line 7
+[25-Jan-2024 12:41:22 America/Fortaleza] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/index.php:5) in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/index.php on line 86
+[25-Jan-2024 12:42:53 America/Fortaleza] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/index.php:5) in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/index.php on line 86
+[25-Jan-2024 12:44:13 America/Fortaleza] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/index.php:5) in /home2/equipz30/zeentech.com.br/volkswagen/Agendamento-RPG/index.php on line 86

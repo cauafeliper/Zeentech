@@ -1,0 +1,486 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: 'vw';
+    src: url('../fonts/VW/VWHead-Regular.otf');
+}
+
+@font-face {
+    font-family: 'vw';
+    src: url("../fonts/VW/VWHead-Bold.otf");
+}
+
+@font-face {
+    font-family: 'vw';
+    src: url('../fonts/VW/VWText-Regular.otf');
+}
+
+@font-face {
+    font-family: 'vw';
+    src: url("../fonts/VW/VWText-Bold.otf");
+}
+
+* {
+    font-family: 'vw';
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+:root {
+    --claro: #4C7397;
+    --escuro: #001e50;
+}
+
+body {
+    background-image: url("../imgs/background.jpg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow-y: hidden;
+}
+/*============================================================================================================*/
+main {
+    background-color: var(--escuro);
+    height: fit-content;
+    width: 24rem;
+    padding: 15px;
+    border-top-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+form {
+    background-color: white;
+    border-top-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    color: white;
+    padding: 10px;
+}
+
+label {
+    color: black;
+    padding: 3px;
+    border-radius: 8px;
+}
+
+input {
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    border-radius: 7px;
+    border: 1px solid lightgrey;
+}
+
+/*============================================================================================================*/
+
+.cadastro {  
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 0.6fr 0.8fr 0.8fr 0.8fr 0.6fr 0.6fr;
+    gap: 10px 10px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "titulo titulo"
+      "nome nome"
+      "empresa area"
+      "numero email"
+      "senha senha_confirma"
+      "submit submit"
+      "login-tela login-tela";
+}
+  
+.titulo { 
+    grid-area: titulo;
+    background-color: var(--escuro);
+    color: white;
+    padding: 10px;
+    text-align: center;
+    border-bottom-right-radius: 10px;
+    border-top-left-radius: 10px; 
+}
+  
+.nome {  
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.7fr 1fr;
+    gap: 8px 8px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "label-nome"
+      "input-nome";
+    grid-area: nome;
+}
+  
+.label-nome { 
+    grid-area: label-nome; 
+}
+  
+.input-nome { 
+    grid-area: input-nome; 
+}
+
+.empresa {  
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.7fr 1fr;
+    gap: 8px 8px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "label-empresa"
+      "input-empresa";
+    grid-area: empresa;
+}
+  
+.label-empresa { 
+    grid-area: label-empresa; 
+}
+  
+.input-empresa { 
+    grid-area: input-empresa; 
+}
+
+#empresa{
+    width: 100%;
+}
+  
+.area {  
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.7fr 1fr;
+    gap: 8px 8px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "label-area"
+      "input-area";
+    grid-area: area;
+}
+  
+.label-area { 
+    grid-area: label-area; 
+}
+  
+.input-area { 
+    grid-area: input-area; 
+}
+
+#area{
+    width: 100%;
+}
+  
+.numero {  
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.7fr 1fr;
+    gap: 8px 8px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "label-numero"
+      "input-numero";
+    grid-area: numero;
+}
+  
+.label-numero { 
+    grid-area: label-numero; 
+}
+  
+.input-numero { 
+    grid-area: input-numero; 
+}
+  
+.email {  
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.7fr 1fr;
+    gap: 8px 8px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "label-email"
+      "input-email";
+    grid-area: email;
+}
+  
+.label-email { 
+    grid-area: label-email; 
+}
+  
+.input-email { 
+    grid-area: input-email; 
+}
+  
+.senha {  
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.7fr 1fr;
+    gap: 8px 8px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "label-senha"
+      "input-senha";
+    grid-area: senha;
+}
+  
+.label-senha { 
+    grid-area: label-senha; 
+}
+  
+.input-senha { 
+    grid-area: input-senha; 
+}
+
+.senha_confirma {  
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.7fr 1fr;
+    gap: 8px 8px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "label-senha_confirma"
+      "input-senha_confirma";
+    grid-area: senha_confirma;
+}
+  
+.label-senha_confirma { 
+    grid-area: label-senha_confirma; 
+}
+  
+.input-senha_confirma { 
+    grid-area: input-senha_confirma; 
+}
+
+.login-tela {
+    grid-area: login-tela;
+}
+
+.login-tela button {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    background-color: dimgray;
+    color: white;
+    border: none;
+}
+
+.login-tela button:hover {
+    transition-duration: 0.3s;
+    background-color: #0b3986;
+}
+
+.login-tela button:not(:hover) {
+    transition-duration: 0.3s;
+}
+  
+.submit { 
+    grid-area: submit; 
+}
+
+.submit input {
+    width: 100%;
+    height: 100%;
+    background-color: var(--escuro);
+    color: white;
+}
+
+.submit input:hover {
+    transition-duration: 0.3s;
+    background-color: #0b3986;
+}
+
+.submit input:not(:hover) {
+    transition-duration: 0.3s;
+}
+  
+  /*============================================================================================================*/
+
+.login {  
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 0.8fr 0.8fr 0.8fr 0.5fr;
+    gap: 10px 10px;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "titulo-login"
+        "email-login"
+        "senha-login"
+        "submit-login"
+        "cadastrar"
+        "esqueceu";
+}
+  
+.titulo-login { 
+    grid-area: titulo-login;
+    background-color: var(--escuro);
+    color: white;
+    padding: 10px;
+    text-align: center;
+    border-bottom-right-radius: 10px;
+    border-top-left-radius: 10px;  
+}
+
+.email-login {  
+    padding: 5px 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.7fr 1fr;
+    gap: 5px 5px;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "email-login-label"
+        "email-login-input";
+    grid-area: email-login;
+}
+
+.email-login-label { 
+    grid-area: email-login-label; 
+}
+
+.email-login-input { 
+    grid-area: email-login-input; 
+}
+
+.nova_senha {  
+    display: flex;
+    flex-direction: column;
+    gap: 5px 5px; 
+    justify-content: center;
+    align-items: center;
+}
+
+.div_senha {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    width: 100%;
+    padding: 5px;
+}
+
+.senha-login {  
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.7fr 1fr;
+    gap: 5px 5px;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "senha-login-label"
+        "senha-login-input";
+    grid-area: senha-login;
+}
+
+.senha-login-label { 
+    grid-area: senha-login-label; 
+}
+
+.senha-login-input { 
+    grid-area: senha-login-input; 
+}
+
+.cadastrar {
+    grid-area: cadastrar;
+}
+
+.cadastrar button {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    background-color: dimgray;
+    color: white;
+    border: none;
+}
+
+.cadastrar button:hover {
+    transition-duration: 0.3s;
+    background-color: #0b3986;
+}
+
+.cadastrar button:not(:hover) {
+    transition-duration: 0.3s;
+}
+
+.esqueceu {
+    grid-area: esqueceu;
+}
+
+.esqueceu button {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    background-color: dimgray;
+    color: white;
+    border: none;
+}
+
+.esqueceu button:hover {
+    transition-duration: 0.3s;
+    background-color: #0b3986;
+}
+
+.esqueceu button:not(:hover) {
+    transition-duration: 0.3s;
+}
+
+.submit-login { 
+    grid-area: submit-login; 
+}
+
+.submit-login input {
+    width: 100%;
+    height: 100%;
+    background-color: var(--escuro);
+    color: white;
+    border: none;
+}
+
+.submit-login input:hover {
+    transition-duration: 0.3s;
+    background-color: #0b3986;
+}
+
+.submit-login input:not(:hover) {
+    transition-duration: 0.3s;
+}
+
+@media(max-width: 320px) {
+    main {
+        background-color: var(--escuro);
+        height: fit-content;
+        width: 250px;
+        padding: 15px;
+        border-top-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+    }
+
+    form {
+        background-color: white;
+        border-top-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        color: white;
+        padding: 10px;
+    }
+
+    label {
+        color: black;
+        padding: 3px;
+        border-radius: 8px;
+    }
+
+    input {
+        width: 100%;
+        height: 100%;
+        padding: 5px;
+        border-radius: 7px;
+        border: 1px solid lightgrey;
+    }
+}

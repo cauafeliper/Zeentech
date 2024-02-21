@@ -1,0 +1,336 @@
+@charset "UTF-8";
+
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-family: 'Heebo', sans-serif;
+}
+
+a {
+    text-decoration: initial;
+    color: initial;
+}
+
+:root {
+    --zt_claro: #D51E24;
+    --zt_escuro: #9a1c1f;
+}
+/*============================================================================================================*/
+html {
+    height: 100%;
+}
+
+body {
+    background-image: url("../../imgs/background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 100%;
+    width: 100%;
+}
+
+main {
+    background-color: transparent;
+
+    height: 600px;
+    width: 1200px;
+
+    display: flex;
+    flex-direction: row;
+}
+
+main>div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 400px;
+    height: 100%;
+
+    background-color: rgba(255, 255, 255, 0.850);
+    backdrop-filter: blur(5px);
+
+    border-bottom-left-radius: 20px;
+    border-top-left-radius: 20px;
+
+    padding: 100px 30px 30px 30px;
+}
+
+main span {
+    height: 110px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    text-align: center;
+}
+
+main span>h1 {
+    font-size: 50px;
+    color: #360708;
+}
+
+main span>h2 {
+    font-size: 30px;
+    font-weight: lighter;
+    color: var(--zt_escuro);
+}
+
+main div>img {
+    width: 220px;
+    padding: 5px;
+}
+
+.botao__voltar {
+    width: 170px;
+    height: 70px;
+
+    border-radius: 50px;
+    border: 3px solid var(--zt_escuro);
+    
+    background-color: var(--zt_claro);
+    
+    color: white;
+    font-size: larger;
+}
+
+.botao__voltar:hover {
+    transition-duration: 0.5s;
+
+    background-color: var(--zt_escuro);
+
+    border: 3px solid var(--zt_claro);
+}
+
+.botao__voltar:not(:hover) {
+    transition-duration: 0.5s;
+}
+/*******************************************************************************DIV DA DIREITA***************************************************************************/
+
+main form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-areas: "titulo titulo"
+                         "re nomeC"
+                         "email senha"
+                         "botao botao";
+
+    width: 800px;
+    height: 100%;
+
+    background-color: rgba(255, 255, 255, 0.700);
+    backdrop-filter: blur(5px);
+
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.alinhamento {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.titulo {
+    grid-area: titulo;
+
+    text-align: center;
+}
+
+.re {
+    grid-area: re;
+}
+
+.nomeC {
+    grid-area: nomeC;
+}
+
+.email {
+    grid-area: email;
+}
+
+.senha {
+    grid-area: senha;
+}
+
+.botao {
+    grid-area: botao;
+}
+
+.form__img {
+    width: 50px;
+
+    border-right: solid 5px black;
+}
+
+form div {
+    width: 320px;
+    height: 55px;
+
+    display: flex;
+    flex-direction: row;
+
+    padding: 5px;
+
+    background-color: rgba(255, 255, 255, 0.700);
+
+    border-radius: 15px;
+}
+
+form input[type=number], input[type=password], input[type=text], input[type=email] {
+    width: 365px;
+    
+    background-color: transparent;
+
+    border: none;
+
+    padding: 5px;
+
+    font-size: large;
+}
+
+form span>h2 {
+    font-weight: bolder;
+    font-size: 60px;
+    color: #360708;
+}
+
+form input[type=submit] {
+    width: 250px;
+    height: 70px;
+
+    border-radius: 50px;
+    border: 3px solid var(--zt_escuro);
+    
+    background-color: var(--zt_claro);
+    
+    color: white;
+    font-size: larger;
+}
+
+input[type=submit]:hover {
+    transition-duration: 0.5s;
+
+    background-color: var(--zt_escuro);
+
+    border: 3px solid var(--zt_claro);
+}
+
+input[type=submit]:not(:hover) {
+    transition-duration: 0.5s;
+}
+
+input:focus {
+    outline: none;
+}
+
+.sumir__bd {
+    display: none;
+}
+/************************************************************************************************************************************************************************/
+@media (max-width: 1220px) {
+    .sumir {
+        display: none;
+    }
+
+    .sumir__bd {
+        display: block;
+    }
+
+    .cadastro_resp {
+        font-size: 25px;
+        font-weight: lighter;
+        color: var(--zt_escuro);
+
+        text-align: center;
+    }
+
+    main {
+        height: fit-content;
+        width: 400px;
+    
+        flex-direction: column-reverse;
+    }
+    
+    main>div {
+        width: 400px;
+        height: 300px;
+    
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        border-top-left-radius: 0px;
+
+        padding: 30px;
+
+        justify-content: space-evenly;
+    }
+
+    main form {
+        grid-template-columns: 1fr;
+        grid-template-areas: "titulo"
+                             "re"
+                             "nomeC"
+                             "email"
+                             "senha"
+                             "botao";
+    
+        width: 400px;
+        height: 670px;
+    
+        border-bottom-right-radius: 0px;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+    }
+}
+
+@media (max-width: 400px) {
+    main {
+        width: 95%;
+    }
+    
+    main>div {
+        width: 100%;
+    }
+
+    main form {
+        width: 100%;
+    }
+
+    @media (max-height: 970px) {
+        body {
+            height: fit-content;
+
+            overflow-y: auto;
+        }
+    }
+}
+
+@media (max-width: 350px) {
+    form div {
+        width: 95%;
+    }
+
+    form input[type=number], input[type=password], input[type=text], input[type=email] {
+        width: 100%;
+    }
+
+    form span>h1 {
+        font-size: 40px;
+    }
+    
+    form input[type=submit] {
+        width: 90%;
+    }
+}

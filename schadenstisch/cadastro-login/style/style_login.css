@@ -1,0 +1,205 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: 'vw';
+    src: url('../../fonts/VW/VWHead-Regular.otf');
+}
+
+@font-face {
+    font-family: 'vw';
+    src: url("../../fonts/VW/VWHead-Bold.otf");
+}
+
+@font-face {
+    font-family: 'vw';
+    src: url('../../fonts/VW/VWText-Regular.otf');
+}
+
+@font-face {
+    font-family: 'vw';
+    src: url("../../fonts/VW/VWText-Bold.otf");
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+    font-family: 'vw';
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+:root {
+    --claro: #4C7397;
+    --escuro: #001e50;
+}
+
+body {
+    background-image: url('../../imgs/background.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow-y: hidden;
+}
+
+/************************************************************************************************************************************************************************/
+
+main {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    background-color: var(--escuro);
+
+    width: 45rem;
+    height: 22rem;
+
+    padding: 20px;
+
+    border-radius: 20px;
+}
+
+main>div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: space-between;
+
+    background-color: whitesmoke;
+
+    height: 100%;
+    width: 35%;
+
+    padding: 10px;
+
+    border-radius: 20px;
+}
+
+main>div button {
+    border: 2px solid var(--escuro);
+    border-radius: 15px;
+
+    background-color: transparent;
+
+    height: 40px;
+    width: 100px;
+}
+
+main>div button:hover {
+    transition-duration: 0.5s;
+
+    background-color: rgb(49, 49, 49);
+
+    color: white;
+
+    cursor: pointer;
+}
+
+main>div button:not(:hover) {
+    transition-duration: 0.5s;
+}
+
+h1 {
+    font-size: 30px;
+    font-weight: bolder;
+}
+
+main>div h2 {
+    font-family: 'Heebo', sans-serif;
+
+    font-size: 12px;
+    font-weight: lighter;
+}
+
+main>div img {
+    height: 35px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    background-color: whitesmoke;
+
+    height: 100%;
+    width: 64%;
+
+    border-radius: 20px;
+
+    padding: 10px;
+}
+
+form span {
+    display: flex;
+    flex-direction: row;
+
+    background-color: rgba(141, 139, 139, 0.555);
+
+    border-radius: 10px;
+
+    padding: 5px;
+
+    width: 260px;
+    height: 40px;
+}
+
+form span>input {
+    color: black;
+
+    background-color: transparent;
+
+    border: none;
+
+    width: 240px;
+}
+
+form span>img {
+    border-right: 2px solid rgba(56, 55, 55, 0.507);
+
+    margin-right: 5px;
+}
+
+form span>input:focus {
+    outline: none;
+}
+
+input[type="submit"] {
+    border: 2px solid var(--escuro);
+    border-radius: 15px;
+
+    background-color: transparent;
+
+    height: 40px;
+    width: 150px;
+}
+
+input[type="submit"]:hover {
+    transition-duration: 0.5s;
+
+    background-color: rgb(49, 49, 49);
+
+    color: white;
+
+    cursor: pointer;
+}
+
+input[type="submit"]:not(:hover) {
+    transition-duration: 0.5s;
+}
