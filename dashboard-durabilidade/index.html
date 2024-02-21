@@ -83,20 +83,22 @@
         function changeIframe(delta) {
             currentIframeIndex = (currentIframeIndex + delta + iframeSources.length) % iframeSources.length;
             var popupIframe = document.getElementById('popupIframe');
-            popupIframe.src = iframeSources[currentIframeIndex];
+            popupIframe.src = iframeSources[currentIframeIndex]; // Verificação do índice do iframe
+            if (!isAutoChangeEnabled) {
+                autoChangeInterval = setInterval(changeNextIframe, getIntervalDuration());
+            } else {
+                clearInterval(autoChangeInterval);
+            }
         }
 
-        let isAutoChangeEnabled = false; // Definindo a variável
+        let isAutoChangeEnabled = false;
+        let autoChangeInterval;
 
         function toggleAutoChange() {
             const button = document.getElementById('btnAutoChange');
 
             if (!isAutoChangeEnabled) {
-                if (currentIframeIndex === 3) {
-                    autoChangeInterval = setInterval(clickNextButton, 450000); // Define um intervalo maior para o terceiro iframe (índice 2)
-                } else {
-                    autoChangeInterval = setInterval(clickNextButton, 40000); // Intervalo padrão para os outros iframes
-                }
+                autoChangeInterval = setInterval(changeNextIframe, getIntervalDuration());
                 button.style.backgroundColor = '#158544'; // Define a cor de fundo para indicar que está ativado
             } else {
                 clearInterval(autoChangeInterval);
@@ -106,8 +108,20 @@
             isAutoChangeEnabled = !isAutoChangeEnabled;
         }
 
-        function clickNextButton() {
-            document.getElementById('btnNext').click(); // Simula um clique no botão de próxima iframe
+        function changeNextIframe() {
+            changeIframe(1); // Avança para o próximo iframe
+        }
+
+        function getIntervalDuration() {
+            console.log('Índice do iframe atual:', currentIframeIndex);
+            // Define a duração do intervalo com base no índice do iframe atual
+            if (currentIframeIndex == 3) {
+                // Se for o iframe de índice 3, retorne a duração de 7 minutos e 30 segundos em milissegundos
+                return 450000;
+            } else {
+                // Caso contrário, retorne a duração padrão de 40 segundos em milissegundos
+                return 40000;
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function () {

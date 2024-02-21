@@ -168,9 +168,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['item']) && isset($_POS
     $coluna = $_POST['coluna'];
     $novoValor = $_POST['valor'];
 
-    // Prepara a consulta SQL para atualizar o valor na tabela
     $query = "UPDATE kpm SET $coluna = ? WHERE item = ?"; // Alterado para 'item'
-
     // Prepara e executa a declaração
     $stmt = mysqli_prepare($conexao, $query);
     if ($stmt) {
