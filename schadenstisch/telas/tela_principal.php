@@ -35,9 +35,9 @@
     <link rel="shortcut icon" href="../imgs/logo-volks.png" type="image/x-icon">
     <link rel="stylesheet" href="style/style_principal.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
     <link rel="stylesheet" href="https://unpkg.com/tippy.js/dist/tippy.css" />
-    <script src="https://unpkg.com/tippy.js@6.3.1/dist/tippy-bundle.umd.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Schadenstisch | Home</title>
 </head>
@@ -181,134 +181,56 @@
                 });
             });
 //---------------------------------------------------------------------------------------------------------------------------------
-
-            function armazenar_n_problem(valor) {
-                $.ajax({
-                    url: 'codigos/tabela.php',
-                    type: 'GET',
-                    data: { filtro_n_problem: valor },
-                    success: function(response) {
-                        // Atualize a tabela com os dados recebidos do servidor
-                        $('#tabela-kpm').html(response);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
+            <?php
+            function criarFuncaoArmazenar($filtro) {
+                return "
+                    function armazenar_$filtro(valor) {
+                        $.ajax({
+                            url: 'codigos/tabela.php',
+                            type: 'GET',
+                            data: { filtro_$filtro: valor },
+                            success: function(response) {
+                                // Atualize a tabela com os dados recebidos do servidor
+                                $('#tabela-kpm').html(response);
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
+                            }
+                        });
                     }
-                });
+                ";
             }
 
-            function armazenar_rank(valor) {
-                $.ajax({
-                    url: 'codigos/tabela.php',
-                    type: 'GET',
-                    data: { filtro_rank: valor },
-                    success: function(response) {
-                        // Atualize a tabela com os dados recebidos do servidor
-                        $('#tabela-kpm').html(response);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
-            }
+            // Lista de filtros
+            $filtros = ['n_problem', 'rank', 'resumo', 'veiculo', 'status_kpm', 'fg', 'dias_aberto'];
 
-            function armazenar_resumo(valor) {
-                $.ajax({
-                    url: 'codigos/tabela.php',
-                    type: 'GET',
-                    data: { filtro_resumo: valor },
-                    success: function(response) {
-                        // Atualize a tabela com os dados recebidos do servidor
-                        $('#tabela-kpm').html(response);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
+            // Criar as funções para cada filtro
+            foreach ($filtros as $filtro) {
+                echo criarFuncaoArmazenar($filtro);
             }
-
-            function armazenar_veiculo(valor) {
-                $.ajax({
-                    url: 'codigos/tabela.php',
-                    type: 'GET',
-                    data: { filtro_veiculo: valor },
-                    success: function(response) {
-                        // Atualize a tabela com os dados recebidos do servidor
-                        $('#tabela-kpm').html(response);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
-            }
-
-            function armazenar_status_kpm(valor) {
-                $.ajax({
-                    url: 'codigos/tabela.php',
-                    type: 'GET',
-                    data: { filtro_status_kpm: valor },
-                    success: function(response) {
-                        // Atualize a tabela com os dados recebidos do servidor
-                        $('#tabela-kpm').html(response);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
-            }
-
-            function armazenar_fg(valor) {
-                $.ajax({
-                    url: 'codigos/tabela.php',
-                    type: 'GET',
-                    data: { filtro_fg: valor },
-                    success: function(response) {
-                        // Atualize a tabela com os dados recebidos do servidor
-                        $('#tabela-kpm').html(response);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
-            }
-
-            function armazenar_dias_aberto(valor) {
-                $.ajax({
-                    url: 'codigos/tabela.php',
-                    type: 'GET',
-                    data: { filtro_dias_aberto: valor },
-                    success: function(response) {
-                        // Atualize a tabela com os dados recebidos do servidor
-                        $('#tabela-kpm').html(response);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
-            }
+            ?>
 
             $(document).on('keyup', function(event) {
-    if (event.keyCode === 13 && $('.editavel:focus').length > 0) {
-        var novoValor = $('.editavel:focus').val();
-        var idItem = $('.editavel:focus').closest('tr').find('td:first-child').text(); // Aqui você pode precisar ajustar para obter o valor correto do ID do item
-        $.ajax({
-            url: 'codigos/tabela.php',
-            type: 'POST', // Certifique-se de que está enviando via POST
-            data: {
-                item: idItem, // Enviar o ID do item
-                coluna: 'rank',
-                valor: novoValor
-            },
-            success: function(response) {
-                console.log(response); // Verificar a resposta do servidor no console do navegador
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText); // Exibir mensagens de erro no console do navegador
-            }
-        });
-    }
-});
-
+                if (event.keyCode === 13 && $('.editavel:focus').length > 0) {
+                    var novoValor = $('.editavel:focus').val();
+                    var idItem = $('.editavel:focus').closest('tr').find('td:first-child').text(); // Aqui você pode precisar ajustar para obter o valor correto do ID do item
+                    $.ajax({
+                        url: 'codigos/tabela.php',
+                        type: 'POST', // Certifique-se de que está enviando via POST
+                        data: {
+                            item: idItem, // Enviar o ID do item
+                            coluna: 'rank',
+                            valor: novoValor
+                        },
+                        success: function(response) {
+                            console.log(response); // Verificar a resposta do servidor no console do navegador
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText); // Exibir mensagens de erro no console do navegador
+                        }
+                    });
+                }
+            });
 
         </script>
     </footer>

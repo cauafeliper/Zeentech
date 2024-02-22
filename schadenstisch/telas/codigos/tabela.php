@@ -99,63 +99,53 @@
 <?php
 
 // Armazena os valores dos filtros em variáveis de sessão
-if (isset($_GET['filtro_programa'])) {
-    $_SESSION['filtro_programa'] = $_GET['filtro_programa'];
+function atribuirFiltroSessao($filtro) {
+    if (isset($_GET[$filtro])) {
+        $_SESSION[$filtro] = $_GET[$filtro];
+    }
 }
-if (isset($_GET['filtro_n_problem'])) {
-    $_SESSION['filtro_n_problem'] = $_GET['filtro_n_problem'];
-}
-if (isset($_GET['filtro_rank'])) {
-    $_SESSION['filtro_rank'] = $_GET['filtro_rank'];
-}
-if (isset($_GET['filtro_resumo'])) {
-    $_SESSION['filtro_resumo'] = $_GET['filtro_resumo'];
-}
-if (isset($_GET['filtro_veiculo'])) {
-    $_SESSION['filtro_veiculo'] = $_GET['filtro_veiculo'];
-}
-if (isset($_GET['filtro_status_kpm'])) {
-    $_SESSION['filtro_status_kpm'] = $_GET['filtro_status_kpm'];
-}
-if (isset($_GET['filtro_status_reuniao'])) {
-    $_SESSION['filtro_status_reuniao'] = $_GET['filtro_status_reuniao'];
-}
-if (isset($_GET['filtro_fg'])) {
-    $_SESSION['filtro_fg'] = $_GET['filtro_fg'];
-}
+
+// Atribuir os valores dos filtros em variáveis de sessão
+atribuirFiltroSessao('filtro_programa');
+atribuirFiltroSessao('filtro_n_problem');
+atribuirFiltroSessao('filtro_rank');
+atribuirFiltroSessao('filtro_resumo');
+atribuirFiltroSessao('filtro_veiculo');
+atribuirFiltroSessao('filtro_status_kpm');
+atribuirFiltroSessao('filtro_status_reuniao');
+atribuirFiltroSessao('filtro_fg');
+
 
 // Construa a consulta SQL com base nos filtros armazenados em variáveis de sessão
 $query = "SELECT * FROM kpm WHERE 1=1";
 
 // Adicione condições de filtro para cada coluna com base nos valores armazenados em variáveis de sessão
-if (isset($_SESSION['filtro_programa']) && $_SESSION['filtro_programa'] != 'Todos') {
-    $query .= " AND programa = '" . $_SESSION['filtro_programa'] . "'";
-}
-if (isset($_SESSION['filtro_n_problem']) && $_SESSION['filtro_n_problem'] != 'Todos') {
-    $query .= " AND n_problem = '" . $_SESSION['filtro_n_problem'] . "'";
-}
-if (isset($_SESSION['filtro_rank']) && $_SESSION['filtro_rank'] != 'Todos') {
-    $query .= " AND rank = '" . $_SESSION['filtro_rank'] . "'";
-}
-if (isset($_SESSION['filtro_resumo']) && $_SESSION['filtro_resumo'] != 'Todos') {
-    $query .= " AND resumo = '" . $_SESSION['filtro_resumo'] . "'";
-}
-if (isset($_SESSION['filtro_veiculo']) && $_SESSION['filtro_veiculo'] != 'Todos') {
-    $query .= " AND veiculo = '" . $_SESSION['filtro_veiculo'] . "'";
-}
-if (isset($_SESSION['filtro_status_kpm']) && $_SESSION['filtro_status_kpm'] != 'Todos') {
-    $query .= " AND status_kpm = '" . $_SESSION['filtro_status_kpm'] . "'";
-}
-if (isset($_SESSION['filtro_status_reuniao']) && $_SESSION['filtro_status_reuniao'] != 'Todos') {
-    if ($_SESSION['filtro_status_reuniao'] == 'Abertos') {
-        $query .= " AND status_reuniao <> 5";
-    } elseif ($_SESSION['filtro_status_reuniao'] == 'Fechados') {
-        $query .= " AND status_reuniao = 5";
+function adicionarFiltro(&$query, $filtro, $coluna) {
+    if (isset($_SESSION[$filtro]) && $_SESSION[$filtro] != 'Todos') {
+        if ($filtro == 'filtro_status_reuniao') {
+            if ($_SESSION[$filtro] == 'Abertos') {
+                $query .= " AND $coluna <> 5";
+            } elseif ($_SESSION[$filtro] == 'Fechados') {
+                $query .= " AND $coluna = 5";
+            }
+        } else {
+            $query .= " AND $coluna = '" . $_SESSION[$filtro] . "'";
+        }
     }
 }
-if (isset($_SESSION['filtro_fg']) && $_SESSION['filtro_fg'] != 'Todos') {
-    $query .= " AND fg = '" . $_SESSION['filtro_fg'] . "'";
-}
+
+// Construir a consulta SQL com base nos filtros armazenados em variáveis de sessão
+$query = "SELECT * FROM kpm WHERE 1=1";
+
+// Adicionar condições de filtro para cada coluna com base nos valores armazenados em variáveis de sessão
+adicionarFiltro($query, 'filtro_programa', 'programa');
+adicionarFiltro($query, 'filtro_n_problem', 'n_problem');
+adicionarFiltro($query, 'filtro_rank', 'rank');
+adicionarFiltro($query, 'filtro_resumo', 'resumo');
+adicionarFiltro($query, 'filtro_veiculo', 'veiculo');
+adicionarFiltro($query, 'filtro_status_kpm', 'status_kpm');
+adicionarFiltro($query, 'filtro_status_reuniao', 'status_reuniao');
+adicionarFiltro($query, 'filtro_fg', 'fg');
 // Adicione mais condições de filtro para outras colunas conforme necessário
 
 // Verificar se os dados foram enviados via POST
@@ -222,3 +212,26 @@ if ($result->num_rows > 0) {
     echo '<tr><td colspan="10">Ainda não existem KPM\'s registrados!</td></tr>';
 }
 ?>
+
+<script>
+    // Seleciona todas as <td> com o atributo 'value'
+    const tds = document.querySelectorAll('#td_tippy');
+ 
+    // Itera sobre as <td> encontradas
+    tds.forEach(function(td_tippy) {
+        // Obtém o valor do atributo 'value'
+        const value = td_tippy.getAttribute('value');
+
+        // Cria a instância do Tippy.js
+        tippy(td_tippy, {
+            content: value,
+            arrow: true,
+            placement: 'top',
+            theme: 'custom-theme',
+            // Adiciona a propriedade CSS para quebrar palavras
+            appendTo: () => document.body,
+            allowHTML: true,
+            content: `<div style="word-wrap: break-word;">${value}</div>`,
+        });
+    });
+</script>
