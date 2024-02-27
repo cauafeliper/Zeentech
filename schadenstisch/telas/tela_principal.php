@@ -34,12 +34,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../imgs/logo-volks.png" type="image/x-icon">
     <link rel="stylesheet" href="style/style_principal.css">
+    <link rel="stylesheet" href="style/selectize.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
     <link rel="stylesheet" href="https://unpkg.com/tippy.js/dist/tippy.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js"></script>
     <title>Schadenstisch | Home</title>
+    <?php include_once('style/selectize.html');?>
 </head>
 <body>
     <header>
@@ -59,7 +63,7 @@
 
                 if ($total > 0) {
                     echo '
-                            <li><a href="../tela_adm.php">ADM</a></li>
+                            <li><a href="tela_adm.php">ADM</a></li>
                             <li><a href="../cadastro-login/aprovacao_Login.php">Logins</a></li>';
                 } else {
                     echo '
@@ -231,7 +235,6 @@
                     });
                 }
             });
-
         </script>
     </footer>
 </body>

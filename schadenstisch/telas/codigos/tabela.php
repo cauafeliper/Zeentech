@@ -234,4 +234,11 @@ if ($result->num_rows > 0) {
             content: `<div style="word-wrap: break-word;">${value}</div>`,
         });
     });
+
+    $(document).ready(function() {
+        $('#select_n_problem').selectize({
+            // Opções adicionais, se necessário
+        });
+    });
+
 </script>
