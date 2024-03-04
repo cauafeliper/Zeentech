@@ -55,22 +55,21 @@
         // Fechar a declaração
         $stmt->close();
         
-        $email = $_SESSION['email'];
-        $query = "SELECT * FROM gestor WHERE email = ?";
-        $stmt = $conexao->prepare($query);
-        // Vincula os parâmetros
-        $stmt->bind_param("s", $email);
-        // Executa a consulta
-        $stmt->execute();
-        // Obtém os resultados, se necessário
-        $resultGestor = $stmt->get_result();
-        // Fechar a declaração
-        $stmt->close();
-        
-        if ((!$result || mysqli_num_rows($result) === 0) && (!$resultGestor || mysqli_num_rows($resultGestor) === 0)) {
+        if (!$result || mysqli_num_rows($result) === 0) {
             session_unset();
             header('Location: ../index.php');
         }
+
+        echo "
+            <script>
+                Swal.fire({
+                    title: 'Cuidado!',
+                    text: 'Note que ao adicionar valores por aqui, você estará modificando diretamente o banco de dados. Certifique-se de que os dados inseridos estão corretos antes de prosseguir para evitar correr riscos.',
+                    icon: 'warning',
+                    confirmButtonText: 'Prosseguir'
+                });
+            </script>
+        ";
     ?>
     <?php ////////////////////////////////////////////////////////////////////////////////////
 
@@ -111,7 +110,21 @@
                 // Fechar a declaração
                 $stmt->close();
 
-                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+                echo '<script>
+                    Swal.fire({
+                        icon: "success",
+                        title: "Valor adicionado!",
+                        text: "O valor foi adicionado à tabela com sucesso.",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: "#001e50",
+                        allowOutsideClick: false,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Redireciona o usuário para a página de login
+                            window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                        }
+                    });
+                </script>';
             }
         }
     }
@@ -132,7 +145,21 @@
         // Fechar a declaração
         $stmt->close();
 
-        echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+        echo '<script>
+            Swal.fire({
+                icon: "success",
+                title: "Valor removido!",
+                text: "O valor foi removido da tabela com sucesso.",
+                confirmButtonText: "Ok",
+                confirmButtonColor: "#001e50",
+                allowOutsideClick: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redireciona o usuário para a página de login
+                    window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                }
+            });
+        </script>';
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addSolic'])) {
@@ -178,7 +205,21 @@
                 // Fechar a declaração
                 $stmt->close();
 
-                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+                echo '<script>
+                    Swal.fire({
+                        icon: "success",
+                        title: "Valor adicionado!",
+                        text: "O valor foi adicionado à tabela com sucesso.",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: "#001e50",
+                        allowOutsideClick: false,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Redireciona o usuário para a página de login
+                            window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                        }
+                    });
+                </script>';
             }
         }
     }
@@ -199,7 +240,21 @@
         // Fechar a declaração
         $stmt->close();
 
-        echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+        echo '<script>
+            Swal.fire({
+                icon: "success",
+                title: "Valor removido!",
+                text: "O valor foi removido da tabela com sucesso.",
+                confirmButtonText: "Ok",
+                confirmButtonColor: "#001e50",
+                allowOutsideClick: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redireciona o usuário para a página de login
+                    window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                }
+            });
+        </script>';
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addEmpresa'])) {
@@ -244,7 +299,21 @@
                 // Fechar a declaração
                 $stmt->close();
 
-                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+                echo '<script>
+                    Swal.fire({
+                        icon: "success",
+                        title: "Valor adicionado!",
+                        text: "O valor foi adicionado à tabela com sucesso.",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: "#001e50",
+                        allowOutsideClick: false,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Redireciona o usuário para a página de login
+                            window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                        }
+                    });
+                </script>';
             }
         }
     }
@@ -265,7 +334,35 @@
         // Fechar a declaração
         $stmt->close();
 
-        echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+        $query_removerEmpresa = "DELETE FROM area_solicitante WHERE empresa = ?";
+
+        // Preparar a declaração SQL
+        $stmt = $conexao->prepare($query_removerEmpresa);
+
+        // Vincular os parâmetros
+        $stmt->bind_param("s", $removerEmpresa);
+
+        // Executar a consulta
+        $stmt->execute();
+
+        // Fechar a declaração
+        $stmt->close();
+
+        echo '<script>
+            Swal.fire({
+                icon: "success",
+                title: "Valor removido!",
+                text: "O valor foi removido da tabela com sucesso.",
+                confirmButtonText: "Ok",
+                confirmButtonColor: "#001e50",
+                allowOutsideClick: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redireciona o usuário para a página de login
+                    window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                }
+            });
+        </script>';
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addCadastro'])) {
@@ -310,7 +407,41 @@
                 // Fechar a declaração
                 $stmt->close();
 
-                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+                require("../PHPMailer-master/src/PHPMailer.php"); 
+                require("../PHPMailer-master/src/SMTP.php");
+                $mail = new PHPMailer\PHPMailer\PHPMailer();
+                $mail->IsSMTP();
+                $mail->SMTPDebug = 0;
+                $mail->SMTPAuth = true;
+                $mail->SMTPSecure = 'tls'; 
+                $mail->Host = "equipzeentech.com"; 
+                $mail->Port = 587;
+                $mail->IsHTML(true); 
+                $mail->Username = "admin@equipzeentech.com"; 
+                $mail->Password = "Z3en7ech"; 
+                $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
+                $mail->AddAddress($novoCadastro); 
+                $mail->Subject = mb_convert_encoding("Tutorial de Cadastro!","Windows-1252","UTF-8"); 
+                $mail->Body = mb_convert_encoding("Seu email foi adicionado à lista de cadastros para o site de agendamento da Pista de Testes. Segue em anexo um tutorial de como realizar o cadastro na página.<br><br>Atenciosamente,<br>Equipe Zeentech.","Windows-1252","UTF-8");
+                $tutorialCadastro = '../anexos/tutorial_cadastro.pdf';
+                $mail->addAttachment($tutorialCadastro, 'tutorial_cadastro.pdf');
+                $mail->send();
+
+                echo '<script>
+                    Swal.fire({
+                        icon: "success",
+                        title: "Valor adicionado!",
+                        text: "O valor foi adicionado à tabela com sucesso.",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: "#001e50",
+                        allowOutsideClick: false,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Redireciona o usuário para a página de login
+                            window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                        }
+                    });
+                </script>';
                 }
         }
     }
@@ -367,17 +498,21 @@
         // Fechar a declaração
         $stmt->close();
 
-        $query_removerCadastro = "DELETE FROM copias_email WHERE email = ?";
-        // Preparar a declaração SQL
-        $stmt = $conexao->prepare($query_removerCadastro);
-        // Vincular os parâmetros
-        $stmt->bind_param("s", $removerCadastro);
-        // Executar a consulta
-        $stmt->execute();
-        // Fechar a declaração
-        $stmt->close();
-
-        echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+        echo '<script>
+            Swal.fire({
+                icon: "success",
+                title: "Valor removido!",
+                text: "O valor foi removido da tabela com sucesso.",
+                confirmButtonText: "Ok",
+                confirmButtonColor: "#001e50",
+                allowOutsideClick: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redireciona o usuário para a página de login
+                    window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                }
+            });
+        </script>';
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addCopia'])) {
@@ -422,7 +557,21 @@
                 // Fechar a declaração
                 $stmt->close();
 
-                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+                echo '<script>
+                    Swal.fire({
+                        icon: "success",
+                        title: "Valor adicionado!",
+                        text: "O valor foi adicionado à tabela com sucesso.",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: "#001e50",
+                        allowOutsideClick: false,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Redireciona o usuário para a página de login
+                            window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                        }
+                    });
+                </script>';
                 }
         }
     }
@@ -443,7 +592,115 @@
         // Fechar a declaração
         $stmt->close();
 
-        echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+        echo '<script>
+            Swal.fire({
+                icon: "success",
+                title: "Valor removido!",
+                text: "O valor foi removido da tabela com sucesso.",
+                confirmButtonText: "Ok",
+                confirmButtonColor: "#001e50",
+                allowOutsideClick: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redireciona o usuário para a página de login
+                    window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                }
+            });
+        </script>';
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addDistrib'])) {
+        if (!empty($_GET['novaDistrib'])) {
+            $novaDistrib = $_GET['novaDistrib'];
+
+            $query_verifica = "select * from lista_distribuicao where email = ?";
+            // Preparar a declaração SQL
+            $stmt = $conexao->prepare($query_verifica);
+            // Vincular os parâmetros
+            $stmt->bind_param("s", $novaDistrib);
+            // Executar a consulta
+            $stmt->execute();
+            // Armazenar o resultado
+            $stmt->store_result();
+            // Obter o número de linhas
+            $num_linhas = $stmt->num_rows;
+            // Fechar a declaração
+            $stmt->close();
+
+            if ($num_linhas > 0) {
+                echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "Valor repetido!",
+                        text: "Já existe esse email no nosso banco de dados da Lista de Distribuição! Insira um valor que ainda não exista!"
+                    });
+                </script>';
+            } else {
+
+                $query_addCopia = "INSERT INTO lista_distribuicao(email) VALUES (?)";
+
+                // Preparar a declaração SQL
+                $stmt = $conexao->prepare($query_addCopia);
+
+                // Vincular os parâmetros
+                $stmt->bind_param("s", $novaDistrib);
+
+                // Executar a consulta
+                $stmt->execute();
+
+                // Fechar a declaração
+                $stmt->close();
+
+                echo '<script>
+                    Swal.fire({
+                        icon: "success",
+                        title: "Valor adicionado!",
+                        text: "O valor foi adicionado à tabela com sucesso.",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: "#001e50",
+                        allowOutsideClick: false,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Redireciona o usuário para a página de login
+                            window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                        }
+                    });
+                </script>';
+                }
+        }
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['rmvDistrib'])) {
+        $removerCopia = $_GET['removerDistrib'];
+        $query_removerCopia = "DELETE FROM lista_distribuicao WHERE email = ?";
+
+        // Preparar a declaração SQL
+        $stmt = $conexao->prepare($query_removerCopia);
+
+        // Vincular os parâmetros
+        $stmt->bind_param("s", $removerCopia);
+
+        // Executar a consulta
+        $stmt->execute();
+
+        // Fechar a declaração
+        $stmt->close();
+
+        echo '<script>
+            Swal.fire({
+                icon: "success",
+                title: "Valor removido!",
+                text: "O valor foi removido da tabela com sucesso.",
+                confirmButtonText: "Ok",
+                confirmButtonColor: "#001e50",
+                allowOutsideClick: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redireciona o usuário para a página de login
+                    window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                }
+            });
+        </script>';
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addGestor'])) {
@@ -488,7 +745,56 @@
                 // Fechar a declaração
                 $stmt->close();
 
-                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+                // Verificar se o email está na tabela logins
+                $stmt_login = $conexao->prepare("SELECT * FROM logins WHERE email = ?");
+                $stmt_login->bind_param("s", $novoGestor);
+                $stmt_login->execute();
+                $result_login = $stmt_login->get_result();
+                $stmt_login->close();
+
+                if($result_login->num_rows > 0) {
+                    $loginTrue = true;
+                } else {
+                    $loginTrue = false;
+                }
+
+                if ($loginTrue) {
+                    require("../PHPMailer-master/src/PHPMailer.php"); 
+                    require("../PHPMailer-master/src/SMTP.php");
+                    $mail = new PHPMailer\PHPMailer\PHPMailer();
+                    $mail->IsSMTP();
+                    $mail->SMTPDebug = 0;
+                    $mail->SMTPAuth = true;
+                    $mail->SMTPSecure = 'tls'; 
+                    $mail->Host = "equipzeentech.com"; 
+                    $mail->Port = 587;
+                    $mail->IsHTML(true); 
+                    $mail->Username = "admin@equipzeentech.com"; 
+                    $mail->Password = "Z3en7ech"; 
+                    $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
+                    $mail->AddAddress($novoGestor); 
+                    $mail->Subject = mb_convert_encoding("Permissão de Gestor","Windows-1252","UTF-8"); 
+                    $mail->Body = mb_convert_encoding("Você foi adicionado como Gestor na página de agendamento da Pista de Testes! Segue em anexo o tutorial de uso da página para Gestores.<br><br>Atenciosamente,<br>Equipe Zeentech.","Windows-1252","UTF-8");
+                    $tutorialGestor = '../anexos/tutorial_gestor.pdf';
+                    $mail->addAttachment($tutorialGestor, 'tutorial_gestor.pdf');
+                    $mail->send();
+                }
+
+                echo '<script>
+                    Swal.fire({
+                        icon: "success",
+                        title: "Valor adicionado!",
+                        text: "O valor foi adicionado à tabela com sucesso.",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: "#001e50",
+                        allowOutsideClick: false,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Redireciona o usuário para a página de login
+                            window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                        }
+                    });
+                </script>';
             }
         }
     }
@@ -509,7 +815,21 @@
         // Fechar a declaração
         $stmt->close();
 
-        echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+        echo '<script>
+            Swal.fire({
+                icon: "success",
+                title: "Valor removido!",
+                text: "O valor foi removido da tabela com sucesso.",
+                confirmButtonText: "Ok",
+                confirmButtonColor: "#001e50",
+                allowOutsideClick: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redireciona o usuário para a página de login
+                    window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                }
+            });
+        </script>';
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addAdm'])) {
@@ -554,7 +874,58 @@
                 // Fechar a declaração
                 $stmt->close();
 
-                echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+                // Verificar se o email está na tabela logins
+                $stmt_login = $conexao->prepare("SELECT * FROM logins WHERE email = ?");
+                $stmt_login->bind_param("s", $novoAdm);
+                $stmt_login->execute();
+                $result_login = $stmt_login->get_result();
+                $stmt_login->close();
+
+                if($result_login->num_rows > 0) {
+                    $loginTrue = true;
+                } else {
+                    $loginTrue = false;
+                }
+
+                if ($loginTrue) {
+                    require("../PHPMailer-master/src/PHPMailer.php"); 
+                    require("../PHPMailer-master/src/SMTP.php");
+                    $mail = new PHPMailer\PHPMailer\PHPMailer();
+                    $mail->IsSMTP();
+                    $mail->SMTPDebug = 0;
+                    $mail->SMTPAuth = true;
+                    $mail->SMTPSecure = 'tls'; 
+                    $mail->Host = "equipzeentech.com"; 
+                    $mail->Port = 587;
+                    $mail->IsHTML(true); 
+                    $mail->Username = "admin@equipzeentech.com"; 
+                    $mail->Password = "Z3en7ech"; 
+                    $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
+                    $mail->AddAddress($novoAdm); 
+                    $mail->Subject = mb_convert_encoding("Permissão de Administrador","Windows-1252","UTF-8"); 
+                    $mail->Body = mb_convert_encoding("Você foi adicionado como Administradir na página de agendamento da Pista de Testes! Segue em anexo o tutorial de uso da página para Administradores e Gestores.<br><br>Atenciosamente,<br>Equipe Zeentech.","Windows-1252","UTF-8");
+                    $tutorialAdm = '../anexos/tutorial_administrador.pdf';
+                    $tutorialGestor = '../anexos/tutorial_gestor.pdf';
+                    $mail->addAttachment($tutorialAdm, 'tutorial_administrador.pdf');
+                    $mail->addAttachment($tutorialGestor, 'tutorial_gestor.pdf');
+                    $mail->send();
+                }
+
+                echo '<script>
+                    Swal.fire({
+                        icon: "success",
+                        title: "Valor adicionado!",
+                        text: "O valor foi adicionado à tabela com sucesso.",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: "#001e50",
+                        allowOutsideClick: false,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Redireciona o usuário para a página de login
+                            window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                        }
+                    });
+                </script>';
             }
         }
     }
@@ -575,7 +946,58 @@
         // Fechar a declaração
         $stmt->close();
 
-        echo '<script>window.location.href = "'.$_SERVER['PHP_SELF'].'";</script>';
+        echo '<script>
+            Swal.fire({
+                icon: "success",
+                title: "Valor removido!",
+                text: "O valor foi removido da tabela com sucesso.",
+                confirmButtonText: "Ok",
+                confirmButtonColor: "#001e50",
+                allowOutsideClick: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redireciona o usuário para a página de login
+                    window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                }
+            });
+        </script>';
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addAgendamento'])) {
+        echo '<script>window.location.href = "agendamento-adm.php";</script>';
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['rmvAgendamento'])) {
+        $removerAgendamento = $_GET['removerAgendamento'];
+        $query_removerAgendamento = "DELETE FROM agendamentos WHERE id = ?";
+
+        // Preparar a declaração SQL
+        $stmt = $conexao->prepare($query_removerAgendamento);
+
+        // Vincular os parâmetros
+        $stmt->bind_param("s", $removerAgendamento);
+
+        // Executar a consulta
+        $stmt->execute();
+
+        // Fechar a declaração
+        $stmt->close();
+
+        echo '<script>
+            Swal.fire({
+                icon: "success",
+                title: "Valor removido!",
+                text: "O valor foi removido da tabela com sucesso.",
+                confirmButtonText: "Ok",
+                confirmButtonColor: "#001e50",
+                allowOutsideClick: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redireciona o usuário para a página de login
+                    window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                }
+            });
+        </script>';
     }
     
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -796,6 +1218,43 @@
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" class="form_addRmvG">
                 <div class="empresa_addRmv">
                     <div class="addRmv_label">
+                        <h2>Lista de Distribuição</h2>
+                    </div>
+                    <div class="valores">
+                        <div class="add">
+                            <h4>Adicionar</h4>
+                            <input style="height: 1.8rem;" type="text" name="novaDistrib" placeholder="Email novo">
+                            <input style="height: 1.5rem;" type="submit" name="addDistrib" value="Adicionar">
+                        </div>
+                        <div class="rmv">
+                            <h4>Remover</h4>
+                            <select name="removerDistrib" id="selec_Distrib">
+                                <option value="">Remover email</option>
+                                <?php
+                                $query_copia = "SELECT DISTINCT email FROM lista_distribuicao";
+                                $result_copia = mysqli_query($conexao, $query_copia);
+                                if ($result_copia && mysqli_num_rows($result_copia) > 0){
+                                    while ($row_copia = mysqli_fetch_assoc($result_copia)) {
+                                        $selected = ($copia == $row_copia['email']) ? 'selected' : '';
+                                        echo '<option value="' . htmlspecialchars($row_copia['email']) . '" ' . $selected . '>' . htmlspecialchars($row_copia['email']) . '</option>';
+                                    }
+                                }
+                                ?>
+                            </select>
+                            <script>
+                                $(document).ready(function () {
+                                $('#selec_Distrib').select2({width: '100%'});
+                                });
+                            </script>
+                            <input style="height: 1.5rem;" type="submit" name="rmvDistrib" value="Remover">
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" class="form_addRmvG">
+                <div class="empresa_addRmv">
+                    <div class="addRmv_label">
                         <h2>Gestores</h2>
                     </div>
                     <div class="valores">
@@ -862,6 +1321,42 @@
                                 });
                             </script>
                             <input style="height: 1.5rem;" type="submit" name="rmvAdm" value="Remover">
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" class="form_addRmvG">
+                <div class="empresa_addRmv">
+                    <div class="addRmv_label">
+                        <h2>Agendamentos</h2>
+                    </div>
+                    <div class="valores">
+                        <div class="add">
+                            <h4>Adicionar</h4>
+                            <input style="height: 1.5rem;" type="submit" name="addAgendamento" value="Adicionar">
+                        </div>
+                        <div class="rmv">
+                            <h4>Remover</h4>
+                            <select name="removerAgendamento" id="selec_Agendamento">
+                                <option value="">Remover por id</option>
+                                <?php
+                                $query_copia = "SELECT DISTINCT id FROM agendamentos";
+                                $result_copia = mysqli_query($conexao, $query_copia);
+                                if ($result_copia && mysqli_num_rows($result_copia) > 0){
+                                    while ($row_copia = mysqli_fetch_assoc($result_copia)) {
+                                        $selected = ($copia == $row_copia['id']) ? 'selected' : '';
+                                        echo '<option value="' . htmlspecialchars($row_copia['id']) . '" ' . $selected . '>' . htmlspecialchars($row_copia['id']) . '</option>';
+                                    }
+                                }
+                                ?>
+                            </select>
+                            <script>
+                                $(document).ready(function () {
+                                $('#selec_Agendamento').select2({width: '100%'});
+                                });
+                            </script>
+                            <input style="height: 1.5rem;" type="submit" name="rmvAgendamento" value="Remover">
                         </div>
                     </div>
                 </div>

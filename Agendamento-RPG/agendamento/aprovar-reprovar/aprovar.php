@@ -85,7 +85,7 @@ if (isset($_GET['id'])) {
             
             $mail->IsHTML(true); 
             $mail->Subject = mb_convert_encoding('Novo agendamento na Pista de Teste!',"Windows-1252","UTF-8");
-            $mail->Body = mb_convert_encoding("Um agendamento foi aprovado para a área da pista $area_pista no dia $dia de $hora_inicio até $hora_fim!<br>Para conferir a tabela de agendamentos dos próximos 30 dias, clique <a href=$linkLocal>aqui</a>.<br>Atenciosamente,<br><br>Equipe Zeentech.","Windows-1252","UTF-8");
+            $mail->Body = mb_convert_encoding("Um agendamento foi aprovado para a área da pista $area_pista no dia $dia de $hora_inicio até $hora_fim!<br>Para conferir a tabela de agendamentos dos próximos 30 dias, clique <a href=$link>aqui</a>.<br>Atenciosamente,<br><br>Equipe Zeentech.","Windows-1252","UTF-8");
             $mail->send();
             
 

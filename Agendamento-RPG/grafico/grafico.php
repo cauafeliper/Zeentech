@@ -180,7 +180,7 @@ $data30 = $hoje->format('Y-m-d');
     <header>
         <a href="https://www.vwco.com.br/" target="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus" style="height: 95%;"></a>
         <ul>
-            <li><a href="grafico31dias.php?diaInicio=<?php echo urlencode(date('Y-m-d')); ?>&diaFinal=<?php echo urlencode($data30); ?>&botao=<?php echo urlencode(true); ?>" target="_blank">Gerar gráfico<br>de 31 dias</a></li>
+            <li><a href="grafico31dias.php?diaInicio=<?php echo urlencode(date('Y-m-d')); ?>&diaFinal=<?php echo urlencode($data30); ?>" target="_blank">Gerar gráfico<br>de 31 dias</a></li>
 
             <li><a href="../agendamento/gestor.php">Gestão</a></li>
 
@@ -212,6 +212,16 @@ $data30 = $hoje->format('Y-m-d');
                             ?>
                         </div>
                         <div class="out_grafico">
+                            <div class = nome_pistas_over>
+                                <div class="c1 quad_graf_over">VDA</div>
+                                <div class="d1 quad_graf_over">NVH</div>
+                                <div class="e1 quad_graf_over">Obstáculos</div>
+                                <div class="f1 quad_graf_over">Rampa 12% e 20%</div>
+                                <div class="g1 quad_graf_over">Rampa 40%</div>
+                                <div class="h1 quad_graf_over">Rampa 60%</div>
+                                <div class="i1 quad_graf_over">Asfalto</div>
+                                <div class="j1 quad_graf_over">Pista Completa</div>
+                            </div>
                             <div class="grafico" style="position: relative">
                                 <hr style="width: 1px; position: absolute;left: 170px;height: 374px;z-index: 1;top: 11%;">
                                 <hr style="width: 1px; position: absolute;left: 248px;height: 374px;z-index: 1;top: 11%;">
@@ -242,14 +252,14 @@ $data30 = $hoje->format('Y-m-d');
                                 </div>
                                 <div class="grafico_preenchimentos">
                                     <div class = nome_pistas>
-                                        <div class="c1 quad_graf">VDA</div>
-                                        <div class="d1 quad_graf">NVH</div>
-                                        <div class="e1 quad_graf">Obstáculos</div>
-                                        <div class="f1 quad_graf">Rampa 12% e 20%</div>
-                                        <div class="g1 quad_graf">Rampa 40%</div>
-                                        <div class="h1 quad_graf">Rampa 60%</div>
-                                        <div class="i1 quad_graf">Asfalto</div>
-                                        <div class="j1 quad_graf">Pista Completa</div>
+                                        <div class="c1 quad_graf"></div>
+                                        <div class="d1 quad_graf"></div>
+                                        <div class="e1 quad_graf"></div>
+                                        <div class="f1 quad_graf"></div>
+                                        <div class="g1 quad_graf"></div>
+                                        <div class="h1 quad_graf"></div>
+                                        <div class="i1 quad_graf"></div>
+                                        <div class="j1 quad_graf"></div>
                                     </div>
                                     <div class="grafico_linhas">
                                     <?php
@@ -288,6 +298,16 @@ $data30 = $hoje->format('Y-m-d');
                             ?>
                         </div>
                         <div class="out_grafico">
+                            <div class = nome_pistas_over>
+                                <div class="c1 quad_graf_over">VDA</div>
+                                <div class="d1 quad_graf_over">NVH</div>
+                                <div class="e1 quad_graf_over">Obstáculos</div>
+                                <div class="f1 quad_graf_over">Rampa 12% e 20%</div>
+                                <div class="g1 quad_graf_over">Rampa 40%</div>
+                                <div class="h1 quad_graf_over">Rampa 60%</div>
+                                <div class="i1 quad_graf_over">Asfalto</div>
+                                <div class="j1 quad_graf_over">Pista Completa</div>
+                            </div>
                             <div class="grafico" style="position: relative">
                                 <div class="scl">
                                 <div class="quad_graf" style="border-bottom: none"></div>
@@ -329,14 +349,14 @@ $data30 = $hoje->format('Y-m-d');
                                 </div>
                                 <div class="grafico_preenchimentos">
                                     <div class = nome_pistas>
-                                        <div class="c1 quad_graf">VDA</div>
-                                        <div class="d1 quad_graf">NVH</div>
-                                        <div class="e1 quad_graf">Obstáculos</div>
-                                        <div class="f1 quad_graf">Rampa 12% e 20%</div>
-                                        <div class="g1 quad_graf">Rampa 40%</div>
-                                        <div class="h1 quad_graf">Rampa 60%</div>
-                                        <div class="i1 quad_graf">Asfalto</div>
-                                        <div class="j1 quad_graf">Pista Completa</div>
+                                        <div class="c1 quad_graf"></div>
+                                        <div class="d1 quad_graf"></div>
+                                        <div class="e1 quad_graf"></div>
+                                        <div class="f1 quad_graf"></div>
+                                        <div class="g1 quad_graf"></div>
+                                        <div class="h1 quad_graf"></div>
+                                        <div class="i1 quad_graf"></div>
+                                        <div class="j1 quad_graf"></div>
                                     </div>
                                     <div class="grafico_linhas_semana">
                                     <?php
@@ -475,7 +495,7 @@ $data30 = $hoje->format('Y-m-d');
                                                         $cor = "#001e50";
                                                     }
                                                     $porcentagemBarra = ($listaMeses[12][$listaPistasClasse[$i]] * 100) / $maior;
-                                                    echo '<div><p></p></div><div class="barra_ano_'.$listaPistasClasse[$i].'"> <p style="color: white"> '.$listaMeses[12][$listaPistasClasse[$i]].' </p> </div>';
+                                                    echo '<div><p></p></div><div class="barra_ano_'.$listaPistasClasse[$i].'"> <p style="color: white; text-shadow: -1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;"> '.$listaMeses[12][$listaPistasClasse[$i]].' </p> </div>';
                                                     echo '<style>';
                                                     echo '.barra_ano_'.$listaPistasClasse[$i].' {background-color: '.$cor.'; width: 50px; display: flex; justify-content: center; align-items: end;}';
                                                     if ($listaMeses[12][$listaPistasClasse[$i]] > 0){
@@ -527,7 +547,7 @@ $data30 = $hoje->format('Y-m-d');
                                                         $porcentagemBarra = ($listaMeses[$z][$listaPistasClasse[$l]] * 100) / $maiorMeses;
                                                         echo '<div class="barra_'.$listaAno[$z].'_'.$listaPistasClasse[$l].'">';
                                                         if ($listaMeses[$z][$listaPistasClasse[$l]] > 0){
-                                                        echo '<p style="color: white"> '.$listaMeses[$z][$listaPistasClasse[$l]].' </p>';
+                                                        echo '<p style="color: white; text-shadow: -1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;"> '.$listaMeses[$z][$listaPistasClasse[$l]].' </p>';
                                                         }
                                                         echo '</div>
                                                         <style>
@@ -584,7 +604,7 @@ $data30 = $hoje->format('Y-m-d');
                                                         $cor = "#001e50";
                                                     }
                                                     $porcentagemBarra = ($listaMesesH[12][$listaPistasClasse[$i]] * 100) / $maiorH;
-                                                    echo '<div><p></p></div><div class="barraH_ano_'.$listaPistasClasse[$i].'"> <p style="color: white"> '.intval($listaMesesH[12][$listaPistasClasse[$i]]/60).'h'.intval($listaMesesH[12][$listaPistasClasse[$i]]%60).'</p> </div>';
+                                                    echo '<div><p></p></div><div class="barraH_ano_'.$listaPistasClasse[$i].'"> <p style="color: white; text-shadow: -1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;"> '.intval($listaMesesH[12][$listaPistasClasse[$i]]/60).'h'.intval($listaMesesH[12][$listaPistasClasse[$i]]%60).'</p> </div>';
                                                     echo '<style>';
                                                     echo '.barraH_ano_'.$listaPistasClasse[$i].' {background-color: '.$cor.'; width: 50px; display: flex; justify-content: center; align-items: end;}';
                                                     if ($listaMesesH[12][$listaPistasClasse[$i]] > 0){
@@ -636,7 +656,7 @@ $data30 = $hoje->format('Y-m-d');
                                                         $porcentagemBarra = ($listaMesesH[$z][$listaPistasClasse[$l]] * 100) / $maiorMesesH;
                                                         echo '<div class="barraH_'.$listaAno[$z].'_'.$listaPistasClasse[$l].'">';
                                                         if ($listaMesesH[$z][$listaPistasClasse[$l]] > 0){
-                                                        echo '<p style="color: white"> '.intval($listaMesesH[$z][$listaPistasClasse[$l]]/60).'h'.intval($listaMesesH[$z][$listaPistasClasse[$l]]%60).' </p>';
+                                                        echo '<p style="color: white; text-shadow: -1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;"> '.intval($listaMesesH[$z][$listaPistasClasse[$l]]/60).'h'.intval($listaMesesH[$z][$listaPistasClasse[$l]]%60).' </p>';
                                                         }
                                                         echo '</div>
                                                         <style>

@@ -52,7 +52,6 @@ $dataFinal = date("$ano-12-31");
 
 $hoje = isset($_GET['diaInicio']) ? urldecode($_GET['diaInicio']) : '';
 $diaFinal = isset($_GET['diaFinal']) ? urldecode($_GET['diaFinal']) : '';
-$botao = isset($_GET['botao']) ? urldecode($_GET['botao']) : false;
 
 $mes = obterDiasEntreDatas($hoje, $diaFinal);
 
@@ -72,13 +71,6 @@ foreach ($mes as $diaMes){
 }
 ?>
     <main>
-        <div>
-            <?php 
-            if ($botao){
-              echo '<button onclick="Email30Dias()" class="botao_email"><p class="texto_botao">Enviar por email<br>aos gestores</p><img class="gif_botao" src="../assets/message.gif" width="100px" height="100px"></button>';      
-            }
-            ?>
-        </div>
         <div id="graf_mes" class="div__grafico grafico_mes ativo">
             <div class="tit">
                 <?php
@@ -167,36 +159,6 @@ foreach ($mes as $diaMes){
                 showCloseButton: true,
                 allowOutsideClick: false,
             })
-        }
-
-        function Email30Dias(){
-            Swal.fire({
-                icon: 'question',
-                title: "Enviar por email aos gestores",
-                html:"<div style='text-align: start; padding: 0 2rem; line-height: 1.5rem'>"+
-                "Deseja enviar o link para esse gráfico por email aos gestores?<br>"+
-                "</div>",
-                showConfirmButton: true,
-                showCloseButton: true,
-                showCancelButton: true,
-                confirmButtonText: "Enviar",
-                cancelButtonText: "Cancelar",
-                allowOutsideClick: false,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Obtém o URL da página
-                    var urlDaPagina = window.location.href;
-
-                    // Substitui o valor de 'botao' de '1' para '0'
-                    var novaUrl = urlDaPagina.replace('botao=1', 'botao=0');
-
-                    // Codifica o URL para garantir que caracteres especiais sejam tratados corretamente
-                    var urlCodificada = encodeURIComponent(novaUrl);
-
-                    // Redireciona para a nova URL
-                    window.location.href = "email31dias.php?link=" + urlCodificada;
-                }
-            });
         }
 
 

@@ -21,7 +21,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
 if (isset($_GET['link'])) {
     $link = $_GET['link'];
 
-    $query_email = "SELECT email FROM gestor";
+    $query_email = "SELECT email FROM lista_distribuicao";
     $result_email = mysqli_query($conexao, $query_email);
     if ($result_email->num_rows > 0){
         // Envie o email com o motivo de reprovação
@@ -40,7 +40,7 @@ if (isset($_GET['link'])) {
         $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
         
         $mail->Subject = mb_convert_encoding("Gráfico de agendamentos dos próximos 30 dias","Windows-1252","UTF-8"); 
-        $mail->Body = mb_convert_encoding('Segue o link para o gráfico de agendamentos da pista para os próximos 30 dias: <a href="'.$link.'">'.$link.'</a>',"Windows-1252","UTF-8"); 
+        $mail->Body = mb_convert_encoding('Para ver o gráfico de agendamentos da pista dos próximos 30 dias, clique <a href="'.$link.'">aqui</a>',"Windows-1252","UTF-8");
 
         while ($row_email = mysqli_fetch_assoc($result_email)) {
             $email = $row_email['email'];
@@ -58,7 +58,7 @@ if (isset($_GET['link'])) {
                 }).then((result) => {
                     if (result.isConfirmed) {
                         // Redireciona o usuário para a página desejada
-                        window.location.href = "grafico.php";
+                        window.location.href = "../agendamento/gestor.php";
                     }
                 });
             </script>';
@@ -68,14 +68,14 @@ if (isset($_GET['link'])) {
             Swal.fire({
                 icon: "warning",
                 title: "ATENÇÃO!",
-                text: "Houve algum problema acessando os emails dos gestores! Verifique se há gestores cadastrasdos.",
+                text: "Houve algum problema acessando os emails da Lista de Distribuição! Verifique se há emails cadastrasdos.",
                 confirmButtonText: "OK",
                 confirmButtonColor: "#23CE6B",
                 allowOutsideClick: false,
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Redireciona o usuário para a página desejada
-                    window.location.href = "grafico.php";
+                    window.location.href = "../agendamento/gestor.php";
                 }
             });
         </script>';
@@ -94,7 +94,7 @@ else{
         }).then((result) => {
             if (result.isConfirmed) {
                 // Redireciona o usuário para a página desejada
-                window.location.href = "grafico.php";
+                window.location.href = "../agendamento/gestor.php";
             }
         });
     </script>';
