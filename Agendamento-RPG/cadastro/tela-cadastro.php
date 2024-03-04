@@ -249,7 +249,7 @@
                                 $mail->AddAddress($email);
                                 
                                 $mail->Subject = mb_convert_encoding("Verificação de email","Windows-1252","UTF-8"); 
-                                $mail->Body = mb_convert_encoding('Voce fez cadastro com esse email no site do RPG. Para verificar seu email e confirmar seu cadastro, clique <a href="'.$linkLocal.'">aqui</a>. Esse link vai expirar em 30 minutos!<br>Caso a solicitação não tenha sido feita por você, apenas ignore este email.<br><br>Atenciosamente,<br>Equipe Zeentech.',"Windows-1252","UTF-8"); 
+                                $mail->Body = mb_convert_encoding('Você fez cadastro com esse email no site de agendamento da Pista de Testes. Para verificar seu email e confirmar seu cadastro, clique <a href="'.$link.'">aqui</a>. Esse link vai expirar em 30 minutos!<br>Caso a solicitação não tenha sido feita por você, apenas ignore este email.<br><br>Atenciosamente,<br>Equipe Zeentech.',"Windows-1252","UTF-8"); 
 
                                 try{
                                     $mail->send();
