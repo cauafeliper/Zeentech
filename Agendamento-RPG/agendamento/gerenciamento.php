@@ -407,6 +407,7 @@
                 // Fechar a declaração
                 $stmt->close();
 
+                require '../PHPMailer-master/src/Exception.php';
                 require("../PHPMailer-master/src/PHPMailer.php"); 
                 require("../PHPMailer-master/src/SMTP.php");
                 $mail = new PHPMailer\PHPMailer\PHPMailer();
@@ -759,6 +760,7 @@
                 }
 
                 if ($loginTrue) {
+                    require '../PHPMailer-master/src/Exception.php';
                     require("../PHPMailer-master/src/PHPMailer.php"); 
                     require("../PHPMailer-master/src/SMTP.php");
                     $mail = new PHPMailer\PHPMailer\PHPMailer();
@@ -888,6 +890,7 @@
                 }
 
                 if ($loginTrue) {
+                    require '../PHPMailer-master/src/Exception.php';
                     require("../PHPMailer-master/src/PHPMailer.php"); 
                     require("../PHPMailer-master/src/SMTP.php");
                     $mail = new PHPMailer\PHPMailer\PHPMailer();
@@ -1027,7 +1030,7 @@
                         <div class="add">
                             <h4>Adicionar</h4>
                             <input style="height: 1.8rem;" type="text" name="novoObjtv" placeholder="Novo Objetivo">
-                            <input style="height: 1.5rem;" type="submit" name="addObjtv" value="Adicionar">
+                            <input style="height: 1.5rem;" type="submit" name="addObjtv" value="Adicionar" id="submitBtn">
                         </div>
                         <div class="rmv">
                             <h4>Remover</h4>
@@ -1047,7 +1050,7 @@
                                 $('#selec_objtv').select2({width: '100%'});
                                 });
                             </script>
-                            <input style="height: 1.5rem;" type="submit" name="rmvObjtv" value="Remover">
+                            <input style="height: 1.5rem;" type="submit" name="rmvObjtv" value="Remover" id="submitBtn">
                         </div>
                     </div>
                 </div>
@@ -1078,7 +1081,7 @@
                                 $('#empresa').select2({width: '100%'});
                                 });
                             </script>
-                            <input style="height: 1.5rem;" type="submit" name="addSolic" value="Adicionar">
+                            <input style="height: 1.5rem;" type="submit" name="addSolic" value="Adicionar" id="submitBtn">
                         </div>
                         <div class="rmv">
                             <h4>Remover</h4>
@@ -1098,7 +1101,7 @@
                                 $('#selec_solic').select2({width: '100%'});
                                 });
                             </script>
-                            <input style="height: 1.5rem;" type="submit" name="rmvSolic" value="Remover">
+                            <input style="height: 1.5rem;" type="submit" name="rmvSolic" value="Remover" id="submitBtn">
                         </div>
                     </div>
                 </div>
@@ -1113,7 +1116,7 @@
                         <div class="add">
                             <h4>Adicionar</h4>
                             <input style="height: 1.8rem;" type="text" name="novoEmpresa" placeholder="Nova Empresa">
-                            <input style="height: 1.5rem;" type="submit" name="addEmpresa" value="Adicionar">
+                            <input style="height: 1.5rem;" type="submit" name="addEmpresa" value="Adicionar" id="submitBtn">
                         </div>
                         <div class="rmv">
                             <h4>Remover</h4>
@@ -1135,7 +1138,7 @@
                                 $('#selec_empresa').select2({width: '100%'});
                                 });
                             </script>
-                            <input style="height: 1.5rem;" type="submit" name="rmvEmpresa" value="Remover">
+                            <input style="height: 1.5rem;" type="submit" name="rmvEmpresa" value="Remover" id="submitBtn">
                         </div>
                     </div>
                 </div>
@@ -1150,7 +1153,7 @@
                         <div class="add">
                             <h4>Adicionar</h4>
                             <input style="height: 1.8rem;" type="text" name="novoCadastro" placeholder="Email novo">
-                            <input style="height: 1.5rem;" type="submit" name="addCadastro" value="Adicionar">
+                            <input style="height: 1.5rem;" type="submit" name="addCadastro" value="Adicionar" id="submitBtn">
                         </div>
                         <div class="rmv">
                             <h4>Remover</h4>
@@ -1172,7 +1175,7 @@
                                 $('#selec_Cadastro').select2({width: '100%'});
                                 });
                             </script>
-                            <input style="height: 1.5rem;" type="submit" name="rmvCadastro" value="Remover">
+                            <input style="height: 1.5rem;" type="submit" name="rmvCadastro" value="Remover" id="submitBtn">
                         </div>
                     </div>
                 </div>
@@ -1187,7 +1190,7 @@
                         <div class="add">
                             <h4>Adicionar</h4>
                             <input style="height: 1.8rem;" type="text" name="novaCopia" placeholder="Email novo">
-                            <input style="height: 1.5rem;" type="submit" name="addCopia" value="Adicionar">
+                            <input style="height: 1.5rem;" type="submit" name="addCopia" value="Adicionar" id="submitBtn">
                         </div>
                         <div class="rmv">
                             <h4>Remover</h4>
@@ -1209,7 +1212,7 @@
                                 $('#selec_Copia').select2({width: '100%'});
                                 });
                             </script>
-                            <input style="height: 1.5rem;" type="submit" name="rmvCopia" value="Remover">
+                            <input style="height: 1.5rem;" type="submit" name="rmvCopia" value="Remover" id="submitBtn">
                         </div>
                     </div>
                 </div>
@@ -1224,7 +1227,7 @@
                         <div class="add">
                             <h4>Adicionar</h4>
                             <input style="height: 1.8rem;" type="text" name="novaDistrib" placeholder="Email novo">
-                            <input style="height: 1.5rem;" type="submit" name="addDistrib" value="Adicionar">
+                            <input style="height: 1.5rem;" type="submit" name="addDistrib" value="Adicionar" id="submitBtn">
                         </div>
                         <div class="rmv">
                             <h4>Remover</h4>
@@ -1246,7 +1249,7 @@
                                 $('#selec_Distrib').select2({width: '100%'});
                                 });
                             </script>
-                            <input style="height: 1.5rem;" type="submit" name="rmvDistrib" value="Remover">
+                            <input style="height: 1.5rem;" type="submit" name="rmvDistrib" value="Remover" id="submitBtn">
                         </div>
                     </div>
                 </div>
@@ -1261,7 +1264,7 @@
                         <div class="add">
                             <h4>Adicionar</h4>
                             <input style="height: 1.8rem;" type="text" name="novoGestor" placeholder="Email novo">
-                            <input style="height: 1.5rem;" type="submit" name="addGestor" value="Adicionar">
+                            <input style="height: 1.5rem;" type="submit" name="addGestor" value="Adicionar" id="submitBtn">
                         </div>
                         <div class="rmv">
                             <h4>Remover</h4>
@@ -1283,7 +1286,7 @@
                                 $('#selec_Gestor').select2({width: '100%'});
                                 });
                             </script>
-                            <input style="height: 1.5rem;" type="submit" name="rmvGestor" value="Remover">
+                            <input style="height: 1.5rem;" type="submit" name="rmvGestor" value="Remover" id="submitBtn">
                         </div>
                     </div>
                 </div>
@@ -1298,7 +1301,7 @@
                         <div class="add">
                             <h4>Adicionar</h4>
                             <input style="height: 1.8rem;" type="text" name="novoAdm" placeholder="Email novo">
-                            <input style="height: 1.5rem;" type="submit" name="addAdm" value="Adicionar">
+                            <input style="height: 1.5rem;" type="submit" name="addAdm" value="Adicionar" id="submitBtn">
                         </div>
                         <div class="rmv">
                             <h4>Remover</h4>
@@ -1320,7 +1323,7 @@
                                 $('#selec_Adm').select2({width: '100%'});
                                 });
                             </script>
-                            <input style="height: 1.5rem;" type="submit" name="rmvAdm" value="Remover">
+                            <input style="height: 1.5rem;" type="submit" name="rmvAdm" value="Remover" id="submitBtn">
                         </div>
                     </div>
                 </div>
@@ -1356,7 +1359,7 @@
                                 $('#selec_Agendamento').select2({width: '100%'});
                                 });
                             </script>
-                            <input style="height: 1.5rem;" type="submit" name="rmvAgendamento" value="Remover">
+                            <input style="height: 1.5rem;" type="submit" name="rmvAgendamento" value="Remover" id="submitBtn">
                         </div>
                     </div>
                 </div>
@@ -1373,5 +1376,30 @@
             <span>Copyright © 2023 de Zeentech os direitos reservados</span>
         </div>
     </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var submitBtns = document.querySelectorAll('input#submitBtn');
+            submitBtns.forEach(function(submitBtn) {
+                submitBtn.addEventListener('click', function(event) {
+                    disablePage(event);
+                });
+            });
+        });
+
+        function disablePage() {
+            // Adicione um overlay para indicar que a página está em estado de "loading"
+            var overlay = document.createElement('div');
+            overlay.classList.add('loading-overlay'); // Adiciona a classe para identificação posterior
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            overlay.style.zIndex = '9999';
+            overlay.innerHTML = '<div style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; text-align: center; color:white;"><h1>Carregando...</h1></div>';
+            document.body.appendChild(overlay);
+        }
+    </script>
 </body>
 </html>

@@ -229,7 +229,7 @@
         <div class="caption"><img src="../assets/table-list.png" width="22" height="22" style="position: relative; top: 3px; margin-right: 5px;">Tabela de Agendamentos</div>
             <table>
                 <tr>
-                    <th style="display: none;">ID</th>
+                    <th>ID</th>
                     <th>Dia</th>
                     <th>Hora de Início</th>
                     <th>Hora do Fim</th>
@@ -290,7 +290,7 @@
                     if ($result_count->num_rows > 0) {
                     while ($row = mysqli_fetch_assoc($result_paginacao)) { ?>
                         <tr>
-                            <td style="display: none;"><?php echo $row['id']; ?></td>
+                            <td><?php echo $row['id']; ?></td>
                             <td><?php echo date('d/m/Y', strtotime($row['dia'])); ?></td>
                             <td><?php echo $row['hora_inicio']; ?></td>
                             <td><?php echo $row['hora_fim']; ?></td>

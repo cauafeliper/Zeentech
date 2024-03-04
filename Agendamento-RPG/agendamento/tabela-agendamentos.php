@@ -153,7 +153,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                 <textarea name="obs" id="obs" cols="48" rows="5" class="obs" maxlength="500"><?php if(isset($_POST['obs'])) { echo htmlspecialchars($_POST['obs']); } ?></textarea>
             </div>
             <div class="enviar">
-                <input type="submit" name="submit" value="Agendar">
+                <input type="submit" name="submit" value="Agendar" id="submitBtn">
             </div>
         </form>
         </div>
@@ -369,6 +369,12 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
     </script>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('submitBtn').addEventListener('click', function(event) {
+                disablePage(event);
+            });
+        });
+
         function diaGrafico() {
         var valorData = document.getElementById('dia').value;
 
@@ -416,6 +422,21 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
 
             xhr.send('novaData=' + valorData);
         };
+
+        function disablePage() {
+            // Adicione um overlay para indicar que a página está em estado de "loading"
+            var overlay = document.createElement('div');
+            overlay.classList.add('loading-overlay'); // Adiciona a classe para identificação posterior
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            overlay.style.zIndex = '9999';
+            overlay.innerHTML = '<div style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; text-align: center; color:white;"><h1>Carregando...</h1></div>';
+            document.body.appendChild(overlay);
+        }
     </script>
 
 </body>
