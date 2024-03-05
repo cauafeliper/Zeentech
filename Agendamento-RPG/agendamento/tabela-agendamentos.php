@@ -432,9 +432,8 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
             overlay.style.left = '0';
             overlay.style.width = '100%';
             overlay.style.height = '100%';
-            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
             overlay.style.zIndex = '9999';
-            overlay.innerHTML = '<div style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; text-align: center; color:white;"><h1>Carregando...</h1></div>';
+            overlay.innerHTML = '<div class="overlay"><img class="gifOverlay" src="../assets/truck-unscreen2.gif"><h1>Carregando...</h1></div>';
             document.body.appendChild(overlay);
         }
     </script>

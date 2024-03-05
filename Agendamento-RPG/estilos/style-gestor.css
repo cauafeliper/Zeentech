@@ -815,3 +815,20 @@ header ul {
   visibility: hidden;
   opacity: 0;
 }
+
+.overlay {
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  flex-direction: column;
+  align-items:center;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.6);
+  color:rgb(0, 0, 0);
+}
+
+.gifOverlay {
+  width: 100px;
+  opacity: 1;
+}

@@ -58,16 +58,21 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
             header('Location: ../index.php');
         }
 
-        echo "
-            <script>
-                Swal.fire({
-                    title: 'Cuidado!',
-                    text: 'Note que ao criar um agendamento por aqui, você estará agendando diretamente no banco de dados. Isso permite que o agendamento ignore as verificações de disponibilidade do horário e seja automaticamente aprovado, e deve ser usado apenas em ocasiões específicas onde tal ação é necessária. Certifique-se de que os dados inseridos estão corretos antes de prosseguir para evitar correr riscos.',
-                    icon: 'warning',
-                    confirmButtonText: 'Prosseguir'
-                });
-            </script>
-        ";
+        if (!isset($_SESSION['avisoAgendamento'])){
+            echo "
+                <script>
+                    Swal.fire({
+                        title: 'Cuidado!',
+                        text: 'Note que ao criar um agendamento por aqui, você estará agendando diretamente no banco de dados. Isso permite que o agendamento ignore as verificações de disponibilidade do horário e seja automaticamente aprovado, e deve ser usado apenas em ocasiões específicas onde tal ação é necessária. Certifique-se de que os dados inseridos estão corretos antes de prosseguir para evitar correr riscos.',
+                        icon: 'warning',
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Prosseguir'
+                    });
+                </script>
+            ";
+        }
+        $_SESSION['avisoAgendamento'] = true;
+
     ?>
     <header>
         <a href="https://www.vwco.com.br/" target="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus" style="height: 95%;"></a>
@@ -249,7 +254,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                             
                             $mail->IsHTML(true); 
                             $mail->Subject = mb_convert_encoding('Novo agendamento na Pista de Teste!',"Windows-1252","UTF-8");
-                            $mail->Body = mb_convert_encoding("Um agendamento foi aprovado para a área da pista $area_pista no dia $dia de $hora_inicio até $hora_fim!<br>Para conferir a tabela de agendamentos dos próximos 30 dias, clique <a href=$link>aqui</a>.<br>Atenciosamente,<br><br>Equipe Zeentech.","Windows-1252","UTF-8");
+                            $mail->Body = mb_convert_encoding("Um agendamento foi aprovado para a área da pista $area no dia $data de $hora_inicio até $hora_fim!<br>Para conferir a tabela de agendamentos dos próximos 30 dias, clique <a href=$link>aqui</a>.<br>Atenciosamente,<br><br>Equipe Zeentech.","Windows-1252","UTF-8");
                             $mail->send();
 
                             echo '<script>
@@ -394,9 +399,8 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
             overlay.style.left = '0';
             overlay.style.width = '100%';
             overlay.style.height = '100%';
-            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
             overlay.style.zIndex = '9999';
-            overlay.innerHTML = '<div style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; text-align: center; color:white;"><h1>Carregando...</h1></div>';
+            overlay.innerHTML = '<div class="overlay"><img class="gifOverlay" src="../assets/truck-unscreen2.gif"><h1>Carregando...</h1></div>';
             document.body.appendChild(overlay);
         }
     </script>

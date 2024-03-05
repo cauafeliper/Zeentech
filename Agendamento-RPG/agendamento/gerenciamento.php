@@ -60,16 +60,20 @@
             header('Location: ../index.php');
         }
 
-        echo "
-            <script>
-                Swal.fire({
-                    title: 'Cuidado!',
-                    text: 'Note que ao adicionar valores por aqui, você estará modificando diretamente o banco de dados. Certifique-se de que os dados inseridos estão corretos antes de prosseguir para evitar correr riscos.',
-                    icon: 'warning',
-                    confirmButtonText: 'Prosseguir'
-                });
-            </script>
-        ";
+        if (!isset($_SESSION['aviso'])){
+            echo "
+                <script>
+                    Swal.fire({
+                        title: 'Cuidado!',
+                        text: 'Note que ao adicionar valores por aqui, você estará modificando diretamente o banco de dados. Certifique-se de que os dados inseridos estão corretos antes de prosseguir para evitar correr riscos.',
+                        icon: 'warning',
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Prosseguir'
+                    });
+                </script>
+            ";
+        }
+        $_SESSION['aviso'] = true;
     ?>
     <?php ////////////////////////////////////////////////////////////////////////////////////
 
@@ -1395,9 +1399,8 @@
             overlay.style.left = '0';
             overlay.style.width = '100%';
             overlay.style.height = '100%';
-            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
             overlay.style.zIndex = '9999';
-            overlay.innerHTML = '<div style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; text-align: center; color:white;"><h1>Carregando...</h1></div>';
+            overlay.innerHTML = '<div class="overlay"><img class="gifOverlay" src="../assets/truck-unscreen2.gif"><h1>Carregando...</h1></div>';
             document.body.appendChild(overlay);
         }
     </script>
