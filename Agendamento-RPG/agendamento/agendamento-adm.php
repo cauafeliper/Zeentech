@@ -9,7 +9,7 @@
         // Sessão expirada, destrói a sessão e redireciona para a página de login
         session_unset();
         session_destroy();
-        header("Location: ../index.php");
+        echo '<script>window.location.href = \'../index.php\';</script>';
         exit();
     }
 
@@ -37,7 +37,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
     <?php 
         if (!isset($_SESSION['email']) || empty($_SESSION['email'])) {
             session_unset();
-            header('Location: ../index.php');
+            echo '<script>window.location.href = \'../index.php\';</script>';
         }
         
         $email = $_SESSION['email'];
@@ -55,7 +55,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
         
         if (!$result || mysqli_num_rows($result) === 0) {
             session_unset();
-            header('Location: ../index.php');
+            echo '<script>window.location.href = \'../index.php\';</script>';
         }
 
         if (!isset($_SESSION['avisoAgendamento'])){

@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['novaSenha'], $_POST['
     }
 } else {
     // Se não for uma requisição POST válida, redirecionar ou mostrar uma mensagem de erro
-    header("Location: ../index.php");
+    echo '<script>window.location.href = \'../index.php\';</script>';
     exit();
 }
 
