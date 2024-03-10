@@ -203,44 +203,63 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                     </script>";
                 }
                 else {
-                    // Preparar a declaração SQL
-                    $stmt = $conexao->prepare("INSERT INTO agendamentos (area_pista, dia, hora_inicio, hora_fim, objtv, solicitante, numero_solicitante, empresa_solicitante, area_solicitante, exclsv, obs, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-
-                    // Vincular os parâmetros
-                    $stmt->bind_param("ssssssssssss", $area, $data, $hora_inicio, $hora_fim, $objetivo, $solicitante, $numero_solicitante, $empresa_solicitante, $area_solicitante, $exclsv, $obs, $status);
-
-                    $result = $stmt->execute();
-
-                    if ($result) {
+                    try {
+                        // Preparar a declaração SQL
+                        $stmt = $conexao->prepare("INSERT INTO agendamentos (area_pista, dia, hora_inicio, hora_fim, objtv, solicitante, numero_solicitante, empresa_solicitante, area_solicitante, exclsv, obs, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                        // Vincular os parâmetros
+                        $stmt->bind_param("ssssssssssss", $area, $data, $hora_inicio, $hora_fim, $objetivo, $solicitante, $numero_solicitante, $empresa_solicitante, $area_solicitante, $exclsv, $obs, $status);
+                        // Executar a consulta
+                        $stmt->execute();
                         $affected_rows = $stmt->affected_rows;
-                        if ($affected_rows > 0) {
-                            
-                            require("../PHPMailer-master/src/PHPMailer.php"); 
-                            require("../PHPMailer-master/src/SMTP.php"); 
-                            $mail = new PHPMailer\PHPMailer\PHPMailer(); 
-                            $mail->IsSMTP();
-                            $mail->SMTPDebug = 0;
-                            $mail->SMTPAuth = true;
-                            $mail->SMTPSecure = 'tls'; 
-                            $mail->Host = "equipzeentech.com";  
-                            $mail->Port = 587;
-                            $mail->IsHTML(true); 
-                            $mail->Username = "admin@equipzeentech.com"; 
-                            $mail->Password = "Z3en7ech"; 
-                            $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
-                                                    
+                        // Get the last inserted id
+                        $last_id = $conexao->insert_id;
+                        // Prepare a SELECT statement to fetch the data of the last inserted row
+                        $stmt = $conexao->prepare("SELECT * FROM agendamentos WHERE id = ?");
+                        $stmt->bind_param("i", $last_id);
+                        // Execute the SELECT statement
+                        $stmt->execute();
+                        // Get the result
+                        $result = $stmt->get_result();
+                        // Fetch the data and put it into an associative array
+                        $dataInserida = $result->fetch_assoc();
+                        // Fechar a declaração
+                        $stmt->close();
+                    } catch (Exception $e) {
+                        echo '<script>
+                            Swal.fire({
+                                icon: "error",
+                                title: "Erro!",
+                                html: "Houve um problema ao adicionar o agendamento no banco de dados:<br>'.$e->getMessage().'",
+                                confirmButtonText: "Ok",
+                                confirmButtonColor: "#001e50",
+                            });
+                        </script>';
+                    }
+                    finally{
+                        if (!isset($affected_rows)) {
+                            echo '<script>
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Erro!",
+                                    text: "Houve um erro na criação do agendamento.",
+                                    confirmButtonText: "Ok",
+                                    confirmButtonColor: "#001e50",
+                                });
+                            </script>';
+                        }
+                        else{
+                            $email_gestor = array();
                             $query_gestor = "SELECT email FROM gestor";
                             $result_gestor = mysqli_query($conexao, $query_gestor);
                             while ($row_gestor = mysqli_fetch_assoc($result_gestor)) {
-                                $mail->addAddress($row_gestor['email']); //email pros gestores
+                                $email_gestor[] = $row_gestor['email']; //email pros gestores
                             }
-
+                            $email_frota = array();
                             $query_copias = "SELECT email FROM copias_email";
                             $result_copias = mysqli_query($conexao, $query_copias);
                             if ($result_copias->num_rows > 0) {
                                 while ($row_copias = mysqli_fetch_assoc($result_copias)) {
-                                    $email_frota = $row_copias['email'];
-                                    $mail->AddCC($email_frota); //email pra copias
+                                    $email_frota[] = $row_copias['email'];
                                 }
                             }
 
@@ -249,41 +268,56 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                             $hoje->add(new DateInterval('P30D'));
                             // Obter a nova data formatada
                             $data30 = $hoje->format('Y-m-d');
-                            $linkLocal = "http://localhost/Zeentech/Agendamento-RPG/grafico/grafico31dias.php?diaInicio=".urlencode(date('Y-m-d'))."&diaFinal=".urlencode($data30);
-                            $link = 'https://www.zeentech.com.br/volkswagen/Agendamento-RPG/grafico/grafico31dias.php?diaInicio='.urlencode(date('Y-m-d')).'&diaFinal='.urlencode($data30);
-                            
-                            $mail->IsHTML(true); 
-                            $mail->Subject = mb_convert_encoding('Novo agendamento na Pista de Teste!',"Windows-1252","UTF-8");
-                            $mail->Body = mb_convert_encoding("Um agendamento foi aprovado para a área da pista $area no dia $data de $hora_inicio até $hora_fim!<br>Para conferir a tabela de agendamentos dos próximos 30 dias, clique <a href=$link>aqui</a>.<br>Atenciosamente,<br><br>Equipe Zeentech.","Windows-1252","UTF-8");
-                            $mail->send();
+                            /* $link = "http://localhost/Zeentech/Agendamento-RPG/grafico/grafico31dias.php?diaInicio=".urlencode(date('Y-m-d'))."&diaFinal=".urlencode($data30); */
+                            $link = "https://www.zeentech.com.br/volkswagen/Agendamento-RPG/grafico/grafico31dias.php?diaInicio=".urlencode(date('Y-m-d'))."&diaFinal=".urlencode($data30);
 
-                            echo '<script>
-                                Swal.fire({
-                                    icon: "success",
-                                    title: "SUCESSO!",
-                                    text: "Seu agendamento foi criado com sucesso!",
-                                    confirmButtonText: "OK",
-                                    confirmButtonColor: "#001e50",
-                                    allowOutsideClick: false,
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        window.location.href = "agendamento-adm.php";
-                                    }
-                                });
-                            </script>';
-                        } 
-                        else {
-                            echo '<script>
-                                Swal.fire({
-                                    icon: "warning",
-                                    title: "ATENÇÃO!",
-                                    html: "Ocorreu um erro no seu agendamento! Tente novamente.
-                                    <br>"Erro: "'.$stmt->error.'",
-                                });
-                            </script>';
+                            // Convert arrays to comma-separated strings
+                            $email_gestor_str = implode(",", $email_gestor);
+                            $email_frota_str = implode(",", $email_frota);
+                            // Convert the associative array to a string
+                            $dataInserida_str = implode(",", array_map(function ($key, $value) {
+                                return "$key: '$value'";
+                            }, array_keys($dataInserida), $dataInserida));
+
+                            // Utiliza a função exec para chamar o script Python com o valor como argumento
+                            $output = shell_exec("python ../email/enviar_email.py " . escapeshellarg('agendamentoadm') . " " . escapeshellarg($email_gestor_str) . " " . escapeshellarg($email_frota_str) . " " . escapeshellarg($dataInserida_str) . " " . escapeshellarg($link));
+                            $output = trim($output);
+    
+                            if ($output !== 'sucesso'){
+                                echo '<script>
+                                    Swal.fire({
+                                        icon: "warning",
+                                        title: "Erro no e-mail!",
+                                        html: "O agendamento foi criado, porém houve um problema no envio do e-mail automático:<br>'.$output.'",
+                                        confirmButtonText: "Ok",
+                                        confirmButtonColor: "#001e50",
+                                        allowOutsideClick: false
+                                    })
+                                    .then((result) => {
+                                        if (result.isConfirmed) {
+                                            window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                                        }
+                                    });
+                                </script>';  
+                            }
+                            else{
+                                echo '<script>
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Valor adicionado!",
+                                        text: "O valor foi adicionado à tabela com sucesso.",
+                                        confirmButtonText: "Ok",
+                                        confirmButtonColor: "#001e50",
+                                        allowOutsideClick: false
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                                        }
+                                    });
+                                </script>';
+                            }    
                         }
                     }
-                    $stmt->close();
                 }
             }
         }

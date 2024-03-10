@@ -396,58 +396,81 @@
                     });
                 </script>';
             } else {
-
-                $query_addCadastro = "INSERT INTO cadastros(email) VALUES (?)";
-
-                // Preparar a declaração SQL
-                $stmt = $conexao->prepare($query_addCadastro);
-
-                // Vincular os parâmetros
-                $stmt->bind_param("s", $novoCadastro);
-
-                // Executar a consulta
-                $stmt->execute();
-
-                // Fechar a declaração
-                $stmt->close();
-
-                require '../PHPMailer-master/src/Exception.php';
-                require("../PHPMailer-master/src/PHPMailer.php"); 
-                require("../PHPMailer-master/src/SMTP.php");
-                $mail = new PHPMailer\PHPMailer\PHPMailer();
-                $mail->IsSMTP();
-                $mail->SMTPDebug = 0;
-                $mail->SMTPAuth = true;
-                $mail->SMTPSecure = 'tls'; 
-                $mail->Host = "equipzeentech.com"; 
-                $mail->Port = 587;
-                $mail->IsHTML(true); 
-                $mail->Username = "admin@equipzeentech.com"; 
-                $mail->Password = "Z3en7ech"; 
-                $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
-                $mail->AddAddress($novoCadastro); 
-                $mail->Subject = mb_convert_encoding("Tutorial de Cadastro!","Windows-1252","UTF-8"); 
-                $mail->Body = mb_convert_encoding("Seu email foi adicionado à lista de cadastros para o site de agendamento da Pista de Testes. Segue em anexo um tutorial de como realizar o cadastro na página.<br><br>Atenciosamente,<br>Equipe Zeentech.","Windows-1252","UTF-8");
-                $tutorialCadastro = '../anexos/tutorial_cadastro.pdf';
-                $mail->addAttachment($tutorialCadastro, 'tutorial_cadastro.pdf');
-                $mail->send();
-
-                echo '<script>
-                    Swal.fire({
-                        icon: "success",
-                        title: "Valor adicionado!",
-                        text: "O valor foi adicionado à tabela com sucesso.",
-                        confirmButtonText: "Ok",
-                        confirmButtonColor: "#001e50",
-                        allowOutsideClick: false,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Redireciona o usuário para a página de login
-                            window.location.href = "'.$_SERVER['PHP_SELF'].'";
-                        }
-                    });
-                </script>';
+                try {
+                    $query_addCadastro = "INSERT INTO cadastros(email) VALUES (?)";
+                    // Preparar a declaração SQL
+                    $stmt = $conexao->prepare($query_addCadastro);
+                    // Vincular os parâmetros
+                    $stmt->bind_param("s", $novoCadastro);
+                    // Executar a consulta
+                    $stmt->execute();
+                    $affected_rows = $stmt->affected_rows;
+                    // Fechar a declaração
+                    $stmt->close();
+                } catch (Exception $e) {
+                    echo '<script>
+                        Swal.fire({
+                            icon: "error",
+                            title: "Erro!",
+                            html: "Houve um problema ao adicionar o valor no banco de dados:<br>'.$e->getMessage().'",
+                            confirmButtonText: "Ok",
+                            confirmButtonColor: "#001e50",
+                        });
+                    </script>';
                 }
+                finally{
+                    if (!isset($affected_rows)) {
+                        echo '<script>
+                            Swal.fire({
+                                icon: "error",
+                                title: "Erro!",
+                                text: "Houve um erro ao adicionar o valor à tabela.",
+                                confirmButtonText: "Ok",
+                                confirmButtonColor: "#001e50",
+                            });
+                        </script>';
+                    }
+                    else{
+                        // Utiliza a função exec para chamar o script Python com o valor como argumento
+                        $output = shell_exec("python ../email/enviar_email.py " . escapeshellarg('addcadastro') . " " . escapeshellarg($novoCadastro));
+                        $output = trim($output);
+
+                        if ($output !== 'sucesso'){
+                            echo '<script>
+                                Swal.fire({
+                                    icon: "warning",
+                                    title: "Erro no e-mail!",
+                                    html: "O valor foi adicionado, porém houve um problema no envio do e-mail automático:<br>'.$output.'",
+                                    confirmButtonText: "Ok",
+                                    confirmButtonColor: "#001e50",
+                                    allowOutsideClick: false
+                                })
+                                .then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                                    }
+                                });
+                            </script>';  
+                        }
+                        else{
+                            echo '<script>
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Valor adicionado!",
+                                    text: "O valor foi adicionado à tabela com sucesso.",
+                                    confirmButtonText: "Ok",
+                                    confirmButtonColor: "#001e50",
+                                    allowOutsideClick: false
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                                    }
+                                });
+                            </script>';
+                        }    
+                    }
+                }
+            }
         }
     }
 
@@ -735,72 +758,111 @@
                     });
                 </script>';
             } else {
-
-                $query_addGestor = "INSERT INTO gestor(email) VALUES (?)";
-
-                // Preparar a declaração SQL
-                $stmt = $conexao->prepare($query_addGestor);
-
-                // Vincular os parâmetros
-                $stmt->bind_param("s", $novoGestor);
-
-                // Executar a consulta
-                $stmt->execute();
-
-                // Fechar a declaração
-                $stmt->close();
-
-                // Verificar se o email está na tabela logins
-                $stmt_login = $conexao->prepare("SELECT * FROM logins WHERE email = ?");
-                $stmt_login->bind_param("s", $novoGestor);
-                $stmt_login->execute();
-                $result_login = $stmt_login->get_result();
-                $stmt_login->close();
-
-                if($result_login->num_rows > 0) {
-                    $loginTrue = true;
-                } else {
-                    $loginTrue = false;
+                try {
+                    $query_addGestor = "INSERT INTO gestor(email) VALUES (?)";
+                    // Preparar a declaração SQL
+                    $stmt = $conexao->prepare($query_addGestor);
+                    // Vincular os parâmetros
+                    $stmt->bind_param("s", $novoGestor);
+                    // Executar a consulta
+                    $stmt->execute();
+                    $affected_rows = $stmt->affected_rows;
+                    // Fechar a declaração
+                    $stmt->close();
+                } catch (Exception $e) {
+                    echo '<script>
+                        Swal.fire({
+                            icon: "error",
+                            title: "Erro!",
+                            html: "Houve um problema ao adicionar o valor no banco de dados:<br>'.$e->getMessage().'",
+                            confirmButtonText: "Ok",
+                            confirmButtonColor: "#001e50",
+                        });
+                    </script>';
                 }
+                finally{
+                    if (!isset($affected_rows)) {
+                        echo '<script>
+                            Swal.fire({
+                                icon: "error",
+                                title: "Erro!",
+                                text: "Houve um erro ao adicionar o valor à tabela.",
+                                confirmButtonText: "Ok",
+                                confirmButtonColor: "#001e50",
+                            });
+                        </script>';
+                    }
+                    else{
+                        // Verificar se o email está na tabela logins
+                        $stmt_login = $conexao->prepare("SELECT * FROM logins WHERE email = ?");
+                        $stmt_login->bind_param("s", $novoGestor);
+                        $stmt_login->execute();
+                        $result_login = $stmt_login->get_result();
+                        $stmt_login->close();
 
-                if ($loginTrue) {
-                    require '../PHPMailer-master/src/Exception.php';
-                    require("../PHPMailer-master/src/PHPMailer.php"); 
-                    require("../PHPMailer-master/src/SMTP.php");
-                    $mail = new PHPMailer\PHPMailer\PHPMailer();
-                    $mail->IsSMTP();
-                    $mail->SMTPDebug = 0;
-                    $mail->SMTPAuth = true;
-                    $mail->SMTPSecure = 'tls'; 
-                    $mail->Host = "equipzeentech.com"; 
-                    $mail->Port = 587;
-                    $mail->IsHTML(true); 
-                    $mail->Username = "admin@equipzeentech.com"; 
-                    $mail->Password = "Z3en7ech"; 
-                    $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
-                    $mail->AddAddress($novoGestor); 
-                    $mail->Subject = mb_convert_encoding("Permissão de Gestor","Windows-1252","UTF-8"); 
-                    $mail->Body = mb_convert_encoding("Você foi adicionado como Gestor na página de agendamento da Pista de Testes! Segue em anexo o tutorial de uso da página para Gestores.<br><br>Atenciosamente,<br>Equipe Zeentech.","Windows-1252","UTF-8");
-                    $tutorialGestor = '../anexos/tutorial_gestor.pdf';
-                    $mail->addAttachment($tutorialGestor, 'tutorial_gestor.pdf');
-                    $mail->send();
-                }
-
-                echo '<script>
-                    Swal.fire({
-                        icon: "success",
-                        title: "Valor adicionado!",
-                        text: "O valor foi adicionado à tabela com sucesso.",
-                        confirmButtonText: "Ok",
-                        confirmButtonColor: "#001e50",
-                        allowOutsideClick: false,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Redireciona o usuário para a página de login
-                            window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                        if($result_login->num_rows > 0) {
+                            $loginTrue = true;
+                        } else {
+                            $loginTrue = false;
                         }
-                    });
-                </script>';
+
+                        if ($loginTrue) {
+                            // Utiliza a função exec para chamar o script Python com o valor como argumento
+                            $output = shell_exec("python ../email/enviar_email.py " . escapeshellarg('addgestor') . " " . escapeshellarg($novoGestor));
+                            $output = trim($output);
+
+                            if ($output !== 'sucesso'){
+                                echo '<script>
+                                    Swal.fire({
+                                        icon: "warning",
+                                        title: "Erro no e-mail!",
+                                        html: "O valor foi adicionado, porém houve um problema no envio do e-mail automático:<br>'.$output.'",
+                                        confirmButtonText: "Ok",
+                                        confirmButtonColor: "#001e50",
+                                        allowOutsideClick: false
+                                    })
+                                    .then((result) => {
+                                        if (result.isConfirmed) {
+                                            window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                                        }
+                                    });
+                                </script>';  
+                            }
+                            else{
+                                echo '<script>
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Valor adicionado!",
+                                        text: "O valor foi adicionado à tabela com sucesso.",
+                                        confirmButtonText: "Ok",
+                                        confirmButtonColor: "#001e50",
+                                        allowOutsideClick: false
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                                        }
+                                    });
+                                </script>';
+                            }    
+                        }
+                        else{
+                            echo '<script>
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Valor adicionado!",
+                                    text: "O valor foi adicionado à tabela com sucesso.",
+                                    confirmButtonText: "Ok",
+                                    confirmButtonColor: "#001e50",
+                                    allowOutsideClick: false
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                                    }
+                                });
+                            </script>';
+                        }
+                    }
+                }
             }
         }
     }
@@ -865,74 +927,111 @@
                     });
                 </script>';
             } else {
-
-                $query_addAdm = "INSERT INTO lista_adm(email) VALUES (?)";
-
-                // Preparar a declaração SQL
-                $stmt = $conexao->prepare($query_addAdm);
-
-                // Vincular os parâmetros
-                $stmt->bind_param("s", $novoAdm);
-
-                // Executar a consulta
-                $stmt->execute();
-
-                // Fechar a declaração
-                $stmt->close();
-
-                // Verificar se o email está na tabela logins
-                $stmt_login = $conexao->prepare("SELECT * FROM logins WHERE email = ?");
-                $stmt_login->bind_param("s", $novoAdm);
-                $stmt_login->execute();
-                $result_login = $stmt_login->get_result();
-                $stmt_login->close();
-
-                if($result_login->num_rows > 0) {
-                    $loginTrue = true;
-                } else {
-                    $loginTrue = false;
+                try {
+                    $query_addAdm = "INSERT INTO lista_adm(email) VALUES (?)";
+                    // Preparar a declaração SQL
+                    $stmt = $conexao->prepare($query_addAdm);
+                    // Vincular os parâmetros
+                    $stmt->bind_param("s", $novoAdm);
+                    // Executar a consulta
+                    $stmt->execute();
+                    $affected_rows = $stmt->affected_rows;
+                    // Fechar a declaração
+                    $stmt->close();
+                } catch (Exception $e) {
+                    echo '<script>
+                        Swal.fire({
+                            icon: "error",
+                            title: "Erro!",
+                            html: "Houve um problema ao adicionar o valor no banco de dados:<br>'.$e->getMessage().'",
+                            confirmButtonText: "Ok",
+                            confirmButtonColor: "#001e50",
+                        });
+                    </script>';
                 }
+                finally{
+                    if (!isset($affected_rows)) {
+                        echo '<script>
+                            Swal.fire({
+                                icon: "error",
+                                title: "Erro!",
+                                text: "Houve um erro ao adicionar o valor à tabela.",
+                                confirmButtonText: "Ok",
+                                confirmButtonColor: "#001e50",
+                            });
+                        </script>';
+                    }
+                    else{
+                        // Verificar se o email está na tabela logins
+                        $stmt_login = $conexao->prepare("SELECT * FROM logins WHERE email = ?");
+                        $stmt_login->bind_param("s", $novoAdm);
+                        $stmt_login->execute();
+                        $result_login = $stmt_login->get_result();
+                        $stmt_login->close();
 
-                if ($loginTrue) {
-                    require '../PHPMailer-master/src/Exception.php';
-                    require("../PHPMailer-master/src/PHPMailer.php"); 
-                    require("../PHPMailer-master/src/SMTP.php");
-                    $mail = new PHPMailer\PHPMailer\PHPMailer();
-                    $mail->IsSMTP();
-                    $mail->SMTPDebug = 0;
-                    $mail->SMTPAuth = true;
-                    $mail->SMTPSecure = 'tls'; 
-                    $mail->Host = "equipzeentech.com"; 
-                    $mail->Port = 587;
-                    $mail->IsHTML(true); 
-                    $mail->Username = "admin@equipzeentech.com"; 
-                    $mail->Password = "Z3en7ech"; 
-                    $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
-                    $mail->AddAddress($novoAdm); 
-                    $mail->Subject = mb_convert_encoding("Permissão de Administrador","Windows-1252","UTF-8"); 
-                    $mail->Body = mb_convert_encoding("Você foi adicionado como Administradir na página de agendamento da Pista de Testes! Segue em anexo o tutorial de uso da página para Administradores e Gestores.<br><br>Atenciosamente,<br>Equipe Zeentech.","Windows-1252","UTF-8");
-                    $tutorialAdm = '../anexos/tutorial_administrador.pdf';
-                    $tutorialGestor = '../anexos/tutorial_gestor.pdf';
-                    $mail->addAttachment($tutorialAdm, 'tutorial_administrador.pdf');
-                    $mail->addAttachment($tutorialGestor, 'tutorial_gestor.pdf');
-                    $mail->send();
-                }
-
-                echo '<script>
-                    Swal.fire({
-                        icon: "success",
-                        title: "Valor adicionado!",
-                        text: "O valor foi adicionado à tabela com sucesso.",
-                        confirmButtonText: "Ok",
-                        confirmButtonColor: "#001e50",
-                        allowOutsideClick: false,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Redireciona o usuário para a página de login
-                            window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                        if($result_login->num_rows > 0) {
+                            $loginTrue = true;
+                        } else {
+                            $loginTrue = false;
                         }
-                    });
-                </script>';
+
+                        if ($loginTrue) {
+                            // Utiliza a função exec para chamar o script Python com o valor como argumento
+                            $output = shell_exec("python ../email/enviar_email.py " . escapeshellarg('addadm') . " " . escapeshellarg($novoAdm));
+                            $output = trim($output);
+
+                            if ($output !== 'sucesso'){
+                                echo '<script>
+                                    Swal.fire({
+                                        icon: "warning",
+                                        title: "Erro no e-mail!",
+                                        html: "O valor foi adicionado, porém houve um problema no envio do e-mail automático:<br>'.$output.'",
+                                        confirmButtonText: "Ok",
+                                        confirmButtonColor: "#001e50",
+                                        allowOutsideClick: false
+                                    })
+                                    .then((result) => {
+                                        if (result.isConfirmed) {
+                                            window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                                        }
+                                    });
+                                </script>';  
+                            }
+                            else{
+                                echo '<script>
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Valor adicionado!",
+                                        text: "O valor foi adicionado à tabela com sucesso.",
+                                        confirmButtonText: "Ok",
+                                        confirmButtonColor: "#001e50",
+                                        allowOutsideClick: false
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                                        }
+                                    });
+                                </script>';
+                            }    
+                        }
+                        else{
+                            echo '<script>
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Valor adicionado!",
+                                    text: "O valor foi adicionado à tabela com sucesso.",
+                                    confirmButtonText: "Ok",
+                                    confirmButtonColor: "#001e50",
+                                    allowOutsideClick: false
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                                    }
+                                });
+                            </script>';
+                        }
+                    }
+                }
             }
         }
     }
