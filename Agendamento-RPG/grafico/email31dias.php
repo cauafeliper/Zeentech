@@ -34,13 +34,12 @@ if (isset($_GET['link'])) {
         $mail->SMTPSecure = 'tls'; 
         $mail->Host = "equipzeentech.com"; 
         $mail->Port = 587;
-        $mail->IsHTML(true); 
         $mail->Username = "admin@equipzeentech.com"; 
         $mail->Password = "Z3en7ech"; 
         $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
         
         $mail->Subject = mb_convert_encoding("Gráfico de agendamentos dos próximos 30 dias","Windows-1252","UTF-8"); 
-        $mail->Body = mb_convert_encoding('Para ver o gráfico de agendamentos da pista dos próximos 30 dias, clique <a href="'.$link.'">aqui</a>',"Windows-1252","UTF-8");
+        $mail->Body = mb_convert_encoding("\nPara conferir a tabela de agendamentos dos próximos 30 dias, acesse: $link.\n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8");
 
         while ($row_email = mysqli_fetch_assoc($result_email)) {
             $email = $row_email['email'];

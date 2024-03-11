@@ -249,115 +249,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                             </script>";
                         }
                         else {
-                            try {
-                                // Preparar a declaração SQL
-                                $stmt = $conexao->prepare("INSERT INTO agendamentos (area_pista, dia, hora_inicio, hora_fim, objtv, solicitante, numero_solicitante, empresa_solicitante, area_solicitante, exclsv, obs, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                                // Vincular os parâmetros
-                                $stmt->bind_param("ssssssssssss", $area, $data, $hora_inicio, $hora_fim, $objetivo, $solicitante, $numero_solicitante, $empresa_solicitante, $area_solicitante, $exclsv, $obs, $status);
-                                // Executar a consulta
-                                $stmt->execute();
-                                $affected_rows = $stmt->affected_rows;
-                                // Get the last inserted id
-                                $last_id = $conexao->insert_id;
-                                // Prepare a SELECT statement to fetch the data of the last inserted row
-                                $stmt = $conexao->prepare("SELECT * FROM agendamentos WHERE id = ?");
-                                $stmt->bind_param("i", $last_id);
-                                // Execute the SELECT statement
-                                $stmt->execute();
-                                // Get the result
-                                $result = $stmt->get_result();
-                                // Fetch the data and put it into an associative array
-                                $dataInserida = $result->fetch_assoc();
-                                // Fechar a declaração
-                                $stmt->close();
-                            } catch (Exception $e) {
-                                echo '<script>
-                                    Swal.fire({
-                                        icon: "error",
-                                        title: "Erro!",
-                                        html: "Houve um problema ao adicionar o agendamento no banco de dados:<br>'.$e->getMessage().'",
-                                        confirmButtonText: "Ok",
-                                        confirmButtonColor: "#001e50",
-                                    });
-                                </script>';
-                            }
-                            finally{
-                                if (!isset($affected_rows)) {
-                                    echo '<script>
-                                        Swal.fire({
-                                            icon: "error",
-                                            title: "Erro!",
-                                            text: "Houve um erro na criação do agendamento.",
-                                            confirmButtonText: "Ok",
-                                            confirmButtonColor: "#001e50",
-                                        });
-                                    </script>';
-                                }
-                                else{
-                                    $email_gestor = array();
-                                    $query_gestor = "SELECT email FROM gestor";
-                                    $result_gestor = mysqli_query($conexao, $query_gestor);
-                                    while ($row_gestor = mysqli_fetch_assoc($result_gestor)) {
-                                        $email_gestor[] = $row_gestor['email']; //email pros gestores
-                                    }
-        
-                                    $hoje = new DateTime(date('Y-m-d'));
-                                    // Adicionar 30 dias
-                                    $hoje->add(new DateInterval('P30D'));
-                                    // Obter a nova data formatada
-                                    $data30 = $hoje->format('Y-m-d');
-                                    /* $link = "http://localhost/Zeentech/Agendamento-RPG/grafico/grafico31dias.php?diaInicio=".urlencode(date('Y-m-d'))."&diaFinal=".urlencode($data30); */
-                                    $link = "https://www.zeentech.com.br/volkswagen/Agendamento-RPG/grafico/grafico31dias.php?diaInicio=".urlencode(date('Y-m-d'))."&diaFinal=".urlencode($data30);
-        
-                                    // Convert arrays to comma-separated strings
-                                    $email_gestor_str = implode(",", $email_gestor);
-                                    // Convert the associative array to a string
-                                    $dataInserida_str = implode(",", array_map(function ($key, $value) {
-                                        return "$key: '$value'";
-                                    }, array_keys($dataInserida), $dataInserida));
-        
-                                    // Utiliza a função exec para chamar o script Python com o valor como argumento
-                                    $output = shell_exec("python ../email/enviar_email.py " . escapeshellarg('agendamento') . " " . escapeshellarg($email_gestor_str) . " " . escapeshellarg($email) . " " . escapeshellarg($dataInserida_str) . " " . escapeshellarg($link));
-                                    $output = trim($output);
-            
-                                    if ($output !== 'sucesso'){
-                                        echo '<script>
-                                            Swal.fire({
-                                                icon: "warning",
-                                                title: "Erro no e-mail!",
-                                                html: "O agendamento foi criado, porém houve um problema no envio do e-mail automático:<br>'.$output.'",
-                                                confirmButtonText: "Ok",
-                                                confirmButtonColor: "#001e50",
-                                                allowOutsideClick: false
-                                            })
-                                            .then((result) => {
-                                                if (result.isConfirmed) {
-                                                    window.location.href = "'.$_SERVER['PHP_SELF'].'";
-                                                }
-                                            });
-                                        </script>';  
-                                    }
-                                    else{
-                                        echo '<script>
-                                            Swal.fire({
-                                                icon: "success",
-                                                title: "Valor adicionado!",
-                                                text: "O valor foi adicionado à tabela com sucesso.",
-                                                confirmButtonText: "Ok",
-                                                confirmButtonColor: "#001e50",
-                                                allowOutsideClick: false
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    window.location.href = "'.$_SERVER['PHP_SELF'].'";
-                                                }
-                                            });
-                                        </script>';
-                                    }    
-                                }
-                            }
-
-
-                            /* // Preparar a declaração SQL
+                            // Preparar a declaração SQL
                             $stmt = $conexao->prepare("INSERT INTO agendamentos (area_pista, dia, hora_inicio, hora_fim, objtv, solicitante, numero_solicitante, empresa_solicitante, area_solicitante, exclsv, obs, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     
                             // Vincular os parâmetros
@@ -392,13 +284,12 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                                     $mail->SMTPSecure = 'tls'; 
                                     $mail->Host = "equipzeentech.com"; 
                                     $mail->Port = 587;
-                                    $mail->IsHTML(true); 
                                     $mail->Username = "admin@equipzeentech.com"; 
                                     $mail->Password = "Z3en7ech"; 
                                     $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
                                     $mail->AddAddress($email); 
                                     $mail->Subject = mb_convert_encoding("Solicitação criada com sucesso!","Windows-1252","UTF-8"); 
-                                    $mail->Body = mb_convert_encoding("Sua solicitação de agendamento da área da pista $area para o dia $data de $hora_inicio até $hora_fim foi criada com sucesso!<br>Assim que houver uma resposta do Gestor encarregado, você receberá um email dizendo se sua solicitação foi aprovada ou não.<br><br>Atenciosamente,<br>Equipe Zeentech.","Windows-1252","UTF-8"); 
+                                    $mail->Body = mb_convert_encoding("Sua solicitação de agendamento da área da pista $area para o dia $data de $hora_inicio até $hora_fim foi criada com sucesso!\nAssim que houver uma resposta do Gestor encarregado, você receberá um email dizendo se sua solicitação foi aprovada ou não.\n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8"); 
                                     $mail->send();
     
                                     $mail->ClearAddresses();
@@ -409,7 +300,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                                         $mail->addAddress($row_gestor['email']); //email pros gestores
                                     }
                                     $mail->Subject = mb_convert_encoding('Nova solicitação de agendamento para pista a Pista de Teste!',"Windows-1252","UTF-8");
-                                    $mail->Body = mb_convert_encoding("Uma nova solicitação para o agendamento da Pista de Teste foi criada pelo colaborador(a) $solicitante na área da pista $area para o dia $data e horário de $hora_inicio até $hora_fim com objetivo $objetivo. Essa nova solicitação aguarda sua resposta!<br><br>Atenciosamente,<br>Equipe Zeentech.","Windows-1252","UTF-8");
+                                    $mail->Body = mb_convert_encoding("Uma nova solicitação para o agendamento da Pista de Teste foi criada pelo colaborador(a) $solicitante na área da pista $area para o dia $data e horário de $hora_inicio até $hora_fim com objetivo $objetivo.\nEssa nova solicitação aguarda sua resposta!\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8");
                                     $mail->send();
                                 } 
                                 else {
@@ -423,7 +314,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                                     </script>';
                                 }
                             }
-                            $stmt->close(); */
+                            $stmt->close();
                         }
                     }
                 }

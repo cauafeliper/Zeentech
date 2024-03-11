@@ -54,14 +54,13 @@ if (isset($_GET['id'])) {
             $mail->SMTPSecure = 'tls'; 
             $mail->Host = "equipzeentech.com"; 
             $mail->Port = 587;
-            $mail->IsHTML(true); 
             $mail->Username = "admin@equipzeentech.com"; 
             $mail->Password = "Z3en7ech"; 
             $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
             $mail->AddAddress($email); 
 
             $mail->Subject = mb_convert_encoding("Solicitação Cancelada com sucesso!","Windows-1252","UTF-8"); 
-            $mail->Body = mb_convert_encoding("Você cancelou sua solicitação de agendamento da área da pista $area_pista para o dia $dia de $hora_inicio até $hora_fim!<br><br>Atenciosamente,<br>Equipe Zeentech.","Windows-1252","UTF-8"); 
+            $mail->Body = mb_convert_encoding("Você cancelou sua solicitação de agendamento da área da pista $area_pista para o dia $dia de $hora_inicio até $hora_fim!\n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8"); 
 
             $mail->send();
 
@@ -88,12 +87,11 @@ if (isset($_GET['id'])) {
                 $hoje->add(new DateInterval('P30D'));
                 // Obter a nova data formatada
                 $data30 = $hoje->format('Y-m-d');
-                $linkLocal = "http://localhost/Zeentech/Agendamento-RPG/grafico/grafico31dias.php?diaInicio=".urlencode(date('Y-m-d'))."&diaFinal=".urlencode($data30);
+                /* $link = "http://localhost/Zeentech/Agendamento-RPG/grafico/grafico31dias.php?diaInicio=".urlencode(date('Y-m-d'))."&diaFinal=".urlencode($data30); */
                 $link = 'https://www.zeentech.com.br/volkswagen/Agendamento-RPG/grafico/grafico31dias.php?diaInicio='.urlencode(date('Y-m-d')).'&diaFinal='.urlencode($data30);
 
-                $mail->IsHTML(true); 
                 $mail->Subject = mb_convert_encoding('Agendamento Cancelado!',"Windows-1252","UTF-8");
-                $mail->Body = mb_convert_encoding("Um agendamento previamente apovado para a área da pista $area_pista no dia $dia de $hora_inicio até $hora_fim foi Cancelado pelo Solicitante!<br>Para conferir a tabela de agendamentos dos próximos 30 dias, clique <a href=$linkLocal>aqui</a>.<br>Atenciosamente,<br><br>Equipe Zeentech.","Windows-1252","UTF-8");
+                $mail->Body = mb_convert_encoding("Um agendamento previamente aprovado para a área da pista $area_pista no dia $dia de $hora_inicio até $hora_fim foi Cancelado pelo Solicitante!\nPara conferir a tabela de agendamentos dos próximos 30 dias, acesse: $link.\n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8");
             }
             else{
                 $hoje = new DateTime(date('Y-m-d'));
