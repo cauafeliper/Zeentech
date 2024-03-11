@@ -98,7 +98,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
             </div>
             <div class="dia grids">
                 <label for="dia">Dia:</label>
-                <input type="date" name="dia" id="dia" placeholder="Indique a data" oninput="diaGrafico()" required <?php if(isset($_POST['dia'])) { echo 'value="' . $_POST['dia'] . '"'; } ?>>
+                <input type="date" name="dia" id="dia" placeholder="Indique a data" oninput="diaGrafico()"  <?php if(isset($_POST['dia'])) { echo 'value="' . $_POST['dia'] . '"'; } ?>>
                 <script>
                     flatpickr("#dia", {
                         dateFormat: "Y-m-d"
@@ -107,11 +107,11 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
             </div>
             <div class="hora_inicio grids">
                 <label for="hora_inicio">Hora de Início:</label>
-                <input type="time" id="hora_inicio" name="hora_inicio" min="07:00" max="19:00" required <?php if(isset($_POST['hora_inicio'])) { echo 'value="' . $_POST['hora_inicio'] . '"'; } ?>>
+                <input type="time" id="hora_inicio" name="hora_inicio" min="07:00" max="19:00"  <?php if(isset($_POST['hora_inicio'])) { echo 'value="' . $_POST['hora_inicio'] . '"'; } ?>>
             </div>
             <div class="hora_fim grids">
                 <label for="hora_fim">Hora do Fim:</label>
-                <input type="time" id="hora_fim" name="hora_fim" min="07:00" max="19:00" required <?php if(isset($_POST['hora_fim'])) { echo 'value="' . $_POST['hora_fim'] . '"'; } ?>>
+                <input type="time" id="hora_fim" name="hora_fim" min="07:00" max="19:00"  <?php if(isset($_POST['hora_fim'])) { echo 'value="' . $_POST['hora_fim'] . '"'; } ?>>
             </div>
             <div class="area_solicitante grids" style="display:none">
                 <label for="area_solicitante">Área do Solicitante:</label>
@@ -119,7 +119,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
             </div>
             <div class="area_solicitada grids">
                 <label for="area_solicitada">Área Solicitada:</label>
-                <select name="area" id="area" required>
+                <select name="area" id="area" >
                     <option value="">Selecione a área da pista</option>
                     <?php
                         $query_area = "SELECT DISTINCT area FROM area_pista";
@@ -133,7 +133,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
             </div>
             <div class="objtv_teste grids">
                 <label for="objetivo">Objetivo do Teste:</label>
-                <select name="objetivo" id="objetivo" required>
+                <select name="objetivo" id="objetivo" >
                     <option value="">Selecione o Objetivo</option>
                     <?php
                         $query_objtv = "SELECT DISTINCT objtv FROM objtv_teste";
