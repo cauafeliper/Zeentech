@@ -423,7 +423,7 @@
                 $mail->Port = 587;
                 $mail->Username = "admin@equipzeentech.com"; 
                 $mail->Password = "Z3en7ech"; 
-                $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
+                $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
                 $mail->AddAddress($novoCadastro); 
                 $mail->Subject = mb_convert_encoding("Tutorial de Cadastro!","Windows-1252","UTF-8"); 
                 $mail->Body = mb_convert_encoding("Seu email foi adicionado à lista de cadastros para o site de agendamento da Pista de Testes.\nSegue um link para o tutorial de como realizar o cadastro na página: https://drive.google.com/file/d/1GNwvqDJGvb_9CAbQN9zUMgUZeDtPZhaF/view?usp=drive_link \n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8");
@@ -775,7 +775,7 @@
                     $mail->Port = 587;
                     $mail->Username = "admin@equipzeentech.com"; 
                     $mail->Password = "Z3en7ech"; 
-                    $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
+                    $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
                     $mail->AddAddress($novoGestor); 
                     $mail->Subject = mb_convert_encoding("Permissão de Gestor","Windows-1252","UTF-8"); 
                     $mail->Body = mb_convert_encoding("Você foi adicionado como Gestor na página de agendamento da Pista de Testes!\nSegue um link para o tutorial de uso da página para gestores: https://drive.google.com/file/d/1nNH71zqNmMx39pKrFuW7eD8hstNWsQ3q/view?usp=drive_link \n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8");
@@ -904,7 +904,7 @@
                     $mail->Port = 587;
                     $mail->Username = "admin@equipzeentech.com"; 
                     $mail->Password = "Z3en7ech"; 
-                    $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
+                    $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
                     $mail->AddAddress($novoAdm); 
                     $mail->Subject = mb_convert_encoding("Permissão de Administrador","Windows-1252","UTF-8"); 
                     $mail->Body = mb_convert_encoding("Você foi adicionado como Administradir na página de agendamento da Pista de Testes!\nSeguem links para o tutorial de uso da página para gestores e administradores.\nGestores: https://drive.google.com/file/d/1nNH71zqNmMx39pKrFuW7eD8hstNWsQ3q/view?usp=drive_link \nAdministradores: https://drive.google.com/file/d/1gukHyPmIIjSW0-ksy97ocQQEadbmcfDb/view?usp=drive_link \n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8");

@@ -36,7 +36,7 @@ if (isset($_GET['link'])) {
         $mail->Port = 587;
         $mail->Username = "admin@equipzeentech.com"; 
         $mail->Password = "Z3en7ech"; 
-        $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
+        $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
         
         $mail->Subject = mb_convert_encoding("Gráfico de agendamentos dos próximos 30 dias","Windows-1252","UTF-8"); 
         $mail->Body = mb_convert_encoding("\nPara conferir a tabela de agendamentos dos próximos 30 dias, acesse: $link.\n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8");

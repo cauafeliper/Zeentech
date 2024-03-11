@@ -97,7 +97,7 @@
                         $mail->Port = 587;
                         $mail->Username = "admin@equipzeentech.com"; 
                         $mail->Password = "Z3en7ech"; 
-                        $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
+                        $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
                         $mail->AddAddress($row['email']); 
                         $mail->Subject = mb_convert_encoding("Email verificado!","Windows-1252","UTF-8");
                         $body =  "Seu email foi verificado com sucesso!\nSegue link para o tutorial de como utilizar a página: https://drive.google.com/file/d/1w-7YJXje3fR3wvZaFnAj9yQ4SsRqB3XT/view?usp=drive_link";

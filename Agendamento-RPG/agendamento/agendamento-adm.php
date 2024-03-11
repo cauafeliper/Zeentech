@@ -226,7 +226,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                             $mail->Port = 587;
                             $mail->Username = "admin@equipzeentech.com"; 
                             $mail->Password = "Z3en7ech"; 
-                            $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
+                            $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
                                                     
                             $query_gestor = "SELECT email FROM gestor";
                             $result_gestor = mysqli_query($conexao, $query_gestor);
