@@ -36,7 +36,12 @@ if (isset($_GET['id'])) {
     // Adicione um verificador para verificar se o formulário foi enviado
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirmarReprovacao'])) {
         // Obtém o motivo da reprovação do formulário
-        $motivoReprovacao = $_POST['motivoReprovacao'];
+        if (isset($_POST['motivoReprovacao'])) {
+            $motivoReprovacao = $_POST['motivoReprovacao'];
+        }
+        else {
+            $motivoReprovacao = 'Motivo não especificado.';
+        }
 
         $query_cancelar = "UPDATE agendamentos SET status = 'Reprovado', motivo_reprovacao = ? WHERE id = ?";
         $stmt = $conexao->prepare($query_cancelar);
@@ -71,7 +76,7 @@ if (isset($_GET['id'])) {
                 $mail->Port = 587;
                 $mail->Username = "admin@equipzeentech.com"; 
                 $mail->Password = "Z3en7ech"; 
-                $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
+                $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
                 $mail->AddAddress($email); 
 
                 $mail->Subject = mb_convert_encoding("Solicitação Reprovada!","Windows-1252","UTF-8"); 

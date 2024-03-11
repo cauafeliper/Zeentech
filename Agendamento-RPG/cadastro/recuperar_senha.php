@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
         $mail->Port = 587;
         $mail->Username = "admin@equipzeentech.com"; 
         $mail->Password = "Z3en7ech"; 
-        $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
+        $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
         $mail->AddAddress($email);
         
         $mail->Subject = mb_convert_encoding("Recuperação da senha","Windows-1252","UTF-8"); 
@@ -117,7 +117,7 @@ $stmt->execute();
                     <label for="email"><img src="../assets/at.png" width="16" height="16" style="position: relative; top: 2px; margin-right: 5px;">Email:</label>
                 </div>
                 <div class="email-login-input">
-                    <input type="text" name="email" id="email" required placeholder="Insira seu email cadastrado..." maxlength="30" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                    <input type="text" name="email" id="email" required placeholder="Insira seu email cadastrado..." maxlength="100" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                 </div>
             </div>
             <div class="submit-login">
@@ -131,6 +131,7 @@ $stmt->execute();
     <script>
         function recuperarSenha() {
             var email = document.getElementById('email').value.trim();
+            
             if (!email.includes('@') || !email.includes('.')) {
                 Swal.fire({
                     icon: "warning",

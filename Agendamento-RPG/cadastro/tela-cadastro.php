@@ -244,7 +244,7 @@
                                 $mail->Port = 587;
                                 $mail->Username = "admin@equipzeentech.com"; 
                                 $mail->Password = "Z3en7ech"; 
-                                $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
+                                $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
                                 $mail->AddAddress($email);
                                 
                                 $mail->Subject = mb_convert_encoding("Verificação de email","Windows-1252","UTF-8"); 
