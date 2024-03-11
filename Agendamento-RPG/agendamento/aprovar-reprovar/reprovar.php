@@ -69,14 +69,13 @@ if (isset($_GET['id'])) {
                 $mail->SMTPSecure = 'tls'; 
                 $mail->Host = "equipzeentech.com"; 
                 $mail->Port = 587;
-                $mail->IsHTML(true); 
                 $mail->Username = "admin@equipzeentech.com"; 
                 $mail->Password = "Z3en7ech"; 
                 $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
                 $mail->AddAddress($email); 
 
                 $mail->Subject = mb_convert_encoding("Solicitação Reprovada!","Windows-1252","UTF-8"); 
-                $mail->Body = mb_convert_encoding("Sua solicitação de agendamento da área da pista $area_pista para o dia $dia de $hora_inicio até $hora_fim foi reprovada!<br>Motivo: \"$motivoReprovacao\".<br><br>Atenciosamente,<br>Equipe Zeentech.","Windows-1252","UTF-8"); 
+                $mail->Body = mb_convert_encoding("Sua solicitação de agendamento da área da pista $area_pista para o dia $dia de $hora_inicio até $hora_fim foi reprovada!\nMotivo: \"$motivoReprovacao\".\n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8"); 
 
                 $mail->send();
 
