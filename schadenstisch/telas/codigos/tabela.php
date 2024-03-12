@@ -4,7 +4,7 @@
     <th>Programa</th>
     <th>
         <select name="select_n_problem" id="select_n_problem" onchange="armazenar_n_problem(this.value)">
-            <option value="">Nº do Problema</option>
+            <option value="">Nº do Problema &#5167;</option>
             <option value="Todos">Todos</option>
             <?php 
                 $query = "SELECT DISTINCT n_problem FROM kpm";
@@ -15,6 +15,7 @@
             ?>
         </select>
     </th>
+    <th>Due Date</th>
     <th>
         <select name="select_rank" id="select_rank" onchange="armazenar_rank(this.value)">
             <option value="">Ranking</option>
@@ -41,6 +42,7 @@
             ?>
         </select>
     </th>
+    <th>Status Semanal</th>
     <th>
         <select name="select_veiculo" id="select_veiculo" onchange="armazenar_veiculo(this.value)">
             <option value="">Veículo</option>
@@ -94,7 +96,7 @@
             ?>
         </select>
     </th>
-    <th>Due Date</th>
+    
 </tr>
 <?php
 
@@ -195,16 +197,29 @@ if ($result->num_rows > 0) {
         ?>
         <tr>
             <td style="display: none;" value="<?php echo $row['item']; ?>"><?php echo $row['item']; ?></td>
-            <td value="<?php echo $row['programa']; ?>" id="td_tippy"><?php echo $row['programa']; ?></td>
-            <td value="<?php echo $row['n_problem']; ?>" id="td_tippy"><?php echo $row['n_problem']; ?></td>
-            <td value="<?php echo $row['rank']; ?>" class="td_tippy"><input type="number" name="input_rank" class="input__rank editavel" value="<?php echo $row['rank']; ?>"></td>
-            <td value="<?php echo $row['resumo']; ?>" id="td_tippy"><?php echo $row['resumo']; ?></td>
-            <td value="<?php echo $row['veiculo']; ?>" id="td_tippy"><?php echo $row['veiculo']; ?></td>
-            <td value="<?php echo $row['status_kpm']; ?>" id="td_tippy"><?php echo $row['status_kpm']; ?></td>
-            <td value="<?php echo $row['status_reuniao']; ?>" id="td_tippy"><?php echo $row['status_reuniao']; ?></td>
-            <td value="<?php echo $row['fg']; ?>" id="td_tippy"><?php echo $row['fg']; ?></td>
-            <td value="<?php echo $row['dias_aberto']; ?>" id="td_tippy"><?php echo $row['dias_aberto']; ?></td>
-            <td value="<?php echo date('d/m/Y', strtotime($row['due_date'])); ?>" id="td_tippy"><?php echo date('d/m/Y', strtotime($row['due_date'])); ?></td>
+
+            <td value="<?php echo $row['programa']; ?>" id="td_tippy" name="programa"><?php echo $row['programa']; ?></td>
+
+            <td value="<?php echo $row['n_problem']; ?>" id="td_tippy" name="n_problem"><?php echo $row['n_problem']; ?></td>
+
+            <td value="<?php echo date('d/m/Y', strtotime($row['due_date'])); ?>" id="td_tippy" name="due_date"><?php echo date('d/m/Y', strtotime($row['due_date'])); ?></td>
+
+            <td value="<?php echo $row['rank']; ?>" class="td_tippy" name="rank"><input type="number" name="input_rank" class="input__td editavel" value="<?php echo $row['rank']; ?>"></td>
+
+            <td value="<?php echo $row['resumo']; ?>" id="td_tippy" name="resumo"><?php echo $row['resumo']; ?></td>
+
+            <td value="<?php echo $row['status_semanal']; ?>" id="td_tippy" name="status_semanal"><input type="text" name="input_status_semanal" class="input__td editavel" value="<?php echo $row['status_semanal']; ?>"></td>
+
+            <td value="<?php echo $row['veiculo']; ?>" id="td_tippy" name="veiculo"><?php echo $row['veiculo']; ?></td>
+
+            <td value="<?php echo $row['status_kpm']; ?>" id="td_tippy" name="status_kpm"><?php echo $row['status_kpm']; ?></td>
+
+            <td value="<?php echo $row['status_reuniao']; ?>" id="td_tippy" name="status_reuniao"><?php echo $row['status_reuniao']; ?></td>
+
+            <td value="<?php echo $row['fg']; ?>" id="td_tippy" name="fg"><?php echo $row['fg']; ?></td>
+
+            <td value="<?php echo $row['dias_aberto']; ?>" id="td_tippy" name="dias_aberto"><?php echo $row['dias_aberto']; ?></td>
+            
         </tr>
         <?php
     }
@@ -234,11 +249,4 @@ if ($result->num_rows > 0) {
             content: `<div style="word-wrap: break-word;">${value}</div>`,
         });
     });
-
-    $(document).ready(function() {
-        $('#select_n_problem').selectize({
-            // Opções adicionais, se necessário
-        });
-    });
-
 </script>

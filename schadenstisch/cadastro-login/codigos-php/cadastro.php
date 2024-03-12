@@ -3,7 +3,7 @@
         $email = $_POST['email'];
 
         function validarEmail($email) {
-            $padraoEmail = '/^extern\.\w+@volkswagen\.com\.br$/';
+            $padraoEmail = '/^[a-zA-Z0-9._%+-]+@volkswagen\.com\.br$/';
             return preg_match($padraoEmail, $email);
         }
 

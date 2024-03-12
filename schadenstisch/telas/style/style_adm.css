@@ -73,7 +73,7 @@ header ul {
     justify-content: space-between;
     align-items: center;
     height: 100%;
-    width: 10rem;
+    width: 14rem;
     margin-right: 2.5rem;
 }
 
@@ -115,7 +115,7 @@ main {
 main>div {
     background-color: rgb(226, 225, 225);
 
-    width: 28%;
+    width: 23%;
     min-height: 100%;
 
     border-radius: 10px;
@@ -128,7 +128,7 @@ main>div {
 }
 
 .div__tabela {
-    width: 68%;
+    width: 75%;
 }
 
 main h2 {
@@ -189,6 +189,8 @@ th {
 
     background-color: var(--escuro);
 
+    max-width: 200px;
+
     padding: 5px;
 
     text-align: center;
@@ -206,13 +208,15 @@ select {
 
 option {
     color: black;
+
+    max-width: 120px;
 }
 
 td {
     border: 0.2px solid var(--escuro);
     border-radius: 5px;
 
-    padding: 3px;
+    padding: 2px;
 
     max-width: 90px;
 
@@ -233,17 +237,23 @@ td {
 
     border-radius: 5px;
 
-    border: 0.5px solid var(--escuro);
+    border: none;
+
+    background-color: transparent;
 }
 
 .tippy-box[data-theme~='custom-theme'] {
     background-color: #ffffff;
     color: black;
+
     border: 2px solid var(--escuro);
     border-radius: 0.25rem;
+
     padding: 0.5rem;
+
     word-wrap: break-word;
     white-space: normal;
+
     width: fit-content;
 }
 

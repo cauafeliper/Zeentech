@@ -14,16 +14,25 @@
 
         $result = $conexao->query($query);
 
-        if (!$result) {
-            die('Erro na execução da consulta: ' . mysqli_error($conexao));
-        }
-
         $row = mysqli_fetch_assoc($result);
         $total = $row['total'];
 
         if ($total <= 0) {
             echo '<script>window.location.href = "../index.php";</script>';
             exit();
+        }
+        else {
+            $query = "SELECT COUNT(*) as total FROM email_adm WHERE email = '" . mysqli_real_escape_string($conexao, $email) . "'";
+    
+            $result = $conexao->query($query);
+    
+            $row = mysqli_fetch_assoc($result);
+            $total = $row['total'];
+
+            if ($total <= 0) {
+                echo '<script>window.location.href = "../index.php";</script>';
+                exit();
+            }
         }
     }
 ?>
@@ -33,8 +42,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../imgs/logo-volks.png" type="image/x-icon">
-    <link rel="stylesheet" href="style/style_principal.css">
-    <link rel="stylesheet" href="style/selectize.css">
+    <link rel="stylesheet" href="style/style_adm.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
@@ -49,6 +57,7 @@
     <header>
         <a href="https://www.vwco.com.br/" target="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus" style="height: 100%;"></a>
         <ul>
+            <li><a href="tela_principal.php">Início</a></li>
             <?php
             $query = "SELECT COUNT(*) as total FROM email_adm WHERE email = ?";
 
@@ -63,8 +72,8 @@
 
                 if ($total > 0) {
                     echo '
-                            <li><a href="tela_adm.php">ADM</a></li>
-                            <li><a href="../cadastro-login/aprovacao_Login.php">Logins</a></li>';
+                        <li><a href="#">KPM</a></li>
+                        <li><a href="../cadastro-login/aprovacao_Login.php">Logins</a></li>';
                 } else {
                     echo '
                             <span style="color: #001e50;">.</span>
@@ -100,7 +109,7 @@
                 <button class="filtro-btn" value="Fechados">Fechados</button>
             </div>
             <div>
-                <table id="tabela-kpm">
+                <table id="tabela-adm-kpm">
                     
                 </table>
             </div>
@@ -117,19 +126,19 @@
         <script>
             $(document).ready(function() {
                 // Função para atualizar a tabela
-                function atualizarTabela() {
+                function atualizarTabelaAdm() {
                     $.ajax({
-                        url: 'codigos/tabela.php',
+                        url: 'codigos/tabela_adm.php',
                         type: 'GET',
                         dataType: 'html',
                         success: function(response) {
-                            $('#tabela-kpm').html(response);
+                            $('#tabela-adm-kpm').html(response);
                         }
                     });
                 }
 
                 // Chama a função de atualização da tabela quando a página é carregada
-                atualizarTabela();
+                atualizarTabelaAdm();
 
                 // Outro código do seu script...
             });
@@ -149,12 +158,12 @@
                 $('.botoes__programas').click(function() {
                     var valorBotao = $(this).text();
                     $.ajax({
-                        url: 'codigos/tabela.php',
+                        url: 'codigos/tabela_adm.php',
                         type: 'GET',
                         data: {filtro_programa: valorBotao},
                         success: function(response) {
                             // Atualize a tabela com os dados recebidos do servidor
-                            $('#tabela-kpm').html(response);
+                            $('#tabela-adm-kpm').html(response);
                         }
                     });
                 });
@@ -162,12 +171,12 @@
                 $('.div__botoes_programas').on('click', 'button', function() {
                     var valorBotao = $(this).val();
                     $.ajax({
-                        url: 'codigos/tabela.php',
+                        url: 'codigos/tabela_adm.php',
                         type: 'GET',
                         data: {filtro_programa: valorBotao},
                         success: function(response) {
                             // Atualize a tabela com os dados recebidos do servidor
-                            $('#tabela-kpm').html(response);
+                            $('#tabela-adm-kpm').html(response);
                         }
                     });
                 });
@@ -175,12 +184,12 @@
                 $('.filtros').on('click', '.filtro-btn', function() {
                     var valorBotao = $(this).text();
                     $.ajax({
-                        url: 'codigos/tabela.php',
+                        url: 'codigos/tabela_adm.php',
                         type: 'GET',
                         data: {filtro_status_reuniao: valorBotao},
                         success: function(response) {
                             // Atualize a tabela com os dados recebidos do servidor
-                            $('#tabela-kpm').html(response);
+                            $('#tabela-adm-kpm').html(response);
                         }
                     });
                 });
@@ -188,44 +197,44 @@
                 $('.filtros').on('click', '.filtro-btn', function() {
                     var valorBotao = $(this).text();
                     $.ajax({
-                        url: 'codigos/tabela.php',
+                        url: 'codigos/tabela_adm.php',
                         type: 'GET',
                         data: {filtro_status_reuniao: valorBotao},
                         success: function(response) {
                             // Atualize a tabela com os dados recebidos do servidor
-                            $('#tabela-kpm').html(response);
+                            $('#tabela-adm-kpm').html(response);
                         }
                     });
                 });
             });
 //---------------------------------------------------------------------------------------------------------------------------------
             <?php
-            function criarFuncaoArmazenar($filtro) {
-                return "
-                    function armazenar_$filtro(valor) {
-                        $.ajax({
-                            url: 'codigos/tabela.php',
-                            type: 'GET',
-                            data: { filtro_$filtro: valor },
-                            success: function(response) {
-                                // Atualize a tabela com os dados recebidos do servidor
-                                $('#tabela-kpm').html(response);
-                            },
-                            error: function(xhr, status, error) {
-                                console.error(xhr.responseText);
-                            }
-                        });
-                    }
-                ";
-            }
+                function criarFuncaoArmazenar($filtro) {
+                    return "
+                        function armazenar_$filtro(valor) {
+                            $.ajax({
+                                url: 'codigos/tabela_adm.php',
+                                type: 'GET',
+                                data: { filtro_$filtro: valor },
+                                success: function(response) {
+                                    // Atualize a tabela com os dados recebidos do servidor
+                                    $('#tabela-adm-kpm').html(response);
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error(xhr.responseText);
+                                }
+                            });
+                        }
+                    ";
+                }
 
-            // Lista de filtros
-            $filtros = ['n_problem', 'rank', 'resumo', 'veiculo', 'status_kpm', 'fg', 'dias_aberto'];
+                // Lista de filtros
+                $filtros = ['n_problem', 'rank', 'data_fecha', 'resumo', 'veiculo', 'status_kpm', 'fg', 'dias_aberto', 'highlight', 'cw_er', 'causa', 'modelo', 'aval_crit', 'aval_crit_2', 'teste', 'kpm_dias_correntes', 'pn', 'reclamante', 'status_acao', 'resp_acao', 'status_du', 'info_du', 'dev_fk', 'dur_fk', 'teste_trt', 'status_anali_ser', 'feedback_ser', 'timing_status', 'nxt_frt_ans'];
 
-            // Criar as funções para cada filtro
-            foreach ($filtros as $filtro) {
-                echo criarFuncaoArmazenar($filtro);
-            }
+                // Criar as funções para cada filtro
+                foreach ($filtros as $filtro) {
+                    echo criarFuncaoArmazenar($filtro);
+                }
             ?>
 
             $(document).on('keyup', function(event) {
@@ -234,7 +243,7 @@
                     var idItem = $('.editavel:focus').closest('tr').find('td:first-child').text();
                     var coluna = $('.editavel:focus').closest('td').attr('name'); // Aqui você pode precisar ajustar para obter o valor correto do atributo "value" da célula
                     $.ajax({
-                        url: 'codigos/tabela.php',
+                        url: 'codigos/tabela_adm.php',
                         type: 'POST',
                         data: {
                             item: idItem,
