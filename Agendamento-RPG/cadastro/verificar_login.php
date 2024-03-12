@@ -59,6 +59,74 @@
                                     }
                                 });
                             </script>';
+
+                        // Verificar se o email está na tabela gestor
+                        $stmt_gestor = $conexao->prepare("SELECT * FROM gestor WHERE email = ?");
+                        $stmt_gestor->bind_param("s", $row['email']);
+                        $stmt_gestor->execute();
+                        $result_gestor = $stmt_gestor->get_result();
+                        $stmt_gestor->close();
+
+                        if($result_gestor->num_rows > 0) {
+                            $gestorTrue = true;
+                        } else {
+                            $gestorTrue = false;
+                        }
+
+                        // Verificar se o email está na tabela lista_adm
+                        $stmt_adm = $conexao->prepare("SELECT * FROM lista_adm WHERE email = ?");
+                        $stmt_adm->bind_param("s", $row['email']);
+                        $stmt_adm->execute();
+                        $result_adm = $stmt_adm->get_result();
+                        $stmt_adm->close();
+
+                        if($result_adm->num_rows > 0) {
+                            $admTrue = true;
+                        } else {
+                            $admTrue = false;
+                        }
+
+                        require("../PHPMailer-master/src/PHPMailer.php"); 
+                        require("../PHPMailer-master/src/SMTP.php");
+                        $mail = new PHPMailer\PHPMailer\PHPMailer();
+                        $mail->IsSMTP();
+                        $mail->SMTPDebug = 0;
+                        $mail->SMTPAuth = true;
+                        $mail->SMTPSecure = 'tls'; 
+                        $mail->Host = "equipzeentech.com"; 
+                        $mail->Port = 587;
+                        $mail->Username = "admin@equipzeentech.com"; 
+                        $mail->Password = "Z3en7ech"; 
+                        $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
+                        $mail->AddAddress($row['email']); 
+                        $mail->Subject = mb_convert_encoding("Email verificado!","Windows-1252","UTF-8");
+                        $body =  "Seu email foi verificado com sucesso!\nSegue link para o tutorial de como utilizar a página: https://drive.google.com/file/d/1w-7YJXje3fR3wvZaFnAj9yQ4SsRqB3XT/view?usp=drive_link";
+                        if($gestorTrue) {
+                            $body .= "\n\nSegue link para o tutorial de como utilizar a página como gestor: https://drive.google.com/file/d/1nNH71zqNmMx39pKrFuW7eD8hstNWsQ3q/view?usp=drive_link";
+                        }
+                        if($admTrue) {
+                            $body .= "\n\nSegue link para o tutorial de como utilizar a página como administrador: https://drive.google.com/file/d/1gukHyPmIIjSW0-ksy97ocQQEadbmcfDb/view?usp=drive_link";
+                            if (!$gestorTrue){
+                                $body .= "\n\nSegue link para o tutorial de como utilizar a página como gestor: https://drive.google.com/file/d/1nNH71zqNmMx39pKrFuW7eD8hstNWsQ3q/view?usp=drive_link";
+                            }
+                        }
+                        $body .= "\n\nAtenciosamente,\nEquipe Zeentech";
+                        $mail->Body = mb_convert_encoding($body,"Windows-1252","UTF-8");
+                        /* $tutorialUsuario = '../anexos/tutorial_usuario.pdf';
+                        $tutorialGestor = '../anexos/tutorial_gestor.pdf';
+                        $tutorialAdm = '../anexos/tutorial_administrador.pdf';
+                        $mail->addAttachment($tutorialUsuario, 'tutorial_usuario.pdf');
+                        if($gestorTrue) {
+                            $mail->addAttachment($tutorialGestor, 'tutorial_gestor.pdf');
+                        }
+                        if($admTrue) {
+                            $mail->addAttachment($tutorialAdm, 'tutorial_administrador.pdf');
+                            if (!$gestorTrue){
+                                $mail->addAttachment($tutorialGestor, 'tutorial_gestor.pdf');
+                            }
+                        } */
+
+                        $mail->send();
                     } else {
                         echo '<script>
                                 Swal.fire({

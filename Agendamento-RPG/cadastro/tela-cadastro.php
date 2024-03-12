@@ -242,14 +242,13 @@
                                 $mail->SMTPSecure = 'tls'; 
                                 $mail->Host = "equipzeentech.com"; 
                                 $mail->Port = 587;
-                                $mail->IsHTML(true); 
                                 $mail->Username = "admin@equipzeentech.com"; 
                                 $mail->Password = "Z3en7ech"; 
-                                $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
+                                $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
                                 $mail->AddAddress($email);
                                 
                                 $mail->Subject = mb_convert_encoding("Verificação de email","Windows-1252","UTF-8"); 
-                                $mail->Body = mb_convert_encoding('Voce fez cadastro com esse email no site do RPG. Para verificar seu email e confirmar seu cadastro, clique <a href="'.$linkLocal.'">aqui</a>. Esse link vai expirar em 30 minutos!<br>Caso a solicitação não tenha sido feita por você, apenas ignore este email.<br><br>Atenciosamente,<br>Equipe Zeentech.',"Windows-1252","UTF-8"); 
+                                $mail->Body = mb_convert_encoding("Você fez cadastro com esse email no site de agendamento da Pista de Testes. Para verificar seu email e confirmar seu cadastro, acesse: $link. Esse link vai expirar em 30 minutos!\nCaso a solicitação não tenha sido feita por você, apenas ignore este email.\n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8"); 
 
                                 try{
                                     $mail->send();

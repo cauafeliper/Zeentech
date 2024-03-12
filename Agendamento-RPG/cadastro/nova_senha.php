@@ -8,7 +8,7 @@ if (isset($_GET['token'])) {
     $token = $_GET['token'];
 } else {
     // Token não fornecido, redirecionar ou mostrar uma mensagem de erro
-    header("Location: ../index.php");
+    echo '<script>window.location.href = \'../index.php\';</script>';
     exit();
 }
 

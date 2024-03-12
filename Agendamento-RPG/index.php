@@ -144,7 +144,7 @@
                     $_SESSION['area_solicitante'] = $area_solicitante;
                     $_SESSION['empresa'] = $empresa;
 
-                header("Location: agendamento/tabela-agendamentos.php");
+                    echo '<script>window.location.href = \'agendamento/tabela-agendamentos.php\';</script>';
                 exit();
 
                 }

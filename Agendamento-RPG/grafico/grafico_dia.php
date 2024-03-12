@@ -39,7 +39,7 @@ include 'functions.php';
         <div class="tit">
         <?php
 
-            $dia = '2024-02-15';
+            $dia = '2024-03-05';
 
             $listaPistas = array('VDA', 'NVH', 'Obstáculos', 'Rampa 12% e 20%', 'Rampa 40%', 'Rampa 60%', 'Asfalto', 'Pista Completa');
             $listaPistasClasse = array('vda', 'nvh', 'obs', 'r_12_20', 'r_40', 'r_60', 'asf', 'pc');
@@ -55,6 +55,16 @@ include 'functions.php';
             ?>
         </div>
         <div class="out_grafico">
+            <div class = nome_pistas_over>
+                <div class="c1 quad_graf_over">VDA</div>
+                <div class="d1 quad_graf_over">NVH</div>
+                <div class="e1 quad_graf_over">Obstáculos</div>
+                <div class="f1 quad_graf_over">Rampa 12% e 20%</div>
+                <div class="g1 quad_graf_over">Rampa 40%</div>
+                <div class="h1 quad_graf_over">Rampa 60%</div>
+                <div class="i1 quad_graf_over">Asfalto</div>
+                <div class="j1 quad_graf_over">Pista Completa</div>
+            </div>
             <div class="grafico" style="position: relative">
                 <hr style="width: 1px; position: absolute;left: 170px;height: 374px;z-index: 1;top: 11%;">
                 <hr style="width: 1px; position: absolute;left: 248px;height: 374px;z-index: 1;top: 11%;">
@@ -85,14 +95,14 @@ include 'functions.php';
                 </div>
                 <div class="grafico_preenchimentos">
                     <div class = nome_pistas>
-                        <div class="c1 quad_graf">VDA</div>
-                        <div class="d1 quad_graf">NVH</div>
-                        <div class="e1 quad_graf">Obstáculos</div>
-                        <div class="f1 quad_graf">Rampa 12% e 20%</div>
-                        <div class="g1 quad_graf">Rampa 40%</div>
-                        <div class="h1 quad_graf">Rampa 60%</div>
-                        <div class="i1 quad_graf">Asfalto</div>
-                        <div class="j1 quad_graf">Pista Completa</div>
+                        <div class="c1 quad_graf"></div>
+                        <div class="d1 quad_graf"></div>
+                        <div class="e1 quad_graf"></div>
+                        <div class="f1 quad_graf"></div>
+                        <div class="g1 quad_graf"></div>
+                        <div class="h1 quad_graf"></div>
+                        <div class="i1 quad_graf"></div>
+                        <div class="j1 quad_graf"></div>
                     </div>
                     <div class="grafico_linhas">
                     <?php

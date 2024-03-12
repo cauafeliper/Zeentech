@@ -80,9 +80,10 @@ function obterDiasEntreDatas($dataInicial, $dataFinal) {
 }
 
 function CriarCSSdia($conexao, $dia, $area_pista, $letra, $pistaClasse, $y){ // cria as classes com os horários agendados
-    $sql = "SELECT hora_inicio, hora_fim, exclsv, status FROM agendamentos WHERE area_pista = '$area_pista' AND dia='$dia' AND (status='Aprovado' OR status='Pendente')";
+    $sql = "SELECT id, hora_inicio, hora_fim, exclsv, status FROM agendamentos WHERE area_pista = '$area_pista' AND dia='$dia' AND (status='Aprovado' OR status='Pendente') ORDER BY hora_inicio ASC";
     $result = $conexao->query($sql);
     $horariosMarcados = array();
+    $listaObs = array();
     if ($result->num_rows > 0) {
 
         while ($row = $result->fetch_assoc()) {
@@ -90,6 +91,7 @@ function CriarCSSdia($conexao, $dia, $area_pista, $letra, $pistaClasse, $y){ // 
             $horarioInicio = $row["hora_inicio"];
             $horarioFim = $row["hora_fim"];
             $status = $row["status"];
+            $id = $row["id"];
             
             $horaInicio = $horarioInicio[0] . $horarioInicio[1];
             $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
@@ -104,15 +106,74 @@ function CriarCSSdia($conexao, $dia, $area_pista, $letra, $pistaClasse, $y){ // 
                 $cor = ($exclsv === 'Sim') ? '#808080' : '#bcb8b8';
             }
 
-            $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim));
+            $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim), 'horarioInicio' => $horarioInicio, 'horarioFim' => $horarioFim, 'id' => $id);
+            if ($area_pista == 'Obstáculos'){
+                $listaObs[] = array('id' => $id, 'inicio' => $horarioInicio, 'fim' => $horarioFim, 'pos' => 0, 'qtd' => 0);
+            }
         }
         $j = 2;
+        $index = 0;
+        $grupo = array();
+        $grupos = array();
+        
+        $ind = 0;
+        foreach ($listaObs as $agendamento) {
+            if ($ind == 0){
+                $grupo[] = $agendamento;
+                $ind++;
+            }
+            else{
+                $sobreposicao = false;
+                foreach ($grupo as $agendamentoGrupo) {
+                    if (((strtotime($agendamento['inicio']) >= strtotime($agendamentoGrupo['inicio']) && strtotime($agendamento['inicio']) <= strtotime($agendamentoGrupo['fim'])) || (strtotime($agendamento['fim']) >= strtotime($agendamentoGrupo['inicio']) && strtotime($agendamento['fim']) <= strtotime($agendamentoGrupo['fim'])) || (strtotime($agendamento['inicio']) <= strtotime($agendamentoGrupo['inicio']) && strtotime($agendamento['fim']) >= strtotime($agendamentoGrupo['fim']))) && $agendamento['id'] != $agendamentoGrupo['id']) {
+                        $sobreposicao = true;
+                    }
+                }
+                if ($sobreposicao){
+                    $grupo[] = $agendamento;
+                }
+                else{
+                    $grupos[] = $grupo;
+                    $grupo = array();
+                    $grupo[] = $agendamento;
+                }
+            }
+            $ind++;
+        }
+        $grupos[] = $grupo;
+
         foreach ($horariosMarcados as $tarefa) {
             $cor = $tarefa['cor'];
             $horaInicio = $tarefa['horaInicio'];
             $horaFim = $tarefa['horaFim'];
             $minutoInicio = $tarefa['minutoInicio'];
             $minutoFim = $tarefa['minutoFim'];
+            $id = $tarefa['id'];
+            $horarioInicio = $tarefa['horarioInicio'];
+            $horarioFim = $tarefa['horarioFim'];
+
+            $numSobreposicoes = 1;
+            foreach ($grupos as $grupo) {
+                $ind = 0;
+                foreach ($grupo as $agendamento) {
+                    if ($agendamento['id'] == $id){
+                        $numSobreposicoes = count($grupo);
+                        $index = $ind;
+                    }
+                    $ind++;
+                }
+            }
+
+            $altura = 100 / ($numSobreposicoes);
+            if ($altura == 100){
+                $altura = 60;
+            }
+            if ($numSobreposicoes > 1){
+                $top = $index * $altura;
+            }
+            else{
+                $top = 20;
+            }
             
             if ($horaInicio != $horaFim){
                 if($minutoInicio != '00'){
@@ -169,23 +230,35 @@ function CriarCSSdia($conexao, $dia, $area_pista, $letra, $pistaClasse, $y){ // 
                 $leftTip = 827;
             }
 
-            echo '<style>';
-            echo '.' . $pistaClasse . '{position: relative;}';
-            echo '.' . $classe . '{transition: opacity 0.3s ease-in-out;position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
+            if ($area_pista === 'Obstáculos'){
+                echo '<style>';
+                echo '.' . $pistaClasse . '{position: relative;}';
+                echo '.' . $classe . '{transition: opacity 0.3s ease-in-out;position: absolute; width: '.$tamanho.'px; height: '.$altura.'%; top: '.$top.'%; left: '.$leftTotal.'px; background-color: '.$cor.'; border-radius: 7px; border-top: 1px solid white; border-bottom: 1px solid white;}';
 
-            echo '.'.$classeTip. '{visibility:hidden; opacity:0; transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; position: absolute; justify-content: center; '.$y.': 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-radius: 15px; z-index: 3; display: flex; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
-            echo ".$classe:hover + .$classeTip".'{visibility:visible;opacity:1}';
-            echo ".$classeTip:hover {visibility:visible;opacity:1}";
-            echo ".$classe:hover {opacity: 0.5;}";
-            echo '</style>';
+                echo '.'.$classeTip. '{visibility:hidden; opacity:0; transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; position: absolute; justify-content: center; '.$y.': 45px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-radius: 15px; z-index: 3; display: flex; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
+                echo ".$classe:hover + .$classeTip".'{visibility:visible;opacity:1}';
+                echo ".$classeTip:hover {visibility:visible;opacity:1}";
+                echo ".$classe:hover {opacity: 0.5;}";
+                echo '</style>';
+            }
+            else{
+                echo '<style>';
+                echo '.' . $pistaClasse . '{position: relative;}';
+                echo '.' . $classe . '{transition: opacity 0.3s ease-in-out;position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-radius: 15px; border-top: 10px solid white; border-bottom: 10px solid white;}';
 
+                echo '.'.$classeTip. '{visibility:hidden; opacity:0; transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; position: absolute; justify-content: center; '.$y.': 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-radius: 15px; z-index: 3; display: flex; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
+                echo ".$classe:hover + .$classeTip".'{visibility:visible;opacity:1}';
+                echo ".$classeTip:hover {visibility:visible;opacity:1}";
+                echo ".$classe:hover {opacity: 0.5;}";
+                echo '</style>';
+            }
             $j++;
         }
     }
 }
 
 function CriarHTMLdia($conexao, $dia, $area_pista, $letra){ // cria as divs com as classes para cada pista
-    $sql = "SELECT * FROM agendamentos WHERE area_pista = '$area_pista' AND dia='$dia' AND (status='Aprovado' OR status='Pendente')";
+    $sql = "SELECT * FROM agendamentos WHERE area_pista = '$area_pista' AND dia='$dia' AND (status='Aprovado' OR status='Pendente') ORDER BY hora_inicio ASC";
     $result = $conexao->query($sql);
     $j = 2;
     while ($row = $result->fetch_assoc()) {
@@ -197,6 +270,7 @@ function CriarHTMLdia($conexao, $dia, $area_pista, $letra){ // cria as divs com 
         $numero = $row["numero_solicitante"];
         $empresa = $row["empresa_solicitante"];
         $status = $row["status"];
+        $obs = $row["obs"];
 
         $classe = "$letra".$j;
         echo '<div class="'.$classe.'" style="cursor:pointer" onclick="PopupAgendamento(\''.$row['id'].'\',\''.$row['area_pista'].'\',\''.$row['dia'].'\',\''.$horario.'\',\''.$row['objtv'].'\',\''.$row['solicitante'].'\',\''.$row['numero_solicitante'].'\',\''.$row['empresa_solicitante'].'\',\''.$row['area_solicitante'].'\',\''.$row['exclsv'].'\',\''.$row['obs'].'\',\''.$row['status'].'\')"></div>';
@@ -205,15 +279,17 @@ function CriarHTMLdia($conexao, $dia, $area_pista, $letra){ // cria as divs com 
             '<p><span style="color: #4C7397;">Empresa: </span>'."$empresa".'</p>'.
             '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
             '<p><span style="color: #4C7397;">Telefone: </span>'."$numero".'</p>'.
-            '<p><span style="color: #4C7397;">Status: </span>'."$status".'</p>'.
-        '</div>';
+            '<p><span style="color: #4C7397;">Status: </span>'."$status".'</p>';
+            if ($obs != ''){
+                echo '<p><span style="color: #4C7397;">Obs: </span>'."$obs".'</p>';}
+        echo '</div>';
         $j++;
     }
 }
 
 function CriarHTMLsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClasse){ // cria as divs com as classes para cada pista
     for ($i = 0; $i < 8; $i++){
-        $sql = "SELECT * FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND (status='Aprovado' OR status='Pendente')";
+        $sql = "SELECT * FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND (status='Aprovado' OR status='Pendente') ORDER BY hora_inicio ASC";
         $result = $conexao->query($sql);
         $j = 2;
         echo '<div class="'.$listaPistaClasse[$i].'" style="width: 140px">';
@@ -227,6 +303,7 @@ function CriarHTMLsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPista
             $empresa = $row["empresa_solicitante"];
             $id = $row["id"];
             $status = $row["status"];
+            $obs = $row["obs"];
 
             $classe = "$listaLetras[$i]".$j.'_semana_'.$id;
             echo '<div class="'.$classe.'" style="cursor:pointer" onclick="PopupAgendamento(\''.$row['id'].'\',\''.$row['area_pista'].'\',\''.$row['dia'].'\',\''.$horario.'\',\''.$row['objtv'].'\',\''.$row['solicitante'].'\',\''.$row['numero_solicitante'].'\',\''.$row['empresa_solicitante'].'\',\''.$row['area_solicitante'].'\',\''.$row['exclsv'].'\',\''.$row['obs'].'\',\''.$row['status'].'\')"></div>';
@@ -235,8 +312,10 @@ function CriarHTMLsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPista
                 '<p><span style="color: #4C7397;">Empresa: </span>'."$empresa".'</p>'.
                 '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
                 '<p><span style="color: #4C7397;">Telefone: </span>'."$numero".'</p>'.
-                '<p><span style="color: #4C7397;">Status: </span>'."$status".'</p>'.
-            '</div>';
+                '<p><span style="color: #4C7397;">Status: </span>'."$status".'</p>';
+                if ($obs != ''){
+                    echo '<p><span style="color: #4C7397;">Obs: </span>'."$obs".'</p>';}
+            echo '</div>';
             $j++;
         }
         echo '</div>';
@@ -246,9 +325,10 @@ function CriarHTMLsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPista
 
 function CriarCSSsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClasse, $listaY){ // cria as classes com os horários agendados
     for ($i = 0; $i < 8; $i++){
-        $sql = "SELECT * FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND (status='Aprovado' OR status='Pendente')";
+        $sql = "SELECT * FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND (status='Aprovado' OR status='Pendente') ORDER BY hora_inicio ASC";
         $result = $conexao->query($sql);
         $horariosMarcados = array();
+        $listaObs = array();
         if ($result->num_rows > 0) {
 
             while ($row = $result->fetch_assoc()) {
@@ -257,6 +337,7 @@ function CriarCSSsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaC
                 $horarioFim = $row["hora_fim"];
                 $id = $row["id"];
                 $status = $row["status"];
+                $area_pista = $row["area_pista"];
                 
                 $horaInicio = $horarioInicio[0] . $horarioInicio[1];
                 $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
@@ -270,10 +351,43 @@ function CriarCSSsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaC
                 else{
                     $cor = ($exclsv === 'Sim') ? '#808080' : '#bcb8b8';
                 }
-
-                $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim), 'id' => $id);
+                
+                $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim), 'horarioInicio' => $horarioInicio, 'horarioFim' => $horarioFim, 'id' => $id);
+                if ($area_pista == 'Obstáculos'){
+                    $listaObs[] = array('id' => $id, 'inicio' => $horarioInicio, 'fim' => $horarioFim, 'pos' => 0, 'qtd' => 0);
+                }
             }
             $j = 2;
+            $index = 0;
+            $grupo = array();
+            $grupos = array();
+            
+            $ind = 0;
+            foreach ($listaObs as $agendamento) {
+                if ($ind == 0){
+                    $grupo[] = $agendamento;
+                    $ind++;
+                }
+                else{
+                    $sobreposicao = false;
+                    foreach ($grupo as $agendamentoGrupo) {
+                        if (((strtotime($agendamento['inicio']) >= strtotime($agendamentoGrupo['inicio']) && strtotime($agendamento['inicio']) <= strtotime($agendamentoGrupo['fim'])) || (strtotime($agendamento['fim']) >= strtotime($agendamentoGrupo['inicio']) && strtotime($agendamento['fim']) <= strtotime($agendamentoGrupo['fim'])) || (strtotime($agendamento['inicio']) <= strtotime($agendamentoGrupo['inicio']) && strtotime($agendamento['fim']) >= strtotime($agendamentoGrupo['fim']))) && $agendamento['id'] != $agendamentoGrupo['id']) {
+                            $sobreposicao = true;
+                        }
+                    }
+                    if ($sobreposicao){
+                        $grupo[] = $agendamento;
+                    }
+                    else{
+                        $grupos[] = $grupo;
+                        $grupo = array();
+                        $grupo[] = $agendamento;
+                    }
+                }
+                $ind++;
+            }
+            $grupos[] = $grupo;
+
             foreach ($horariosMarcados as $tarefa) {
                 $cor = $tarefa['cor'];
                 $horaInicio = $tarefa['horaInicio'];
@@ -281,6 +395,31 @@ function CriarCSSsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaC
                 $minutoInicio = $tarefa['minutoInicio'];
                 $minutoFim = $tarefa['minutoFim'];
                 $id = $tarefa['id'];
+                $horarioInicio = $tarefa['horarioInicio'];
+                $horarioFim = $tarefa['horarioFim'];
+
+                $numSobreposicoes = 1;
+                foreach ($grupos as $grupo) {
+                    $ind = 0;
+                    foreach ($grupo as $agendamento) {
+                        if ($agendamento['id'] == $id){
+                            $numSobreposicoes = count($grupo);
+                            $index = $ind;
+                        }
+                        $ind++;
+                    }
+                }
+
+                $altura = 100 / ($numSobreposicoes);
+                if ($altura == 100){
+                    $altura = 60;
+                }
+                if ($numSobreposicoes > 1){
+                    $top = $index * $altura;
+                }
+                else{
+                    $top = 20;
+                }
                 
                 if ($horaInicio != $horaFim){
                     if($minutoInicio != '00'){
@@ -341,15 +480,28 @@ function CriarCSSsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaC
                     $leftTip = 827;
                 }
 
-                echo '<style>';
-                echo '.' . $listaPistaClasse[$i] . '{position: relative;}';
-                echo '.' . $classe . '{transition: opacity 0.3s ease-in-out;position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-radius: 40%; border-top: 10px solid white; border-bottom: 10px solid white;}';
+                if ($area_pista === 'Obstáculos'){
+                    echo '<style>';
+                    echo '.' . $listaPistaClasse[$i] . '{position: relative;}';
+                    echo '.' . $classe . '{transition: opacity 0.3s ease-in-out;position: absolute; width: '.$tamanho.'px; height: '.$altura.'%; top: '.$top.'%; left: '.$leftTotal.'px; background-color: '.$cor.'; border-radius: 10px; border-top: 1px solid white; border-bottom: 1px solid white;}';
 
-                echo '.'.$classeTip. '{visibility:hidden; opacity:0; transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;position: absolute; justify-content: center; '.$listaY[$i].': 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-radius: 15px; z-index: 3; display: flex; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
-                echo ".$classe:hover + .$classeTip".'{visibility:visible;opacity:1}';
-                echo ".$classeTip:hover {visibility:visible;opacity:1}";
-                echo ".$classe:hover {opacity: 0.5;}";
-                echo '</style>';
+                    echo '.'.$classeTip. '{visibility:hidden; opacity:0; transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;position: absolute; justify-content: center; '.$listaY[$i].': 45px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-radius: 15px; z-index: 3; display: flex; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
+                    echo ".$classe:hover + .$classeTip".'{visibility:visible;opacity:1}';
+                    echo ".$classeTip:hover {visibility:visible;opacity:1}";
+                    echo ".$classe:hover {opacity: 0.5;}";
+                    echo '</style>';
+                }
+                else{
+                    echo '<style>';
+                    echo '.' . $listaPistaClasse[$i] . '{position: relative;}';
+                    echo '.' . $classe . '{transition: opacity 0.3s ease-in-out;position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-radius: 40%; border-top: 10px solid white; border-bottom: 10px solid white;}';
+
+                    echo '.'.$classeTip. '{visibility:hidden; opacity:0; transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;position: absolute; justify-content: center; '.$listaY[$i].': 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-radius: 15px; z-index: 3; display: flex; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
+                    echo ".$classe:hover + .$classeTip".'{visibility:visible;opacity:1}';
+                    echo ".$classeTip:hover {visibility:visible;opacity:1}";
+                    echo ".$classe:hover {opacity: 0.5;}";
+                    echo '</style>';
+                }
 
                 $j++;
             }
@@ -359,7 +511,7 @@ function CriarCSSsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPistaC
 
 function CriarHTMLmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClasse){ // cria as divs com as classes para cada pista
     for ($i = 0; $i < 8; $i++){
-        $sql = "SELECT * FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND (status='Aprovado' OR status='Pendente')";
+        $sql = "SELECT * FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND (status='Aprovado' OR status='Pendente') ORDER BY hora_inicio ASC";
         $result = $conexao->query($sql);
         $j = 2;
         echo '<div class="'.$listaPistaClasse[$i].'" style="width: 140px">';
@@ -373,6 +525,7 @@ function CriarHTMLmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaCla
             $empresa = $row["empresa_solicitante"];
             $id = $row["id"];
             $status = $row["status"];
+            $obs = $row["obs"];
 
             $classe = "$listaLetras[$i]".$j.'_mes_'.$id;
             echo '<div class="'.$classe.'" style="cursor:pointer" onclick="PopupAgendamento(\''.$row['id'].'\',\''.$row['area_pista'].'\',\''.$row['dia'].'\',\''.$horario.'\',\''.$row['objtv'].'\',\''.$row['solicitante'].'\',\''.$row['numero_solicitante'].'\',\''.$row['empresa_solicitante'].'\',\''.$row['area_solicitante'].'\',\''.$row['exclsv'].'\',\''.$row['obs'].'\',\''.$row['status'].'\')"></div>';
@@ -381,8 +534,10 @@ function CriarHTMLmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaCla
                 '<p><span style="color: #4C7397;">Empresa: </span>'."$empresa".'</p>'.
                 '<p><span style="color: #4C7397;">Área Solicitante: </span>'."$areaSolicitante".'</p>'.
                 '<p><span style="color: #4C7397;">Telefone: </span>'."$numero".'</p>'.
-                '<p><span style="color: #4C7397;">Status: </span>'."$status".'</p>'.
-            '</div>';
+                '<p><span style="color: #4C7397;">Status: </span>'."$status".'</p>';
+                if ($obs != ''){
+                    echo '<p><span style="color: #4C7397;">Obs: </span>'."$obs".'</p>';}
+            echo '</div>';
             $j++;
         }
         echo '</div>';
@@ -392,9 +547,10 @@ function CriarHTMLmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaCla
 
 function CriarCSSmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClasse, $listaY){ // cria as classes com os horários agendados
     for ($i = 0; $i < 8; $i++){
-        $sql = "SELECT * FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND (status='Aprovado' OR status='Pendente')";
+        $sql = "SELECT * FROM agendamentos WHERE area_pista = '$listaPistas[$i]' AND dia='$dia' AND (status='Aprovado' OR status='Pendente') ORDER BY hora_inicio ASC";
         $result = $conexao->query($sql);
         $horariosMarcados = array();
+        $listaObs = array();
         if ($result->num_rows > 0) {
 
             while ($row = $result->fetch_assoc()) {
@@ -403,6 +559,7 @@ function CriarCSSmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClas
                 $horarioFim = $row["hora_fim"];
                 $id = $row["id"];
                 $status = $row["status"];
+                $area_pista = $row["area_pista"];
                 
                 $horaInicio = $horarioInicio[0] . $horarioInicio[1];
                 $minutoInicio = $horarioInicio[3] . $horarioInicio[4];
@@ -417,9 +574,42 @@ function CriarCSSmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClas
                     $cor = ($exclsv === 'Sim') ? '#808080' : '#bcb8b8';
                 }
 
-                $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim), 'id' => $id);
+                $horariosMarcados[] = array('exclsv' => $exclsv, 'cor' => $cor, 'horaInicio' => intval($horaInicio), 'horaFim' => intval($horaFim), 'minutoInicio' => intval($minutoInicio), 'minutoFim' => intval($minutoFim), 'horarioInicio' => $horarioInicio, 'horarioFim' => $horarioFim, 'id' => $id);
+                if ($area_pista == 'Obstáculos'){
+                    $listaObs[] = array('id' => $id, 'inicio' => $horarioInicio, 'fim' => $horarioFim, 'pos' => 0, 'qtd' => 0);
+                }
             }
             $j = 2;
+            $index = 0;
+            $grupo = array();
+            $grupos = array();
+            
+            $ind = 0;
+            foreach ($listaObs as $agendamento) {
+                if ($ind == 0){
+                    $grupo[] = $agendamento;
+                    $ind++;
+                }
+                else{
+                    $sobreposicao = false;
+                    foreach ($grupo as $agendamentoGrupo) {
+                        if (((strtotime($agendamento['inicio']) >= strtotime($agendamentoGrupo['inicio']) && strtotime($agendamento['inicio']) <= strtotime($agendamentoGrupo['fim'])) || (strtotime($agendamento['fim']) >= strtotime($agendamentoGrupo['inicio']) && strtotime($agendamento['fim']) <= strtotime($agendamentoGrupo['fim'])) || (strtotime($agendamento['inicio']) <= strtotime($agendamentoGrupo['inicio']) && strtotime($agendamento['fim']) >= strtotime($agendamentoGrupo['fim']))) && $agendamento['id'] != $agendamentoGrupo['id']) {
+                            $sobreposicao = true;
+                        }
+                    }
+                    if ($sobreposicao){
+                        $grupo[] = $agendamento;
+                    }
+                    else{
+                        $grupos[] = $grupo;
+                        $grupo = array();
+                        $grupo[] = $agendamento;
+                    }
+                }
+                $ind++;
+            }
+            $grupos[] = $grupo;
+            
             foreach ($horariosMarcados as $tarefa) {
                 $cor = $tarefa['cor'];
                 $horaInicio = $tarefa['horaInicio'];
@@ -427,6 +617,31 @@ function CriarCSSmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClas
                 $minutoInicio = $tarefa['minutoInicio'];
                 $minutoFim = $tarefa['minutoFim'];
                 $id = $tarefa['id'];
+                $horarioInicio = $tarefa['horarioInicio'];
+                $horarioFim = $tarefa['horarioFim'];
+
+                $numSobreposicoes = 1;
+                foreach ($grupos as $grupo) {
+                    $ind = 0;
+                    foreach ($grupo as $agendamento) {
+                        if ($agendamento['id'] == $id){
+                            $numSobreposicoes = count($grupo);
+                            $index = $ind;
+                        }
+                        $ind++;
+                    }
+                }
+
+                $altura = 100 / ($numSobreposicoes);
+                if ($altura == 100){
+                    $altura = 60;
+                }
+                if ($numSobreposicoes > 1){
+                    $top = $index * $altura;
+                }
+                else{
+                    $top = 20;
+                }
                 
                 if ($horaInicio != $horaFim){
                     if($minutoInicio != '00'){
@@ -487,15 +702,28 @@ function CriarCSSmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaClas
                     $leftTip = 827;
                 }
 
-                echo '<style>';
-                echo '.' . $listaPistaClasse[$i] . '{position: relative;}';
-                echo '.' . $classe . '{transition: opacity 0.3s ease-in-out;position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-radius: 40%; border-top: 10px solid white; border-bottom: 10px solid white;}';
+                if ($area_pista === 'Obstáculos'){
+                    echo '<style>';
+                    echo '.' . $listaPistaClasse[$i] . '{position: relative;}';
+                    echo '.' . $classe . '{transition: opacity 0.3s ease-in-out;position: absolute; width: '.$tamanho.'px; height: '.$altura.'%; top: '.$top.'%; left: '.$leftTotal.'px; background-color: '.$cor.'; border-radius: 10px; border-top: 1px solid white; border-bottom: 1px solid white;}';
 
-                echo '.'.$classeTip. '{visibility:hidden; opacity:0; transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;position: absolute; justify-content: center; '.$listaY[$i].': 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-radius: 15px; z-index: 3; display: flex; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
-                echo ".$classe:hover + .$classeTip".'{visibility:visible;opacity:1}';
-                echo ".$classeTip:hover {visibility:visible;opacity:1}";
-                echo ".$classe:hover {opacity: 0.5;}";
-                echo '</style>';
+                    echo '.'.$classeTip. '{visibility:hidden; opacity:0; transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;position: absolute; justify-content: center; '.$listaY[$i].': 45px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-radius: 15px; z-index: 3; display: flex; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
+                    echo ".$classe:hover + .$classeTip".'{visibility:visible;opacity:1}';
+                    echo ".$classeTip:hover {visibility:visible;opacity:1}";
+                    echo ".$classe:hover {opacity: 0.5;}";
+                    echo '</style>';
+                }
+                else{
+                    echo '<style>';
+                    echo '.' . $listaPistaClasse[$i] . '{position: relative;}';
+                    echo '.' . $classe . '{transition: opacity 0.3s ease-in-out;position: absolute; width: '.$tamanho.'px; height: 43px; left: '.$leftTotal.'px; background-color: '.$cor.'; border-radius: 40%; border-top: 10px solid white; border-bottom: 10px solid white;}';
+
+                    echo '.'.$classeTip. '{visibility:hidden; opacity:0; transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;position: absolute; justify-content: center; '.$listaY[$i].': 35px; width: 200px; height: fit-content; left: '.$leftTip.'px; border-radius: 15px; z-index: 3; display: flex; text-align: start; padding: 5px;  flex-flow: column; background-color: #9cadddeb; font-size: 14px;}';
+                    echo ".$classe:hover + .$classeTip".'{visibility:visible;opacity:1}';
+                    echo ".$classeTip:hover {visibility:visible;opacity:1}";
+                    echo ".$classe:hover {opacity: 0.5;}";
+                    echo '</style>';
+                }
 
                 $j++;
             }
@@ -663,7 +891,7 @@ function CriarGraficoSolicitante($conexao, $listaAreasSolicitantes, $dataInicial
                 $tamanho = 0;
             }
             else{
-                $tamanho = ($pista['vezes'] / $maiorVezes) * 100;
+                $tamanho = ($pista['vezes'] / $maiorVezes) * 90;
             }
             if ($tamanho != 0){
                 switch ($pista['pista']){
@@ -722,7 +950,7 @@ function CriarGraficoSolicitanteHoras($conexao, $listaAreasSolicitantes, $dataIn
                 $tamanho = 0;
             }
             else{
-                $tamanho = ($pista['tempo'] / $maiorTempo) * 100;
+                $tamanho = ($pista['tempo'] / $maiorTempo) * 90;
             }
             if ($tamanho != 0){
                 switch ($pista['pista']){
@@ -793,7 +1021,7 @@ function CriarNovoGraficoSolicitante($conexao, $listaAreasSolicitantes, $dataIni
                 $tamanho = 0;
             }
             else{
-                $tamanho = ($pista['vezes'] / $maiorVezes) * 100;
+                $tamanho = ($pista['vezes'] / $maiorVezes) * 90;
             }
             if ($tamanho != 0){
                 switch ($pista['pista']){
@@ -854,7 +1082,7 @@ function CriarNovoGraficoSolicitanteHoras($conexao, $listaAreasSolicitantes, $da
                 $tamanho = 0;
             }
             else{
-                $tamanho = ($pista['tempo'] / $maiorTempo) * 100;
+                $tamanho = ($pista['tempo'] / $maiorTempo) * 90;
             }
             if ($tamanho != 0){
                 switch ($pista['pista']){

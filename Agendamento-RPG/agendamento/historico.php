@@ -9,7 +9,7 @@
         // Sessão expirada, destrói a sessão e redireciona para a página de login
         session_unset();
         session_destroy();
-        header("Location: ../index.php");
+        echo '<script>window.location.href = \'../index.php\';</script>';
         exit();
     }
 
@@ -39,7 +39,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
 <body>
     <?php 
         if (!isset($_SESSION['email']) || empty($_SESSION['email'])) {
-            header('Location: ../index.php');
+            echo '<script>window.location.href = \'../index.php\';</script>';
             exit();
         }
     ?>

@@ -47,19 +47,38 @@ if (isset($_GET['id'])) {
             $mail->SMTPSecure = 'tls'; 
             $mail->Host = "equipzeentech.com";  
             $mail->Port = 587;
-            $mail->IsHTML(true); 
             $mail->Username = "admin@equipzeentech.com"; 
             $mail->Password = "Z3en7ech"; 
-            $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
+            $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
             $mail->AddAddress($email); 
 
             $mail->Subject = mb_convert_encoding("Solicitação Aprovada!","Windows-1252","UTF-8"); 
-            $mail->Body = mb_convert_encoding("Sua solicitação de agendamento da área da pista $area_pista para o dia $dia de $hora_inicio até $hora_fim foi Aprovada!<br>Atenciosamente,<br><br>Equipe Zeentech.","Windows-1252","UTF-8"); 
+            $mail->Body = mb_convert_encoding("Sua solicitação de agendamento da área da pista $area_pista para o dia $dia de $hora_inicio até $hora_fim foi Aprovada!\n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8"); 
 
             $mail->send();
 
             $mail->ClearAddresses();
-                                    
+
+            $hoje = new DateTime(date('Y-m-d'));
+            // Adicionar 30 dias
+            $hoje->add(new DateInterval('P30D'));
+            // Obter a nova data formatada
+            $data30 = $hoje->format('Y-m-d');
+            /* $link = "http://localhost/Zeentech/Agendamento-RPG/grafico/grafico31dias.php?diaInicio=".urlencode(date('Y-m-d'))."&diaFinal=".urlencode($data30); */
+            $link = 'https://www.zeentech.com.br/volkswagen/Agendamento-RPG/grafico/grafico31dias.php?diaInicio='.urlencode(date('Y-m-d')).'&diaFinal='.urlencode($data30);
+            
+
+            $mail = new PHPMailer\PHPMailer\PHPMailer(); 
+            $mail->IsSMTP();
+            $mail->SMTPDebug = 0;
+            $mail->SMTPAuth = true;
+            $mail->SMTPSecure = 'tls'; 
+            $mail->Host = "equipzeentech.com";  
+            $mail->Port = 587;
+            $mail->Username = "admin@equipzeentech.com"; 
+            $mail->Password = "Z3en7ech"; 
+            $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG");
+
             $query_gestor = "SELECT email FROM gestor";
             $result_gestor = mysqli_query($conexao, $query_gestor);
             while ($row_gestor = mysqli_fetch_assoc($result_gestor)) {
@@ -68,24 +87,12 @@ if (isset($_GET['id'])) {
 
             $query_copias = "SELECT email FROM copias_email";
             $result_copias = mysqli_query($conexao, $query_copias);
-            if ($result_copias->num_rows > 0) {
-                while ($row_copias = mysqli_fetch_assoc($result_copias)) {
-                    $email_frota = $row_copias['email'];
-                    $mail->AddCC($email_frota); //email pra copias
-                }
+            while ($row_copias = mysqli_fetch_assoc($result_copias)) {
+                $mail->AddCC($row_copias['email']); //email pra copias
             }
 
-            $hoje = new DateTime(date('Y-m-d'));
-            // Adicionar 30 dias
-            $hoje->add(new DateInterval('P30D'));
-            // Obter a nova data formatada
-            $data30 = $hoje->format('Y-m-d');
-            $linkLocal = "http://localhost/Zeentech/Agendamento-RPG/grafico/grafico31dias.php?diaInicio=".urlencode(date('Y-m-d'))."&diaFinal=".urlencode($data30);
-            $link = 'https://www.zeentech.com.br/volkswagen/Agendamento-RPG/grafico/grafico31dias.php?diaInicio='.urlencode(date('Y-m-d')).'&diaFinal='.urlencode($data30);
-            
-            $mail->IsHTML(true); 
             $mail->Subject = mb_convert_encoding('Novo agendamento na Pista de Teste!',"Windows-1252","UTF-8");
-            $mail->Body = mb_convert_encoding("Um agendamento foi aprovado para a área da pista $area_pista no dia $dia de $hora_inicio até $hora_fim!<br>Para conferir a tabela de agendamentos dos próximos 30 dias, clique <a href=$linkLocal>aqui</a>.<br>Atenciosamente,<br><br>Equipe Zeentech.","Windows-1252","UTF-8");
+            $mail->Body = mb_convert_encoding("Um agendamento foi aprovado para a área da pista $area_pista no dia $dia de $hora_inicio até $hora_fim!\nPara conferir a tabela de agendamentos dos próximos 30 dias, acesse: $link.\n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8");
             $mail->send();
             
 

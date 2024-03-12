@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
         $stmt = $conexao->prepare($query);
         $stmt->execute();        
 
-        $linkLocal = 'http://localhost/Zeentech/Agendamento-RPG/cadastro/nova_senha.php?token='.$token.'&?email='.$email;
+        /* $link = 'http://localhost/Zeentech/Agendamento-RPG/cadastro/nova_senha.php?token='.$token.'&?email='.$email; */
         $link = 'https://www.zeentech.com.br/volkswagen/Agendamento-RPG/cadastro/nova_senha.php?token='.$token.'&?email='.$email;
 
         require("../PHPMailer-master/src/PHPMailer.php"); 
@@ -67,14 +67,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
         $mail->SMTPSecure = 'tls'; 
         $mail->Host = "equipzeentech.com"; 
         $mail->Port = 587;
-        $mail->IsHTML(true); 
         $mail->Username = "admin@equipzeentech.com"; 
         $mail->Password = "Z3en7ech"; 
-        $mail->SetFrom("admin@equipzeentech.com", "Zeentech"); 
+        $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
         $mail->AddAddress($email);
         
         $mail->Subject = mb_convert_encoding("Recuperação da senha","Windows-1252","UTF-8"); 
-        $mail->Body = mb_convert_encoding('Voce solicitou uma recuperação de senha para este email no site do RPG. Para recuperar sua senha, clique <a href="'.$linkLocal.'">aqui</a>. Esse link vai expirar em 30 minutos!<br>Caso a solicitação não tenha sido feita por você, apenas ignore este email.<br><br>Atenciosamente,<br>Equipe Zeentech.',"Windows-1252","UTF-8"); 
+        $mail->Body = mb_convert_encoding("Voce solicitou uma recuperação de senha para este email no site do RPG. Para recuperar sua senha, acesse $link. Esse link vai expirar em 30 minutos!\nCaso a solicitação não tenha sido feita por você, apenas ignore este email.\n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8"); 
 
         try{
             $mail->send();
@@ -118,7 +117,7 @@ $stmt->execute();
                     <label for="email"><img src="../assets/at.png" width="16" height="16" style="position: relative; top: 2px; margin-right: 5px;">Email:</label>
                 </div>
                 <div class="email-login-input">
-                    <input type="text" name="email" id="email" required placeholder="Insira seu email cadastrado..." maxlength="30" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                    <input type="text" name="email" id="email" required placeholder="Insira seu email cadastrado..." maxlength="100" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                 </div>
             </div>
             <div class="submit-login">
@@ -132,6 +131,7 @@ $stmt->execute();
     <script>
         function recuperarSenha() {
             var email = document.getElementById('email').value.trim();
+            
             if (!email.includes('@') || !email.includes('.')) {
                 Swal.fire({
                     icon: "warning",

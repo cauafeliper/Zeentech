@@ -9,7 +9,7 @@
         // Sessão expirada, destrói a sessão e redireciona para a página de login
         session_unset();
         session_destroy();
-        header("Location: ../index.php");
+        echo '<script>window.location.href = \'../index.php\';</script>';
         exit();
     }
 
@@ -38,7 +38,7 @@
     <?php
         if (!isset($_SESSION['email']) || empty($_SESSION['email'])) {
             session_unset();
-            header('Location: ../index.php');
+            echo '<script>window.location.href = \'../index.php\';</script>';
         }
         
         $email = $_SESSION['email'];
@@ -67,8 +67,18 @@
         
         if ((!$result || mysqli_num_rows($result) === 0) && (!$resultGestor || mysqli_num_rows($resultGestor) === 0)) {
             session_unset();
-            header('Location: ../index.php');
+            echo '<script>window.location.href = \'../index.php\';</script>';
         }
+
+        $hoje = new DateTime(date('Y-m-d'));
+        // Adicionar 30 dias
+        $hoje->add(new DateInterval('P30D'));
+        // Obter a nova data formatada
+        $data30 = $hoje->format('Y-m-d');
+
+        $linkLocal = 'http://localhost/Zeentech/Agendamento-RPG/grafico/grafico31dias.php?diaInicio='.date('Y-m-d').'&diaFinal='.$data30.'';
+        $link = 'https://www.zeentech.com.br/volkswagen/Agendamento-RPG/grafico/grafico31dias.php?diaInicio='.date('Y-m-d').'&diaFinal='.$data30.'';
+
     ?>
     <header>
         <a href="https://www.vwco.com.br/" tarGET="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus" style="height: 95%;"></a>
@@ -89,134 +99,137 @@
     </header>
     
     <main>
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" class="filtros">
-            <div class="titulo">
-                <h2><img src="../assets/filter.png" width="24" height="24" style="position: relative; top: 2px;">Filtros de Buscas</h2>
-            </div>
-            <div class="dia">
-                <div class="label_dia">
-                    <label for="dia">Dia:</label>
+        <div style="display:flex; flex-flow:row; justify-content: space-between; gap: 5px">
+            <form style="width: 100%;" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" class="filtros">
+                <div class="titulo">
+                    <h2><img src="../assets/filter.png" width="24" height="24" style="position: relative; top: 2px;">Filtros de Buscas</h2>
                 </div>
-                <div class="input_dia">
-                <input type="date" name="dia" id="dia" value="<?php echo htmlspecialchars($dia); ?>">
-                    <script>
-                        flatpickr("#dia", {
-                            dateFormat: "Y-m-d"
-                        });
-                    </script>
+                <div class="dia">
+                    <div class="label_dia">
+                        <label for="dia">Dia:</label>
+                    </div>
+                    <div class="input_dia">
+                    <input type="date" name="dia" id="dia" value="<?php echo htmlspecialchars($dia); ?>">
+                        <script>
+                            flatpickr("#dia", {
+                                dateFormat: "Y-m-d"
+                            });
+                        </script>
+                    </div>
                 </div>
-            </div>
-            <div class="objetivo">
-                <div class="label_objetivo">
-                    <label for="objetivo">Objetivo:</label>
+                <div class="objetivo">
+                    <div class="label_objetivo">
+                        <label for="objetivo">Objetivo:</label>
+                    </div>
+                    <div class="input_objetivo">
+                        <select name="objetivo" id="select_objetivo">
+                            <option value="">Selecione o Objetivo</option>
+                            <?php
+                                $query_objtv = "SELECT DISTINCT objtv FROM objtv_teste";
+                                $result_objtv = mysqli_query($conexao, $query_objtv);
+                                while ($row_objtv = mysqli_fetch_assoc($result_objtv)) {
+                                    $selected = ($objtv == $row_objtv['objtv']) ? 'selected' : '';
+                                    echo '<option value="' . htmlspecialchars($row_objtv['objtv']) . '" ' . $selected . '>' . htmlspecialchars($row_objtv['objtv']) . '</option>';
+                                }
+                            ?>
+                        </select>
+                        <script>
+                            $(document).ready(function () {
+                            $('#select_objetivo').select2();
+                            });
+                        </script>
+                    </div>
                 </div>
-                <div class="input_objetivo">
-                    <select name="objetivo" id="select_objetivo">
-                        <option value="">Selecione o Objetivo</option>
+                <div class="solicitante">
+                    <div class="label_solicitante">
+                        <label for="solicitante">Solicitante:</label>
+                    </div>
+                    <div class="input_solicitante">
+                        <select name="solicitante" id="select_solicitante">
+                            <option value="">Selecione o Solicitante</option>
+                            <?php
+                            $query_solicitante = "SELECT DISTINCT solicitante FROM agendamentos";
+                            $result_solicitante = mysqli_query($conexao, $query_solicitante);
+                            while ($row_solicitante = mysqli_fetch_assoc($result_solicitante)) {
+                                $selected = ($solicitante == $row_solicitante['solicitante']) ? 'selected' : '';
+                                echo '<option value="' . htmlspecialchars($row_solicitante['solicitante']) . '" ' . $selected . '>' . htmlspecialchars($row_solicitante['solicitante']) . '</option>';
+                            }
+                            ?>
+                        </select>
+                        <script>
+                            $(document).ready(function () {
+                            $('#select_solicitante').select2();
+                            });
+                        </script>
+                    </div>
+                </div>
+                <div class="area_pista">
+                    <div class="label_area_pista">
+                        <label for="area_pista">Área da Pista</label>
+                    </div>
+                    <div class="input_area_pista">
+                    <select name="area_pista" id="select_area_pista">
+                        <option value="">Selecione a área da pista</option>
                         <?php
-                            $query_objtv = "SELECT DISTINCT objtv FROM objtv_teste";
-                            $result_objtv = mysqli_query($conexao, $query_objtv);
-                            while ($row_objtv = mysqli_fetch_assoc($result_objtv)) {
-                                $selected = ($objtv == $row_objtv['objtv']) ? 'selected' : '';
-                                echo '<option value="' . htmlspecialchars($row_objtv['objtv']) . '" ' . $selected . '>' . htmlspecialchars($row_objtv['objtv']) . '</option>';
+                            $query_area = "SELECT DISTINCT area FROM area_pista";
+                            $result_area = mysqli_query($conexao, $query_area);
+                            while ($row_area = mysqli_fetch_assoc($result_area)) {
+                                $selected = ($area == $row_area['area']) ? 'selected' : '';
+                                echo '<option value="' . htmlspecialchars($row_area['area']) . '" ' . $selected . '>' . htmlspecialchars($row_area['area']) . '</option>';
                             }
                         ?>
                     </select>
                     <script>
                         $(document).ready(function () {
-                        $('#select_objetivo').select2();
+                            $('#select_area_pista').select2({
+                                tags: true,
+                                tokenSeparators: [',', ' ']
+                            });
                         });
                     </script>
+                    </div>
                 </div>
-            </div>
-            <div class="solicitante">
-                <div class="label_solicitante">
-                    <label for="solicitante">Solicitante:</label>
+                <div class="exclsv">
+                    <div class="label_exclsv">
+                        <label for="exclsv">Uso Exclusivo?</label>
+                    </div>
+                    <div class="input_exclsv">
+                        <label for="sim">Sim</label>
+                        <input type="radio" name="exclsv" id="exclsv" value="Sim">
+                        <label for="nao">Não</label>
+                        <input type="radio" name="exclsv" id="exclsv" value="Não">
+                    </div>
                 </div>
-                <div class="input_solicitante">
-                    <select name="solicitante" id="select_solicitante">
-                        <option value="">Selecione o Solicitante</option>
-                        <?php
-                        $query_solicitante = "SELECT DISTINCT solicitante FROM agendamentos";
-                        $result_solicitante = mysqli_query($conexao, $query_solicitante);
-                        while ($row_solicitante = mysqli_fetch_assoc($result_solicitante)) {
-                            $selected = ($solicitante == $row_solicitante['solicitante']) ? 'selected' : '';
-                            echo '<option value="' . htmlspecialchars($row_solicitante['solicitante']) . '" ' . $selected . '>' . htmlspecialchars($row_solicitante['solicitante']) . '</option>';
-                        }
-                        ?>
-                    </select>
-                    <script>
-                        $(document).ready(function () {
-                        $('#select_solicitante').select2();
-                        });
-                    </script>
+                <div class="status">
+                    <div class="label_status">
+                        <label for="status">Status:</label>
+                    </div>
+                    <div class="input_status">
+                        <select name="status" id="select_status">
+                            <option value="">-</option>
+                            <option value="Pendente">Pendente</option>
+                            <option value="Aprovado">Aprovado</option>
+                            <option value="Reprovado">Reprovado</option>
+                        </select>
+                        <script>
+                            $(document).ready(function () {
+                            $('#select_status').select2();
+                            });
+                        </script>
+                    </div>
                 </div>
-            </div>
-            <div class="area_pista">
-                <div class="label_area_pista">
-                    <label for="area_pista">Área da Pista</label>
+                <div class="submit">
+                    <hr>
+                    <input type="submit" value="Filtrar">
                 </div>
-                <div class="input_area_pista">
-                <select name="area_pista" id="select_area_pista">
-                    <option value="">Selecione a área da pista</option>
-                    <?php
-                        $query_area = "SELECT DISTINCT area FROM area_pista";
-                        $result_area = mysqli_query($conexao, $query_area);
-                        while ($row_area = mysqli_fetch_assoc($result_area)) {
-                            $selected = ($area == $row_area['area']) ? 'selected' : '';
-                            echo '<option value="' . htmlspecialchars($row_area['area']) . '" ' . $selected . '>' . htmlspecialchars($row_area['area']) . '</option>';
-                        }
-                    ?>
-                </select>
-                <script>
-                    $(document).ready(function () {
-                        $('#select_area_pista').select2({
-                            tags: true,
-                            tokenSeparators: [',', ' ']
-                        });
-                    });
-                </script>
-                </div>
-            </div>
-            <div class="exclsv">
-                <div class="label_exclsv">
-                    <label for="exclsv">Uso Exclusivo?</label>
-                </div>
-                <div class="input_exclsv">
-                    <label for="sim">Sim</label>
-                    <input type="radio" name="exclsv" id="exclsv" value="Sim">
-                    <label for="nao">Não</label>
-                    <input type="radio" name="exclsv" id="exclsv" value="Não">
-                </div>
-            </div>
-            <div class="status">
-                <div class="label_status">
-                    <label for="status">Status:</label>
-                </div>
-                <div class="input_status">
-                    <select name="status" id="select_status">
-                        <option value="">-</option>
-                        <option value="Pendente">Pendente</option>
-                        <option value="Aprovado">Aprovado</option>
-                        <option value="Reprovado">Reprovado</option>
-                    </select>
-                    <script>
-                        $(document).ready(function () {
-                        $('#select_status').select2();
-                        });
-                    </script>
-                </div>
-            </div>
-            <div class="submit">
-                <hr>
-                <input type="submit" value="Filtrar">
-            </div>
-        </form>
+            </form>
+            <button style="width: 12em; height: 9.5em;" onclick="Email30Dias('<?php echo $link; ?>')" class="botao_email"><p class="texto_botao">Enviar gráfico<br>por email</p><img class="gif_botao" src="../assets/message.gif" width="100px" height="100px"></button>
+        </div>
         <div class="tabela">
         <div class="caption"><img src="../assets/table-list.png" width="22" height="22" style="position: relative; top: 3px; margin-right: 5px;">Tabela de Agendamentos</div>
             <table>
                 <tr>
-                    <th style="display: none;">ID</th>
+                    <th>ID</th>
                     <th>Dia</th>
                     <th>Hora de Início</th>
                     <th>Hora do Fim</th>
@@ -277,7 +290,7 @@
                     if ($result_count->num_rows > 0) {
                     while ($row = mysqli_fetch_assoc($result_paginacao)) { ?>
                         <tr>
-                            <td style="display: none;"><?php echo $row['id']; ?></td>
+                            <td><?php echo $row['id']; ?></td>
                             <td><?php echo date('d/m/Y', strtotime($row['dia'])); ?></td>
                             <td><?php echo $row['hora_inicio']; ?></td>
                             <td><?php echo $row['hora_fim']; ?></td>
@@ -481,11 +494,6 @@
         });
 
         function disablePage() {
-            // Desativa todos os elementos de entrada da página
-            document.querySelectorAll('input, select, button').forEach(function(element) {
-                element.disabled = true;
-            });
-
             // Adicione um overlay para indicar que a página está em estado de "loading"
             var overlay = document.createElement('div');
             overlay.classList.add('loading-overlay'); // Adiciona a classe para identificação posterior
@@ -494,11 +502,39 @@
             overlay.style.left = '0';
             overlay.style.width = '100%';
             overlay.style.height = '100%';
-            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
             overlay.style.zIndex = '9999';
-            overlay.innerHTML = '<div style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; text-align: center; color:white;"><h1>Carregando...</h1></div>';
+            overlay.innerHTML = '<div class="overlay"><img class="gifOverlay" src="../assets/truck-unscreen2.gif"><h1>Carregando...</h1></div>';
             document.body.appendChild(overlay);
         }
+
+        function Email30Dias(link){
+            console.log('Função Email30Dias chamada com link: ' + link);
+            Swal.fire({
+                icon: 'question',
+                title: "Enviar por email?",
+                html:"<div style='text-align: start; padding: 0 2rem; line-height: 1.5rem'>"+
+                "Deseja enviar o link para o gráfico dos próximos 30 dias por email à lista de distribuição?<br>"+
+                "</div>",
+                showConfirmButton: true,
+                showCloseButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Enviar",
+                cancelButtonText: "Cancelar",
+                allowOutsideClick: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Obtém o URL da página
+                    var urlDaPagina = link;
+
+                    // Codifica o URL para garantir que caracteres especiais sejam tratados corretamente
+                    var urlCodificada = encodeURIComponent(urlDaPagina);
+
+                    // Redireciona para a nova URL
+                    window.location.href = "../grafico/email31dias.php?link=" + urlCodificada;
+                }
+            });
+        }
+
     </script>
 
 </body>
