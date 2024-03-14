@@ -1010,6 +1010,7 @@
     ?>
     <header>
         <a href="https://www.vwco.com.br/" tarGET="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus" style="height: 95%;"></a>
+        <img src="../imgs/LogoCertificationTeam.png" alt="logo-certification-team" style="height: 95%;">
         <ul>
             <li><a href="gestor.php">Gestão</a></li>
 
@@ -1376,7 +1377,7 @@
             <span>Desenvolvido por:  <img src="../imgs/lg-zeentech(titulo).png" alt="logo-zeentech"></span>
         </div>
         <div class="copyright">
-            <span>Copyright © 2023 de Zeentech os direitos reservados</span>
+            <span>Copyright © 2024 de Zeentech, todos os direitos reservados.</span>
         </div>
     </footer>
     <script>

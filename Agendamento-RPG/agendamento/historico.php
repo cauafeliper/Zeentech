@@ -45,6 +45,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
     ?>
     <header>
         <a href="https://www.vwco.com.br/" target="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus" style="height: 95%;"></a>
+        <img src="../imgs/LogoCertificationTeam.png" alt="logo-certification-team" style="height: 95%;">
         <ul>
             <?php 
 
@@ -303,7 +304,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
             <span>Desenvolvido por:  <img src="../imgs/lg-zeentech(titulo).png" alt="logo-zeentech"></span>
         </div>
         <div class="copyright">
-            <span>Copyright © 2023 de Zeentech os direitos reservados</span>
+            <span>Copyright © 2024 de Zeentech, todos os direitos reservados.</span>
         </div>
     </footer>
 
