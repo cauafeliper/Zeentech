@@ -414,21 +414,23 @@
                 require '../PHPMailer-master/src/Exception.php';
                 require("../PHPMailer-master/src/PHPMailer.php"); 
                 require("../PHPMailer-master/src/SMTP.php");
+                
                 $mail = new PHPMailer\PHPMailer\PHPMailer();
                 $mail->IsSMTP();
                 $mail->SMTPDebug = 0;
                 $mail->SMTPAuth = true;
-                $mail->SMTPSecure = 'tls'; 
-                $mail->Host = "equipzeentech.com"; 
-                $mail->Port = 587;
-                $mail->Username = "admin@equipzeentech.com"; 
-                $mail->Password = "Z3en7ech"; 
-                $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
+                $mail->SMTPSecure = 'ssl'; 
+                $mail->Host = "smtp.gmail.com"; 
+                $mail->Port = 465;
+                $mail->Username = "zeentechidt@gmail.com"; // Seu endereço de e-mail do Gmail
+                $mail->Password = "gkvx eqte etxy mblw"; // Sua senha do Gmail
+                $mail->SetFrom("zeentechidt@gmail.com", "SISTEMA RPG"); 
                 $mail->AddAddress($novoCadastro); 
-                $mail->Subject = mb_convert_encoding("Tutorial de Cadastro!","Windows-1252","UTF-8"); 
-                $mail->Body = mb_convert_encoding("Seu email foi adicionado à lista de cadastros para o site de agendamento da Pista de Testes.\nSegue um link para o tutorial de como realizar o cadastro na página: https://drive.google.com/file/d/1GNwvqDJGvb_9CAbQN9zUMgUZeDtPZhaF/view?usp=drive_link \n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8");
-                /* $tutorialCadastro = '../anexos/tutorial_cadastro.pdf';
-                $mail->addAttachment($tutorialCadastro, 'tutorial_cadastro.pdf'); */
+                $subject = "Tutorial de Cadastro!";
+                $mail->Subject = mb_convert_encoding($subject, "Windows-1252", "UTF-8");
+                $linkTutorial = "https://bit.ly/tutorial_cadastroRPG";
+                $body = "Seu email foi adicionado à lista de cadastros para o site de agendamento da Pista de Testes.\nSegue um link para o tutorial de como realizar o cadastro na página: $linkTutorial \n\nAtenciosamente,\nEquipe Zeentech.";
+                $mail->Body = mb_convert_encoding($body, "Windows-1252", "UTF-8");
                 $mail->send();
 
                 echo '<script>

@@ -58,7 +58,7 @@ if (isset($_GET['id'])) {
             $mail->send();
 
             $mail->ClearAddresses();
-
+                                    
             $hoje = new DateTime(date('Y-m-d'));
             // Adicionar 30 dias
             $hoje->add(new DateInterval('P30D'));
