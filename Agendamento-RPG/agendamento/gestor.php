@@ -70,14 +70,8 @@
             echo '<script>window.location.href = \'../index.php\';</script>';
         }
 
-        $hoje = new DateTime(date('Y-m-d'));
-        // Adicionar 30 dias
-        $hoje->add(new DateInterval('P30D'));
-        // Obter a nova data formatada
-        $data30 = $hoje->format('Y-m-d');
-
-        $linkLocal = 'http://localhost/Zeentech/Agendamento-RPG/grafico/grafico31dias.php?diaInicio='.date('Y-m-d').'&diaFinal='.$data30.'';
-        $link = 'https://www.zeentech.com.br/volkswagen/Agendamento-RPG/grafico/grafico31dias.php?diaInicio='.date('Y-m-d').'&diaFinal='.$data30.'';
+        /* $link = 'http://localhost/Zeentech/Agendamento-RPG/grafico/grafico31dias.php'; */
+        $link = 'https://www.zeentech.com.br/volkswagen/Agendamento-RPG/grafico/grafico31dias.php';
 
     ?>
     <header>

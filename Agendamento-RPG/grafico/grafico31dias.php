@@ -46,12 +46,11 @@ $listaSemana = array('segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'
 $listaAno = array('janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembo', 'outubro', 'novembro', 'dezembro');
 $semana = calcularDiasDaSemana($dia);
 
-$ano = date('Y', strtotime($dia));
-$dataInicial = date("$ano-01-01");
-$dataFinal = date("$ano-12-31");
-
-$hoje = isset($_GET['diaInicio']) ? urldecode($_GET['diaInicio']) : '';
-$diaFinal = isset($_GET['diaFinal']) ? urldecode($_GET['diaFinal']) : '';
+$hoje = $dia;
+$data30 = new DateTime(date('Y-m-d'));
+$data30->add(new DateInterval('P30D'));
+$data30 = $data30->format('Y-m-d');
+$diaFinal = $data30;
 
 $mes = obterDiasEntreDatas($hoje, $diaFinal);
 

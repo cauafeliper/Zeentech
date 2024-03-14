@@ -180,7 +180,7 @@ $data30 = $hoje->format('Y-m-d');
     <header>
         <a href="https://www.vwco.com.br/" target="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus" style="height: 95%;"></a>
         <ul>
-            <li><a href="grafico31dias.php?diaInicio=<?php echo urlencode(date('Y-m-d')); ?>&diaFinal=<?php echo urlencode($data30); ?>" target="_blank">Gerar gráfico<br>de 31 dias</a></li>
+            <li><a href="grafico31dias.php" target="_blank">Gerar gráfico<br>de 31 dias</a></li>
 
             <li><a href="../agendamento/gestor.php">Gestão</a></li>
 
