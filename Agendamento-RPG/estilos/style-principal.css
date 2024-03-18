@@ -58,8 +58,12 @@ header {
     top: 0;
     width: 100%;
     background-color: var(--escuro);
-    height: 100px;
+    height: fit-content;
     padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 header ul {
@@ -70,6 +74,7 @@ header ul {
     height: 100%;
     margin-right: 40px;
     gap: 1rem;
+    flex-wrap: wrap;
 }
 
 header li a {
@@ -87,6 +92,22 @@ header li a:hover {
 
 header li a:not(:hover) {
     transition-duration: 0.3s;
+}
+
+.header_logos{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: fit-content;
+    height: 100px;
+}
+
+.header_logos a {
+    height: 100%;
+}
+
+.header_logos a img{
+    height: 100%;
 }
 /*============================================================================================================*/
 main {
@@ -184,16 +205,11 @@ td {
 }
 /*============================================================================================================*/
 .novo__agendamento {
-    display: grid; 
-    grid-auto-columns: 1fr; 
-    grid-template-columns: 1fr 1fr 1fr; 
-    grid-template-rows: 0.6fr 1.1fr 1.1fr 1.1fr; 
-    gap: 2px 2px; 
-    grid-template-areas: 
-    "titulo solicitante solicitante"
-    "dia hora_inicio hora_fim"
-    "area_solicitante area_solicitada objtv_teste"
-    "obs obs enviar";  
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2px 2px;
+    align-items: center;
   }
 
 .grids {
@@ -206,6 +222,7 @@ td {
     border-radius: 5px;
     padding: 3px;
     border: 0.5px solid var(--escuro);
+    width: fit-content;
 }
 
 .obs__label {
@@ -216,10 +233,26 @@ td {
     border: 0.5px solid var(--escuro);
 }
 
+.carro__label {
+    background-color: #4C7397;
+    color: white;
+    border-radius: 5px;
+    padding: 3px;
+    border: 0.5px solid var(--escuro);
+}
+
+.centro_custo__label {
+    background-color: #4C7397;
+    color: white;
+    border-radius: 5px;
+    padding: 3px;
+    border: 0.5px solid var(--escuro);
+}
+
 .grids input {
     margin-top: 5px;
     width: 100%;
-    height: 40%;
+    height: 2rem;
     border-radius: 5px;
     border: 0.5px solid var(--escuro);
 }
@@ -227,7 +260,7 @@ td {
 .grids select {
     margin-top: 5px;
     width: 100%;
-    height: 40%;
+    height: 2rem;
     border-radius: 5px;
     border: 0.5px solid var(--escuro);
 }
@@ -238,22 +271,33 @@ td {
     height: 40%;
 }
 
-.titulo { 
-    grid-area: titulo;
+.head_form{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: var(--escuro);
+    height: fit-content;
+    width: 100%;
+}
+
+.titulo {
     color: white;
     background-color: var(--escuro); 
-    width: 100%;
+    width: fit-content;
     height: 100%;
     border-radius: 5px;
 }
 
-.solicitante { 
-    grid-area: solicitante;
+.solicitante {
     width: 100%;
     height: 100%;
     background-color: var(--claro);
     border-radius: 5px;
     border: 1px solid var(--escuro);
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .solicitante label {
@@ -276,68 +320,55 @@ td {
 
 .dia { 
     grid-area: dia; 
-    width: 100%;
+    width: 33%;
     height: 100%;
 }
 
 .hora_inicio { 
     grid-area: hora_inicio;
-    width: 100%;
+    width: 33%;
     height: 100%; 
 }
 
 .hora_fim { 
     grid-area: hora_fim;
-    width: 100%;
+    width: 33%;
     height: 100%; 
 }
 
 .area_solicitante { 
     grid-area: area_solicitante;
-    width: 100%;
+    width: 33%;
     height: 100%; 
 }
 
 .area_solicitada { 
     grid-area: area_solicitada;
-    width: 100%;
+    width: 33%;
     height: 100%; 
 }
 
 .objtv_teste { 
     grid-area: objtv_teste;
-    width: 100%;
-    height: 100%; 
-}
-
-.veic { 
-    grid-area: veic;
-    width: 100%;
-    height: 100%; 
-}
-
-.resp_veic { 
-    grid-area: resp_veic;
-    width: 100%;
+    width: 33%;
     height: 100%; 
 }
 
 .status { 
     grid-area: status;
-    height: 100%;
+    width: 30%;
     width: 100%;
 }
 
 .enviar { 
     grid-area: enviar;
-    height: 50%;
-    width: 100%;
-    position: relative;
-    top: 47%;
+    height: 4rem;
+    width: 30%;
+    margin: 4%;
 }
 
 .exclsv {
-    width: 100%;
+    width: 33%;
     height: 100%;
 }
 
@@ -369,9 +400,39 @@ td {
 }
 
 .obs { 
-    grid-area: obs;
-    width: 340px;
-    height: 70px;
+    width: 60%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.carro { 
+    width: 66%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.centro_custo { 
+    width: 33%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.carro_txt{
+    width: 100%;
+    height: 2rem;
+}
+
+.centro_custo_txt{
+    width: 100%;
+    height: 2rem;
+}
+
+.obs_txt{
+    width: 100%;
+    height: 4rem;
 }
 
 .select_hora option {
@@ -575,12 +636,6 @@ footer img {
         order: 2;
     }
 
-    .obs { 
-        grid-area: obs;
-        width: 320px;
-        height: 62px;
-    }
-
     footer {
         height: 100px;
         font-size: larger;
@@ -624,24 +679,6 @@ footer img {
         width: 100%;
         height: 500px;
     }
-    
-
-    .novo__agendamento {
-        display: grid; 
-        grid-auto-columns: 1fr; 
-        grid-template-columns: 50% 50%; 
-        grid-template-rows: 0.5fr 0.5fr 0.7fr 0.7fr 0.7fr 0.7fr 0.7fr 0.4fr; 
-        gap: 2px 2px; 
-        grid-template-areas: 
-        "titulo titulo"
-        "solicitante solicitante"
-        "dia objtv_teste"
-        "hora_inicio hora_fim"
-        "area_solicitante area_solicitada"
-        "veic resp_veic"
-        "status obs"
-        "enviar enviar";  
-      }
 
     .titulo { 
         text-align: center;
@@ -665,11 +702,6 @@ footer img {
         height: 20px;
     }
     
-    .obs { 
-        grid-area: obs;
-        width: 100%;
-        height: 70%;
-    }
 }
 
 @media(max-width: 396px) {
@@ -705,12 +737,6 @@ footer img {
         padding: 7px;
     }
     
-
-    .obs { 
-        grid-area: obs;
-        width: 100%;
-        height: 90%;
-    }
 }
 
 @media(min-width: 1600px) {
@@ -720,11 +746,6 @@ footer img {
         padding: 7px;
     }
 
-    .obs { 
-        grid-area: obs;
-        width: 100%;
-        height: 90%;
-    }
 }
 
 @media (min-width: 2651px) {
@@ -732,7 +753,6 @@ footer img {
 
     .form__agendamento{
         width: 1150px;
-        height: 600px;
     }
 }
 

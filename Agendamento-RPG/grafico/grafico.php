@@ -851,14 +851,14 @@ $data30 = $hoje->format('Y-m-d');
                 </div>
             </div>
         </main>
-    <footer>
-        <div>
-            <span>Desenvolvido por:<img src="../imgs/lg-zeentech(titulo).png" alt="logo-zeentech"></span>
-        </div>
-        <div class="copyright">
-            <span>Copyright © 2024 de Zeentech, todos os direitos reservados.</span>
-        </div>
-    </footer>
+        <footer>
+            <div>
+                <span style="font-size: 16px">Desenvolvido por: <img src="../imgs/IDT.png" alt="logo-zeentech" style="margin-left: 10px; height: 16px"></span>
+            </div>
+            <div class="copyright">
+                <span style="font-size: 14px">Copyright © 2024 de Zeentech, todos os direitos reservados.</span>
+            </div>
+        </footer>
     
     <!-- ///////////////////////////////////////////////////////// -->
 

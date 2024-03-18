@@ -809,11 +809,8 @@ function obterNumeroDoMes($data) {
 
 function calcularCW($dataSelecionada) {
     $data = new DateTime($dataSelecionada);
-
     // Obtém o número da semana (CW) da data
     $numeroDaSemana = $data->format('W');
-
-
     return $numeroDaSemana;
 }
 
