@@ -805,3 +805,9 @@ footer img {
     width: 100px;
     opacity: 1;
   }
+
+.obrigatorio{
+    color: red;
+    font-size: 18px;
+    visibility: hidden;
+}
