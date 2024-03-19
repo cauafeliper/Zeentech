@@ -70,8 +70,7 @@
             echo '<script>window.location.href = \'../index.php\';</script>';
         }
 
-        /* $link = 'http://localhost/Zeentech/Agendamento-RPG/grafico/grafico31dias.php'; */
-        $link = 'https://www.zeentech.com.br/volkswagen/Agendamento-RPG/grafico/grafico31dias.php';
+        $link = 'https://bit.ly/grafico31diasRPG';
 
     ?>
     <header>
@@ -481,6 +480,7 @@
                         cancelButtonText: "Voltar",
                     }).then((result) => {
                         if (result.isConfirmed) {
+                            disablePage();
                             window.location.href = "aprovar-reprovar/reprovar.php?id=" + id;
                         }
                     });
@@ -518,6 +518,7 @@
                 allowOutsideClick: false,
             }).then((result) => {
                 if (result.isConfirmed) {
+                    disablePage();
                     // Obtém o URL da página
                     var urlDaPagina = link;
 

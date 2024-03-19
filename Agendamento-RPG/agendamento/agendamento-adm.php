@@ -1,5 +1,6 @@
 <?php
     include_once('../config/config.php');
+    include_once('../emails/email.php');
     session_start();
 
     $expire_time = $_SESSION['expire_time'];
@@ -75,8 +76,10 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
 
     ?>
     <header>
-        <a href="https://www.vwco.com.br/" target="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus" style="height: 95%;"></a>
-        <img src="../imgs/LogoCertificationTeam.png" alt="logo-certification-team" style="height: 95%;">
+        <div class="header_logos">
+            <a href="https://www.vwco.com.br/" target="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus"></a>
+            <img src="../imgs/LogoCertificationTeam.png" alt="logo-certification-team" style="height: 95%;">
+        </div>
         <ul>
             <li><a href="gerenciamento.php">Voltar</a></li>
             <li><a href="sair.php">Sair</a></li>
@@ -87,15 +90,17 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
         <div class="div_agendar">
             <iframe class="iframeGrafico" id="iframeGrafico" src="../grafico/grafico_dia.php" width="100%" height="100%" frameborder="0"></iframe>
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" id="formularioAgendamento" class="form__agendamento novo__agendamento">
-            <div class="titulo">
-                <h2>Adicionar Agendamento</h2>
-            </div>
-            <div class="solicitante">
-                <label for="solicitante">Solicitante:</label>
-                <input type="text" name="solicitante" id="solicitante" value="<?= $_SESSION['nome'] ?>" readonly style="display:none">
-                <h2 style="color: white;"><?= $_SESSION['nome'] ?></h2>
-                <label for="solicitante"><p style="font-size: smaller;">Empresa: <?= $_SESSION['empresa'] ?></p></label>
-                <label for="solicitante"><p style="font-size: smaller;">Área: <?= $_SESSION['area_solicitante'] ?></p></label>
+            <div class="head_form">
+                <div class="titulo">
+                    <h2>Novo Agendamento</h2>
+                </div>
+                <div class="solicitante">
+                    <label for="solicitante">Solicitante:</label>
+                    <input type="text" name="solicitante" id="solicitante" value="<?= $_SESSION['nome'] ?>" readonly style="display:none">
+                    <h2 style="color: white;"><?= $_SESSION['nome'] ?></h2>
+                    <label for="solicitante"><p style="font-size: smaller;">Empresa: <?= $_SESSION['empresa'] ?></p></label>
+                    <label for="solicitante"><p style="font-size: smaller;">Área: <?= $_SESSION['area_solicitante'] ?></p></label>
+                </div>
             </div>
             <div class="dia grids">
                 <label for="dia">Dia:</label>
@@ -158,9 +163,17 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                 <label for="status">Status:</label>
                 <input type="text" name="status" id="status" value="Pendente" readonly>
             </div>
-            <div class="obs">
+            <div class="centro_custo grids">
+                <label for="centro_custo" class="centro_custo__label">Centro de Custo:</label>
+                <input type="text" name="centro_custo" id="centro_custo" class="centro_custo_txt" maxlength="4" oninput="this.value = this.value.replace(/[^0-9]/g, '')" <?php if(isset($_POST['centro_custo'])) { echo 'value="' . $_POST['centro_custo']. '" '; } ?>>
+            </div>
+            <div class="carro grids">
+                <label for="carro" class="carro__label">Carro:</label>
+                <input type="text" name="carro" id="carro" class="carro_txt" maxlength="30" <?php if(isset($_POST['carro'])) { echo 'value="' . htmlspecialchars($_POST['carro']) . '" '; } ?>>
+            </div>
+            <div class="obs grids">
                 <label for="obs" class="obs__label">Observações:</label>
-                <textarea name="obs" id="obs" cols="48" rows="5" class="obs" maxlength="500"><?php if(isset($_POST['obs'])) { echo htmlspecialchars($_POST['obs']); } ?></textarea>
+                <textarea name="obs" id="obs" cols="48" rows="5" class="obs_txt" maxlength="500"><?php if(isset($_POST['obs'])) { echo htmlspecialchars($_POST['obs']); } ?></textarea>
             </div>
             <div class="enviar">
                 <input type="submit" name="submit" value="Adicionar" id="submitBtn">
@@ -190,6 +203,8 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                 $exclsv = $_POST['resposta'];
                 $status = 'Aprovado';
                 $obs = $_POST['obs'];
+                $centro_custo = $_POST['centro_custo'];
+                $carro = $_POST['carro'];
                 if ($area == 'Pista Completa') {
                     $exclsv = 'Sim';
                 }
@@ -205,56 +220,25 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                 }
                 else {
                     // Preparar a declaração SQL
-                    $stmt = $conexao->prepare("INSERT INTO agendamentos (area_pista, dia, hora_inicio, hora_fim, objtv, solicitante, numero_solicitante, empresa_solicitante, area_solicitante, exclsv, obs, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    $stmt = $conexao->prepare("INSERT INTO agendamentos (area_pista, dia, hora_inicio, hora_fim, objtv, solicitante, numero_solicitante, empresa_solicitante, area_solicitante, exclsv, centro_de_custo, carro, obs, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                     // Vincular os parâmetros
-                    $stmt->bind_param("ssssssssssss", $area, $data, $hora_inicio, $hora_fim, $objetivo, $solicitante, $numero_solicitante, $empresa_solicitante, $area_solicitante, $exclsv, $obs, $status);
+                    $stmt->bind_param("ssssssssssssss", $area, $data, $hora_inicio, $hora_fim, $objetivo, $solicitante, $numero_solicitante, $empresa_solicitante, $area_solicitante, $exclsv, $centro_custo, $carro, $obs, $status);
 
                     $result = $stmt->execute();
 
                     if ($result) {
                         $affected_rows = $stmt->affected_rows;
                         if ($affected_rows > 0) {
-                            
-                            require("../PHPMailer-master/src/PHPMailer.php"); 
-                            require("../PHPMailer-master/src/SMTP.php"); 
-                            $mail = new PHPMailer\PHPMailer\PHPMailer(); 
-                            $mail->IsSMTP();
-                            $mail->SMTPDebug = 0;
-                            $mail->SMTPAuth = true;
-                            $mail->SMTPSecure = 'tls'; 
-                            $mail->Host = "equipzeentech.com";  
-                            $mail->Port = 587;
-                            $mail->Username = "admin@equipzeentech.com"; 
-                            $mail->Password = "Z3en7ech"; 
-                            $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
-                                                    
-                            $query_gestor = "SELECT email FROM gestor";
-                            $result_gestor = mysqli_query($conexao, $query_gestor);
-                            while ($row_gestor = mysqli_fetch_assoc($result_gestor)) {
-                                $mail->addAddress($row_gestor['email']); //email pros gestores
-                            }
 
-                            $query_copias = "SELECT email FROM copias_email";
-                            $result_copias = mysqli_query($conexao, $query_copias);
-                            if ($result_copias->num_rows > 0) {
-                                while ($row_copias = mysqli_fetch_assoc($result_copias)) {
-                                    $email_frota = $row_copias['email'];
-                                    $mail->AddCC($email_frota); //email pra copias
-                                }
-                            }
-
-                            $hoje = new DateTime(date('Y-m-d'));
-                            // Adicionar 30 dias
-                            $hoje->add(new DateInterval('P30D'));
-                            // Obter a nova data formatada
-                            $data30 = $hoje->format('Y-m-d');
-                            /* $link = "http://localhost/Zeentech/Agendamento-RPG/grafico/grafico31dias.php?diaInicio=".urlencode(date('Y-m-d'))."&diaFinal=".urlencode($data30); */
-                            $link = 'https://www.zeentech.com.br/volkswagen/Agendamento-RPG/grafico/grafico31dias.php?diaInicio='.urlencode(date('Y-m-d')).'&diaFinal='.urlencode($data30);
+                            $last_id = $conexao->insert_id; // Get the last inserted id
+                            $stmt = $conexao->prepare("SELECT * FROM agendamentos WHERE id = ?"); // Prepare a SELECT statement to fetch the data of the last inserted row
+                            $stmt->bind_param("i", $last_id);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+                            $dataInserida = $result->fetch_assoc(); // Fetch the data and put it into an associative array
                             
-                            $mail->Subject = mb_convert_encoding('Novo agendamento na Pista de Teste!',"Windows-1252","UTF-8");
-                            $mail->Body = mb_convert_encoding("Um agendamento foi aprovado para a área da pista $area no dia $data de $hora_inicio até $hora_fim!\nPara conferir a tabela de agendamentos dos próximos 30 dias, acesse: $link.\n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8");
-                            $mail->send();
+                            EmailSolicitacaoAdm($dataInserida, $conexao);
 
                             echo '<script>
                                 Swal.fire({
