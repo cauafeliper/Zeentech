@@ -273,7 +273,7 @@ function CriarHTMLdia($conexao, $dia, $area_pista, $letra){ // cria as divs com 
         $obs = $row["obs"];
 
         $classe = "$letra".$j;
-        echo '<div class="'.$classe.'" style="cursor:pointer" onclick="PopupAgendamento(\''.$row['id'].'\',\''.$row['area_pista'].'\',\''.$row['dia'].'\',\''.$horario.'\',\''.$row['objtv'].'\',\''.$row['solicitante'].'\',\''.$row['numero_solicitante'].'\',\''.$row['empresa_solicitante'].'\',\''.$row['area_solicitante'].'\',\''.$row['exclsv'].'\',\''.$row['obs'].'\',\''.$row['status'].'\')"></div>';
+        echo '<div class="'.$classe.'" style="cursor:pointer" onclick="PopupAgendamento(\''.$row['id'].'\',\''.$row['area_pista'].'\',\''.$row['dia'].'\',\''.$horario.'\',\''.$row['objtv'].'\',\''.$row['solicitante'].'\',\''.$row['numero_solicitante'].'\',\''.$row['empresa_solicitante'].'\',\''.$row['area_solicitante'].'\',\''.$row['exclsv'].'\',\''.$row['centro_de_custo'].'\',\''.$row['carro'].'\',\''.$row['obs'].'\',\''.$row['status'].'\')"></div>';
         echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
             '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
             '<p><span style="color: #4C7397;">Empresa: </span>'."$empresa".'</p>'.
@@ -306,7 +306,7 @@ function CriarHTMLsemana($conexao, $dia, $listaPistas, $listaLetras, $listaPista
             $obs = $row["obs"];
 
             $classe = "$listaLetras[$i]".$j.'_semana_'.$id;
-            echo '<div class="'.$classe.'" style="cursor:pointer" onclick="PopupAgendamento(\''.$row['id'].'\',\''.$row['area_pista'].'\',\''.$row['dia'].'\',\''.$horario.'\',\''.$row['objtv'].'\',\''.$row['solicitante'].'\',\''.$row['numero_solicitante'].'\',\''.$row['empresa_solicitante'].'\',\''.$row['area_solicitante'].'\',\''.$row['exclsv'].'\',\''.$row['obs'].'\',\''.$row['status'].'\')"></div>';
+            echo '<div class="'.$classe.'" style="cursor:pointer" onclick="PopupAgendamento(\''.$row['id'].'\',\''.$row['area_pista'].'\',\''.$row['dia'].'\',\''.$horario.'\',\''.$row['objtv'].'\',\''.$row['solicitante'].'\',\''.$row['numero_solicitante'].'\',\''.$row['empresa_solicitante'].'\',\''.$row['area_solicitante'].'\',\''.$row['exclsv'].'\',\''.$row['centro_de_custo'].'\',\''.$row['carro'].'\',\''.$row['obs'].'\',\''.$row['status'].'\')"></div>';
             echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
                 '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
                 '<p><span style="color: #4C7397;">Empresa: </span>'."$empresa".'</p>'.
@@ -528,7 +528,7 @@ function CriarHTMLmes($conexao, $dia, $listaPistas, $listaLetras, $listaPistaCla
             $obs = $row["obs"];
 
             $classe = "$listaLetras[$i]".$j.'_mes_'.$id;
-            echo '<div class="'.$classe.'" style="cursor:pointer" onclick="PopupAgendamento(\''.$row['id'].'\',\''.$row['area_pista'].'\',\''.$row['dia'].'\',\''.$horario.'\',\''.$row['objtv'].'\',\''.$row['solicitante'].'\',\''.$row['numero_solicitante'].'\',\''.$row['empresa_solicitante'].'\',\''.$row['area_solicitante'].'\',\''.$row['exclsv'].'\',\''.$row['obs'].'\',\''.$row['status'].'\')"></div>';
+            echo '<div class="'.$classe.'" style="cursor:pointer" onclick="PopupAgendamento(\''.$row['id'].'\',\''.$row['area_pista'].'\',\''.$row['dia'].'\',\''.$horario.'\',\''.$row['objtv'].'\',\''.$row['solicitante'].'\',\''.$row['numero_solicitante'].'\',\''.$row['empresa_solicitante'].'\',\''.$row['area_solicitante'].'\',\''.$row['exclsv'].'\',\''.$row['centro_de_custo'].'\',\''.$row['carro'].'\',\''.$row['obs'].'\',\''.$row['status'].'\')"></div>';
             echo '<div class="tip_'.$classe.'" id="tip_'.$classe.'" style="color: #001e50"><h3 style="display: flex; height: fit-content; justify-content: center;">'.$horario. '</h3>'.
                 '<p><span style="color: #4C7397;">Solicitante: </span>'.$solicitante.'</p>'.
                 '<p><span style="color: #4C7397;">Empresa: </span>'."$empresa".'</p>'.

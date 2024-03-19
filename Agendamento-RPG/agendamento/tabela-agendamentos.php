@@ -93,7 +93,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                     </div>
                 </div>
                 <div class="dia grids">
-                    <label for="dia">Dia:</label>
+                    <label for="dia">Dia: <span class="obrigatorio">*</span></label>
                     <input type="date" name="dia" id="dia" placeholder="Indique a data" oninput="diaGrafico()"  <?php if(isset($_POST['dia'])) { echo 'value="' . $_POST['dia'] . '"'; } ?>>
                     <script>
                         flatpickr("#dia", {
@@ -103,19 +103,19 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                     </script>
                 </div>
                 <div class="hora_inicio grids">
-                    <label for="hora_inicio">Hora de Início:</label>
-                    <input type="time" id="hora_inicio" name="hora_inicio" min="07:00" max="19:00"  <?php if(isset($_POST['hora_inicio'])) { echo 'value="' . $_POST['hora_inicio'] . '"'; } ?>>
+                    <label for="hora_inicio">Hora de Início: <span class="obrigatorio">*</span></label>
+                    <input type="time" id="hora_inicio" name="hora_inicio" <?php if(isset($_POST['hora_inicio'])) { echo 'value="' . $_POST['hora_inicio'] . '"'; } ?>>
                 </div>
                 <div class="hora_fim grids">
-                    <label for="hora_fim">Hora do Fim:</label>
-                    <input type="time" id="hora_fim" name="hora_fim" min="07:00" max="19:00"  <?php if(isset($_POST['hora_fim'])) { echo 'value="' . $_POST['hora_fim'] . '"'; } ?>>
+                    <label for="hora_fim">Hora do Fim: <span class="obrigatorio">*</span></label>
+                    <input type="time" id="hora_fim" name="hora_fim" <?php if(isset($_POST['hora_fim'])) { echo 'value="' . $_POST['hora_fim'] . '"'; } ?>>
                 </div>
                 <div class="area_solicitante grids" style="display:none">
                     <label for="area_solicitante">Área do Solicitante:</label>
                     <input type="text" name="area_solicitante" value="<?= $_SESSION['area_solicitante'] ?>" readonly <?php if(isset($_POST['area_solicitante'])) { echo 'value="' . $_POST['area_solicitante'] . '"'; } ?>>
                 </div>
                 <div class="area_solicitada grids">
-                    <label for="area_solicitada">Área Solicitada:</label>
+                    <label for="area_solicitada">Área Solicitada: <span class="obrigatorio">*</span></label>
                     <select name="area" id="area" >
                         <option value="">Selecione a área da pista</option>
                         <?php
@@ -129,7 +129,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                     </select>
                 </div>
                 <div class="objtv_teste grids">
-                    <label for="objetivo">Objetivo do Teste:</label>
+                    <label for="objetivo">Objetivo do Teste: <span class="obrigatorio">*</span></label>
                     <select name="objetivo" id="objetivo" >
                         <option value="">Selecione o Objetivo</option>
                         <?php
@@ -143,7 +143,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                     </select>
                 </div>
                 <div class="exclsv grids">
-                    <label for="exclsv">Uso Exclusivo?</label>
+                    <label for="exclsv">Uso Exclusivo? <span class="obrigatorio">*</span></label>
                     <div style="display:flex; height: fit-content; width: 100%; align-items: center; justify-content: start;">
                         <label for="sim" style="font-size: smaller; margin-top: 5px; background-color: #001e50;">Sim:</label>
                         <input type="radio" id="sim" name="resposta" value="Sim" style="width: 20%;" <?php if(isset($_POST['resposta']) && $_POST['resposta'] === 'Sim') echo 'checked'; ?>>
@@ -157,7 +157,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                     <input type="text" name="status" id="status" value="Pendente" readonly>
                 </div>
                 <div class="centro_custo grids">
-                    <label for="centro_custo" class="centro_custo__label">Centro de Custo:</label>
+                    <label for="centro_custo" class="centro_custo__label">Centro de Custo: <span class="obrigatorio">*</span></label>
                     <input type="text" name="centro_custo" id="centro_custo" class="centro_custo_txt" maxlength="4" oninput="this.value = this.value.replace(/[^0-9]/g, '')" <?php if(isset($_POST['centro_custo'])) { echo 'value="' . $_POST['centro_custo']. '" '; } ?>>
                 </div>
                 <div class="carro grids">
@@ -182,7 +182,12 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                         title: 'ATENÇÃO!',
                         html: 'Algum dos campos está vazio! Por favor, preencha todos os campos atentamente.',
                     });
-                </script>";
+                </script>
+                <style>
+                .obrigatorio {
+                    visibility: visible;
+                }
+                </style>";
             } else {
                 $solicitante = $_POST['solicitante'];
                 $numero_solicitante = $_SESSION['numero'];
@@ -208,6 +213,15 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                             icon: 'warning',
                             title: 'ATENÇÃO!',
                             html: 'O horário de início não pode ser maior ou igual que o horário de fim!',
+                        });
+                    </script>";
+                }
+                else if (!(strtotime($hora_inicio) >= strtotime('07:00') && strtotime($hora_inicio) <= strtotime('19:00')) || !(strtotime($hora_fim) >= strtotime('07:00') && strtotime($hora_fim) <= strtotime('19:00'))) {
+                    echo "<script>
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'ATENÇÃO!',
+                            html: 'O horário deve estar entre 07:00 e 19:00!',
                         });
                     </script>";
                 }
@@ -324,7 +338,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
     
     <footer>
         <div>
-            <span style="font-size: 16px">Desenvolvido por: <img src="../imgs/ZeentechIDT.png" alt="logo-zeentech" style="margin-left: 10px; height: 16px"></span>
+            <span style="font-size: 16px">Desenvolvido por: <img src="../imgs/ZeentechIDT.png" alt="logo-zeentech" style="margin-left: 10px;"></span>
         </div>
         <div class="copyright">
             <span style="font-size: 14px">Copyright © 2024 de Zeentech, todos os direitos reservados.</span>

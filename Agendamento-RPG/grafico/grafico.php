@@ -853,7 +853,7 @@ $data30 = $hoje->format('Y-m-d');
         </main>
         <footer>
             <div>
-                <span style="font-size: 16px">Desenvolvido por: <img src="../imgs/IDT.png" alt="logo-zeentech" style="margin-left: 10px; height: 16px"></span>
+                <span style="font-size: 16px">Desenvolvido por: <img src="../imgs/ZeentechIDT.png" alt="logo-zeentech" style="margin-left: 10px;"></span>
             </div>
             <div class="copyright">
                 <span style="font-size: 14px">Copyright © 2024 de Zeentech, todos os direitos reservados.</span>
@@ -1069,9 +1069,8 @@ $data30 = $hoje->format('Y-m-d');
 
         });
 
-        function PopupAgendamento(id, area_pista, dia, horario, objetivo, solicitante, numero_solicitante, empresa_solicitante, area_solicitante, exclsv, obs, status){
+        function PopupAgendamento(id, area_pista, dia, horario, objetivo, solicitante, numero_solicitante, empresa_solicitante, area_solicitante, exclsv, centro_de_custo, carro, obs, status){
             var classeAgendamento = document.getElementById(id);
-            console.log('clicou na '+id);
 
             Swal.fire({
                 icon: 'info',
@@ -1087,6 +1086,8 @@ $data30 = $hoje->format('Y-m-d');
                 "Empresa do solicitante: "+empresa_solicitante+"<br>"+
                 "Área Solicitante: "+area_solicitante+"<br>"+
                 "É exclusivo? "+exclsv+"<br>"+
+                "Centro de Custo: "+centro_de_custo+"<br>"+
+                "Carro: "+carro+"<br>"+
                 "Observação: "+obs+"<br>"+
                 "Status: "+status+"<br>"+
                 "</div>"

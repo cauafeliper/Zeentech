@@ -219,7 +219,7 @@
             </form>
             <button style="width: 12em; height: 9.5em;" onclick="Email30Dias('<?php echo $link; ?>')" class="botao_email"><p class="texto_botao">Enviar gráfico<br>por email</p><img class="gif_botao" src="../assets/message.gif" width="100px" height="100px"></button>
         </div>
-        <div class="tabela">
+        <div class="tabela" style="overflow-y: auto;">
         <div class="caption"><img src="../assets/table-list.png" width="22" height="22" style="position: relative; top: 3px; margin-right: 5px;">Tabela de Agendamentos</div>
             <table>
                 <tr>
@@ -234,6 +234,8 @@
                     <th>Empresa Solic.</th>
                     <th>Área do Solic.</th>
                     <th>Uso Exclusivo?</th>
+                    <th>Centro de Custo</th>
+                    <th>Carro</th>
                     <th>Observação</th>
                     <th>Status</th>
                     <th>Aprovar/<br>Reprovar</th>
@@ -295,6 +297,8 @@
                             <td id="td_tippy" value="<?php echo $row['empresa_solicitante'];?>"><?php echo $row['empresa_solicitante'];?></td>
                             <td id="td_tippy" value="<?php echo $row['area_solicitante'];?>"><?php echo $row['area_solicitante']; ?></td>
                             <td><?php echo $row['exclsv'];?></td>
+                            <td id="td_tippy" value="<?php echo $row['centro_de_custo'];?>"><?php echo $row['centro_de_custo'];?></td>
+                            <td id="td_tippy" value="<?php echo $row['carro'];?>"><?php echo $row['carro'];?></td>
                             <td id="td_tippy" value="<?php echo $row['obs'];?>"><?php echo $row['obs'];?></td>
                             <td <?php if($row['status'] === 'Aprovado'){echo 'style="background-color: #A6C48A;"';} elseif($row['status'] === 'Pendente'){echo 'style="background-color: #FFD275;"';} else { echo 'style="background-color: #E5625E;"';}?>><?php echo $row['status']; ?></td>
                             <td>
@@ -345,7 +349,7 @@
     
     <footer>
         <div>
-            <span style="font-size: 16px">Desenvolvido por: <img src="../imgs/IDT.png" alt="logo-zeentech" style="margin-left: 10px; height: 16px"></span>
+            <span style="font-size: 16px">Desenvolvido por: <img src="../imgs/ZeentechIDT.png" alt="logo-zeentech" style="margin-left: 10px;"></span>
         </div>
         <div class="copyright">
             <span style="font-size: 14px">Copyright © 2024 de Zeentech, todos os direitos reservados.</span>
