@@ -1,5 +1,6 @@
 <?php
     include_once('../config/config.php');
+    include_once('../emails/email.php');
     session_start();
 
     $expire_time = $_SESSION['expire_time'];
@@ -411,27 +412,7 @@
                 // Fechar a declaração
                 $stmt->close();
 
-                require '../PHPMailer-master/src/Exception.php';
-                require("../PHPMailer-master/src/PHPMailer.php"); 
-                require("../PHPMailer-master/src/SMTP.php");
-                
-                $mail = new PHPMailer\PHPMailer\PHPMailer();
-                $mail->IsSMTP();
-                $mail->SMTPDebug = 0;
-                $mail->SMTPAuth = true;
-                $mail->SMTPSecure = 'ssl'; 
-                $mail->Host = "smtp.gmail.com"; 
-                $mail->Port = 465;
-                $mail->Username = "zeentechidt@gmail.com"; // Seu endereço de e-mail do Gmail
-                $mail->Password = "gkvx eqte etxy mblw"; // Sua senha do Gmail
-                $mail->SetFrom("zeentechidt@gmail.com", "SISTEMA RPG"); 
-                $mail->AddAddress($novoCadastro); 
-                $subject = "Tutorial de Cadastro!";
-                $mail->Subject = mb_convert_encoding($subject, "Windows-1252", "UTF-8");
-                $linkTutorial = "https://bit.ly/tutorial_cadastroRPG";
-                $body = "Seu email foi adicionado à lista de cadastros para o site de agendamento da Pista de Testes.\nSegue um link para o tutorial de como realizar o cadastro na página: $linkTutorial \n\nAtenciosamente,\nEquipe Zeentech.";
-                $mail->Body = mb_convert_encoding($body, "Windows-1252", "UTF-8");
-                $mail->send();
+                EmailAddCadastro($novoCadastro);
 
                 echo '<script>
                     Swal.fire({
@@ -765,25 +746,7 @@
                 }
 
                 if ($loginTrue) {
-                    require '../PHPMailer-master/src/Exception.php';
-                    require("../PHPMailer-master/src/PHPMailer.php"); 
-                    require("../PHPMailer-master/src/SMTP.php");
-                    $mail = new PHPMailer\PHPMailer\PHPMailer();
-                    $mail->IsSMTP();
-                    $mail->SMTPDebug = 0;
-                    $mail->SMTPAuth = true;
-                    $mail->SMTPSecure = 'tls'; 
-                    $mail->Host = "equipzeentech.com"; 
-                    $mail->Port = 587;
-                    $mail->Username = "admin@equipzeentech.com"; 
-                    $mail->Password = "Z3en7ech"; 
-                    $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
-                    $mail->AddAddress($novoGestor); 
-                    $mail->Subject = mb_convert_encoding("Permissão de Gestor","Windows-1252","UTF-8"); 
-                    $mail->Body = mb_convert_encoding("Você foi adicionado como Gestor na página de agendamento da Pista de Testes!\nSegue um link para o tutorial de uso da página para gestores: https://drive.google.com/file/d/1nNH71zqNmMx39pKrFuW7eD8hstNWsQ3q/view?usp=drive_link \n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8");
-                    /* $tutorialGestor = '../anexos/tutorial_gestor.pdf';
-                    $mail->addAttachment($tutorialGestor, 'tutorial_gestor.pdf'); */
-                    $mail->send();
+                    EmailAddGestor($novoGestor);
                 }
 
                 echo '<script>
@@ -894,27 +857,7 @@
                 }
 
                 if ($loginTrue) {
-                    require '../PHPMailer-master/src/Exception.php';
-                    require("../PHPMailer-master/src/PHPMailer.php"); 
-                    require("../PHPMailer-master/src/SMTP.php");
-                    $mail = new PHPMailer\PHPMailer\PHPMailer();
-                    $mail->IsSMTP();
-                    $mail->SMTPDebug = 0;
-                    $mail->SMTPAuth = true;
-                    $mail->SMTPSecure = 'tls'; 
-                    $mail->Host = "equipzeentech.com"; 
-                    $mail->Port = 587;
-                    $mail->Username = "admin@equipzeentech.com"; 
-                    $mail->Password = "Z3en7ech"; 
-                    $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
-                    $mail->AddAddress($novoAdm); 
-                    $mail->Subject = mb_convert_encoding("Permissão de Administrador","Windows-1252","UTF-8"); 
-                    $mail->Body = mb_convert_encoding("Você foi adicionado como Administradir na página de agendamento da Pista de Testes!\nSeguem links para o tutorial de uso da página para gestores e administradores.\nGestores: https://drive.google.com/file/d/1nNH71zqNmMx39pKrFuW7eD8hstNWsQ3q/view?usp=drive_link \nAdministradores: https://drive.google.com/file/d/1gukHyPmIIjSW0-ksy97ocQQEadbmcfDb/view?usp=drive_link \n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8");
-                    /* $tutorialAdm = '../anexos/tutorial_administrador.pdf';
-                    $tutorialGestor = '../anexos/tutorial_gestor.pdf';
-                    $mail->addAttachment($tutorialAdm, 'tutorial_administrador.pdf');
-                    $mail->addAttachment($tutorialGestor, 'tutorial_gestor.pdf'); */
-                    $mail->send();
+                    EmailAddAdm($novoAdm);
                 }
 
                 echo '<script>

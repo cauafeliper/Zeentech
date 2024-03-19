@@ -1,5 +1,6 @@
 <?php
     include_once('../../config/config.php');
+    include_once('../../emails/email.php');
     session_start();
 
     date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
@@ -11,7 +12,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="shortcut icon" href="../imgs/logo-volks.png" type="image/x-icon">
+    <link rel="shortcut icon" href="../../imgs/logo-volks.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../estilos/style-gestor.css">
 </head>
 <body>
     <script>
@@ -22,10 +24,8 @@
         overlay.style.left = '0';
         overlay.style.width = '100%';
         overlay.style.height = '100%';
-        overlay.style.opacity = '1';
-        overlay.style.backgroundColor = '#c9c9c9';
         overlay.style.zIndex = '1';
-        overlay.innerHTML = '<div style="width:100%; height:100%; display:flex; justify-content:center; align-items:center; text-align: center; color:black;"><h1>Carregando...</h1></div>';
+        overlay.innerHTML = '<div class="overlay"><img class="gifOverlay" src="../../assets/truck-unscreen2.gif"><h1>Carregando...</h1></div>';
         document.body.appendChild(overlay);
     </script>
 <?php
@@ -51,10 +51,6 @@ if (isset($_GET['id'])) {
         $result = mysqli_query($conexao, $query);
         $row = mysqli_fetch_assoc($result);
         $solicitante = $row['solicitante'];
-        $dia = $row['dia'];
-        $hora_inicio = $row['hora_inicio'];
-        $hora_fim = $row['hora_fim'];
-        $area_pista = $row['area_pista'];
 
         $query_email = "SELECT email FROM logins WHERE nome = '$solicitante'";
         $result_email = mysqli_query($conexao, $query_email);
@@ -65,24 +61,7 @@ if (isset($_GET['id'])) {
             $affected_rows = mysqli_affected_rows($conexao);
             if ($affected_rows > 0) {
                 // Envie o email com o motivo de reprovação
-                require("../../PHPMailer-master/src/PHPMailer.php"); 
-                require("../../PHPMailer-master/src/SMTP.php"); 
-                $mail = new PHPMailer\PHPMailer\PHPMailer(); 
-                $mail->IsSMTP();
-                $mail->SMTPDebug = 0;
-                $mail->SMTPAuth = true;
-                $mail->SMTPSecure = 'tls'; 
-                $mail->Host = "equipzeentech.com"; 
-                $mail->Port = 587;
-                $mail->Username = "admin@equipzeentech.com"; 
-                $mail->Password = "Z3en7ech"; 
-                $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
-                $mail->AddAddress($email); 
-
-                $mail->Subject = mb_convert_encoding("Solicitação Reprovada!","Windows-1252","UTF-8"); 
-                $mail->Body = mb_convert_encoding("Sua solicitação de agendamento da área da pista $area_pista para o dia $dia de $hora_inicio até $hora_fim foi reprovada!\nMotivo: \"$motivoReprovacao\".\n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8"); 
-
-                $mail->send();
+                EmailReprovar($email, $row, $motivoReprovacao, $_SESSION['nome'], $conexao);
 
                 echo '<script>
                     Swal.fire({
@@ -147,6 +126,7 @@ if (isset($_GET['id'])) {
                     form.appendChild(textarea);
                     document.body.appendChild(form);
                     form.submit();
+                    textarea.style.display = "none";
                 }
             }).then((result) => {
                 if (result.dismiss === Swal.DismissReason.cancel) {

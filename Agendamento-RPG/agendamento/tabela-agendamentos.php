@@ -1,5 +1,6 @@
 <?php
     include_once('../config/config.php');
+    include_once('../emails/email.php');
     session_start();
 
     $expire_time = $_SESSION['expire_time'];
@@ -157,11 +158,11 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                 </div>
                 <div class="centro_custo grids">
                     <label for="centro_custo" class="centro_custo__label">Centro de Custo:</label>
-                    <input type="text" name="centro_custo" id="centro_custo" class="centro_custo_txt" maxlength="4" oninput="this.value = this.value.replace(/[^0-9]/g, '')"><?php if(isset($_POST['centro_custo'])) { echo htmlspecialchars($_POST['centro_custo']); } ?></textarea>
+                    <input type="text" name="centro_custo" id="centro_custo" class="centro_custo_txt" maxlength="4" oninput="this.value = this.value.replace(/[^0-9]/g, '')" <?php if(isset($_POST['centro_custo'])) { echo 'value="' . $_POST['centro_custo']. '" '; } ?>>
                 </div>
                 <div class="carro grids">
                     <label for="carro" class="carro__label">Carro:</label>
-                    <input type="text" name="carro" id="carro" class="carro_txt" maxlength="30"><?php if(isset($_POST['carro'])) { echo htmlspecialchars($_POST['carro']); } ?></textarea>
+                    <input type="text" name="carro" id="carro" class="carro_txt" maxlength="30" <?php if(isset($_POST['carro'])) { echo 'value="' . htmlspecialchars($_POST['carro']) . '" '; } ?>>
                 </div>
                 <div class="obs grids">
                     <label for="obs" class="obs__label">Observações:</label>
@@ -291,34 +292,15 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                                             }
                                         });
                                     </script>';
+
+                                    $last_id = $conexao->insert_id; // Get the last inserted id
+                                    $stmt = $conexao->prepare("SELECT * FROM agendamentos WHERE id = ?"); // Prepare a SELECT statement to fetch the data of the last inserted row
+                                    $stmt->bind_param("i", $last_id);
+                                    $stmt->execute();
+                                    $result = $stmt->get_result();
+                                    $dataInserida = $result->fetch_assoc(); // Fetch the data and put it into an associative array
                                     
-                                    require("../PHPMailer-master/src/PHPMailer.php"); 
-                                    require("../PHPMailer-master/src/SMTP.php");
-                                    $mail = new PHPMailer\PHPMailer\PHPMailer();
-                                    $mail->IsSMTP();
-                                    $mail->SMTPDebug = 0;
-                                    $mail->SMTPAuth = true;
-                                    $mail->SMTPSecure = 'tls'; 
-                                    $mail->Host = "equipzeentech.com"; 
-                                    $mail->Port = 587;
-                                    $mail->Username = "admin@equipzeentech.com"; 
-                                    $mail->Password = "Z3en7ech"; 
-                                    $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
-                                    $mail->AddAddress($email); 
-                                    $mail->Subject = mb_convert_encoding("Solicitação criada com sucesso!","Windows-1252","UTF-8"); 
-                                    $mail->Body = mb_convert_encoding("Sua solicitação de agendamento da área da pista $area para o dia $data de $hora_inicio até $hora_fim foi criada com sucesso!\nAssim que houver uma resposta do Gestor encarregado, você receberá um email dizendo se sua solicitação foi aprovada ou não.\n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8"); 
-                                    $mail->send();
-    
-                                    $mail->ClearAddresses();
-                                    
-                                    $query_gestor = "SELECT email FROM gestor";
-                                    $result_gestor = mysqli_query($conexao, $query_gestor);
-                                    while ($row_gestor = mysqli_fetch_assoc($result_gestor)) {
-                                        $mail->addAddress($row_gestor['email']); //email pros gestores
-                                    }
-                                    $mail->Subject = mb_convert_encoding('Nova solicitação de agendamento para pista a Pista de Teste!',"Windows-1252","UTF-8");
-                                    $mail->Body = mb_convert_encoding("Uma nova solicitação para o agendamento da Pista de Teste foi criada pelo colaborador(a) $solicitante na área da pista $area para o dia $data e horário de $hora_inicio até $hora_fim com objetivo $objetivo.\nEssa nova solicitação aguarda sua resposta!\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8");
-                                    $mail->send();
+                                    EmailSolicitacao($email, $dataInserida, $conexao);
                                 } 
                                 else {
                                     echo '<script>

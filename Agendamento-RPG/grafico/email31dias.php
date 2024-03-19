@@ -1,6 +1,6 @@
 <?php
-
 include_once('../config/config.php');
+include_once('../emails/email.php');
 session_start(); 
 
 date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
@@ -25,27 +25,8 @@ if (isset($_GET['link'])) {
     $result_email = mysqli_query($conexao, $query_email);
     if ($result_email->num_rows > 0){
         // Envie o email com o motivo de reprovação
-        require("../PHPMailer-master/src/PHPMailer.php"); 
-        require("../PHPMailer-master/src/SMTP.php"); 
-        $mail = new PHPMailer\PHPMailer\PHPMailer(); 
-        $mail->IsSMTP();
-        $mail->SMTPDebug = 0;
-        $mail->SMTPAuth = true;
-        $mail->SMTPSecure = 'tls'; 
-        $mail->Host = "equipzeentech.com"; 
-        $mail->Port = 587;
-        $mail->Username = "admin@equipzeentech.com"; 
-        $mail->Password = "Z3en7ech"; 
-        $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
-        
-        $mail->Subject = mb_convert_encoding("Gráfico de agendamentos dos próximos 30 dias","Windows-1252","UTF-8"); 
-        $mail->Body = mb_convert_encoding("\nPara conferir a tabela de agendamentos dos próximos 30 dias, acesse: $link.\n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8");
+        EmailGrafico($result_email);
 
-        while ($row_email = mysqli_fetch_assoc($result_email)) {
-            $email = $row_email['email'];
-            $mail->AddAddress($email);
-        }
-        $mail->send();
         echo '<script>
                 Swal.fire({
                     icon: "success",
