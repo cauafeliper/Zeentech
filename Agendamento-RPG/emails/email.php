@@ -2,7 +2,6 @@
 
 $linkGrafico = 'https://bit.ly/grafico31diasRPG';
 $linkVerificacao = 'https://bit.ly/verificacaoRPG';
-$linkRecuperarSenha = 'https://bit.ly/recuperarSenhaRPG';
 $tutorialCadastro = "https://bit.ly/tutorial_cadastroRPG";
 $tutorialGestor = "https://bit.ly/tutorial_gestorRPG";
 $tutorialAdm = "https://bit.ly/tutorial_administradorRPG";
