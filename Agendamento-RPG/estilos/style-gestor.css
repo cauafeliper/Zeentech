@@ -262,7 +262,7 @@ main form {
   table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 10px;
+    border-spacing: 8px;
   }
 
   .caption {
@@ -579,13 +579,13 @@ footer img {
     font-size: medium;
 }
 
-@media (max-width: 1314px) { 
+@media (max-width: 1475px) { 
   .tabela {
     overflow-y: auto;
   }
   
   table {
-    width: 1245px;
+    width: 1275px;
   }
 }
 

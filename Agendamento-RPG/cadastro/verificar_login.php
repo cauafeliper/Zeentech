@@ -1,5 +1,6 @@
 <?php
     include_once('../config/config.php');
+    include_once('../emails/email.php');
     session_start();
 
     date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo 
@@ -18,10 +19,19 @@
 </head>
 <body>
     <main>
+        <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+            <label for="email">Email</label>
+            <input type="text" name="email" value="<?php echo isset($_GET['email']) ? htmlspecialchars($_GET['email']) : ''; ?>">
+            <label for="token">Token</label>
+            <input type="text" name="token">
+            <input type="submit" name="submit" value="verificar">
+        </form>
+
         <?php
-            if(isset($_GET['token'])) {
-                $token = $_GET['token'];
-                if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['submit'])){       
+                if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])){
+                    
+                    $token = $_POST['token'];
+                    $email = $_POST['email'];
                     // Verificar se o token existe na tabela logins_pendentes
                     $stmt = $conexao->prepare("SELECT * FROM logins_pendentes WHERE token = ? AND expiracao > NOW()");
                     $stmt->bind_param("s", $token);
@@ -43,23 +53,7 @@
                         $stmt_delete->bind_param("s", $token);
                         $stmt_delete->execute();
                         $stmt_delete->close();
-            
-                        echo '<script>
-                                Swal.fire({
-                                    icon: "success",
-                                    title: "Email Verificado!",
-                                    text: "Seu email foi verificado com sucesso. Agora você pode fazer login.",
-                                    confirmButtonText: "Login",
-                                    confirmButtonColor: "#001e50",
-                                    allowOutsideClick: false,
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        // Redireciona o usuário para a página de login
-                                        window.location.href = "../index.php";
-                                    }
-                                });
-                            </script>';
-
+        
                         // Verificar se o email está na tabela gestor
                         $stmt_gestor = $conexao->prepare("SELECT * FROM gestor WHERE email = ?");
                         $stmt_gestor->bind_param("s", $row['email']);
@@ -86,54 +80,14 @@
                             $admTrue = false;
                         }
 
-                        require("../PHPMailer-master/src/PHPMailer.php"); 
-                        require("../PHPMailer-master/src/SMTP.php");
-                        $mail = new PHPMailer\PHPMailer\PHPMailer();
-                        $mail->IsSMTP();
-                        $mail->SMTPDebug = 0;
-                        $mail->SMTPAuth = true;
-                        $mail->SMTPSecure = 'tls'; 
-                        $mail->Host = "equipzeentech.com"; 
-                        $mail->Port = 587;
-                        $mail->Username = "admin@equipzeentech.com"; 
-                        $mail->Password = "Z3en7ech"; 
-                        $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
-                        $mail->AddAddress($row['email']); 
-                        $mail->Subject = mb_convert_encoding("Email verificado!","Windows-1252","UTF-8");
-                        $body =  "Seu email foi verificado com sucesso!\nSegue link para o tutorial de como utilizar a página: https://drive.google.com/file/d/1w-7YJXje3fR3wvZaFnAj9yQ4SsRqB3XT/view?usp=drive_link";
-                        if($gestorTrue) {
-                            $body .= "\n\nSegue link para o tutorial de como utilizar a página como gestor: https://drive.google.com/file/d/1nNH71zqNmMx39pKrFuW7eD8hstNWsQ3q/view?usp=drive_link";
-                        }
-                        if($admTrue) {
-                            $body .= "\n\nSegue link para o tutorial de como utilizar a página como administrador: https://drive.google.com/file/d/1gukHyPmIIjSW0-ksy97ocQQEadbmcfDb/view?usp=drive_link";
-                            if (!$gestorTrue){
-                                $body .= "\n\nSegue link para o tutorial de como utilizar a página como gestor: https://drive.google.com/file/d/1nNH71zqNmMx39pKrFuW7eD8hstNWsQ3q/view?usp=drive_link";
-                            }
-                        }
-                        $body .= "\n\nAtenciosamente,\nEquipe Zeentech";
-                        $mail->Body = mb_convert_encoding($body,"Windows-1252","UTF-8");
-                        /* $tutorialUsuario = '../anexos/tutorial_usuario.pdf';
-                        $tutorialGestor = '../anexos/tutorial_gestor.pdf';
-                        $tutorialAdm = '../anexos/tutorial_administrador.pdf';
-                        $mail->addAttachment($tutorialUsuario, 'tutorial_usuario.pdf');
-                        if($gestorTrue) {
-                            $mail->addAttachment($tutorialGestor, 'tutorial_gestor.pdf');
-                        }
-                        if($admTrue) {
-                            $mail->addAttachment($tutorialAdm, 'tutorial_administrador.pdf');
-                            if (!$gestorTrue){
-                                $mail->addAttachment($tutorialGestor, 'tutorial_gestor.pdf');
-                            }
-                        } */
+                        EmailVerificado($row['email'], $gestorTrue, $admTrue);
 
-                        $mail->send();
-                    } else {
                         echo '<script>
                                 Swal.fire({
-                                    icon: "warning",
-                                    title: "Token Inválido!",
-                                    text: "O token fornecido não é válido ou expirou.",
-                                    confirmButtonText: "OK",
+                                    icon: "success",
+                                    title: "Email Verificado!",
+                                    text: "Seu email foi verificado com sucesso. Agora você pode fazer login.",
+                                    confirmButtonText: "Login",
                                     confirmButtonColor: "#001e50",
                                     allowOutsideClick: false,
                                 }).then((result) => {
@@ -143,33 +97,23 @@
                                     }
                                 });
                             </script>';
+                        
+                    } else {
+                        echo '<script>
+                                Swal.fire({
+                                    icon: "warning",
+                                    title: "Token Inválido!",
+                                    text: "O token ou email fornecido não é válido ou expirou.",
+                                    confirmButtonText: "OK",
+                                    confirmButtonColor: "#001e50",
+                                    allowOutsideClick: false,
+                                })
+                            </script>';
                     }
                     exit();
                 }
-            } else {
-                echo '<script>
-                        Swal.fire({
-                            icon: "warning",
-                            title: "Token Ausente!",
-                            text: "O token não foi fornecido.",
-                            confirmButtonText: "OK",
-                            confirmButtonColor: "#001e50",
-                            allowOutsideClick: false,
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                // Redireciona o usuário para a página de login
-                                window.location.href = "../index.php";
-                            }
-                        });
-                    </script>';
-            }
+            
         ?>
-
-        <form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-            <input type="hidden" name="token" value="<?php echo isset($_GET['token']) ? htmlspecialchars($_GET['token']) : ''; ?>">
-            <input type="submit" name="submit" value="verificar">
-        </form>
-
     </main>
 </body>
 </html>

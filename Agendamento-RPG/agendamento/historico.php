@@ -301,7 +301,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
 
     <footer>
         <div>
-            <span style="font-size: 16px">Desenvolvido por: <img src="../imgs/IDT.png" alt="logo-zeentech" style="margin-left: 10px; height: 16px"></span>
+            <span style="font-size: 16px">Desenvolvido por: <img src="../imgs/ZeentechIDT.png" alt="logo-zeentech" style="margin-left: 10px;"></span>
         </div>
         <div class="copyright">
             <span style="font-size: 14px">Copyright © 2024 de Zeentech, todos os direitos reservados.</span>

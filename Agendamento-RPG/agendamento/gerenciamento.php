@@ -412,24 +412,35 @@
                 // Fechar a declaração
                 $stmt->close();
 
-                EmailAddCadastro($novoCadastro);
+                try{
+                    EmailAddCadastro($novoCadastro);
 
-                echo '<script>
-                    Swal.fire({
-                        icon: "success",
-                        title: "Valor adicionado!",
-                        text: "O valor foi adicionado à tabela com sucesso.",
-                        confirmButtonText: "Ok",
-                        confirmButtonColor: "#001e50",
-                        allowOutsideClick: false,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Redireciona o usuário para a página de login
-                            window.location.href = "'.$_SERVER['PHP_SELF'].'";
-                        }
-                    });
-                </script>';
+                    echo '<script>
+                        Swal.fire({
+                            icon: "success",
+                            title: "Valor adicionado!",
+                            text: "O valor foi adicionado à tabela com sucesso.",
+                            confirmButtonText: "Ok",
+                            confirmButtonColor: "#001e50",
+                            allowOutsideClick: false,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Redireciona o usuário para a página de login
+                                window.location.href = "'.$_SERVER['PHP_SELF'].'";
+                            }
+                        });
+                    </script>';
                 }
+                catch(Exception $e){
+                    echo '<script>
+                        Swal.fire({
+                            icon: "error",
+                            title: "Erro ao enviar email!",
+                            text: "Ocorreu um erro ao enviar o email: '.$e->getMessage().'"
+                        });
+                    </script>';
+                }
+            }
         }
     }
 

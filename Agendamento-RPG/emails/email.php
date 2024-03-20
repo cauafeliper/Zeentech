@@ -1,6 +1,8 @@
 <?php
 
 $linkGrafico = 'https://bit.ly/grafico31diasRPG';
+$linkVerificacao = 'https://bit.ly/verificacaoRPG';
+$linkRecuperarSenha = 'https://bit.ly/recuperarSenhaRPG';
 $tutorialCadastro = "https://bit.ly/tutorial_cadastroRPG";
 $tutorialGestor = "https://bit.ly/tutorial_gestorRPG";
 $tutorialAdm = "https://bit.ly/tutorial_administradorRPG";
@@ -17,8 +19,8 @@ function EmailAddCadastro($address) {
     $mail->SMTPSecure = 'tls'; 
     $mail->Host = "equipzeentech.com"; 
     $mail->Port = 587;
-    $mail->Username = "admin@equipzeentech.com"; // Your Gmail email address
-    $mail->Password = "Z3en7ech"; // Your Gmail password
+    $mail->Username = "admin@equipzeentech.com";
+    $mail->Password = "Z3en7ech";
     $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
     $mail->AddAddress($address); 
     $subject = "Tutorial de Cadastro!";
@@ -316,5 +318,81 @@ function EmailGrafico($result_email){
         $email = $row_email['email'];
         $mail->AddAddress($email);
     }
+    $mail->send();
+}
+
+function EmailConfirmar($address, $token){
+    require('../PHPMailer-master/src/Exception.php');
+    require("../PHPMailer-master/src/PHPMailer.php"); 
+    require("../PHPMailer-master/src/SMTP.php");
+    $mail = new PHPMailer\PHPMailer\PHPMailer(); 
+    $mail->IsSMTP();
+    $mail->SMTPDebug = 0;
+    $mail->SMTPAuth = true;
+    $mail->SMTPSecure = 'tls'; 
+    $mail->Host = "equipzeentech.com"; 
+    $mail->Port = 587;
+    $mail->Username = "admin@equipzeentech.com"; 
+    $mail->Password = "Z3en7ech"; 
+    $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
+    $mail->AddAddress($address);
+    
+    global $linkVerificacao;
+    $mail->Subject = mb_convert_encoding("Verificação de email","Windows-1252","UTF-8"); 
+    $mail->Body = mb_convert_encoding("Seu token de verificação é $token. Esse token vai expirar em 30 minutos! Para verificar seu email, acesse $linkVerificacao.\nCaso a solicitação não tenha sido feita por você, apenas ignore este email.\n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8"); 
+    $mail->send();
+}
+
+function EmailVerificado($address, $gestorTrue, $admTrue){
+    require('../PHPMailer-master/src/Exception.php');
+    require("../PHPMailer-master/src/PHPMailer.php"); 
+    require("../PHPMailer-master/src/SMTP.php");
+    $mail = new PHPMailer\PHPMailer\PHPMailer();
+    $mail->IsSMTP();
+    $mail->SMTPDebug = 0;
+    $mail->SMTPAuth = true;
+    $mail->SMTPSecure = 'tls'; 
+    $mail->Host = "equipzeentech.com"; 
+    $mail->Port = 587;
+    $mail->Username = "admin@equipzeentech.com"; 
+    $mail->Password = "Z3en7ech"; 
+    $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
+    $mail->AddAddress($address); 
+    $mail->Subject = mb_convert_encoding("Email verificado!","Windows-1252","UTF-8");
+    
+    global $tutorialUsuario;
+    global $tutorialGestor;
+    global $tutorialAdm;
+    $body =  "Seu email foi verificado com sucesso!\nSegue link para o tutorial de como utilizar a página: $tutorialUsuario";
+    if($gestorTrue) {
+        $body .= "\nSegue link para o tutorial de como utilizar a página como gestor: $tutorialGestor";
+    }
+    if($admTrue) {
+        $body .= "\nSegue link para o tutorial de como utilizar a página como administrador: $tutorialAdm";
+    }
+    $body .= "\n\nAtenciosamente,\nEquipe Zeentech";
+    $mail->Body = mb_convert_encoding($body,"Windows-1252","UTF-8");
+
+    $mail->send();
+}
+
+function EmailRecuperarSenha($address, $token){
+    require('../PHPMailer-master/src/Exception.php');
+    require("../PHPMailer-master/src/PHPMailer.php"); 
+    require("../PHPMailer-master/src/SMTP.php");
+    $mail = new PHPMailer\PHPMailer\PHPMailer(); 
+    $mail->IsSMTP();
+    $mail->SMTPDebug = 0;
+    $mail->SMTPAuth = true;
+    $mail->SMTPSecure = 'tls'; 
+    $mail->Host = "equipzeentech.com"; 
+    $mail->Port = 587;
+    $mail->Username = "admin@equipzeentech.com"; 
+    $mail->Password = "Z3en7ech"; 
+    $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
+    $mail->AddAddress($address);
+    
+    $mail->Subject = mb_convert_encoding("Recuperação da senha","Windows-1252","UTF-8"); 
+    $mail->Body = mb_convert_encoding("Seu token de recuperação de senha é $token. Esse token vai expirar em 30 minutos!\nCaso a solicitação não tenha sido feita por você, apenas ignore este email.\n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8"); 
     $mail->send();
 }

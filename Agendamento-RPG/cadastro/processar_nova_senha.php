@@ -18,9 +18,10 @@ session_start();
 
 date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['novaSenha'], $_POST['token'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['novaSenha'], $_POST['token'], $_POST['email'])) {
     $novaSenha = $_POST['novaSenha'];
     $token = $_POST['token'];
+    $email = $_POST['email'];
 
     // Verificar se o token é válido e ainda não expirou
     $stmt = $conexao->prepare("SELECT email FROM tokens WHERE token = ? AND expiracao > NOW()");

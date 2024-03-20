@@ -1,5 +1,6 @@
 <?php
     include_once('../config/config.php');
+    include_once('../emails/email.php');
     session_start();
 
     date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
@@ -213,7 +214,8 @@
                         </script>';
                         /* exit(); */
                     } else {
-                        $token = bin2hex(random_bytes(16)); // 16 bytes, 32 caracteres hexadecimais
+                        $token = mt_rand(100000, 999999);
+                        
                         $tempoExpiracaoMinutos = 30;
                         $tempoExpiracaoSegundos = $tempoExpiracaoMinutos * 60;
                         $expiracao = date('Y-m-d H:i:s', strtotime("+$tempoExpiracaoSegundos seconds"));
@@ -230,40 +232,21 @@
                         if ($result) {
                             $affected_rows = $stmt->affected_rows;
                             if ($affected_rows > 0) {
-                                $linkLocal = 'http://localhost/Zeentech/Agendamento-RPG/cadastro/verificar_login.php?token='.$token;
-                                $link = 'https://www.zeentech.com.br/volkswagen/Agendamento-RPG/cadastro/verificar_login.php?token='.$token;
-
-                                require("../PHPMailer-master/src/PHPMailer.php"); 
-                                require("../PHPMailer-master/src/SMTP.php"); 
-                                $mail = new PHPMailer\PHPMailer\PHPMailer(); 
-                                $mail->IsSMTP();
-                                $mail->SMTPDebug = 0;
-                                $mail->SMTPAuth = true;
-                                $mail->SMTPSecure = 'tls'; 
-                                $mail->Host = "equipzeentech.com"; 
-                                $mail->Port = 587;
-                                $mail->Username = "admin@equipzeentech.com"; 
-                                $mail->Password = "Z3en7ech"; 
-                                $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
-                                $mail->AddAddress($email);
-                                
-                                $mail->Subject = mb_convert_encoding("Verificação de email","Windows-1252","UTF-8"); 
-                                $mail->Body = mb_convert_encoding("Você fez cadastro com esse email no site de agendamento da Pista de Testes. Para verificar seu email e confirmar seu cadastro, acesse: $link. Esse link vai expirar em 30 minutos!\nCaso a solicitação não tenha sido feita por você, apenas ignore este email.\n\nAtenciosamente,\nEquipe Zeentech.","Windows-1252","UTF-8"); 
-
                                 try{
-                                    $mail->send();
+                                    EmailConfirmar($email, $token);
                                     echo '<script>
                                         Swal.fire({
                                             icon: "success",
                                             title: "SUCESSO!",
                                             text: "Seu cadastro foi efetuado e aguarda para ser confirmado! Confira seu email para confirmar o cadastro.",
-                                            confirmButtonText: "Login",
+                                            confirmButtonText: "Verificar email",
                                             confirmButtonColor: "#001e50",
                                             allowOutsideClick: false,
+                                            showCloseButton: true
                                         }).then((result) => {
                                             if (result.isConfirmed) {
                                                 // Redireciona o usuário para a página desejada
-                                                window.location.href = "../index.php";
+                                                window.location.href = "verificar_login.php?email='.urlencode($email).'";
                                             }
                                         });
                                     </script>';
