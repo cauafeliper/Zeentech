@@ -212,28 +212,80 @@
                                 html: "Seu email já está cadastrado!<br>Tente logar com o seu email e senha."
                             });
                         </script>';
-                        /* exit(); */
                     } else {
-                        $token = mt_rand(100000, 999999);
-                        
-                        $tempoExpiracaoMinutos = 30;
-                        $tempoExpiracaoSegundos = $tempoExpiracaoMinutos * 60;
-                        $expiracao = date('Y-m-d H:i:s', strtotime("+$tempoExpiracaoSegundos seconds"));
-                        
-                        $query = "INSERT INTO logins_pendentes (numero, nome, empresa, area, email, senha, token, expiracao) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-                        $stmt = $conexao->prepare($query);
+                        try{
+                            $token = mt_rand(100000, 999999);
+                            $token = strval($token);
+                            
+                            $tempoExpiracaoMinutos = 30;
+                            $tempoExpiracaoSegundos = $tempoExpiracaoMinutos * 60;
+                            $expiracao = date('Y-m-d H:i:s', strtotime("+$tempoExpiracaoSegundos seconds"));
+                            
+                            $query = "INSERT INTO logins_pendentes (numero, nome, empresa, area, email, senha, token, expiracao) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                            $stmt = $conexao->prepare($query);
 
-                        // Vinculando os parâmetros
-                        $stmt->bind_param("ssssssss", $numero, $nome, $empresa, $area, $email, $senha, $token, $expiracao);
+                            // Vinculando os parâmetros
+                            $stmt->bind_param("ssssssss", $numero, $nome, $empresa, $area, $email, $senha, $token, $expiracao);
 
-                        // Executando a consulta preparada
-                        $result = $stmt->execute();
-
-                        if ($result) {
+                            // Executando a consulta preparada
+                            $result = $stmt->execute();
                             $affected_rows = $stmt->affected_rows;
-                            if ($affected_rows > 0) {
-                                try{
-                                    EmailConfirmar($email, $token);
+                            $stmt->close();
+                        }
+                        catch(Exception $e){
+                            echo '<script>
+                            Swal.fire({
+                                icon: "error",
+                                title: "Erro!",
+                                html: "Ocorreu um erro no seu cadastro!<br>Tente novamente."
+                            });
+                            </script>';
+                        }
+                        finally{
+                            if (!isset($affected_rows)) {
+                                echo '<script>
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Erro!",
+                                        text: "Houve um erro na criação do agendamento.",
+                                        confirmButtonText: "Ok",
+                                        confirmButtonColor: "#001e50",
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            window.location.href = "../gestor.php";
+                                        }
+                                    });
+                                </script>';
+                            }
+                            else{
+                                // Convert the associative array to a string
+                                $dataInserida_str = implode(",", array_map(function ($key, $value) {
+                                    return "$key: '$value'";
+                                }, array_keys($dataInserida), $dataInserida));
+                    
+                                echo('prestes a enviar');
+                                // Utiliza a função exec para chamar o script Python com o valor como argumento
+                                $output = shell_exec("python ../../email/enviar_email.py " . escapeshellarg('agendamento_reprovado') . " " . escapeshellarg($email_gestor_str) . " " . escapeshellarg($email_frota_str) . " " . escapeshellarg($email) . " " . escapeshellarg($dataInserida_str));
+                                $output = trim($output);
+                                echo($output);
+                    
+                                if ($output !== 'sucesso'){
+                                    echo '<script>
+                                        Swal.fire({
+                                            icon: "warning",
+                                            title: "Erro no e-mail!",
+                                            html: "O agendamento foi criado, porém houve um problema no envio do e-mail automático:<br>'.$output.'",
+                                            confirmButtonText: "Ok",
+                                            confirmButtonColor: "#001e50",
+                                            allowOutsideClick: false
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                window.location.href = "../gestor.php";
+                                            }
+                                        });
+                                    </script>';  
+                                }
+                                else{
                                     echo '<script>
                                         Swal.fire({
                                             icon: "success",
@@ -250,24 +302,7 @@
                                             }
                                         });
                                     </script>';
-                                }
-                                catch(Exception $e){
-                                    echo '<script>
-                                    Swal.fire({
-                                        icon: "error",
-                                        title: "Erro!",
-                                        html: "O email não pôde ser enviado!<br>Por favor, tente novamente."
-                                    });
-                                    </script>';
-                                }
-                            } else {
-                                echo '<script>
-                                    Swal.fire({
-                                        icon: "warning",
-                                        title: "ATENÇÃO!",
-                                        html: "Ocorreu um erro no seu cadastro!<br>Tente novamente."
-                                    });
-                                </script>';
+                                }    
                             }
                         }
                     }

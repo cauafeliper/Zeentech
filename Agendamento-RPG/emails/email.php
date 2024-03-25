@@ -1,5 +1,7 @@
 <?php
 
+use PHPMailer\PHPMailer\SMTP;
+
 $linkGrafico = 'https://bit.ly/grafico31diasRPG';
 $linkVerificacao = 'https://bit.ly/verificacaoRPG';
 $tutorialCadastro = "https://bit.ly/tutorial_cadastroRPG";
@@ -8,32 +10,43 @@ $tutorialAdm = "https://bit.ly/tutorial_administradorRPG";
 $tutorialUsuario = "https://bit.ly/tutorial_usuarioRPG";
 
 function EmailAddCadastro($address) {
-    require('../PHPMailer-master/src/Exception.php');
-    require("../PHPMailer-master/src/PHPMailer.php"); 
-    require("../PHPMailer-master/src/SMTP.php");
-    $mail = new PHPMailer\PHPMailer\PHPMailer();
-    $mail->IsSMTP();
-    $mail->SMTPDebug = 0;
-    $mail->SMTPAuth = true;
-    $mail->SMTPSecure = 'tls'; 
-    $mail->Host = "equipzeentech.com"; 
-    $mail->Port = 587;
-    $mail->Username = "admin@equipzeentech.com";
-    $mail->Password = "Z3en7ech";
-    $mail->SetFrom("admin@equipzeentech.com", "SISTEMA RPG"); 
-    $mail->AddAddress($address); 
-    $subject = "Tutorial de Cadastro!";
-    $mail->Subject = mb_convert_encoding($subject, "Windows-1252", "UTF-8");
-    global $tutorialCadastro;
-    $body = "Seu email foi adicionado à lista de cadastros para o site de agendamento da Pista de Testes.\nSegue um link para o tutorial de como realizar o cadastro na página: $tutorialCadastro \n\nAtenciosamente,\nEquipe Zeentech.";
-    $mail->Body = mb_convert_encoding($body, "Windows-1252", "UTF-8");
-    $mail->send();
+    require_once('../PHPMailer-master/src/Exception.php');
+    require_once("../PHPMailer-master/src/PHPMailer.php"); 
+    require_once("../PHPMailer-master/src/SMTP.php");
+    try{
+        $mail = new PHPMailer\PHPMailer\PHPMailer();
+        $mail->IsSMTP();
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+        $mail->SMTPAuth = true;
+        $mail->SMTPSecure = 'tls'; 
+        $mail->Host = "smtp.zeentech.com";
+        $mail->Port = 587;
+        $mail->Username = "idt@zeentech.com.br";
+        $mail->Password = "1n3xH@H@l3l3";
+        $mail->SetFrom("idt@zeentech.com.br", "SISTEMA RPG"); 
+        $mail->AddAddress($address); 
+        $subject = "Tutorial de Cadastro!";
+        $mail->Subject = mb_convert_encoding($subject, "Windows-1252", "UTF-8");
+        global $tutorialCadastro;
+        $body = "Seu email foi adicionado à lista de cadastros para o site de agendamento da Pista de Testes.\nSegue um link para o tutorial de como realizar o cadastro na página: $tutorialCadastro \n\nAtenciosamente,\nEquipe Zeentech.";
+        $mail->Body = mb_convert_encoding($body, "Windows-1252", "UTF-8");
+        if ($mail->send()) {
+            echo "Email enviado com sucesso!";
+        }
+        else {
+            echo "Email não enviado! {$mail->ErrorInfo}";
+        }
+    }
+    catch(Exception $e){
+        echo "$e";
+        echo "Erro ao enviar: {$mail->ErrorInfo}";
+    }
 }
 
 function EmailAddGestor($address){
-    require('../PHPMailer-master/src/Exception.php');
-    require("../PHPMailer-master/src/PHPMailer.php"); 
-    require("../PHPMailer-master/src/SMTP.php");
+    require_once('../PHPMailer-master/src/Exception.php');
+    require_once("../PHPMailer-master/src/PHPMailer.php"); 
+    require_once("../PHPMailer-master/src/SMTP.php");
     $mail = new PHPMailer\PHPMailer\PHPMailer();
     $mail->IsSMTP();
     $mail->SMTPDebug = 0;
@@ -54,9 +67,9 @@ function EmailAddGestor($address){
 }
 
 function EmailAddAdm($address){
-    require('../PHPMailer-master/src/Exception.php');
-    require("../PHPMailer-master/src/PHPMailer.php"); 
-    require("../PHPMailer-master/src/SMTP.php");
+    require_once('../PHPMailer-master/src/Exception.php');
+    require_once("../PHPMailer-master/src/PHPMailer.php"); 
+    require_once("../PHPMailer-master/src/SMTP.php");
     $mail = new PHPMailer\PHPMailer\PHPMailer();
     $mail->IsSMTP();
     $mail->SMTPDebug = 0;
@@ -77,9 +90,9 @@ function EmailAddAdm($address){
 }
 
 function EmailSolicitacao($address, $data, $conexao){
-    require('../PHPMailer-master/src/Exception.php');
-    require("../PHPMailer-master/src/PHPMailer.php"); 
-    require("../PHPMailer-master/src/SMTP.php");
+    require_once('../PHPMailer-master/src/Exception.php');
+    require_once("../PHPMailer-master/src/PHPMailer.php"); 
+    require_once("../PHPMailer-master/src/SMTP.php");
     $mail = new PHPMailer\PHPMailer\PHPMailer();
     $mail->IsSMTP();
     $mail->SMTPDebug = 0;
@@ -108,9 +121,9 @@ function EmailSolicitacao($address, $data, $conexao){
 }
 
 function EmailSolicitacaoAdm($data, $conexao){
-    require('../PHPMailer-master/src/Exception.php');
-    require("../PHPMailer-master/src/PHPMailer.php"); 
-    require("../PHPMailer-master/src/SMTP.php");
+    require_once('../PHPMailer-master/src/Exception.php');
+    require_once("../PHPMailer-master/src/PHPMailer.php"); 
+    require_once("../PHPMailer-master/src/SMTP.php");
     $mail = new PHPMailer\PHPMailer\PHPMailer(); 
     $mail->IsSMTP();
     $mail->SMTPDebug = 0;
@@ -144,9 +157,9 @@ function EmailSolicitacaoAdm($data, $conexao){
 }
 
 function EmailAprovar($address, $data, $gestor, $conexao){
-    require('../../PHPMailer-master/src/Exception.php');
-    require("../../PHPMailer-master/src/PHPMailer.php"); 
-    require("../../PHPMailer-master/src/SMTP.php");
+    require_once('../../PHPMailer-master/src/Exception.php');
+    require_once("../../PHPMailer-master/src/PHPMailer.php"); 
+    require_once("../../PHPMailer-master/src/SMTP.php");
     $mail = new PHPMailer\PHPMailer\PHPMailer(); 
     $mail->IsSMTP();
     $mail->SMTPDebug = 0;
@@ -196,9 +209,9 @@ function EmailAprovar($address, $data, $gestor, $conexao){
 }
 
 function EmailCancelar($address, $data, $conexao){
-    require('../../PHPMailer-master/src/Exception.php');
-    require("../../PHPMailer-master/src/PHPMailer.php"); 
-    require("../../PHPMailer-master/src/SMTP.php");
+    require_once('../../PHPMailer-master/src/Exception.php');
+    require_once("../../PHPMailer-master/src/PHPMailer.php"); 
+    require_once("../../PHPMailer-master/src/SMTP.php");
     $mail = new PHPMailer\PHPMailer\PHPMailer(); 
     $mail->IsSMTP();
     $mail->SMTPDebug = 0;
@@ -248,9 +261,9 @@ function EmailCancelar($address, $data, $conexao){
 }
 
 function EmailReprovar($address, $data, $motivoReprovacao, $gestor, $conexao){
-    require('../../PHPMailer-master/src/Exception.php');
-    require("../../PHPMailer-master/src/PHPMailer.php"); 
-    require("../../PHPMailer-master/src/SMTP.php");
+    require_once('../../PHPMailer-master/src/Exception.php');
+    require_once("../../PHPMailer-master/src/PHPMailer.php"); 
+    require_once("../../PHPMailer-master/src/SMTP.php");
     $mail = new PHPMailer\PHPMailer\PHPMailer(); 
     $mail->IsSMTP();
     $mail->SMTPDebug = 0;
@@ -295,9 +308,9 @@ function EmailReprovar($address, $data, $motivoReprovacao, $gestor, $conexao){
 }
 
 function EmailGrafico($result_email){
-    require('../PHPMailer-master/src/Exception.php');
-    require("../PHPMailer-master/src/PHPMailer.php"); 
-    require("../PHPMailer-master/src/SMTP.php");
+    require_once('../PHPMailer-master/src/Exception.php');
+    require_once("../PHPMailer-master/src/PHPMailer.php"); 
+    require_once("../PHPMailer-master/src/SMTP.php");
     $mail = new PHPMailer\PHPMailer\PHPMailer(); 
     $mail->IsSMTP();
     $mail->SMTPDebug = 0;
@@ -321,9 +334,9 @@ function EmailGrafico($result_email){
 }
 
 function EmailConfirmar($address, $token){
-    require('../PHPMailer-master/src/Exception.php');
-    require("../PHPMailer-master/src/PHPMailer.php"); 
-    require("../PHPMailer-master/src/SMTP.php");
+    require_once('../PHPMailer-master/src/Exception.php');
+    require_once("../PHPMailer-master/src/PHPMailer.php"); 
+    require_once("../PHPMailer-master/src/SMTP.php");
     $mail = new PHPMailer\PHPMailer\PHPMailer(); 
     $mail->IsSMTP();
     $mail->SMTPDebug = 0;
@@ -343,9 +356,9 @@ function EmailConfirmar($address, $token){
 }
 
 function EmailVerificado($address, $gestorTrue, $admTrue){
-    require('../PHPMailer-master/src/Exception.php');
-    require("../PHPMailer-master/src/PHPMailer.php"); 
-    require("../PHPMailer-master/src/SMTP.php");
+    require_once('../PHPMailer-master/src/Exception.php');
+    require_once("../PHPMailer-master/src/PHPMailer.php"); 
+    require_once("../PHPMailer-master/src/SMTP.php");
     $mail = new PHPMailer\PHPMailer\PHPMailer();
     $mail->IsSMTP();
     $mail->SMTPDebug = 0;
@@ -376,9 +389,9 @@ function EmailVerificado($address, $gestorTrue, $admTrue){
 }
 
 function EmailRecuperarSenha($address, $token){
-    require('../PHPMailer-master/src/Exception.php');
-    require("../PHPMailer-master/src/PHPMailer.php"); 
-    require("../PHPMailer-master/src/SMTP.php");
+    require_once('../PHPMailer-master/src/Exception.php');
+    require_once("../PHPMailer-master/src/PHPMailer.php"); 
+    require_once("../PHPMailer-master/src/SMTP.php");
     $mail = new PHPMailer\PHPMailer\PHPMailer(); 
     $mail->IsSMTP();
     $mail->SMTPDebug = 0;

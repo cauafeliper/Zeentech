@@ -79,54 +79,89 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && $_POST['s
         exit();
     }
     else{
-        $stmt = $conexao->prepare("DELETE FROM tokens WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $stmt->close();
-        // Gera um token aleatório
-        $token = mt_rand(100000, 999999);
-        $tempoExpiracaoMinutos = 30;
-        $tempoExpiracaoSegundos = $tempoExpiracaoMinutos * 60;
-
-        $expiracao = date('Y-m-d H:i:s', strtotime("+$tempoExpiracaoSegundos seconds"));
-        $query = "INSERT INTO tokens (token, expiracao, email) VALUES ('$token', '$expiracao', '$email')";
-        $stmt = $conexao->prepare($query);
-        $stmt->execute();
-        $stmt->close();
-
         try{
-            EmailRecuperarSenha($email, $token);
-            echo '<script>
-            Swal.fire({
-                icon: "success",
-                title: "Enviado!",
-                html: "Foi enviado um email de recuperação de senha!"
-            });
-            </script>';
-
-            echo '<style>
-                #formToken {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.5rem;
-                }
-            </style>';
+            $token = mt_rand(100000, 999999);
+            $token = strval($token);
+            
+            $tempoExpiracaoMinutos = 30;
+            $tempoExpiracaoSegundos = $tempoExpiracaoMinutos * 60;
+            $expiracao = date('Y-m-d H:i:s', strtotime("+$tempoExpiracaoSegundos seconds"));
+            
+            $query = "INSERT INTO tokens (token, expiracao, email) VALUES ('$token', '$expiracao', '$email')";
+            $stmt = $conexao->prepare($query);
+            $stmt->execute();
+            $stmt->close();
         }
         catch(Exception $e){
             echo '<script>
             Swal.fire({
                 icon: "error",
                 title: "Erro!",
-                html: "O email não pôde ser enviado!<br>Por favor, tente novamente."
+                html: "Ocorreu um erro no seu cadastro!<br>Tente novamente."
             });
             </script>';
         }
-
-        echo '<script>
-            document.getElementById("formToken").style.display = "flex";
-        </script>';
-        // Encerre a execução para evitar que o restante da página seja exibido desnecessariamente
-        exit();
+        finally{
+            if (!isset($affected_rows)) {
+                echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "Erro!",
+                        text: "Houve um erro na criação do agendamento.",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: "#001e50",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "../gestor.php";
+                        }
+                    });
+                </script>';
+            }
+            else{
+                echo('prestes a enviar');
+                // Utiliza a função exec para chamar o script Python com o valor como argumento
+                $output = shell_exec("python ../../email/enviar_email.py " . escapeshellarg('agendamento_reprovado') . " " . escapeshellarg($email_gestor_str) . " " . escapeshellarg($email_frota_str) . " " . escapeshellarg($email) . " " . escapeshellarg($dataInserida_str));
+                $output = trim($output);
+                echo($output);
+    
+                if ($output !== 'sucesso'){
+                    echo '<script>
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Erro no e-mail!",
+                            html: "O agendamento foi criado, porém houve um problema no envio do e-mail automático:<br>'.$output.'",
+                            confirmButtonText: "Ok",
+                            confirmButtonColor: "#001e50",
+                            allowOutsideClick: false
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = "../gestor.php";
+                            }
+                        });
+                    </script>';  
+                }
+                else{
+                    echo '<script>
+                    Swal.fire({
+                        icon: "success",
+                        title: "Enviado!",
+                        html: "Foi enviado um email de recuperação de senha!"
+                    });
+                    </script>';
+                    /* echo '<script>
+                        document.getElementById("formToken").style.display = "flex";
+                    </script>'; */
+                    echo '<style>
+                        #formToken {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 0.5rem;
+                        }
+                    </style>';
+                    /* exit(); */
+                }    
+            }
+        }
     }
 }
 

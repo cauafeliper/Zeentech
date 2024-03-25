@@ -23,59 +23,109 @@ if (isset($_GET['id'])) {
     // Obtém o motivo da reprovação do formulário
     $motivoReprovacao = 'Cancelado pelo solicitante';
 
-    $query_cancelar = "UPDATE agendamentos SET status = 'Reprovado', motivo_reprovacao = ? WHERE id = ?";
-    $stmt = $conexao->prepare($query_cancelar);
-    $stmt->bind_param("ss", $motivoReprovacao, $id);
-    
-    $query = "SELECT * FROM agendamentos WHERE id = $id";
-    $result = mysqli_query($conexao, $query);
-    $row = mysqli_fetch_assoc($result);
-    $solicitante = $row['solicitante'];
-
-    $query_email = "SELECT email FROM logins WHERE nome = '$solicitante'";
-    $result_email = mysqli_query($conexao, $query_email);
-    $row_email = mysqli_fetch_assoc($result_email);
-    $email = $row_email['email'];
-    
-    if ($stmt->execute()) {
+    try {
+        $query_cancelar = "UPDATE agendamentos SET status = 'Reprovado', motivo_reprovacao = ? WHERE id = ?";
+        $stmt = $conexao->prepare($query_cancelar);
+        $stmt->bind_param("ss", $motivoReprovacao, $id);
+        $stmt->execute();
         $affected_rows = mysqli_affected_rows($conexao);
-        if ($affected_rows > 0) {
-            // Envie o email com o motivo de reprovação
-            EmailCancelar($email, $row, $conexao);
+        $stmt->close();
+        
+        // Prepare a SELECT statement to fetch the data of the last inserted row
+        $stmt = $conexao->prepare("SELECT * FROM agendamentos WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        // Execute the SELECT statement
+        $stmt->execute();
+        // Get the result
+        $result = $stmt->get_result();
+        // Fetch the data and put it into an associative array
+        $dataInserida = $result->fetch_assoc();
+        // Fechar a declaração
+        $stmt->close();
+        $solicitante = $dataInserida['solicitante'];
 
-            echo '<script>
-                Swal.fire({
-                    icon: "success",
-                    title: "SUCESSO!",
-                    text: "Agendamento cancelado com sucesso!",
-                    confirmButtonText: "OK",
-                    confirmButtonColor: "#23CE6B",
-                    allowOutsideClick: false,
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Redireciona o usuário para a página desejada
-                        window.location.href = "../historico.php";
-                    }
-                });
-            </script>';
-        } else {
-            echo '<script>
-                Swal.fire({
-                    icon: "warning",
-                    title: "ATENÇÃO!",
-                    text: "Ocorreu um erro ao cancelar o agendamento. Tente novamente.",
-                });
-            </script>';
-        }
-    } else {
+        $query_email = "SELECT email FROM logins WHERE nome = '$solicitante'";
+        $result_email = mysqli_query($conexao, $query_email);
+        $row_email = mysqli_fetch_assoc($result_email);
+        $email = $row_email['email'];
+        
+    } catch (Exception $e) {
         echo '<script>
             Swal.fire({
                 icon: "error",
-                title: "ERRO!",
-                text: "Falha na consulta SQL. Tente novamente.",
+                title: "Erro!",
+                html: "Houve um problema ao adicionar o agendamento no banco de dados:<br>'.$e->getMessage().'",
+                confirmButtonText: "Ok",
+                confirmButtonColor: "#001e50",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "../gestor.php";
+                }
             });
         </script>';
-    } 
+    }
+    finally{
+        if (!isset($affected_rows)) {
+            echo '<script>
+                Swal.fire({
+                    icon: "error",
+                    title: "Erro!",
+                    text: "Houve um erro na criação do agendamento.",
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: "#001e50",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "../gestor.php";
+                    }
+                });
+            </script>';
+        }
+        else{
+            // Convert the associative array to a string
+            $dataInserida_str = implode(",", array_map(function ($key, $value) {
+                return "$key: '$value'";
+            }, array_keys($dataInserida), $dataInserida));
+
+            echo('prestes a enviar');
+            // Utiliza a função exec para chamar o script Python com o valor como argumento
+            $output = shell_exec("python ../../email/enviar_email.py " . escapeshellarg('agendamento_reprovado') . " " . escapeshellarg($email_gestor_str) . " " . escapeshellarg($email_frota_str) . " " . escapeshellarg($email) . " " . escapeshellarg($dataInserida_str));
+            $output = trim($output);
+            echo($output);
+
+            if ($output !== 'sucesso'){
+                echo '<script>
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Erro no e-mail!",
+                        html: "O agendamento foi criado, porém houve um problema no envio do e-mail automático:<br>'.$output.'",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: "#001e50",
+                        allowOutsideClick: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "../gestor.php";
+                        }
+                    });
+                </script>';  
+            }
+            else{
+                echo '<script>
+                    Swal.fire({
+                        icon: "success",
+                        title: "Valor adicionado!",
+                        text: "O valor foi adicionado à tabela com sucesso.",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: "#001e50",
+                        allowOutsideClick: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "../gestor.php";
+                        }
+                    });
+                </script>';
+            }    
+        }
+    }
 } 
 ?>
 </body>
