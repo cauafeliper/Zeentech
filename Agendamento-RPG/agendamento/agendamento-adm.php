@@ -1,6 +1,5 @@
 <?php
     include_once('../config/config.php');
-    include_once('../emails/email.php');
     session_start();
 
     $expire_time = $_SESSION['expire_time'];
@@ -182,12 +181,12 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
         </div>
         <?php
         if (isset($_POST['submit'])) {
-            if (empty($_POST['solicitante']) OR empty($_POST['dia']) OR empty($_POST['hora_inicio']) OR empty($_POST['hora_fim']) OR empty($_POST['area_solicitante']) OR empty($_POST['area']) OR empty($_POST['objetivo']) OR empty($_POST['resposta'])) {
+            if (empty($_POST['solicitante']) OR empty($_POST['dia']) OR empty($_POST['hora_inicio']) OR empty($_POST['hora_fim']) OR empty($_POST['area_solicitante']) OR empty($_POST['area']) OR empty($_POST['objetivo']) OR empty($_POST['resposta']) OR empty($_POST['centro_custo'])) {
                 echo "<script>
                     Swal.fire({
                         icon: 'warning',
                         title: 'ATENÇÃO!',
-                        html: 'Algum dos campos está vazio! Por favor, preencha todos os campos atentamente.',
+                        html: 'Algum dos campos obrigatórios está vazio! Por favor, preencha todos os campos atentamente.',
                     });
                 </script>";
             } else {
@@ -221,9 +220,9 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                 else {
                     try {
                         // Preparar a declaração SQL
-                        $stmt = $conexao->prepare("INSERT INTO agendamentos (area_pista, dia, hora_inicio, hora_fim, objtv, solicitante, numero_solicitante, empresa_solicitante, area_solicitante, exclsv, obs, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                        $stmt = $conexao->prepare("INSERT INTO agendamentos (area_pista, dia, hora_inicio, hora_fim, objtv, solicitante, numero_solicitante, empresa_solicitante, area_solicitante, exclsv, centro_de_custo, carro, obs, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                         // Vincular os parâmetros
-                        $stmt->bind_param("ssssssssssss", $area, $data, $hora_inicio, $hora_fim, $objetivo, $solicitante, $numero_solicitante, $empresa_solicitante, $area_solicitante, $exclsv, $obs, $status);
+                        $stmt->bind_param("ssssssssssssss", $area, $data, $hora_inicio, $hora_fim, $objetivo, $solicitante, $numero_solicitante, $empresa_solicitante, $area_solicitante, $exclsv, $centro_custo, $carro, $obs, $status);
                         // Executar a consulta
                         $stmt->execute();
                         $affected_rows = $stmt->affected_rows;
@@ -245,7 +244,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                             Swal.fire({
                                 icon: "error",
                                 title: "Erro!",
-                                html: "Houve um problema ao adicionar o agendamento no banco de dados:<br>'.$e->getMessage().'",
+                                html: "Houve um problema na consulta sql:<br>'.$e->getMessage().'",
                                 confirmButtonText: "Ok",
                                 confirmButtonColor: "#001e50",
                             });
@@ -312,8 +311,8 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                                 echo '<script>
                                     Swal.fire({
                                         icon: "success",
-                                        title: "Valor adicionado!",
-                                        text: "O valor foi adicionado à tabela com sucesso.",
+                                        title: "Agendamento criado!",
+                                        text: "O agendamento foi adicionado à tabela com sucesso.",
                                         confirmButtonText: "Ok",
                                         confirmButtonColor: "#001e50",
                                         allowOutsideClick: false

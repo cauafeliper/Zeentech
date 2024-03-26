@@ -7,12 +7,12 @@ import sys
 
 def envio_grafico():
     try:
-        receiver_email = sys.argv[2]
+        email_lista = sys.argv[2].split(",")
 
         message = MIMEMultipart("alternative")
         message["Subject"] = "Gráfico de agendamentos"
-        message["From"] = "SISTEMA RPG"
-        message["To"] = receiver_email
+        message["From"] = f"SISTEMA RPG <{sender_email}>"
+        message["To"] = ", ".join(email_lista)
 
         # Create the plain-text and HTML version of your message
         text = f"""\
@@ -47,7 +47,7 @@ def envio_grafico():
         with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
-                sender_email, receiver_email, text
+                sender_email, email_lista, text
             )
             print('sucesso')
     except Exception as e:
@@ -60,7 +60,7 @@ def recuperar_senha():
 
         message = MIMEMultipart("alternative")
         message["Subject"] = "Recuperação da senha"
-        message["From"] = "SISTEMA RPG"
+        message["From"] = f"SISTEMA RPG <{sender_email}>"
         message["To"] = receiver_email
 
         # Create the plain-text and HTML version of your message
@@ -70,12 +70,12 @@ def recuperar_senha():
         
         
         Atenciosamente,
-        Equipe Zeentech."""
+        Equipe Zeentech e Certification Team."""
         html = f"""\
         <html>
         <body style="display:flex;justify-content:center;alignt-items:center;flex-direction:column">
             <p>
-                Seu token de recuperação de senha é {token}. Esse token vai expirar em 30 minutos!<br>Caso a solicitação não tenha sido feita por você, apenas ignore este email.<br><br>Atenciosamente,<br>Equipe Zeentech.
+                Seu token de recuperação de senha é {token}. Esse token vai expirar em 30 minutos!<br>Caso a solicitação não tenha sido feita por você, apenas ignore este email.<br><br>Atenciosamente,<br>Equipe Zeentech e Certification Team.
             </p>
         </body>
         </html>
@@ -111,7 +111,7 @@ def cadastro_verificado():
 
         message = MIMEMultipart("alternative")
         message["Subject"] = "Email verificado!"
-        message["From"] = "SISTEMA RPG"
+        message["From"] = f"SISTEMA RPG <{sender_email}>"
         message["To"] = receiver_email
 
         # Create the plain-text and HTML version of your message
@@ -120,7 +120,7 @@ def cadastro_verificado():
         
         
         Atenciosamente,
-        Equipe Zeentech."""
+        Equipe Zeentech e Certification Team."""
         html = f"""\
         <html>
         <body style="display:flex;justify-content:center;alignt-items:center;flex-direction:column">
@@ -129,7 +129,7 @@ def cadastro_verificado():
         
         
                 Atenciosamente,
-                Equipe Zeentech.
+                Equipe Zeentech e Certification Team.
             </p>
         </body>
         </html>
@@ -231,22 +231,22 @@ def verificar_email():
 
         message = MIMEMultipart("alternative")
         message["Subject"] = "Verificação de email"
-        message["From"] = "SISTEMA RPG"
+        message["From"] = f"SISTEMA RPG <{sender_email}>"
         message["To"] = receiver_email
 
         # Create the plain-text and HTML version of your message
         text = f"""\
-        Seu token de verificação é {token}. Esse token vai expirar em 30 minutos! Para verificar seu email, acesse {linkVerificacao}.
+        Seu token de verificação é {token}. Esse token vai expirar em 30 minutos!
         Caso a solicitação não tenha sido feita por você, apenas ignore este email.
         
         
         Atenciosamente,
-        Equipe Zeentech."""
+        Equipe Zeentech e Certification Team."""
         html = f"""\
         <html>
         <body style="display:flex;justify-content:center;alignt-items:center;flex-direction:column">
             <p>
-                Seu token de verificação é {token}. Esse token vai expirar em 30 minutos! Para verificar seu email, clique <a href="{linkVerificacao}">aqui</a>.<br>Caso a solicitação não tenha sido feita por você, apenas ignore este email.<br><br>Atenciosamente,<br>Equipe Zeentech.
+                Seu token de verificação é {token}. Esse token vai expirar em 30 minutos!<br>Caso a solicitação não tenha sido feita por você, apenas ignore este email.<br><br>Atenciosamente,<br>Equipe Zeentech e Certification Team.
             </p>
         </body>
         </html>
@@ -281,32 +281,32 @@ def agendamento_aprovado():
         email_usuario = sys.argv[4]
         dataInserida_str = sys.argv[5]
         items = dataInserida_str.split(",") # Split the string by ', ' to get a list of "key: 'value'" strings
-        dataInserida = {}
+        data = {}
         # Loop through the list of "key: 'value'" strings
         for item in items:
             key, value = item.split(": ") # Split the "key: 'value'" string by ': ' to get the key and value
             value = value.strip("'") # Remove the single quotes around the value
-            dataInserida[key] = value # Add the key and value to the dictionary
-        link = sys.argv[6]
+            data[key] = value # Add the key and value to the dictionary
+        gestor = sys.argv[6]
         
         enviados = 0
 
         message = MIMEMultipart("alternative")
         message["Subject"] = "Solicitação Aprovada!"
-        message["From"] = "SISTEMA RPG"
+        message["From"] = f"SISTEMA RPG <{sender_email}>"
         message["To"] = email_usuario
 
         # Create the plain-text and HTML version of your message
         text = f"""\
-        Sua solicitação de agendamento da área da pista {dataInserida['area_pista']} para o dia {dataInserida['dia']} de {dataInserida['hora_inicio']} até {dataInserida['hora_fim']} foi Aprovada!
+        Sua solicitação de agendamento da área da pista {data['area_pista']} para o dia {data['dia']} de {data['hora_inicio']} até {data['hora_fim']} foi Aprovada pelo gestor {gestor}!
         
         Atenciosamente,
-        Equipe Zeentech."""
+        Equipe Zeentech e Certification Team."""
         html = f"""\
         <html>
         <body style="display:flex;justify-content:center;alignt-items:center;flex-direction:column">
             <p>
-                Sua solicitação de agendamento da área da pista {dataInserida['area_pista']} para o dia {dataInserida['dia']} de {dataInserida['hora_inicio']} até {dataInserida['hora_fim']} foi Aprovada!<br><br>Atenciosamente,<br>Equipe Zeentech.
+                Sua solicitação de agendamento da área da pista {data['area_pista']} para o dia {data['dia']} de {data['hora_inicio']} até {data['hora_fim']} foi Aprovada pelo gestor {gestor}!<br><br>Atenciosamente,<br>Equipe Zeentech e Certification Team.
             </p>
         </body>
         </html>
@@ -325,7 +325,7 @@ def agendamento_aprovado():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, email_usuario, text
@@ -334,23 +334,23 @@ def agendamento_aprovado():
             
         #segundo email
         message = MIMEMultipart("alternative")
-        message["Subject"] = "Novo agendamento na Pista de Teste!"
+        message["Subject"] = "Novo agendamento na Pista de Testes!"
         message["From"] = "SISTEMA RPG"
         message["To"] = ",".join(email_gestor)
         message["Cc"] = ",".join(email_frota)
 
         # Create the plain-text and HTML version of your message
         text = f"""\
-        Um agendamento foi aprovado para a área da pista {dataInserida['area_pista']} no dia {dataInserida['dia']} de {dataInserida['hora_inicio']} até {dataInserida['hora_fim']}!
-        Para conferir a tabela de agendamentos dos próximos 30 dias, clique aqui.
+        Um agendamento foi aprovado para a área da pista {data['area_pista']} no dia {data['dia']} de {data['hora_inicio']} até {data['hora_fim']} pelo gestor {gestor}!
+        Para conferir a tabela de agendamentos dos próximos 30 dias, acesse: {linkGrafico}
         
         Atenciosamente,
-        Equipe Zeentech."""
+        Equipe Zeentech e Certification Team."""
         html = f"""\
         <html>
         <body style="display:flex;justify-content:center;alignt-items:center;flex-direction:column">
             <p>
-                Um agendamento foi aprovado para a área da pista {dataInserida['area_pista']} no dia {dataInserida['dia']} de {dataInserida['hora_inicio']} até {dataInserida['hora_fim']}!<br>Para conferir a tabela de agendamentos dos próximos 30 dias, clique <a href={link}>aqui</a>.<br><br>Atenciosamente,<br>Equipe Zeentech.
+                Um agendamento foi aprovado para a área da pista {data['area_pista']} no dia {data['dia']} de {data['hora_inicio']} até {data['hora_fim']} pelo gestor {gestor}!<br>Para conferir a tabela de agendamentos dos próximos 30 dias, <a href={linkGrafico}>clique aqui</a>.<br><br>Atenciosamente,<br>Equipe Zeentech e Certification Team.
             </p>
         </body>
         </html>
@@ -369,7 +369,7 @@ def agendamento_aprovado():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, email_gestor + email_frota, text
@@ -378,13 +378,17 @@ def agendamento_aprovado():
 
         if enviados == 2:
             print('sucesso')
+        else:
+            print('Um dos emails não foi enviado')
     except Exception as e:
         print(e)
 
 def agendamento_reprovado():
     try:
-        email_usuario = sys.argv[2]
-        dataInserida_str = sys.argv[3]
+        email_gestor = [email.strip() for email in sys.argv[2].split(",")]
+        email_frota = [email.strip() for email in sys.argv[3].split(",")]
+        email_usuario = sys.argv[4]
+        dataInserida_str = sys.argv[5]
         items = dataInserida_str.split(",") # Split the string by ', ' to get a list of "key: 'value'" strings
         data = {}
         # Loop through the list of "key: 'value'" strings
@@ -392,11 +396,11 @@ def agendamento_reprovado():
             key, value = item.split(": ") # Split the "key: 'value'" string by ': ' to get the key and value
             value = value.strip("'") # Remove the single quotes around the value
             data[key] = value # Add the key and value to the dictionary
-        gestor = sys.argv[4]
+        gestor = sys.argv[6]
 
         message = MIMEMultipart("alternative")
         message["Subject"] = "Solicitação Reprovada!"
-        message["From"] = "SISTEMA RPG"
+        message["From"] = f"SISTEMA RPG <{sender_email}>"
         message["To"] = email_usuario
 
         # Create the plain-text and HTML version of your message
@@ -405,12 +409,12 @@ def agendamento_reprovado():
         Motivo: {data['motivo_reprovacao']}.
         
         Atenciosamente,
-        Equipe Zeentech."""
+        Equipe Zeentech e Certification Team."""
         html = f"""\
         <html>
         <body style="display:flex;justify-content:center;alignt-items:center;flex-direction:column">
             <p>
-                Sua solicitação de agendamento da área da pista {data['area_pista']} para o dia {data['dia']} de {data['hora_inicio']} até {data['hora_fim']} foi reprovada pelo gestor {gestor}!<br>Motivo: {data['motivo_reprovacao']}.<br><br>Atenciosamente,<br>Equipe Zeentech.
+                Sua solicitação de agendamento da área da pista {data['area_pista']} para o dia {data['dia']} de {data['hora_inicio']} até {data['hora_fim']} foi reprovada pelo gestor {gestor}!<br>Motivo: {data['motivo_reprovacao']}.<br><br>Atenciosamente,<br>Equipe Zeentech e Certification Team.
             </p>
         </body>
         </html>
@@ -429,12 +433,56 @@ def agendamento_reprovado():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, email_usuario, text
             )
-            print('sucesso')
+        
+        if data["status"] == "Aprovado":
+            #segundo email
+            message = MIMEMultipart("alternative")
+            message["Subject"] = "Agendamento Reprovado!"
+            message["From"] = "SISTEMA RPG"
+            message["To"] = ",".join(email_gestor)
+            message["Cc"] = ",".join(email_frota)
+
+            # Create the plain-text and HTML version of your message
+            text = f"""\
+            Um agendamento previamente aprovado foi reprovado para a área da pista {data['area_pista']} no dia {data['dia']} de {data['hora_inicio']} até {data['hora_fim']} pelo gestor {gestor}!
+            Para conferir a tabela de agendamentos dos próximos 30 dias, acesse: {linkGrafico}.
+            
+            Atenciosamente,
+            Equipe Zeentech e Certification Team."""
+            html = f"""\
+            <html>
+            <body style="display:flex;justify-content:center;alignt-items:center;flex-direction:column">
+                <p>
+                    Um agendamento previamente aprovado foi reprovado para a área da pista {data['area_pista']} no dia {data['dia']} de {data['hora_inicio']} até {data['hora_fim']} pelo gestor {gestor}!<br>Para conferir a tabela de agendamentos dos próximos 30 dias, <a href={linkGrafico}>clique aqui</a>.<br><br>Atenciosamente,<br>Equipe Zeentech e Certification Team.
+                </p>
+            </body>
+            </html>
+            """
+
+            # Turn these into plain/html MIMEText objects
+            part1 = MIMEText(text, "plain")
+            part2 = MIMEText(html, "html")
+
+            # Add HTML/plain-text parts to MIMEMultipart message
+            # The email client will try to render the last part first
+            message.attach(part1)
+            message.attach(part2)
+            
+            text = message.as_string()
+
+            # Create secure connection with server and send email
+            context = ssl.create_default_context()
+            with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
+                server.login(sender_email, password)
+                server.sendmail(
+                    sender_email, email_gestor + email_frota, text
+                )
+        print('sucesso')
     except Exception as e:
         print(e)
 
@@ -454,7 +502,7 @@ def agendamento_cancelado():
 
         message = MIMEMultipart("alternative")
         message["Subject"] = "Solicitação Cancelada com sucesso!"
-        message["From"] = "SISTEMA RPG"
+        message["From"] = f"SISTEMA RPG <{sender_email}>"
         message["To"] = email_usuario
 
         # Create the plain-text and HTML version of your message
@@ -462,12 +510,12 @@ def agendamento_cancelado():
         Você cancelou sua solicitação de agendamento da área da pista {data['area_pista']} para o dia {data['dia']} de {data['hora_inicio']} até {data['hora_fim']}!
         
         Atenciosamente,
-        Equipe Zeentech."""
+        Equipe Zeentech e Certification Team."""
         html = f"""\
         <html>
         <body style="display:flex;justify-content:center;alignt-items:center;flex-direction:column">
             <p>
-                Você cancelou sua solicitação de agendamento da área da pista {data['area_pista']} para o dia {data['dia']} de {data['hora_inicio']} até {data['hora_fim']}!<br><br>Atenciosamente,<br>Equipe Zeentech.
+                Você cancelou sua solicitação de agendamento da área da pista {data['area_pista']} para o dia {data['dia']} de {data['hora_inicio']} até {data['hora_fim']}!<br><br>Atenciosamente,<br>Equipe Zeentech e Certification Team.
             </p>
         </body>
         </html>
@@ -486,7 +534,7 @@ def agendamento_cancelado():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, email_usuario, text
@@ -502,16 +550,16 @@ def agendamento_cancelado():
 
             # Create the plain-text and HTML version of your message
             text = f"""\
-            Um agendamento previamente aprovado foi cancelado para a área da pista {data['area_pista']} no dia {data['dia']} de {data['hora_inicio']} até {data['hora_fim']}!
+            Um agendamento previamente aprovado foi cancelado para a área da pista {data['area_pista']} no dia {data['dia']} de {data['hora_inicio']} até {data['hora_fim']} pelo solicitante {data['solicitante']}!
             Para conferir a tabela de agendamentos dos próximos 30 dias, acesse: {linkGrafico}.
             
             Atenciosamente,
-            Equipe Zeentech."""
+            Equipe Zeentech e Certification Team."""
             html = f"""\
             <html>
             <body style="display:flex;justify-content:center;alignt-items:center;flex-direction:column">
                 <p>
-                    Um agendamento previamente aprovado foi cancelado para a área da pista {data['area_pista']} no dia {data['dia']} de {data['hora_inicio']} até {data['hora_fim']}!<br>Para conferir a tabela de agendamentos dos próximos 30 dias, clique <a href={linkGrafico}>aqui</a>.<br><br>Atenciosamente,<br>Equipe Zeentech.
+                    Um agendamento previamente aprovado foi cancelado para a área da pista {data['area_pista']} no dia {data['dia']} de {data['hora_inicio']} até {data['hora_fim']} pelo solicitante {data['solicitante']}!<br>Para conferir a tabela de agendamentos dos próximos 30 dias, <a href={linkGrafico}>clique aqui</a>.<br><br>Atenciosamente,<br>Equipe Zeentech e Certification Team.
                 </p>
             </body>
             </html>
@@ -530,7 +578,7 @@ def agendamento_cancelado():
 
             # Create secure connection with server and send email
             context = ssl.create_default_context()
-            with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+            with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
                 server.login(sender_email, password)
                 server.sendmail(
                     sender_email, email_gestor + email_frota, text
@@ -551,13 +599,12 @@ def agendamento():
             key, value = item.split(": ") # Split the "key: 'value'" string by ': ' to get the key and value
             value = value.strip("'") # Remove the single quotes around the value
             dataInserida[key] = value # Add the key and value to the dictionary
-        link = sys.argv[5]
         
         enviados = 0
 
         message = MIMEMultipart("alternative")
         message["Subject"] = "Solicitação criada com sucesso!"
-        message["From"] = "SISTEMA RPG"
+        message["From"] = f"SISTEMA RPG <{sender_email}>"
         message["To"] = email_usuario
 
         # Create the plain-text and HTML version of your message
@@ -590,7 +637,7 @@ def agendamento():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, email_usuario, text
@@ -632,7 +679,7 @@ def agendamento():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, email_gestor, text
@@ -641,6 +688,8 @@ def agendamento():
 
         if enviados == 2:
             print('sucesso')
+        else:
+            print('Um dos emails não foi enviado')
     except Exception as e:
         print(e)
 
@@ -650,32 +699,31 @@ def agendamentoadm():
         email_frota = sys.argv[3].split(",")
         dataInserida_str = sys.argv[4]
         items = dataInserida_str.split(",") # Split the string by ', ' to get a list of "key: 'value'" strings
-        dataInserida = {}
+        data = {}
         # Loop through the list of "key: 'value'" strings
         for item in items:
             key, value = item.split(": ") # Split the "key: 'value'" string by ': ' to get the key and value
             value = value.strip("'") # Remove the single quotes around the value
-            dataInserida[key] = value # Add the key and value to the dictionary
-        link = sys.argv[5]
+            data[key] = value # Add the key and value to the dictionary
 
         message = MIMEMultipart("alternative")
         message["Subject"] = "Novo agendamento na Pista de Teste!"
-        message["From"] = "SISTEMA RPG"
+        message["From"] = f"SISTEMA RPG <{sender_email}>"
         message["To"] = ", ".join(email_gestor)
         message["Cc"] = ", ".join(email_frota)
 
         # Create the plain-text and HTML version of your message
         text = f"""\
-        Um agendamento foi aprovado para a área da pista {dataInserida['area_pista']} no dia {dataInserida['dia']} de {dataInserida['hora_inicio']} até {dataInserida['hora_fim']}!
-        Para conferir a tabela de agendamentos dos próximos 30 dias, clique <a href=$link>aqui</a>.
+        Um agendamento foi aprovado para a área da pista {data['area_pista']} no dia {data['dia']} de {data['hora_inicio']} até {data['hora_fim']}!
+        Para conferir a tabela de agendamentos dos próximos 30 dias, acesse: {linkGrafico}
         
         Atenciosamente,
-        Equipe Zeentech."""
+        Equipe Zeentech e Certification Team."""
         html = f"""\
         <html>
         <body style="display:flex;justify-content:center;alignt-items:center;flex-direction:column">
             <p>
-                Um agendamento foi aprovado para a área da pista {dataInserida['area_pista']} no dia {dataInserida['dia']} de {dataInserida['hora_inicio']} até {dataInserida['hora_fim']}!<br>Para conferir a tabela de agendamentos dos próximos 30 dias, clique <a href={link}>aqui</a>.<br><br>Atenciosamente,<br>Equipe Zeentech.
+                Um agendamento foi aprovado para a área da pista {data['area_pista']} no dia {data['dia']} de {data['hora_inicio']} até {data['hora_fim']}!<br>Para conferir a tabela de agendamentos dos próximos 30 dias, <a href={linkGrafico}>clique aqui</a>.<br><br>Atenciosamente,<br>Equipe Zeentech e Certification Team.
             </p>
         </body>
         </html>
@@ -694,7 +742,7 @@ def agendamentoadm():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, email_gestor + email_frota, text
@@ -709,7 +757,7 @@ def addadm():
 
         message = MIMEMultipart("alternative")
         message["Subject"] = "Permissão de Administrador"
-        message["From"] = "SISTEMA RPG"
+        message["From"] = f"SISTEMA RPG <{sender_email}>"
         message["To"] = receiver_email
 
         # Create the plain-text and HTML version of your message
@@ -717,12 +765,12 @@ def addadm():
         Você foi adicionado como Administradir na página de agendamento da Pista de Testes! Segue em anexo o tutorial de uso da página para Administradores e Gestores.
         
         Atenciosamente,
-        Equipe Zeentech."""
+        Equipe Zeentech e Certification Team."""
         html = """\
         <html>
         <body style="display:flex;justify-content:center;alignt-items:center;flex-direction:column">
             <p>
-                Você foi adicionado como Administradir na página de agendamento da Pista de Testes! Segue em anexo o tutorial de uso da página para Administradores e Gestores.<br><br>Atenciosamente,<br>Equipe Zeentech.
+                Você foi adicionado como Administradir na página de agendamento da Pista de Testes! Segue em anexo o tutorial de uso da página para Administradores e Gestores.<br><br>Atenciosamente,<br>Equipe Zeentech e Certification Team.
             </p>
         </body>
         </html>
@@ -785,7 +833,7 @@ def addadm():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, receiver_email, text
@@ -800,7 +848,7 @@ def addgestor():
 
         message = MIMEMultipart("alternative")
         message["Subject"] = "Permissão de Gestor"
-        message["From"] = "SISTEMA RPG"
+        message["From"] = f"SISTEMA RPG <{sender_email}>"
         message["To"] = receiver_email
 
         # Create the plain-text and HTML version of your message
@@ -808,12 +856,12 @@ def addgestor():
         Você foi adicionado como Gestor na página de agendamento da Pista de Testes! Segue em anexo o tutorial de uso da página para Gestores.
         
         Atenciosamente,
-        Equipe Zeentech."""
+        Equipe Zeentech e Certification Team."""
         html = """\
         <html>
         <body style="display:flex;justify-content:center;alignt-items:center;flex-direction:column">
             <p>
-                Você foi adicionado como Gestor na página de agendamento da Pista de Testes! Segue em anexo o tutorial de uso da página para Gestores.<br><br>Atenciosamente,<br>Equipe Zeentech.
+                Você foi adicionado como Gestor na página de agendamento da Pista de Testes! Segue em anexo o tutorial de uso da página para Gestores.<br><br>Atenciosamente,<br>Equipe Zeentech e Certification Team.
             </p>
         </body>
         </html>
@@ -853,7 +901,7 @@ def addgestor():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, receiver_email, text
@@ -868,7 +916,7 @@ def addcadastro():
 
         message = MIMEMultipart("alternative")
         message["Subject"] = "Tutorial de Cadastro!"
-        message["From"] = "SISTEMA RPG"
+        message["From"] = f"SISTEMA RPG <{sender_email}>"
         message["To"] = receiver_email
 
         # Create the plain-text and HTML version of your message
@@ -876,12 +924,15 @@ def addcadastro():
         Seu email foi adicionado à lista de cadastros para o site de agendamento da Pista de Testes. Segue em anexo um tutorial de como realizar o cadastro na página.
 
         Atenciosamente,
-        Equipe Zeentech."""
+        Equipe Zeentech e Certification Team."""
         html = """\
         <html>
         <body style="display:flex;justify-content:center;alignt-items:center;flex-direction:column">
             <p>
-                Seu email foi adicionado à lista de cadastros para o site de agendamento da Pista de Testes. Segue em anexo um tutorial de como realizar o cadastro na página.<br><br>Atenciosamente,<br>Equipe Zeentech.
+                Seu email foi adicionado à lista de cadastros para o site de agendamento da Pista de Testes. Segue em anexo um tutorial de como realizar o cadastro na página.<br>
+                <br>
+                Atenciosamente,<br>
+                Equipe Zeentech e Certification Team.<br>
             </p>
         </body>
         </html>
@@ -938,7 +989,6 @@ sender_email = 'admin@equipzeentech.com'
 password = 'Z3en7ech'
 
 #links usados
-linkVerificacao = 'https://www.zeentech.com.br/volkswagen/Agendamento-RPG/cadastro/verificar_login.php'
 linkGrafico = 'https://www.zeentech.com.br/volkswagen/Agendamento-RPG/grafico/grafico31dias.php'
 
 # Obtém o argumento passado pelo PHP

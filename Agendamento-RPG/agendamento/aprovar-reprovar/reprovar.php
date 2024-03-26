@@ -1,12 +1,11 @@
 <?php
     include_once('../../config/config.php');
-    include_once('../../emails/email.php');
     session_start();
 
     date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,12 +43,6 @@ if (isset($_GET['id'])) {
         }
 
         try {
-            $query_cancelar = "UPDATE agendamentos SET status = 'Reprovado', motivo_reprovacao = ? WHERE id = ?";
-            $stmt = $conexao->prepare($query_cancelar);
-            $stmt->bind_param("ss", $motivoReprovacao, $id);
-            $stmt->execute();
-            $affected_rows = mysqli_affected_rows($conexao);
-            
             // Prepare a SELECT statement to fetch the data of the last inserted row
             $stmt = $conexao->prepare("SELECT * FROM agendamentos WHERE id = ?");
             $stmt->bind_param("i", $id);
@@ -62,6 +55,14 @@ if (isset($_GET['id'])) {
             // Fechar a declaração
             $stmt->close();
             $solicitante = $dataInserida['solicitante'];
+            $gestor = $
+
+            $query_cancelar = "UPDATE agendamentos SET status = 'Reprovado', motivo_reprovacao = ? WHERE id = ?";
+            $stmt = $conexao->prepare($query_cancelar);
+            $stmt->bind_param("ss", $motivoReprovacao, $id);
+            $stmt->execute();
+            $affected_rows = mysqli_affected_rows($conexao);
+            $stmt->close();
 
             $query_email = "SELECT email FROM logins WHERE nome = '$solicitante'";
             $result_email = mysqli_query($conexao, $query_email);
@@ -73,7 +74,7 @@ if (isset($_GET['id'])) {
                 Swal.fire({
                     icon: "error",
                     title: "Erro!",
-                    html: "Houve um problema ao adicionar o agendamento no banco de dados:<br>'.$e->getMessage().'",
+                    html: "Houve um problema na consulta sql:<br>'.$e->getMessage().'",
                     confirmButtonText: "Ok",
                     confirmButtonColor: "#001e50",
                 }).then((result) => {
@@ -89,7 +90,7 @@ if (isset($_GET['id'])) {
                     Swal.fire({
                         icon: "error",
                         title: "Erro!",
-                        text: "Houve um erro na criação do agendamento.",
+                        text: "Houve um erro na reprovação do agendamento.",
                         confirmButtonText: "Ok",
                         confirmButtonColor: "#001e50",
                     }).then((result) => {
@@ -104,19 +105,17 @@ if (isset($_GET['id'])) {
                 $dataInserida_str = implode(",", array_map(function ($key, $value) {
                     return "$key: '$value'";
                 }, array_keys($dataInserida), $dataInserida));
-    
-                echo('prestes a enviar');
+
                 // Utiliza a função exec para chamar o script Python com o valor como argumento
-                $output = shell_exec("python ../../email/enviar_email.py " . escapeshellarg('agendamento_reprovado') . " " . escapeshellarg($email_gestor_str) . " " . escapeshellarg($email_frota_str) . " " . escapeshellarg($email) . " " . escapeshellarg($dataInserida_str));
+                $output = shell_exec("python ../../email/enviar_email.py " . escapeshellarg('agendamento_reprovado') . " " . escapeshellarg($email_gestor_str) . " " . escapeshellarg($email_frota_str) . " " . escapeshellarg($email) . " " . escapeshellarg($dataInserida_str) . " " . escapeshellarg($gestor));
                 $output = trim($output);
-                echo($output);
     
                 if ($output !== 'sucesso'){
                     echo '<script>
                         Swal.fire({
                             icon: "warning",
                             title: "Erro no e-mail!",
-                            html: "O agendamento foi criado, porém houve um problema no envio do e-mail automático:<br>'.$output.'",
+                            html: "O agendamento foi reprovado, porém houve um problema no envio do e-mail automático:<br>'.$output.'",
                             confirmButtonText: "Ok",
                             confirmButtonColor: "#001e50",
                             allowOutsideClick: false
@@ -131,8 +130,8 @@ if (isset($_GET['id'])) {
                     echo '<script>
                         Swal.fire({
                             icon: "success",
-                            title: "Valor adicionado!",
-                            text: "O valor foi adicionado à tabela com sucesso.",
+                            title: "Agendamento reprovado!",
+                            text: "O agendamento foi reprovado com sucesso.",
                             confirmButtonText: "Ok",
                             confirmButtonColor: "#001e50",
                             allowOutsideClick: false

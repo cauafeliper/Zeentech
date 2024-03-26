@@ -1,6 +1,5 @@
 <?php
     include_once('../config/config.php');
-    include_once('../emails/email.php');
     session_start();
 
     date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
@@ -90,15 +89,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && $_POST['s
             $query = "INSERT INTO tokens (token, expiracao, email) VALUES ('$token', '$expiracao', '$email')";
             $stmt = $conexao->prepare($query);
             $stmt->execute();
+            $affected_rows = $stmt->affected_rows;
             $stmt->close();
         }
         catch(Exception $e){
             echo '<script>
-            Swal.fire({
-                icon: "error",
-                title: "Erro!",
-                html: "Ocorreu um erro no seu cadastro!<br>Tente novamente."
-            });
+                Swal.fire({
+                    icon: "error",
+                    title: "Erro!",
+                    html: "Houve um problema na consulta sql:<br>'.$e->getMessage().'",
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: "#001e50",
+                });
             </script>';
         }
         finally{
@@ -107,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && $_POST['s
                     Swal.fire({
                         icon: "error",
                         title: "Erro!",
-                        text: "Houve um erro na criação do agendamento.",
+                        text: "Houve um erro na consulta sql.",
                         confirmButtonText: "Ok",
                         confirmButtonColor: "#001e50",
                     }).then((result) => {
@@ -118,18 +120,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && $_POST['s
                 </script>';
             }
             else{
-                echo('prestes a enviar');
                 // Utiliza a função exec para chamar o script Python com o valor como argumento
-                $output = shell_exec("python ../../email/enviar_email.py " . escapeshellarg('agendamento_reprovado') . " " . escapeshellarg($email_gestor_str) . " " . escapeshellarg($email_frota_str) . " " . escapeshellarg($email) . " " . escapeshellarg($dataInserida_str));
+                $output = shell_exec("python ../email/enviar_email.py " . escapeshellarg('recuperar_senha') . " " . escapeshellarg($email) . " " . escapeshellarg($token));
                 $output = trim($output);
-                echo($output);
     
                 if ($output !== 'sucesso'){
                     echo '<script>
                         Swal.fire({
                             icon: "warning",
                             title: "Erro no e-mail!",
-                            html: "O agendamento foi criado, porém houve um problema no envio do e-mail automático:<br>'.$output.'",
+                            html: "Houve um problema no envio do e-mail automático:<br>'.$output.'",
                             confirmButtonText: "Ok",
                             confirmButtonColor: "#001e50",
                             allowOutsideClick: false
@@ -158,7 +158,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && $_POST['s
                             gap: 0.5rem;
                         }
                     </style>';
-                    /* exit(); */
                 }    
             }
         }

@@ -70,8 +70,6 @@
             echo '<script>window.location.href = \'../index.php\';</script>';
         }
 
-        $link = 'https://bit.ly/grafico31diasRPG';
-
     ?>
     <header>
         <a href="https://www.vwco.com.br/" tarGET="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus" style="height: 95%;"></a>
@@ -217,7 +215,7 @@
                     <input type="submit" value="Filtrar">
                 </div>
             </form>
-            <button style="width: 12em; height: 9.5em;" onclick="Email30Dias('<?php echo $link; ?>')" class="botao_email"><p class="texto_botao">Enviar gráfico<br>por email</p><img class="gif_botao" src="../assets/message.gif" width="100px" height="100px"></button>
+            <button style="width: 12em; height: 9.5em;" onclick="Email30Dias()" class="botao_email"><p class="texto_botao">Enviar gráfico<br>por email</p><img class="gif_botao" src="../assets/message.gif" width="100px" height="100px"></button>
         </div>
         <div class="tabela" style="overflow-y: auto;">
         <div class="caption"><img src="../assets/table-list.png" width="22" height="22" style="position: relative; top: 3px; margin-right: 5px;">Tabela de Agendamentos</div>
@@ -506,8 +504,8 @@
             document.body.appendChild(overlay);
         }
 
-        function Email30Dias(link){
-            console.log('Função Email30Dias chamada com link: ' + link);
+        function Email30Dias(){
+            console.log('Função Email30Dias chamada');
             Swal.fire({
                 icon: 'question',
                 title: "Enviar por email?",
@@ -523,14 +521,8 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     disablePage();
-                    // Obtém o URL da página
-                    var urlDaPagina = link;
-
-                    // Codifica o URL para garantir que caracteres especiais sejam tratados corretamente
-                    var urlCodificada = encodeURIComponent(urlDaPagina);
-
                     // Redireciona para a nova URL
-                    window.location.href = "../grafico/email31dias.php?link=" + urlCodificada;
+                    window.location.href = "../grafico/email31dias.php";
                 }
             });
         }

@@ -1,6 +1,5 @@
 <?php
     include_once('../../config/config.php');
-    include_once('../../emails/email.php');
     session_start();
 
     date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
@@ -24,14 +23,6 @@ if (isset($_GET['id'])) {
     $motivoReprovacao = 'Cancelado pelo solicitante';
 
     try {
-        $query_cancelar = "UPDATE agendamentos SET status = 'Reprovado', motivo_reprovacao = ? WHERE id = ?";
-        $stmt = $conexao->prepare($query_cancelar);
-        $stmt->bind_param("ss", $motivoReprovacao, $id);
-        $stmt->execute();
-        $affected_rows = mysqli_affected_rows($conexao);
-        $stmt->close();
-        
-        // Prepare a SELECT statement to fetch the data of the last inserted row
         $stmt = $conexao->prepare("SELECT * FROM agendamentos WHERE id = ?");
         $stmt->bind_param("i", $id);
         // Execute the SELECT statement
@@ -44,6 +35,13 @@ if (isset($_GET['id'])) {
         $stmt->close();
         $solicitante = $dataInserida['solicitante'];
 
+        $query_cancelar = "UPDATE agendamentos SET status = 'Reprovado', motivo_reprovacao = ? WHERE id = ?";
+        $stmt = $conexao->prepare($query_cancelar);
+        $stmt->bind_param("ss", $motivoReprovacao, $id);
+        $stmt->execute();
+        $affected_rows = mysqli_affected_rows($conexao);
+        $stmt->close();
+
         $query_email = "SELECT email FROM logins WHERE nome = '$solicitante'";
         $result_email = mysqli_query($conexao, $query_email);
         $row_email = mysqli_fetch_assoc($result_email);
@@ -54,7 +52,7 @@ if (isset($_GET['id'])) {
             Swal.fire({
                 icon: "error",
                 title: "Erro!",
-                html: "Houve um problema ao adicionar o agendamento no banco de dados:<br>'.$e->getMessage().'",
+                html: "Houve um problema na consulta sql:<br>'.$e->getMessage().'",
                 confirmButtonText: "Ok",
                 confirmButtonColor: "#001e50",
             }).then((result) => {
@@ -70,7 +68,7 @@ if (isset($_GET['id'])) {
                 Swal.fire({
                     icon: "error",
                     title: "Erro!",
-                    text: "Houve um erro na criação do agendamento.",
+                    text: "Houve um erro no cancelamento do agendamento.",
                     confirmButtonText: "Ok",
                     confirmButtonColor: "#001e50",
                 }).then((result) => {
@@ -86,18 +84,16 @@ if (isset($_GET['id'])) {
                 return "$key: '$value'";
             }, array_keys($dataInserida), $dataInserida));
 
-            echo('prestes a enviar');
             // Utiliza a função exec para chamar o script Python com o valor como argumento
-            $output = shell_exec("python ../../email/enviar_email.py " . escapeshellarg('agendamento_reprovado') . " " . escapeshellarg($email_gestor_str) . " " . escapeshellarg($email_frota_str) . " " . escapeshellarg($email) . " " . escapeshellarg($dataInserida_str));
+            $output = shell_exec("python ../../email/enviar_email.py " . escapeshellarg('agendamento_cancelado') . " " . escapeshellarg($email_gestor_str) . " " . escapeshellarg($email_frota_str) . " " . escapeshellarg($email) . " " . escapeshellarg($dataInserida_str));
             $output = trim($output);
-            echo($output);
 
             if ($output !== 'sucesso'){
                 echo '<script>
                     Swal.fire({
                         icon: "warning",
                         title: "Erro no e-mail!",
-                        html: "O agendamento foi criado, porém houve um problema no envio do e-mail automático:<br>'.$output.'",
+                        html: "O agendamento foi cancelado, porém houve um problema no envio do e-mail automático:<br>'.$output.'",
                         confirmButtonText: "Ok",
                         confirmButtonColor: "#001e50",
                         allowOutsideClick: false
@@ -112,8 +108,8 @@ if (isset($_GET['id'])) {
                 echo '<script>
                     Swal.fire({
                         icon: "success",
-                        title: "Valor adicionado!",
-                        text: "O valor foi adicionado à tabela com sucesso.",
+                        title: "Agendamento cancelado!",
+                        text: "O agendamento foi cancelado com sucesso.",
                         confirmButtonText: "Ok",
                         confirmButtonColor: "#001e50",
                         allowOutsideClick: false

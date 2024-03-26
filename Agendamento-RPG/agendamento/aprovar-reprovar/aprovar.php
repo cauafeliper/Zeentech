@@ -1,6 +1,5 @@
 <?php
     include_once('../../config/config.php');
-    include_once('../../emails/email.php');
     session_start();
 
     date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
@@ -47,7 +46,7 @@ if (isset($_GET['id'])) {
             Swal.fire({
                 icon: "error",
                 title: "Erro!",
-                html: "Houve um problema ao adicionar o agendamento no banco de dados:<br>'.$e->getMessage().'",
+                html: "Houve um problema na consulta sql:<br>'.$e->getMessage().'",
                 confirmButtonText: "Ok",
                 confirmButtonColor: "#001e50",
             }).then((result) => {
@@ -63,7 +62,7 @@ if (isset($_GET['id'])) {
                 Swal.fire({
                     icon: "error",
                     title: "Erro!",
-                    text: "Houve um erro na criação do agendamento.",
+                    text: "Houve um erro na aprovação do agendamento.",
                     confirmButtonText: "Ok",
                     confirmButtonColor: "#001e50",
                 }).then((result) => {
@@ -74,6 +73,8 @@ if (isset($_GET['id'])) {
             </script>';
         }
         else{
+            $gestor = $_SESSION['nome'];
+
             $email_gestor = array();
             $query_gestor = "SELECT email FROM gestor";
             $result_gestor = mysqli_query($conexao, $query_gestor);
@@ -99,18 +100,16 @@ if (isset($_GET['id'])) {
                 return "$key: '$value'";
             }, array_keys($dataInserida), $dataInserida));
 
-            echo('prestes a enviar');
             // Utiliza a função exec para chamar o script Python com o valor como argumento
-            $output = shell_exec("python ../../email/enviar_email.py " . escapeshellarg('agendamento_aprovado') . " " . escapeshellarg($email_gestor_str) . " " . escapeshellarg($email_frota_str) . " " . escapeshellarg($email) . " " . escapeshellarg($dataInserida_str));
+            $output = shell_exec("python ../../email/enviar_email.py " . escapeshellarg('agendamento_aprovado') . " " . escapeshellarg($email_gestor_str) . " " . escapeshellarg($email_frota_str) . " " . escapeshellarg($email) . " " . escapeshellarg($dataInserida_str) . " " . escapeshellarg($gestor));
             $output = trim($output);
-            echo($output);
 
             if ($output !== 'sucesso'){
                 echo '<script>
                     Swal.fire({
                         icon: "warning",
                         title: "Erro no e-mail!",
-                        html: "O agendamento foi criado, porém houve um problema no envio do e-mail automático:<br>'.$output.'",
+                        html: "O agendamento foi aprovado, porém houve um problema no envio do e-mail automático:<br>'.$output.'",
                         confirmButtonText: "Ok",
                         confirmButtonColor: "#001e50",
                         allowOutsideClick: false
@@ -125,8 +124,8 @@ if (isset($_GET['id'])) {
                 echo '<script>
                     Swal.fire({
                         icon: "success",
-                        title: "Valor adicionado!",
-                        text: "O valor foi adicionado à tabela com sucesso.",
+                        title: "Agendametno aprovado!",
+                        text: "O agendamento foi aprovado com sucesso.",
                         confirmButtonText: "Ok",
                         confirmButtonColor: "#001e50",
                         allowOutsideClick: false

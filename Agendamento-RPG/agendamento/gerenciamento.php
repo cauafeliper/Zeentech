@@ -1,6 +1,5 @@
 <?php
     include_once('../config/config.php');
-    include_once('../emails/email.php');
     session_start();
 
     $expire_time = $_SESSION['expire_time'];
@@ -413,7 +412,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Erro!",
-                            html: "Houve um problema ao adicionar o valor no banco de dados:<br>'.$e->getMessage().'",
+                            html: "Houve um problema na consulta sql:<br>'.$e->getMessage().'",
                             confirmButtonText: "Ok",
                             confirmButtonColor: "#001e50",
                         });
@@ -775,7 +774,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Erro!",
-                            html: "Houve um problema ao adicionar o valor no banco de dados:<br>'.$e->getMessage().'",
+                            html: "Houve um problema na consulta sql:<br>'.$e->getMessage().'",
                             confirmButtonText: "Ok",
                             confirmButtonColor: "#001e50",
                         });
@@ -944,7 +943,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Erro!",
-                            html: "Houve um problema ao adicionar o valor no banco de dados:<br>'.$e->getMessage().'",
+                            html: "Houve um problema na consulta sql:<br>'.$e->getMessage().'",
                             confirmButtonText: "Ok",
                             confirmButtonColor: "#001e50",
                         });

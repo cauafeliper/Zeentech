@@ -1,6 +1,5 @@
 <?php
     include_once('../config/config.php');
-    include_once('../emails/email.php');
     session_start();
 
     date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para São Paulo
@@ -234,11 +233,13 @@
                         }
                         catch(Exception $e){
                             echo '<script>
-                            Swal.fire({
-                                icon: "error",
-                                title: "Erro!",
-                                html: "Ocorreu um erro no seu cadastro!<br>Tente novamente."
-                            });
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Erro!",
+                                    html: "Houve um problema na consulta sql:<br>'.$e->getMessage().'",
+                                    confirmButtonText: "Ok",
+                                    confirmButtonColor: "#001e50",
+                                });
                             </script>';
                         }
                         finally{
@@ -247,7 +248,7 @@
                                     Swal.fire({
                                         icon: "error",
                                         title: "Erro!",
-                                        text: "Houve um erro na criação do agendamento.",
+                                        text: "Houve um erro na criação do cadastro.",
                                         confirmButtonText: "Ok",
                                         confirmButtonColor: "#001e50",
                                     }).then((result) => {
@@ -258,23 +259,16 @@
                                 </script>';
                             }
                             else{
-                                // Convert the associative array to a string
-                                $dataInserida_str = implode(",", array_map(function ($key, $value) {
-                                    return "$key: '$value'";
-                                }, array_keys($dataInserida), $dataInserida));
-                    
-                                echo('prestes a enviar');
                                 // Utiliza a função exec para chamar o script Python com o valor como argumento
-                                $output = shell_exec("python ../../email/enviar_email.py " . escapeshellarg('agendamento_reprovado') . " " . escapeshellarg($email_gestor_str) . " " . escapeshellarg($email_frota_str) . " " . escapeshellarg($email) . " " . escapeshellarg($dataInserida_str));
+                                $output = shell_exec("python ../email/enviar_email.py " . escapeshellarg($email) . " " . escapeshellarg($token));
                                 $output = trim($output);
-                                echo($output);
                     
                                 if ($output !== 'sucesso'){
                                     echo '<script>
                                         Swal.fire({
                                             icon: "warning",
                                             title: "Erro no e-mail!",
-                                            html: "O agendamento foi criado, porém houve um problema no envio do e-mail automático:<br>'.$output.'",
+                                            html: "Houve um problema no envio do e-mail automático:<br>'.$output.'",
                                             confirmButtonText: "Ok",
                                             confirmButtonColor: "#001e50",
                                             allowOutsideClick: false
@@ -289,8 +283,8 @@
                                     echo '<script>
                                         Swal.fire({
                                             icon: "success",
-                                            title: "SUCESSO!",
-                                            text: "Seu cadastro foi efetuado e aguarda para ser confirmado! Confira seu email para confirmar o cadastro.",
+                                            title: "Verifique seu email!",
+                                            text: "Seu cadastro foi efetuado e aguarda a verificação de email! Um código foi enviado para o e-mail cadastrado.",
                                             confirmButtonText: "Verificar email",
                                             confirmButtonColor: "#001e50",
                                             allowOutsideClick: false,
