@@ -16,16 +16,15 @@ def envio_grafico():
 
         # Create the plain-text and HTML version of your message
         text = f"""\
-        Para conferir a tabela de agendamentos dos próximos 30 dias, acesse: {linkGrafico}.
-        
+        Houveram mudanças nos agendamentos da Pista de Testes. Para ver a tabela de agendamentos dos próximos 30 dias, confira o anexo.
         
         Atenciosamente,
-        Equipe Zeentech."""
+        Equipe Zeentech e Certification Team."""
         html = f"""\
         <html>
         <body style="display:flex;justify-content:center;alignt-items:center;flex-direction:column">
             <p>
-                Para conferir a tabela de agendamentos dos próximos 30 dias, clique <a href="{linkGrafico}">aqui</a>.<br><br>Atenciosamente,<br>Equipe Zeentech.
+                Houveram mudanças nos agendamentos da Pista de Testes. Para ver a tabela de agendamentos dos próximos 30 dias, confira o anexo.<br><br>Atenciosamente,<br>Equipe Zeentech e Certification Team.
             </p>
         </body>
         </html>
@@ -40,6 +39,27 @@ def envio_grafico():
         message.attach(part1)
         message.attach(part2)
         
+        filepath = "../anexos/tutorial_grafico.pdf"  # In same directory as script
+        filename = "tutorial_grafico.pdf"  # Name of file to be attached
+
+        # Open PDF file in binary mode
+        with open(filepath, "rb") as attachment:
+            # Add file as application/octet-stream
+            # Email client can usually download this automatically as attachment
+            part = MIMEBase("application", "octet-stream")
+            part.set_payload(attachment.read())
+
+        # Encode file in ASCII characters to send by email    
+        encoders.encode_base64(part)
+
+        # Add header as key/value pair to attachment part
+        part.add_header(
+            "Content-Disposition",
+            f"attachment; filename= {filename}",
+        )
+
+        # Add attachment to message and convert message to string
+        message.attach(part)
         text = message.as_string()
 
         # Create secure connection with server and send email
@@ -116,8 +136,7 @@ def cadastro_verificado():
 
         # Create the plain-text and HTML version of your message
         text = f"""\
-        Seu email foi verificado com sucesso! Segue em anexo o tutorial de como utilizar a página.
-        
+        Seu email foi verificado com sucesso! Segue em anexo o tutorial de como utilizar a página.<br>
         
         Atenciosamente,
         Equipe Zeentech e Certification Team."""
@@ -125,10 +144,9 @@ def cadastro_verificado():
         <html>
         <body style="display:flex;justify-content:center;alignt-items:center;flex-direction:column">
             <p>
-                Seu email foi verificado com sucesso! Segue em anexo o tutorial de como utilizar a página.
-        
-        
-                Atenciosamente,
+                Seu email foi verificado com sucesso! Segue em anexo o tutorial de como utilizar a página.<br>
+                <br>
+                Atenciosamente,<br>
                 Equipe Zeentech e Certification Team.
             </p>
         </body>
@@ -397,6 +415,7 @@ def agendamento_reprovado():
             value = value.strip("'") # Remove the single quotes around the value
             data[key] = value # Add the key and value to the dictionary
         gestor = sys.argv[6]
+        statusAnterior = sys.argv[7]
 
         message = MIMEMultipart("alternative")
         message["Subject"] = "Solicitação Reprovada!"
@@ -439,7 +458,7 @@ def agendamento_reprovado():
                 sender_email, email_usuario, text
             )
         
-        if data["status"] == "Aprovado":
+        if statusAnterior == "Aprovado":
             #segundo email
             message = MIMEMultipart("alternative")
             message["Subject"] = "Agendamento Reprovado!"
@@ -807,28 +826,6 @@ def addadm():
         # Add attachment to message and convert message to string
         message.attach(part)
         
-        # Second attachment
-        filepath2 = "../anexos/tutorial_gestor.pdf"  # Path to second file
-        filename2 = "tutorial_gestor.pdf"  # Name of second file
-
-        # Open second file in binary mode
-        with open(filepath2, "rb") as attachment:
-            # Add file as application/octet-stream
-            part2 = MIMEBase("application", "octet-stream")
-            part2.set_payload(attachment.read())
-
-        # Encode file in ASCII characters to send by email    
-        encoders.encode_base64(part2)
-
-        # Add header as key/value pair to attachment part
-        part2.add_header(
-            "Content-Disposition",
-            f"attachment; filename= {filename2}",
-        )
-
-        # Add second attachment to message
-        message.attach(part2)
-        
         text = message.as_string()
 
         # Create secure connection with server and send email
@@ -972,7 +969,8 @@ def addcadastro():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
+        with smtplib.SMTP("equipzeentech.com", 587) as server:
+            server.starttls(context=context)
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, receiver_email, text
@@ -982,7 +980,7 @@ def addcadastro():
         print(e)
 
 
-########################################################################################
+#######################################################################################
 
 # Configurações do email
 sender_email = 'admin@equipzeentech.com'

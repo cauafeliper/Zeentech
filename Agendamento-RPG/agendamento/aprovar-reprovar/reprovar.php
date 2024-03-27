@@ -54,8 +54,7 @@ if (isset($_GET['id'])) {
             $dataInserida = $result->fetch_assoc();
             // Fechar a declaração
             $stmt->close();
-            $solicitante = $dataInserida['solicitante'];
-            $gestor = $
+            $statusAnterior = $dataInserida['status'];
 
             $query_cancelar = "UPDATE agendamentos SET status = 'Reprovado', motivo_reprovacao = ? WHERE id = ?";
             $stmt = $conexao->prepare($query_cancelar);
@@ -63,6 +62,20 @@ if (isset($_GET['id'])) {
             $stmt->execute();
             $affected_rows = mysqli_affected_rows($conexao);
             $stmt->close();
+
+            // Prepare a SELECT statement to fetch the data of the last inserted row
+            $stmt = $conexao->prepare("SELECT * FROM agendamentos WHERE id = ?");
+            $stmt->bind_param("i", $id);
+            // Execute the SELECT statement
+            $stmt->execute();
+            // Get the result
+            $result = $stmt->get_result();
+            // Fetch the data and put it into an associative array
+            $dataInserida = $result->fetch_assoc();
+            // Fechar a declaração
+            $stmt->close();
+            $solicitante = $dataInserida['solicitante'];
+            $gestor = $_SESSION['nome'];
 
             $query_email = "SELECT email FROM logins WHERE nome = '$solicitante'";
             $result_email = mysqli_query($conexao, $query_email);
@@ -106,8 +119,27 @@ if (isset($_GET['id'])) {
                     return "$key: '$value'";
                 }, array_keys($dataInserida), $dataInserida));
 
+                $email_gestor = array();
+                $query_gestor = "SELECT email FROM gestor";
+                $result_gestor = mysqli_query($conexao, $query_gestor);
+                while ($row_gestor = mysqli_fetch_assoc($result_gestor)) {
+                    $email_gestor[] = $row_gestor['email']; //email pros gestores
+                }
+                $email_frota = array();
+                $query_copias = "SELECT email FROM copias_email";
+                $result_copias = mysqli_query($conexao, $query_copias);
+                if ($result_copias->num_rows > 0) {
+                    while ($row_copias = mysqli_fetch_assoc($result_copias)) {
+                        $email_frota[] = $row_copias['email'];
+                    }
+                }
+
+                // Convert arrays to comma-separated strings
+                $email_gestor_str = implode(",", $email_gestor);
+                $email_frota_str = implode(",", $email_frota);
+
                 // Utiliza a função exec para chamar o script Python com o valor como argumento
-                $output = shell_exec("python ../../email/enviar_email.py " . escapeshellarg('agendamento_reprovado') . " " . escapeshellarg($email_gestor_str) . " " . escapeshellarg($email_frota_str) . " " . escapeshellarg($email) . " " . escapeshellarg($dataInserida_str) . " " . escapeshellarg($gestor));
+                $output = shell_exec("python ../../email/enviar_email.py " . escapeshellarg('agendamento_reprovado') . " " . escapeshellarg($email_gestor_str) . " " . escapeshellarg($email_frota_str) . " " . escapeshellarg($email) . " " . escapeshellarg($dataInserida_str) . " " . escapeshellarg($gestor) . " " . escapeshellarg($statusAnterior));
                 $output = trim($output);
     
                 if ($output !== 'sucesso'){

@@ -181,7 +181,7 @@ $data30 = $hoje->format('Y-m-d');
         <a href="https://www.vwco.com.br/" target="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus" style="height: 95%;"></a>
         <img src="../imgs/LogoCertificationTeam.png" alt="logo-certification-team" style="height: 95%;">
         <ul>
-            <li><a href="grafico31dias.php" target="_blank">Gerar gráfico<br>de 31 dias</a></li>
+            <li><a href="grafico31dias.php" target="_blank">Gráfico de 31 dias</a></li>
 
             <li><a href="../agendamento/gestor.php">Gestão</a></li>
 

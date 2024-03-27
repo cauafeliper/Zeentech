@@ -124,7 +124,7 @@ if (isset($_GET['id'])) {
                 echo '<script>
                     Swal.fire({
                         icon: "success",
-                        title: "Agendametno aprovado!",
+                        title: "Agendamento aprovado!",
                         text: "O agendamento foi aprovado com sucesso.",
                         confirmButtonText: "Ok",
                         confirmButtonColor: "#001e50",

@@ -260,7 +260,7 @@
                             }
                             else{
                                 // Utiliza a função exec para chamar o script Python com o valor como argumento
-                                $output = shell_exec("python ../email/enviar_email.py " . escapeshellarg($email) . " " . escapeshellarg($token));
+                                $output = shell_exec("python ../email/enviar_email.py " . escapeshellarg('verificar_email') . " " . escapeshellarg($email) . " " . escapeshellarg($token));
                                 $output = trim($output);
                     
                                 if ($output !== 'sucesso'){
@@ -272,11 +272,7 @@
                                             confirmButtonText: "Ok",
                                             confirmButtonColor: "#001e50",
                                             allowOutsideClick: false
-                                        }).then((result) => {
-                                            if (result.isConfirmed) {
-                                                window.location.href = "../gestor.php";
-                                            }
-                                        });
+                                        })
                                     </script>';  
                                 }
                                 else{

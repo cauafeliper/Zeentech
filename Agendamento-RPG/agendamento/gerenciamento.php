@@ -980,7 +980,7 @@
                             $output = shell_exec("python ../email/enviar_email.py " . escapeshellarg('addadm') . " " . escapeshellarg($novoAdm));
                             $output = trim($output);
 
-                            if ($output !== 'sucesso'){
+                            if ($output !== 'sucesso' || !isset($output)){
                                 echo '<script>
                                     Swal.fire({
                                         icon: "warning",
