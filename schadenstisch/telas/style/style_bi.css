@@ -1,0 +1,100 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: 'vw';
+    src: url('../../fonts/VW/VWHead-Regular.otf');
+}
+
+@font-face {
+    font-family: 'vw';
+    src: url("../../fonts/VW/VWHead-Bold.otf");
+}
+
+@font-face {
+    font-family: 'vw';
+    src: url('../../fonts/VW/VWText-Regular.otf');
+}
+
+@font-face {
+    font-family: 'vw';
+    src: url("../../fonts/VW/VWText-Bold.otf");
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+    font-family: 'vw';
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+:root {
+    --claro: #4C7397;
+    --escuro: #001e50;
+}
+
+body {
+    background-color: #01235e;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow-y: hidden;
+
+    align-items: center;
+}
+
+header {
+    width: 100%;
+    height: 70px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: var(--escuro);
+
+    padding: 10px;
+}
+
+header img {
+    height: 100%;
+}
+
+.logo__zeentech {
+    height: 30px;
+}
+
+main {
+    height: 520px;
+    width: 860px;
+
+    border-radius: 10px;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+
+    border-radius: 10px;
+}
+
+footer {
+    height: 1px;
+
+    color: var(--escuro);
+}

@@ -1,9 +1,9 @@
 <?php 
     include_once('../config/config.php');
     session_start();
-    /* if (!isset($_SESSION['email']) || empty($_SESSION['email'])) {
-        session_unset();
-        header('Location: ../index.php');
+    if (!isset($_SESSION['email']) OR !isset($_SESSION['senha'])) {
+        session_destroy();
+        echo '<script>window.location.href = "../index.php";</script>';
     }
     
     $email = $_SESSION['email'];
@@ -14,9 +14,9 @@
     $result = mysqli_stmt_get_result($stmt);
     
     if (!$result || mysqli_num_rows($result) === 0) {
-        session_unset();
-        header('Location: ../index.php');
-    } */
+        session_destroy();
+        echo '<script>window.location.href = "../index.php";</script>';
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -31,10 +31,10 @@
 </head>
 <body>
     <header>
-        <a href="https://www.vwco.com.br/" target="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus" style="height: 100%;"></a>
+        <a href="https://www.vwco.com.br/" target="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus"></a>
         <ul>
             <li><a href="../telas/tela_principal.php">Início</a></li>
-            <li><a href="sair.php">Sair</a></li>
+            <li><a href="../sair.php">Sair</a></li>
         </ul>
     </header>
 
@@ -138,7 +138,7 @@
             <span>Desenvolvido por:  <img src="../imgs/lg-zeentech(titulo).png" alt="logo-zeentech"></span>
         </div>
         <div class="copyright">
-            <span>Copyright © 2023 de Zeentech os direitos reservados</span>
+            <span>Copyright © 2024 de Zeentech os direitos reservados</span>
         </div>
     </footer>
 

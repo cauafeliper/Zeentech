@@ -21,28 +21,29 @@ function criarFiltroSelect($conexao, $nomeCampo, $coluna, $label, $onchangeFunct
 // Exemplo de uso:
 echo '<tr>';
 echo '<th style="display: none;">Item</th>';
+echo '<th><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABpUlEQVR4nO2ZsUoDQRRFXxFjo2KjoH5KanutBGtFMepfhGA+yiKLJoKKpZWKxCZltD8y+BaXdRISM4lvcA4ElpnZ7BzuvM1kVyRhFOCS+Mh8IlEiw0QkEvg3IrEhHpGM+GhPHpkRGHd+SWROkBIxBimRyfZqH0AHOAWqEmMi/OQe2PzthC2IHABvenwXOhlCiQCLwBnQ1aWUlc9zSRRk6tq2BLxMu00nhAiwBTyUr+Y7DzjUps4UIu3gIppELvEKHPlEPAwkIAQQOdeup7yISyLZxBu7PxK50a69ib/UmMi7dq2Vx45ZpDaKHRho13KhLRu3LiwVe1e7dkace6xjrmVGEEDEbTscj8DqkFtzT8ecBJx7cJGqbjtymV1gBVgH9oFn7bsFFsSqSOEXO5fx4SQ2xIOZYi8lU3d1oHcy97lyy2lUEmaK3QokEWOQEjEGKRFjkBKJPRHryBgiMbwnacu8ya8ssUPsIkAFuCgsB3dckdgAWp613ZLYAPo6+W2gpsd9iQ2+n/3WCiI9iQ2g6VlaDYkNvv4SNzUZ93SlMauXPwkxyCd0wP9bGhyOZwAAAABJRU5ErkJggg==" width="20" height="20"></th>';
 echo '<th>Programa</th>';
 echo criarFiltroSelect($conexao, 'n_problem', 'n_problem', 'Nº do Problema &#5167;', 'armazenar_n_problem');
 echo criarFiltroSelect($conexao, 'rank', 'rank', 'Ranking', 'armazenar_rank');
-echo criarFiltroSelect($conexao, 'data_fecha', 'data_fecha', 'Data de Fechamento', 'armazenar_data_fecha');
+echo '<th>Data de Fechamento</th>';
 echo '<th>Due Date</th>';
-echo criarFiltroSelect($conexao, 'resumo', 'resumo', 'Resumo', 'armazenar_resumo');
+echo '<th>Resumo</th>';
 echo criarFiltroSelect($conexao, 'veiculo', 'veiculo', 'Veículo', 'armazenar_veiculo');
 echo criarFiltroSelect($conexao, 'status_kpm', 'status_kpm', 'Status KPM', 'armazenar_status_kpm');
 echo '<th>Status Reunião</th>';
 echo criarFiltroSelect($conexao, 'fg', 'fg', 'FG', 'armazenar_fg');
-echo criarFiltroSelect($conexao, 'dias_aberto', 'dias_aberto', 'Dias em Aberto', 'armazenar_dias_aberto');
+echo '<th>Dias em Aberto</th>';
 echo '<th>Data de Ins.</th>';
 echo criarFiltroSelect($conexao, 'highlight', 'highlight', 'Highlight', 'armazenar_highlight');
 echo '<th>Data(ER)</th>';
-echo criarFiltroSelect($conexao, 'cw_er', 'cw(er)', 'CW(ER)', 'armazenar_cw_er');
+echo 'CW(ER)';
 echo criarFiltroSelect($conexao, 'causa', 'causa', 'Causa do Problema', 'armazenar_causa');
 echo criarFiltroSelect($conexao, 'modelo', 'modelo', 'Modelo', 'armazenar_modelo');
 echo '<th>Data<br>Registrada</th>';
 echo criarFiltroSelect($conexao, 'aval_crit', 'aval_crit', 'Avaliação<br>Criticidade', 'armazenar_aval_crit');
 echo criarFiltroSelect($conexao, 'aval_crit_2', 'aval_crit_2', 'Avaliação<br>Criticidade2', 'armazenar_aval_crit_2');
 echo criarFiltroSelect($conexao, 'teste', 'teste', 'Teste', 'armazenar_teste');
-echo criarFiltroSelect($conexao, 'kpm_dias_correntes', 'kpm_dias_correntes', 'KPM Dias<br>Correntes', 'armazenar_kpm_dias_correntes');
+echo 'Kpm Dias Correntes';
 echo criarFiltroSelect($conexao, 'pn', 'pn', 'PN', 'armazenar_pn');
 echo criarFiltroSelect($conexao, 'reclamante', 'reclamante', 'Reclamante', 'armazenar_reclamante');
 echo '<th>Descrição do<br>Problema</th>';
@@ -137,13 +138,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $coluna = $_POST['coluna'];
     $valor = $_POST['valor'];
 
-    if($coluna === 'data(er)' || $coluna === 'data_registrada' || $coluna === 'data(ua)' || $coluna === 'data(dca)' || $coluna === 'due_date' || $coluna === 'data_fecha') {
+    if($coluna === 'data(er)' || $coluna === 'data_registrada' || $coluna === 'data(ua)' || $coluna === 'data(dca)' || $coluna === 'due_date' || $coluna === 'data_fecha' || $coluna === 'data_ins') {
         $valor = date('Y-m-d', strtotime(str_replace('/', '-', $valor)));
-    }
-    elseif ($coluna === 'data_ins') {
-        // Converter a data e hora para o formato aceito pelo SQL (Y-m-d H:i:s)
-        $data_hora_php = date_create_from_format('d/m/Y - H:i', $valor);
-        $valor = date_format($data_hora_php, 'Y-m-d H:i:s');
     }
     
     // Montar a consulta SQL para atualizar a tabela
@@ -179,7 +175,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 // Função para criar célula da tabela com input editável
 function createTableCell($coluna, $valor) {
-    return '<td value="' . $valor . '" id="td_tippy" name="'. $coluna .'"><input type="text" name="input_' . $coluna . '" class="input__td editavel" value="' . $valor . '"></td>';
+    if ($coluna === 'data_fecha' || $coluna === 'due_date' || $coluna === 'data(er)' || $coluna === 'data_registrada' || $coluna === 'data(ua)' || $coluna === 'data(dca)' || $coluna === 'data_ins') {
+        return '<td value="'. date('d/m/Y', strtotime($valor)) .'" id="td_tippy" name="'. $coluna .'"><input type="date" name="input_'. $coluna .'" class="input__td editavel" value="'. $valor .'"></td>';
+    }
+    else { 
+        return '<td value="' . $valor . '" id="td_tippy" name="'. $coluna .'"><input type="text" name="input_' . $coluna . '" class="input__td editavel" value="' . $valor . '"></td>';
+    }
 }
 // Execute a consulta SQL
 $result = $conexao->query($query);
@@ -192,12 +193,13 @@ if ($result->num_rows > 0) {
             <!-- Exibir a coluna "Item" -->
             <td style="display: none;" value="<?php echo $row['item']; ?>"><?php echo $row['item']; ?></td>
 
+            <td><button class="botao__apresentacao" onclick="redirectToPresentation(<?php echo $row['item']; ?>)"><img width="15" height="15" src="https://img.icons8.com/pastel-glyph/64/search--v2.png" alt="search--v2"/></button></td>
             <?php
             // Definir as colunas e valores correspondentes
             $colunas = ['programa', 'n_problem', 'rank', 'data_fecha', 'due_date', 'resumo', 'veiculo', 'status_kpm', 'status_reuniao', 'fg', 'dias_aberto', 'data_ins', 'highlight', 'data(er)', 'cw(er)', 'causa', 'modelo', 'data_registrada', 'aval_crit', 'aval_crit_2', 'teste', 'kpm_dias_correntes', 'pn', 'reclamante', 'desc_prob', 'remarks', 'status_semanal', 'status_acao', 'resp_acao', 'data(ua)', 'cw(ua)', 'dias(du)', 'status(du)', 'info(du)', 'dev(fk)', 'dur(fk)', 'km_teste', 'resp_acao', 'data(dca)', 'dias_est(dca)', 'teste(trt)', 'km_plan(trt)', 'cw_est(trt)', 'km(da)', 'cw_est(da)', 'km(tp)', 'cw_est(tp)', 'km(sde)', 'cw_est(sde)', 'porcen(sde)', 'porcen(ser)', 'status_anali(ser)', 'feedback(ser)', 'resp', 'timing_status', 'nxt_frt_ans'];
 
             // Obter os valores correspondentes às colunas
-            $valores = [$row['programa'], $row['n_problem'], $row['rank'], date('d/m/Y', strtotime($row['data_fecha'])), date('d/m/Y', strtotime($row['due_date'])), $row['resumo'], $row['veiculo'], $row['status_kpm'], $row['status_reuniao'], $row['fg'], $row['dias_aberto'], date('d/m/Y - H:i', strtotime($row['data_ins'])), $row['highlight'], date('d/m/Y', strtotime($row['data(er)'])), $row['cw(er)'], $row['causa'], $row['modelo'], date('d/m/Y', strtotime($row['data_registrada'])), $row['aval_crit'], $row['aval_crit_2'], $row['teste'], $row['kpm_dias_correntes'], $row['pn'], $row['reclamante'], $row['desc_prob'], $row['remarks'], $row['status_semanal'], $row['status_acao'], $row['resp_acao'], date('d/m/Y', strtotime($row['data(ua)'])), $row['cw(ua)'], $row['dias(du)'], $row['status(du)'], $row['info(du)'], $row['dev(fk)'], $row['dur(fk)'], $row['km_teste'], $row['resp_acao'], date('d/m/Y', strtotime($row['data(dca)'])), $row['dias_est(dca)'], $row['teste(trt)'], $row['km_plan(trt)'], $row['cw_est(trt)'], $row['km(da)'], $row['cw_est(da)'], $row['km(tp)'], $row['cw_est(tp)'], $row['km(sde)'], $row['cw_est(sde)'], $row['porcen(sde)'], $row['porcen(ser)'], $row['status_anali(ser)'], $row['feedback(ser)'], $row['resp'], $row['timing_status'], $row['nxt_frt_ans']];
+            $valores = [$row['programa'], $row['n_problem'], $row['rank'], $row['data_fecha'], $row['due_date'], $row['resumo'], $row['veiculo'], $row['status_kpm'], $row['status_reuniao'], $row['fg'], $row['dias_aberto'], $row['data_ins'], $row['highlight'], $row['data(er)'], $row['cw(er)'], $row['causa'], $row['modelo'], $row['data_registrada'], $row['aval_crit'], $row['aval_crit_2'], $row['teste'], $row['kpm_dias_correntes'], $row['pn'], $row['reclamante'], $row['desc_prob'], $row['remarks'], $row['status_semanal'], $row['status_acao'], $row['resp_acao'], $row['data(ua)'], $row['cw(ua)'], $row['dias(du)'], $row['status(du)'], $row['info(du)'], $row['dev(fk)'], $row['dur(fk)'], $row['km_teste'], $row['resp_acao'], $row['data(dca)'], $row['dias_est(dca)'], $row['teste(trt)'], $row['km_plan(trt)'], $row['cw_est(trt)'], $row['km(da)'], $row['cw_est(da)'], $row['km(tp)'], $row['cw_est(tp)'], $row['km(sde)'], $row['cw_est(sde)'], $row['porcen(sde)'], $row['porcen(ser)'], $row['status_anali(ser)'], $row['feedback(ser)'], $row['resp'], $row['timing_status'], $row['nxt_frt_ans']];
 
             // Criar as células da tabela para cada coluna e valor
             foreach (array_combine($colunas, $valores) as $coluna => $valor) {
@@ -209,7 +211,7 @@ if ($result->num_rows > 0) {
         <?php
     }
 } else {
-    echo '<tr><td colspan="6">Ainda não existem KPM\'s registrados!</td></tr>';
+    echo '<tr><td colspan="9">Ainda não existem KPM\'s registrados!</td></tr>';
 }
 ?>
 
@@ -234,4 +236,10 @@ if ($result->num_rows > 0) {
             content: `<div style="word-wrap: break-word;">${value}</div>`,
         });
     });
+</script>
+<script>
+    function redirectToPresentation(item) {
+        // Redireciona para a página de apresentação com o valor do item como parâmetro
+        window.open('apresentacao/tela_apresentacao_adm.php?item=' + item, '_blank');
+    }
 </script>

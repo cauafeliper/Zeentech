@@ -1,6 +1,7 @@
 <?php include_once('../../config/config.php'); session_start();?>
 <tr>
     <th style="display: none;">Item</th>
+    <th><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABpUlEQVR4nO2ZsUoDQRRFXxFjo2KjoH5KanutBGtFMepfhGA+yiKLJoKKpZWKxCZltD8y+BaXdRISM4lvcA4ElpnZ7BzuvM1kVyRhFOCS+Mh8IlEiw0QkEvg3IrEhHpGM+GhPHpkRGHd+SWROkBIxBimRyfZqH0AHOAWqEmMi/OQe2PzthC2IHABvenwXOhlCiQCLwBnQ1aWUlc9zSRRk6tq2BLxMu00nhAiwBTyUr+Y7DzjUps4UIu3gIppELvEKHPlEPAwkIAQQOdeup7yISyLZxBu7PxK50a69ib/UmMi7dq2Vx45ZpDaKHRho13KhLRu3LiwVe1e7dkace6xjrmVGEEDEbTscj8DqkFtzT8ecBJx7cJGqbjtymV1gBVgH9oFn7bsFFsSqSOEXO5fx4SQ2xIOZYi8lU3d1oHcy97lyy2lUEmaK3QokEWOQEjEGKRFjkBKJPRHryBgiMbwnacu8ya8ssUPsIkAFuCgsB3dckdgAWp613ZLYAPo6+W2gpsd9iQ2+n/3WCiI9iQ2g6VlaDYkNvv4SNzUZ93SlMauXPwkxyCd0wP9bGhyOZwAAAABJRU5ErkJggg==" width="20" height="20"></th>
     <th>Programa</th>
     <th>
         <select name="select_n_problem" id="select_n_problem" onchange="armazenar_n_problem(this.value)">
@@ -29,19 +30,7 @@
             ?>
         </select>
     </th>
-    <th>
-        <select name="select_resumo" id="select_resumo" onchange="armazenar_resumo(this.value)">
-            <option value="">Resumo</option>
-            <option value="Todos">Todos</option>
-            <?php 
-                $query = "SELECT DISTINCT resumo FROM kpm";
-                $result = $conexao->query($query);
-                while ($row = $result->fetch_assoc()) {
-                    echo '<option value="' . $row['resumo'] . '">' . $row['resumo'] . '</option>';
-                };
-            ?>
-        </select>
-    </th>
+    <th>Resumo</th>
     <th>Status Semanal</th>
     <th>
         <select name="select_veiculo" id="select_veiculo" onchange="armazenar_veiculo(this.value)">
@@ -83,19 +72,7 @@
             ?>
         </select>
     </th>
-    <th>
-        <select name="select_dias_aberto" id="select_dias_aberto" onchange="armazenar_dias_aberto(this.value)">
-            <option value="">Dias em Aberto</option>
-            <option value="Todos">Todos</option>
-            <?php 
-                $query = "SELECT DISTINCT dias_aberto FROM kpm ORDER BY dias_aberto ASC";
-                $result = $conexao->query($query);
-                while ($row = $result->fetch_assoc()) {
-                    echo '<option value="' . $row['dias_aberto'] . '">' . $row['dias_aberto'] . '</option>';
-                };
-            ?>
-        </select>
-    </th>
+    <th>Dias em Aberto</th>
     
 </tr>
 <?php
@@ -156,6 +133,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $item = $_POST['item'];
     $coluna = $_POST['coluna'];
     $valor = $_POST['valor'];
+
+    if($coluna === 'data(er)' || $coluna === 'data_registrada' || $coluna === 'data(ua)' || $coluna === 'data(dca)' || $coluna === 'due_date' || $coluna === 'data_fecha' || $coluna === 'data_ins') {
+        $valor = date('Y-m-d', strtotime(str_replace('/', '-', $valor)));
+    }
     
     // Montar a consulta SQL para atualizar a tabela
     $query = "UPDATE kpm SET $coluna = ? WHERE item = ?";
@@ -198,11 +179,13 @@ if ($result->num_rows > 0) {
         <tr>
             <td style="display: none;" value="<?php echo $row['item']; ?>"><?php echo $row['item']; ?></td>
 
+            <td><button class="botao__apresentacao" onclick="redirectToPresentation(<?php echo $row['item']; ?>)"><img width="15" height="15" src="https://img.icons8.com/pastel-glyph/64/search--v2.png" alt="search--v2"/></button></td>
+
             <td value="<?php echo $row['programa']; ?>" id="td_tippy" name="programa"><?php echo $row['programa']; ?></td>
 
             <td value="<?php echo $row['n_problem']; ?>" id="td_tippy" name="n_problem"><?php echo $row['n_problem']; ?></td>
 
-            <td value="<?php echo date('d/m/Y', strtotime($row['due_date'])); ?>" id="td_tippy" name="due_date"><?php echo date('d/m/Y', strtotime($row['due_date'])); ?></td>
+            <td value="<?php echo date('d/m/Y', strtotime($row['due_date'])); ?>" id="td_tippy" name="due_date"><input type="date" name="input_due_date" class="input__td editavel" value="<?php echo $row['due_date']; ?>"></td>
 
             <td value="<?php echo $row['rank']; ?>" class="td_tippy" name="rank"><input type="number" name="input_rank" class="input__td editavel" value="<?php echo $row['rank']; ?>"></td>
 
@@ -224,7 +207,7 @@ if ($result->num_rows > 0) {
         <?php
     }
 } else {
-    echo '<tr><td colspan="10">Ainda não existem KPM\'s registrados!</td></tr>';
+    echo '<tr><td colspan="11">Ainda não existem KPM\'s registrados!</td></tr>';
 }
 ?>
 
@@ -249,4 +232,10 @@ if ($result->num_rows > 0) {
             content: `<div style="word-wrap: break-word;">${value}</div>`,
         });
     });
+</script>
+<script>
+    function redirectToPresentation(item) {
+        // Redireciona para a página de apresentação com o valor do item como parâmetro
+        window.open('apresentacao/tela_apresentacao.php?item=' + item, '_blank');
+    }
 </script>

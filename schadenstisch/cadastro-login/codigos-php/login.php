@@ -34,7 +34,7 @@
                     title: "SEJA BEM VINDO!",
                     html: "Login realizado com sucesso!<br>Atenciosamente, Equipe Zeentech.<br>Contato: crpereira@zeentech.com"
                 }).then(function() {
-                    window.location.href = \'telas/tela_principal.php\';
+                    window.location.href = \'tela_inicial.php\';
                 });
                 </script>';
                 $_SESSION['nome'] = $nome;

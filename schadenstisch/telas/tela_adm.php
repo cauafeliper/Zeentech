@@ -2,7 +2,7 @@
     include_once('../config/config.php');
     session_start();
 
-    if (!isset($_SESSION['email'])) {
+    if (!isset($_SESSION['email']) OR !isset($_SESSION['senha'])) {
         echo '<script>window.location.href = "../index.php";</script>';
         exit();
     } else {
@@ -14,24 +14,39 @@
 
         $result = $conexao->query($query);
 
+        if (!$result) {
+            die('Erro na execução da consulta: ' . mysqli_error($conexao));
+        }
+
         $row = mysqli_fetch_assoc($result);
         $total = $row['total'];
 
         if ($total <= 0) {
+            session_destroy();
             echo '<script>window.location.href = "../index.php";</script>';
             exit();
         }
         else {
-            $query = "SELECT COUNT(*) as total FROM email_adm WHERE email = '" . mysqli_real_escape_string($conexao, $email) . "'";
-    
-            $result = $conexao->query($query);
-    
-            $row = mysqli_fetch_assoc($result);
-            $total = $row['total'];
+            $query = "SELECT COUNT(*) as total FROM email_adm WHERE email = ?";
 
-            if ($total <= 0) {
-                echo '<script>window.location.href = "../index.php";</script>';
-                exit();
+            $stmt = mysqli_prepare($conexao, $query);
+
+            if ($stmt) {
+                mysqli_stmt_bind_param($stmt, "s", $email);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_bind_result($stmt, $total);
+                mysqli_stmt_fetch($stmt);
+                mysqli_stmt_close($stmt);
+
+                if ($total <= 0) {
+                    session_destroy();
+                    echo '<script>window.location.href = "../index.php";</script>';
+                } 
+                else {
+                }
+            } 
+            else {
+                die('Erro na preparação da consulta: ' . mysqli_error($conexao));
             }
         }
     }
@@ -46,56 +61,64 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
-    <link rel="stylesheet" href="https://unpkg.com/tippy.js/dist/tippy.css" />
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js/dist/tippy.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.default.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js"></script>
-    <title>Schadenstisch | Home</title>
-    <?php include_once('style/selectize.html');?>
+    <title>Schadenstisch | ADM</title>
+    <style>
+        .ativo {      
+            background-color: var(--escuro);
+            border: 1px solid var(--claro);
+            color: white;
+        }
+    </style>
+    <?php
+        include_once('style/selectize.html');
+    ?>
 </head>
 <body>
     <header>
-        <a href="https://www.vwco.com.br/" target="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus" style="height: 100%;"></a>
+        <a href="https://www.vwco.com.br/" target="_blank"><img src="../imgs/truckBus.png" alt="logo-truckbus"></a>
         <ul>
-            <li><a href="tela_principal.php">Início</a></li>
             <?php
-            $query = "SELECT COUNT(*) as total FROM email_adm WHERE email = ?";
+                $query = "SELECT COUNT(*) as total FROM email_adm WHERE email = ?";
 
-            $stmt = mysqli_prepare($conexao, $query);
+                $stmt = mysqli_prepare($conexao, $query);
 
-            if ($stmt) {
-                mysqli_stmt_bind_param($stmt, "s", $email);
-                mysqli_stmt_execute($stmt);
-                mysqli_stmt_bind_result($stmt, $total);
-                mysqli_stmt_fetch($stmt);
-                mysqli_stmt_close($stmt);
+                if ($stmt) {
+                    mysqli_stmt_bind_param($stmt, "s", $email);
+                    mysqli_stmt_execute($stmt);
+                    mysqli_stmt_bind_result($stmt, $total);
+                    mysqli_stmt_fetch($stmt);
+                    mysqli_stmt_close($stmt);
 
-                if ($total > 0) {
-                    echo '
-                        <li><a href="#">KPM</a></li>
-                        <li><a href="../cadastro-login/aprovacao_Login.php">Logins</a></li>';
+                    if ($total > 0) {
+                        echo '
+                                <li><a href="tela_principal.php">Início</a></li>
+                                <li><a href="../cadastro-login/aprovacao_Login.php">Logins</a></li>';
+                    } else {
+                        echo '
+                                <span style="color: #001e50;">.</span>
+                                <span style="color: #001e50;">.</span>';
+                    }
                 } else {
-                    echo '
-                            <span style="color: #001e50;">.</span>
-                            <span style="color: #001e50;">.</span>';
+                    die('Erro na preparação da consulta: ' . mysqli_error($conexao));
                 }
-            } else {
-                die('Erro na preparação da consulta: ' . mysqli_error($conexao));
-            }
             ?>
-            <li><a href="sair.php">Sair</a></li>
+            <li><a href="../sair.php">Sair</a></li>
         </ul>
     </header>
     <main>
         <div class="div__programas">
             <h2>Programas</h2>
-            <button class="botoes__programas">Todos</button>
+            <button class="botoes_programa">Todos</button>
             <div class="div__botoes_programas">
                 <?php
                     $query_programa = "SELECT programa FROM programas";
                     $result_programa = $conexao->query($query_programa);
                     while ($row = $result_programa->fetch_assoc()) {
-                        echo '<button value="' . $row['programa'] . '">' . $row['programa'] . '</button>';
+                        echo '<button value="' . $row['programa'] . '" class="botoes_programa">' . $row['programa'] . '</button>';
                     }
                 ?>
             </div>
@@ -104,12 +127,12 @@
         <div class="div__tabela">
             <h2>Tabela de KPM`s</h2>
             <div class="filtros">
-                <button class="filtro-btn" value="Todos">Todos</button>
-                <button class="filtro-btn" value="Abertos">Abertos</button>
-                <button class="filtro-btn" value="Fechados">Fechados</button>
+                <button class="filtro-btn <?= $ativo_todos_class ?>" value="Todos">Todos</button>
+                <button class="filtro-btn <?= $ativo_abertos_class ?>" value="Abertos">Abertos</button>
+                <button class="filtro-btn <?= $ativo_fechados_class ?>" value="Fechados">Fechados</button>
             </div>
             <div>
-                <table id="tabela-adm-kpm">
+                <table id="tabela-kpm">
                     
                 </table>
             </div>
@@ -121,7 +144,7 @@
             <span>Desenvolvido por:  <img src="../imgs/lg-zeentech(titulo).png" alt="logo-zeentech"></span>
         </div>
         <div class="copyright">
-            <span>Copyright © 2023 de Zeentech os direitos reservados</span>
+            <span>Copyright © 2024 de Zeentech os direitos reservados</span>
         </div>
         <script>
             $(document).ready(function() {
@@ -132,7 +155,7 @@
                         type: 'GET',
                         dataType: 'html',
                         success: function(response) {
-                            $('#tabela-adm-kpm').html(response);
+                            $('#tabela-kpm').html(response);
                         }
                     });
                 }
@@ -155,54 +178,64 @@
         </script>
         <script>
            $(document).ready(function() {
-                $('.botoes__programas').click(function() {
+            $('.div__programas .botoes_programa[value="Todos"]').addClass('ativo');
+
+            $('.div__programas .botoes_programa, .div__botoes_programas button').click(function() {
+                // Remove a classe 'ativo' de todos os botões de programa
+                $('.div__programas .botoes_programa, .div__botoes_programas button').removeClass('ativo');
+                // Adiciona a classe 'ativo' apenas ao botão clicado
+                $(this).addClass('ativo');
+
+                // Verifica se o botão clicado pertence aos botões de programa
+                if ($(this).hasClass('botoes_programa')) {
                     var valorBotao = $(this).text();
                     $.ajax({
                         url: 'codigos/tabela_adm.php',
                         type: 'GET',
                         data: {filtro_programa: valorBotao},
                         success: function(response) {
-                            // Atualize a tabela com os dados recebidos do servidor
-                            $('#tabela-adm-kpm').html(response);
+                            $('#tabela-kpm').html(response);
                         }
                     });
-                });
+                }
+            });
 
-                $('.div__botoes_programas').on('click', 'button', function() {
-                    var valorBotao = $(this).val();
-                    $.ajax({
-                        url: 'codigos/tabela_adm.php',
-                        type: 'GET',
-                        data: {filtro_programa: valorBotao},
-                        success: function(response) {
-                            // Atualize a tabela com os dados recebidos do servidor
-                            $('#tabela-adm-kpm').html(response);
-                        }
-                    });
+            // Script para os filtros de status
+            $('.filtros .filtro-btn[value="Todos"]').addClass('ativo');
+
+            $('.filtros .filtro-btn').click(function() {
+                // Remove a classe 'ativo' de todos os botões de filtro
+                $('.filtros .filtro-btn').removeClass('ativo');
+                // Adiciona a classe 'ativo' apenas ao botão clicado
+                $(this).addClass('ativo');
+
+                var valorBotao = $(this).text();
+                $.ajax({
+                    url: 'codigos/tabela_adm.php',
+                    type: 'GET',
+                    data: {filtro_status_reuniao: valorBotao},
+                    success: function(response) {
+                        $('#tabela-kpm').html(response);
+                    }
                 });
+            });
 // ------------------------------------------------------------------------------------------------------------------------------------
-                $('.filtros').on('click', '.filtro-btn', function() {
-                    var valorBotao = $(this).text();
-                    $.ajax({
-                        url: 'codigos/tabela_adm.php',
-                        type: 'GET',
-                        data: {filtro_status_reuniao: valorBotao},
-                        success: function(response) {
-                            // Atualize a tabela com os dados recebidos do servidor
-                            $('#tabela-adm-kpm').html(response);
-                        }
-                    });
-                });
+                $('.filtros .filtro-btn[value="Todos"]').addClass('ativo');
 
-                $('.filtros').on('click', '.filtro-btn', function() {
+                $('.filtros .filtro-btn').click(function() {
+                    // Remove a classe 'ativo' de todos os botões de filtro
+                    $('.filtros .filtro-btn').removeClass('ativo');
+
+                    // Adiciona a classe 'ativo' apenas ao botão clicado
+                    $(this).addClass('ativo');
+
                     var valorBotao = $(this).text();
                     $.ajax({
                         url: 'codigos/tabela_adm.php',
                         type: 'GET',
                         data: {filtro_status_reuniao: valorBotao},
                         success: function(response) {
-                            // Atualize a tabela com os dados recebidos do servidor
-                            $('#tabela-adm-kpm').html(response);
+                            $('#tabela-kpm').html(response);
                         }
                     });
                 });

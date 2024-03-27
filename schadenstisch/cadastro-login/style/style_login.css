@@ -150,7 +150,7 @@ form span {
     display: flex;
     flex-direction: row;
 
-    background-color: rgba(141, 139, 139, 0.555);
+    background-color: rgba(187, 186, 186, 0.555);
 
     border-radius: 10px;
 
@@ -202,4 +202,48 @@ input[type="submit"]:hover {
 
 input[type="submit"]:not(:hover) {
     transition-duration: 0.5s;
+}
+
+@media (max-width: 720px) {
+    body {
+        height: fit-content;
+        overflow-y: auto;
+    }
+
+    main {
+        flex-direction: column-reverse;
+
+        height: 47rem;
+        width: 30rem;
+    }
+
+    main div {
+        width: 100%;
+    }
+
+    form {
+        width: 100%;
+
+        margin-bottom: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    main {
+        width: 90%;
+    }
+}
+
+@media (max-width: 345px) {
+    form span {
+        width: 90%;
+    }
+    
+    form span>input {
+        width: 100%;
+    }
+
+    main {
+        text-align: center;
+    }
 }
