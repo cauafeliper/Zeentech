@@ -40,8 +40,8 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                 echo '<script>
                     Swal.fire({
                         icon: "error",
-                        title: "Código inválido ou expirado!",
-                        html: "O código de recuperação de senha é inválido ou expirou. Por favor, solicite novamente."
+                        title: "Código inválido!",
+                        html: "O código de recuperação ou email são inválidos. Por favor, solicite novamente."
                     }).then(function() {
                         window.location.href = "../index.php";
                     });

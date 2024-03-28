@@ -64,7 +64,7 @@ def envio_grafico():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL(host, 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, email_lista, text
@@ -114,7 +114,7 @@ def recuperar_senha():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL(host, 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, receiver_email, text
@@ -233,7 +233,7 @@ def cadastro_verificado():
         text = message.as_string()
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL(host, 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, receiver_email, text
@@ -283,7 +283,7 @@ def verificar_email():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL(host, 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, receiver_email, text
@@ -343,7 +343,7 @@ def agendamento_aprovado():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL(host, 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, email_usuario, text
@@ -387,7 +387,7 @@ def agendamento_aprovado():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL(host, 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, email_gestor + email_frota, text
@@ -452,7 +452,7 @@ def agendamento_reprovado():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL(host, 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, email_usuario, text
@@ -496,7 +496,7 @@ def agendamento_reprovado():
 
             # Create secure connection with server and send email
             context = ssl.create_default_context()
-            with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
+            with smtplib.SMTP_SSL(host, 465, context=context) as server:
                 server.login(sender_email, password)
                 server.sendmail(
                     sender_email, email_gestor + email_frota, text
@@ -553,7 +553,7 @@ def agendamento_cancelado():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL(host, 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, email_usuario, text
@@ -597,7 +597,7 @@ def agendamento_cancelado():
 
             # Create secure connection with server and send email
             context = ssl.create_default_context()
-            with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
+            with smtplib.SMTP_SSL(host, 465, context=context) as server:
                 server.login(sender_email, password)
                 server.sendmail(
                     sender_email, email_gestor + email_frota, text
@@ -656,7 +656,7 @@ def agendamento():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL(host, 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, email_usuario, text
@@ -698,7 +698,7 @@ def agendamento():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL(host, 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, email_gestor, text
@@ -761,7 +761,7 @@ def agendamentoadm():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL(host, 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, email_gestor + email_frota, text
@@ -830,7 +830,7 @@ def addadm():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL(host, 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, receiver_email, text
@@ -898,7 +898,7 @@ def addgestor():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("equipzeentech.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL(host, 465, context=context) as server:
             server.login(sender_email, password)
             server.sendmail(
                 sender_email, receiver_email, text
@@ -969,7 +969,7 @@ def addcadastro():
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP("equipzeentech.com", 587) as server:
+        with smtplib.SMTP(host, 587) as server:
             server.starttls(context=context)
             server.login(sender_email, password)
             server.sendmail(
@@ -985,6 +985,7 @@ def addcadastro():
 # Configurações do email
 sender_email = 'admin@equipzeentech.com'
 password = 'Z3en7ech'
+host = 'equipzeentech.com'
 
 #links usados
 linkGrafico = 'https://www.zeentech.com.br/volkswagen/Agendamento-RPG/grafico/grafico31dias.php'

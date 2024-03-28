@@ -84,6 +84,25 @@ if (isset($_GET['id'])) {
                 return "$key: '$value'";
             }, array_keys($dataInserida), $dataInserida));
 
+            $email_gestor = array();
+            $query_gestor = "SELECT email FROM gestor";
+            $result_gestor = mysqli_query($conexao, $query_gestor);
+            while ($row_gestor = mysqli_fetch_assoc($result_gestor)) {
+                $email_gestor[] = $row_gestor['email']; //email pros gestores
+            }
+            $email_frota = array();
+            $query_copias = "SELECT email FROM copias_email";
+            $result_copias = mysqli_query($conexao, $query_copias);
+            if ($result_copias->num_rows > 0) {
+                while ($row_copias = mysqli_fetch_assoc($result_copias)) {
+                    $email_frota[] = $row_copias['email'];
+                }
+            }
+
+            // Convert arrays to comma-separated strings
+            $email_gestor_str = implode(",", $email_gestor);
+            $email_frota_str = implode(",", $email_frota);
+
             // Utiliza a função exec para chamar o script Python com o valor como argumento
             $output = shell_exec("python ../../email/enviar_email.py " . escapeshellarg('agendamento_cancelado') . " " . escapeshellarg($email_gestor_str) . " " . escapeshellarg($email_frota_str) . " " . escapeshellarg($email) . " " . escapeshellarg($dataInserida_str));
             $output = trim($output);

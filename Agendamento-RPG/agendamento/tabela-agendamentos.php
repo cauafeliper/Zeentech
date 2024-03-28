@@ -340,7 +340,7 @@ date_default_timezone_set('America/Sao_Paulo'); // Define o fuso horário para S
                                     }, array_keys($dataInserida), $dataInserida));
         
                                     // Utiliza a função exec para chamar o script Python com o valor como argumento
-                                    $output = shell_exec("python ../email/enviar_email.py " . escapeshellarg('agendamentoadm') . " " . escapeshellarg($email_gestor_str) . " " . escapeshellarg($email) . " " . escapeshellarg($dataInserida_str));
+                                    $output = shell_exec("python ../email/enviar_email.py " . escapeshellarg('agendamento') . " " . escapeshellarg($email_gestor_str) . " " . escapeshellarg($email) . " " . escapeshellarg($dataInserida_str));
                                     $output = trim($output);
             
                                     if ($output !== 'sucesso'){
